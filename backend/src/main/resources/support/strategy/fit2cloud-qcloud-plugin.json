@@ -1,0 +1,32 @@
+{
+	"Version": "2021-1-1",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"cos:Get*"
+			],
+			"Resource": [
+				"tencent:cos:::<bucket>",
+				"tencent:cos:::<bucket>/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"cvm:List*",
+				"eip:List*",
+				"disk:List*",
+				"vpc:Describe*",
+				"cos:Describe*",
+				"clb:List*",
+				"cdb:List*",
+				"dcdb:List*",
+				"security-group:List*"
+			],
+			"Resource": [
+				"*"
+			]
+		}
+	]
+}

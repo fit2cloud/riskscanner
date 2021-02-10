@@ -1,0 +1,22 @@
+{
+	"Version": "2021-1-1",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"image:List*",
+				"vm:List*",
+				"vnet:List*",
+				"sqlserver:Describe*",
+				"redis:List*",
+				"publicip:Describe*",
+				"networksecuritygroup:List*",
+				"loadbalancer:Get*",
+				"disk::List*"
+			],
+			"Resource": [
+				"*"
+			]
+		}
+	]
+}

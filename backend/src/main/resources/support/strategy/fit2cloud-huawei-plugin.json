@@ -1,0 +1,31 @@
+{
+  "Version": "2021-1-1",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "obs:Get*"
+      ],
+      "Resource": [
+        "huawei:obs:::<bucket>",
+        "huawei:obs:::<bucket>/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecs:List*",
+        "eip:List*",
+        "disk:List*",
+        "vpc:Describe*",
+        "obs:Describe*",
+        "elb:List*",
+        "rds:List*",
+        "security-group:List*"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}

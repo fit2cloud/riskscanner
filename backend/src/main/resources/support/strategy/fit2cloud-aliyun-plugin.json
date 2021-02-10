@@ -1,0 +1,36 @@
+{
+	"Version": "2021-1-1",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"oss:Get*"
+			],
+			"Resource": [
+				"arn:aliyun-cn:oss:::<bucket>",
+				"arn:aliyun-cn:oss:::<bucket>/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ecs:List*",
+				"eip:List*",
+				"disk:List*",
+				"vpc:Describe*",
+				"slb:List*",
+				"oss:Describe*",
+				"cdn:Describe*",
+				"mongodb:List*",
+				"iam:Get*",
+				"polardb::List*",
+				"redis::List*",
+				"rds:List*",
+				"security-group:List*"
+			],
+			"Resource": [
+				"*"
+			]
+		}
+	]
+}

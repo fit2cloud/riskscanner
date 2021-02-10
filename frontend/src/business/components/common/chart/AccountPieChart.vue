@@ -1,0 +1,91 @@
+<template>
+  <div>
+    <rs-chart :options="options"></rs-chart>
+  </div>
+</template>
+
+<script>
+
+import RsChart from "@/business/components/common/chart/RsChart";
+
+export default {
+  name: "AccountPieChart",
+  components: {RsChart},
+  props: {
+    data: {},
+  },
+  data() {
+    return {
+      options: {},
+    }
+  },
+  methods: {
+    init() {
+      this.$post("/dashboard/distribution", {group: "accountList"}, response => {
+        let legendData = [];
+        let seriesData = [];
+        for (let obj of response.data) {
+          legendData.push(obj.groupName + ' ' + obj.xAxis + ' 分(' + obj.yAxis + '/' + obj.yAxis2 + ')');
+          seriesData.push({
+            name: obj.groupName + ' ' + obj.xAxis + ' 分(' + obj.yAxis + '/' + obj.yAxis2 + ')',
+            value: obj.yAxis
+          });
+        }
+        this.options = {
+          title: {
+            text: this.$t('dashboard.cloud_account_statistics'),
+            subtext: this.$t('resource.resource_result_score'),
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          legend: {
+            type: 'scroll',
+            orient: 'vertical',
+            right: 10,
+            top: 20,
+            bottom: 20,
+            data: legendData,
+
+          },
+          series: [
+            {
+
+              name: this.$t('resource.resource_result_score'),
+              type: 'pie',
+              radius: '55%',
+              center: ['40%', '50%'],
+              data: seriesData,
+              // data: this.sycData("seriesData"),
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ],
+          color: ['#11cfae', '#009ef0', '#627dec', '#893fdc', '#89ffff','#0051a4' ]
+        };
+      });
+    },
+  },
+  created() {
+    this.init();
+  },
+}
+
+</script>
+
+<style scoped>
+
+  .echarts {
+    margin: 0 auto;
+    min-width: 510px;
+    min-height: 340px;
+  }
+
+</style>

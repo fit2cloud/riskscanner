@@ -1,0 +1,25 @@
+package io.riskscanner.commons.constants;
+
+public class CloudAccountConstants {
+    public CloudAccountConstants() {
+    }
+
+    public static enum SyncStatus {
+        pending,
+        success,
+        error,
+        sync;
+
+        private SyncStatus() {
+        }
+    }
+
+    public static enum Status {
+        VALID,
+        INVALID,
+        DELETED;
+
+        private Status() {
+        }
+    }
+}

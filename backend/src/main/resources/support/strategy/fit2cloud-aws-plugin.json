@@ -1,0 +1,37 @@
+{
+	"Version": "2021-1-1",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"s3:Get*"
+			],
+			"Resource": [
+				"arn:aws-cn:s3:::<bucket>",
+				"arn:aws-cn:s3:::<bucket>/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"ec2:List*",
+				"iam:Get*",
+				"s3:List*",
+				"s3:GetBucketLocation",
+				"rds:Describe*",
+				"security-group:List*",
+				"disk:List*",
+				"vpc:Describe*",
+				"elasticache:Describe*",
+				"elasticloadbalancing:Describe*",
+				"cloudwatch:Describe*",
+				"cloudwatch:GetMetricStatistics",
+				"cloudwatch:ListMetrics",
+				"dynamodb:Describe*"
+			],
+			"Resource": [
+				"*"
+			]
+		}
+	]
+}
