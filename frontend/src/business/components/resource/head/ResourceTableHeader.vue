@@ -40,7 +40,14 @@
       tip: {
         String,
         default() {
-          return this.$t('resource.search_by_report_name');
+          let path = this.$route.path;
+          if (path.indexOf("/resource/result") >= 0) {
+            return this.$t('commons.search_by_name');
+          } else if (path.indexOf("/resource/ResultDetails") >= 0) {
+            return this.$t('resource.search_by_f2cid');
+          } else {
+            return this.$t('resource.search_by_report_name');
+          }
         }
       }
     },

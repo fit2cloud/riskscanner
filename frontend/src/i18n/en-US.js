@@ -473,6 +473,7 @@ export default {
     please_choose_rule:'Please select at least one scanning rule',
     status:'Is it enabled',
     rule_set:'Rule set',
+    rule_set_name:'Rule set name',
     create_rule_set:'Create a rule set',
     rule_set_list:'Rule set list',
     inspection_report:'Waiting to guarantee inspection regulations',
@@ -564,6 +565,7 @@ export default {
     no_resources_allowed:'No resources scanned',
     handle_scans:'Rescanning will all overwrite the previous data, do you want to continue?',
     search_by_report_name:'Search by name of the required terms',
+    search_by_f2cid:'Search based on resource identification',
   },
   account: {
     cloud_account_setting:'Cloud account settings',

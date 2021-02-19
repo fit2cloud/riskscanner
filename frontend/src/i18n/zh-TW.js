@@ -473,6 +473,7 @@ export default {
     please_choose_rule: '請選中至少一條掃描規則',
     status: '是否啟用',
     rule_set: '規則組',
+    rule_set_name: '規則組名稱',
     create_rule_set: '創建規則組',
     rule_set_list: '規則組列表',
     inspection_report: '等保檢查條例',
@@ -564,6 +565,7 @@ export default {
     no_resources_allowed: '沒有掃描資源',
     handle_scans: '重新掃描會全部覆蓋掉之前的數據，是否繼續?',
     search_by_report_name: '根據要求條款名稱搜索',
+    search_by_f2cid: '根據資源標識搜索',
   },
   account: {
     cloud_account_setting: '雲賬號設置',

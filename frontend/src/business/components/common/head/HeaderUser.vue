@@ -56,7 +56,7 @@
             this.$refs.aboutUs.open();
             break;
           case "help":
-            window.location.href = "http://maguohao.com";
+            window.location.href = "https://rs-docs.fit2cloud.com";
             break;
           default:
             break;

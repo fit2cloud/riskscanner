@@ -473,6 +473,7 @@ export default {
     please_choose_rule: '请选中至少一条扫描规则',
     status: '是否启用',
     rule_set: '规则组',
+    rule_set_name: '规则组名称',
     create_rule_set: '创建规则组',
     rule_set_list: '规则组列表',
     inspection_report: '等保检查条例',
@@ -564,6 +565,7 @@ export default {
     no_resources_allowed: '没有扫描资源',
     handle_scans: '重新扫描会全部覆盖掉之前的数据，是否继续?',
     search_by_report_name: '根据要求条款名称搜索',
+    search_by_f2cid: '根据资源标识搜索',
   },
   account: {
     cloud_account_setting: '云账号设置',
