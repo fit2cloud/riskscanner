@@ -20,6 +20,7 @@
         <nacos.version>1.1.3</nacos.version>
         <dubbo.version>2.7.7</dubbo.version>
         <graalvm.version>20.1.0</graalvm.version>
+        <knife4j.version>2.0.5</knife4j.version>
     </properties>
 
     <dependencyManagement>
@@ -35,6 +36,8 @@
     </dependencyManagement>
 
     <dependencies>
+
+        <!-- spring-boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -45,22 +48,18 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -72,7 +71,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
@@ -95,45 +93,53 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.1.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
+        <!-- spring-boot -->
 
         <!-- flyway -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
+        <!-- flyway -->
+
+        <!-- mysql -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!-- mysql -->
+
+        <!-- pagehelper -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
             <version>5.0.3</version>
         </dependency>
+        <!-- pagehelper -->
 
+        <!-- shiro -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring-boot-starter</artifactId>
             <version>${shiro.version}</version>
         </dependency>
+        <!-- shiro -->
 
+        <!-- commons -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -152,6 +158,7 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
         </dependency>
+        <!-- commons -->
 
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -172,6 +179,7 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.2.32</version>
         </dependency>
+        <!-- openapi -->
 
         <dependency>
             <groupId>com.fit2cloud</groupId>
@@ -184,6 +192,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-ldap</artifactId>
         </dependency>
+        <!-- LDAP Module -->
 
         <!-- swagger 解析 -->
         <dependency>
@@ -191,6 +200,18 @@
             <artifactId>swagger-parser</artifactId>
             <version>1.0.51</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- swagger 解析 -->
 
         <!-- 执行 js 代码依赖 -->
         <dependency>
@@ -257,21 +278,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.fit2cloud</groupId>-->
-<!--            <artifactId>scanner-java-sdk</artifactId>-->
-<!--            <version>0.1.1</version>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>com.alibaba</groupId>-->
-<!--                    <artifactId>fastjson</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>httpclient</artifactId>-->
-<!--                    <groupId>org.apache.httpcomponents</groupId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
         <!-- AWS -->
 
         <!-- azure -->
@@ -348,69 +354,36 @@
             <artifactId>huaweicloud-sdk-vpc</artifactId>
             <version>3.0.23-beta</version>
         </dependency>
-
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-iam</artifactId>
             <version>3.0.23-beta</version>
         </dependency>
-
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-ecs</artifactId>
             <version>3.0.23-beta</version>
         </dependency>
-
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-evs</artifactId>
             <version>3.0.23-beta</version>
         </dependency>
-
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-ims</artifactId>
             <version>3.0.23-beta</version>
         </dependency>
-
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-ims</artifactId>
             <version>3.0.23-beta</version>
         </dependency>
-
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-ces</artifactId>
             <version>3.0.23-beta</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.huawei</groupId>-->
-<!--            <artifactId>openstack4j</artifactId>-->
-<!--            <version>1.0.19</version>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.slf4j</groupId>-->
-<!--                    <artifactId>slf4j-api</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.slf4j</groupId>-->
-<!--                    <artifactId>slf4j-simple</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>com.google.guava</groupId>-->
-<!--                    <artifactId>guava</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.yaml</groupId>-->
-<!--                    <artifactId>snakeyaml</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>com.google.code.findbugs</groupId>-->
-<!--                    <artifactId>jsr305</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
         <!-- huawei -->
 
         <!-- tencent -->

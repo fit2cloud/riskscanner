@@ -1,6 +1,7 @@
 export default {
   commons: {
     help_documentation:'Help documentation',
+    api_help_documentation:'API Documentation',
     delete_cancelled:'Canceled delete',
     workspace:'Workspace',
     organization:'Organization',
