@@ -438,21 +438,18 @@ public class UserService {
 
     /*修改当前用户用户密码*/
     private User updateCurrentUserPwd(EditPassWordRequest request) {
-        if (SessionUtils.getUser() != null) {
-            User user = userMapper.selectByPrimaryKey(SessionUtils.getUser().getId());
-            String pwd = user.getPassword();
-            String prepwd = CodingUtil.md5(request.getPassword(), "utf-8");
-            String newped = request.getNewpassword();
-            if (StringUtils.isNotBlank(prepwd)) {
-                if (prepwd.trim().equals(pwd.trim())) {
-                    user.setPassword(CodingUtil.md5(newped));
-                    user.setUpdateTime(System.currentTimeMillis());
-                    OperationLogService.log(SessionUtils.getUser(), SessionUtils.getUser().getId(), SessionUtils.getUser().getName(), ResourceTypeConstants.USER.name(), ResourceOperation.UPDATE, "修改密码");
-                    return user;
-                }
-            }
-            RSException.throwException(Translator.get("password_modification_failed"));
+        String oldPassword = CodingUtil.md5(request.getPassword(), "utf-8");
+        String newPassword = request.getNewpassword();
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIdEqualTo(SessionUtils.getUser().getId()).andPasswordEqualTo(oldPassword);
+        List<User> users = userMapper.selectByExample(userExample);
+        if (!CollectionUtils.isEmpty(users)) {
+            User user = users.get(0);
+            user.setPassword(CodingUtil.md5(newPassword));
+            user.setUpdateTime(System.currentTimeMillis());
+            return user;
         }
+        RSException.throwException(Translator.get("password_modification_failed"));
         return null;
     }
 

@@ -67,6 +67,7 @@ export default {
         for (let i = 0; i < attaData.length; i++) {
           salvProMax.push(attaData[0]);
         }
+        topName.reverse();//翻转数组，列表的名称反了
         this.options = {
           backgroundColor: "#fff",
           tooltip: {

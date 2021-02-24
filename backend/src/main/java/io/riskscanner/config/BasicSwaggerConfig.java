@@ -36,10 +36,11 @@ public class BasicSwaggerConfig {
     private TypeResolver typeResolver;
 
     private ApiInfo apiInfo() {
-        Contact contact = new Contact("RiskScanner", null, null);
+        Contact contact = new Contact("Ma GuoHao", "riskscanner.io", "guohao.ma@fit2cloud.com");
         return new ApiInfoBuilder()
                 .title("RiskScanner Restful APIs")
                 .contact(contact)
+                .description("#RiskScanner Restful APIs")
                 .version("1.0")
                 .build();
     }
@@ -49,6 +50,8 @@ public class BasicSwaggerConfig {
     public Docket docket() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
+//                //分组名称
+//                .groupName("1.0版本")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("io.riskscanner.controller"))
                 .paths(PathSelectors.any())

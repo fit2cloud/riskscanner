@@ -97,7 +97,7 @@
           <el-form-item :label="$t('rule.rule_description')" prop="description">
             <el-input v-model="createRuleForm.description" autocomplete="off" :placeholder="$t('rule.rule_description')"/>
           </el-form-item>
-          <el-form-item :label="$t('account.cloud_platform')">
+          <el-form-item :label="$t('account.cloud_platform')" :rules="{required: true, message: $t('account.cloud_platform'), trigger: 'change'}">
             <el-select style="width: 100%;" v-model="createRuleForm.pluginId" :placeholder="$t('account.please_choose_plugin')">
               <el-option
                 v-for="item in plugins"
@@ -109,7 +109,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.rule_tag')">
+          <el-form-item :label="$t('rule.rule_tag')" :rules="{required: true, message: $t('rule.rule_tag'), trigger: 'change'}">
             <el-select style="width: 100%;" multiple v-model="createRuleForm.tags" :placeholder="$t('rule.please_choose_tag')">
               <el-option
                 v-for="item in tags"
@@ -119,7 +119,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.severity')">
+          <el-form-item :label="$t('rule.severity')" :rules="{required: true, message: $t('rule.severity'), trigger: 'change'}">
             <el-select style="width: 100%;" v-model="createRuleForm.severity" :placeholder="$t('rule.please_choose_severity')">
               <el-option
                 v-for="item in severityOptions"
@@ -129,7 +129,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.rule_set')">
+          <el-form-item :label="$t('rule.rule_set')" :rules="{required: true, message: $t('rule.rule_set'), trigger: 'change'}">
             <el-select style="width: 100%;" multiple filterable v-model="createRuleForm.ruleSets">
               <el-option
                 v-for="item in ruleSetOptions"
@@ -139,7 +139,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.inspection_report')">
+          <el-form-item :label="$t('rule.inspection_report')" :rules="{required: true, message: $t('rule.inspection_report'), trigger: 'change'}">
             <el-select style="width: 100%;" multiple filterable collapse-tags v-model="createRuleForm.inspectionSeports">
               <el-option
                 v-for="item in inspectionSeportOptions"
@@ -149,10 +149,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.rule_yml')">
+          <el-form-item :label="$t('rule.rule_yml')" :rules="{required: true, message: $t('rule.rule_yml'), trigger: 'change'}">
             <codemirror ref="cmEditor" v-model="createRuleForm.script" class="code-mirror" :options="cmOptions" />
           </el-form-item>
-          <el-form-item :label="$t('rule.middleware_parameter')">
+          <el-form-item :label="$t('rule.middleware_parameter')" :rules="{required: true, message: $t('rule.middleware_parameter'), trigger: 'change'}">
             <el-button type="primary" plain @click="addParam(createRuleForm)">{{$t('rule.middleware_parameter_add')}}</el-button>
           </el-form-item>
           <el-form-item>
@@ -194,7 +194,7 @@
           <el-form-item :label="$t('rule.rule_description')" prop="description">
             <el-input v-model="updateRuleForm.description" autocomplete="off" :placeholder="$t('rule.rule_description')"/>
           </el-form-item>
-          <el-form-item :label="$t('account.cloud_platform')">
+          <el-form-item :label="$t('account.cloud_platform')" :rules="{required: true, message: $t('account.cloud_platform'), trigger: 'change'}">
             <el-select style="width: 100%;" v-model="updateRuleForm.pluginId" :placeholder="$t('account.please_choose_plugin')">
               <el-option
                 v-for="item in plugins"
@@ -206,7 +206,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.rule_tag')">
+          <el-form-item :label="$t('rule.rule_tag')" :rules="{required: true, message: $t('rule.rule_tag'), trigger: 'change'}">
             <el-select style="width: 100%;" multiple v-model="updateRuleForm.tags" :placeholder="$t('rule.please_choose_tag')">
               <el-option
                 v-for="item in tags"
@@ -216,7 +216,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.severity')">
+          <el-form-item :label="$t('rule.severity')" :rules="{required: true, message: $t('rule.severity'), trigger: 'change'}">
             <el-select style="width: 100%;" v-model="updateRuleForm.severity" :placeholder="$t('rule.please_choose_severity')">
               <el-option
                 v-for="item in severityOptions"
@@ -226,7 +226,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.rule_set')">
+          <el-form-item :label="$t('rule.rule_set')" :rules="{required: true, message: $t('rule.rule_set'), trigger: 'change'}">
             <el-select style="width: 100%;" multiple filterable v-model="updateRuleForm.ruleSets">
               <el-option
                 v-for="item in ruleSetOptions"
@@ -236,7 +236,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.inspection_report')">
+          <el-form-item :label="$t('rule.inspection_report')" :rules="{required: true, message: $t('rule.inspection_report'), trigger: 'change'}">
             <el-select style="width: 100%;" multiple filterable collapse-tags v-model="updateRuleForm.inspectionSeports">
               <el-option
                 v-for="item in inspectionSeportOptions"
@@ -246,10 +246,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.rule_yml')">
+          <el-form-item :label="$t('rule.rule_yml')" :rules="{required: true, message: $t('rule.rule_yml'), trigger: 'change'}">
             <codemirror ref="cmEditor" v-model="updateRuleForm.script" class="code-mirror" :options="cmOptions" />
           </el-form-item>
-          <el-form-item :label="$t('rule.middleware_parameter')">
+          <el-form-item :label="$t('rule.middleware_parameter')" :rules="{required: true, message: $t('rule.middleware_parameter'), trigger: 'change'}">
             <el-button type="primary" plain @click="addParam(updateRuleForm)">{{$t('rule.middleware_parameter_add')}}</el-button>
           </el-form-item>
           <el-form-item>
@@ -291,7 +291,7 @@
           <el-form-item :label="$t('rule.rule_description')" prop="description">
             <el-input v-model="copyRuleForm.description" autocomplete="off" :placeholder="$t('rule.rule_description')"/>
           </el-form-item>
-          <el-form-item :label="$t('account.cloud_platform')">
+          <el-form-item :label="$t('account.cloud_platform')" :rules="{required: true, message: $t('account.cloud_platform'), trigger: 'change'}">
             <el-select style="width: 100%;" v-model="copyRuleForm.pluginId" :placeholder="$t('account.please_choose_plugin')">
               <el-option
                 v-for="item in plugins"
@@ -303,7 +303,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.rule_tag')">
+          <el-form-item :label="$t('rule.rule_tag')" :rules="{required: true, message: $t('rule.rule_tag'), trigger: 'change'}">
             <el-select style="width: 100%;" multiple v-model="copyRuleForm.tags" :placeholder="$t('rule.please_choose_tag')">
               <el-option
                 v-for="item in tags"
@@ -313,7 +313,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.severity')">
+          <el-form-item :label="$t('rule.severity')" :rules="{required: true, message: $t('rule.severity'), trigger: 'change'}">
             <el-select style="width: 100%;" v-model="copyRuleForm.severity" :placeholder="$t('rule.please_choose_severity')">
               <el-option
                 v-for="item in severityOptions"
@@ -323,7 +323,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.rule_set')">
+          <el-form-item :label="$t('rule.rule_set')" :rules="{required: true, message: $t('rule.rule_set'), trigger: 'change'}">
             <el-select style="width: 100%;" multiple filterable v-model="copyRuleForm.ruleSets">
               <el-option
                 v-for="item in ruleSetOptions"
@@ -333,7 +333,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.inspection_report')">
+          <el-form-item :label="$t('rule.inspection_report')" :rules="{required: true, message: $t('rule.inspection_report'), trigger: 'change'}">
             <el-select style="width: 100%;" multiple filterable collapse-tags v-model="copyRuleForm.inspectionSeports">
               <el-option
                 v-for="item in inspectionSeportOptions"
@@ -343,10 +343,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('rule.rule_yml')">
+          <el-form-item :label="$t('rule.rule_yml')" :rules="{required: true, message: $t('rule.rule_yml'), trigger: 'change'}">
             <codemirror ref="cmEditor" v-model="copyRuleForm.script" class="code-mirror" :options="cmOptions" />
           </el-form-item>
-          <el-form-item :label="$t('rule.middleware_parameter')">
+          <el-form-item :label="$t('rule.middleware_parameter')" :rules="{required: true, message: $t('rule.middleware_parameter'), trigger: 'change'}">
             <el-button type="primary" plain @click="addParam(copyRuleForm)">{{$t('rule.middleware_parameter_add')}}</el-button>
           </el-form-item>
           <el-form-item>
@@ -440,7 +440,7 @@
           ],
           description: [
             {required: true, message: this.$t('rule.input_description'), trigger: 'blur'},
-            {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
+            {min: 2, max: 100, message: this.$t('commons.input_limit', [2, 100]), trigger: 'blur'},
             {
               required: true,
               message: this.$t('rule.special_characters_are_not_supported'),
@@ -621,10 +621,10 @@
         } else if (type === 'edit') {
           url = '/rule/update';
           form = 'updateRuleForm';
-          if (mdObj.flag == 1) {
-            this.$warning(this.$t('rule.rule_group_flag'));
-            return;
-          }
+          // if (mdObj.flag == 1) {
+          //   this.$warning(this.$t('rule.rule_flag'));
+          //   return;
+          // }
         } else if (type === 'copy') {
           form = 'copyRuleForm';
           url = '/rule/copy';

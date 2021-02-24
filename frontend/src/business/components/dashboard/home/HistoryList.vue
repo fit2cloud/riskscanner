@@ -15,7 +15,7 @@
           </el-table-column>
           <el-table-column :label="$t('history.scan_score')" min-width="20%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              {{!!scope.row.scanScore?scope.row.scanScore:'100'}}
+              {{scope.row.scanScore}}
             </template>
           </el-table-column>
           <el-table-column :label="$t('history.resource_result')" min-width="30%" show-overflow-tooltip>

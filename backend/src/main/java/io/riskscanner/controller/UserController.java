@@ -19,6 +19,8 @@ import io.riskscanner.dto.UserDTO;
 import io.riskscanner.dto.UserRoleDTO;
 import io.riskscanner.i18n.Translator;
 import io.riskscanner.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
+@Api(tags = "用户")
 @RequestMapping("user")
 @RestController
 public class UserController {
@@ -34,6 +37,7 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @ApiOperation(value = "添加用户")
     @PostMapping("/special/add")
     @RequiresRoles(RoleConstants.ADMIN)
     public UserDTO insertUser(@RequestBody UserRequest user) {

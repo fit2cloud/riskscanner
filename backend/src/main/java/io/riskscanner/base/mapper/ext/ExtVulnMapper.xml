@@ -162,7 +162,7 @@
             LEFT JOIN resource_rule t1 ON t.id = t1.rule_id
             LEFT JOIN resource t2 ON t1.resource_id = t2.id
         GROUP BY
-            t.id
+            t.id, t.name
         ORDER BY
             yAxis desc
         LIMIT 10

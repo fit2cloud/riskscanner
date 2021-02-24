@@ -29,10 +29,10 @@
     <el-drawer class="rtl" :title="$t('account.create')" :visible.sync="createVisible" size="70%" :before-close="handleClose" :direction="direction"
                :destroy-on-close="true">
       <el-form :model="form" label-position="right" label-width="150px" size="small" :rules="rule" ref="createAccountForm">
-        <el-form-item :label="$t('account.name')">
+        <el-form-item :label="$t('account.name')" ref="name" prop="name">
           <el-input v-model="form.name" autocomplete="off" :placeholder="$t('account.input_name')"/>
         </el-form-item>
-        <el-form-item :label="$t('account.cloud_platform')">
+        <el-form-item :label="$t('account.cloud_platform')" :rules="{required: true, message: $t('account.cloud_platform'), trigger: 'change'}">
           <el-select style="width: 100%;" v-model="form.pluginId" :placeholder="$t('account.please_choose_plugin')" @change="changePlugin(form.pluginId)">
             <el-option
               v-for="item in plugins"
@@ -103,15 +103,6 @@
         direction: 'rtl',
         plugins: [],
         rule: {
-          pluginId: [
-            {required: true, message: this.$t('user.input_id'), trigger: 'blur'},
-            {min: 2, max: 100, message: this.$t('commons.input_limit', [2, 100]), trigger: 'blur'},
-            {
-              required: true,
-              message: this.$t('user.special_characters_are_not_supported'),
-              trigger: 'blur'
-            }
-          ],
           name: [
             {required: true, message: this.$t('commons.input_name'), trigger: 'blur'},
             {min: 2, max: 100, message: this.$t('commons.input_limit', [2, 100]), trigger: 'blur'},
@@ -217,6 +208,7 @@
         this.$emit("refreshTable");
       },
       addScenario() {
+        this.form = {};
         this.createVisible = true;
       },
       enableTrash() {

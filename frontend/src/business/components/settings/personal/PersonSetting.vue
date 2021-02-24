@@ -166,6 +166,7 @@
         listenGoBack(this.handleClose);
       },
       editPassword(row) {
+        this.ruleForm.id = row.id;
         this.editPasswordVisible = true;
         listenGoBack(this.handleClose);
       },

@@ -249,7 +249,7 @@ export default {
     email_format_is_incorrect:'Email format is incorrect',
     delete_confirm:'Are you sure you want to delete this user?',
     apikey_delete_confirm:'Are you sure you want to delete this API Key?',
-    input_id_placeholder:'Please enter ID (only numbers and English letters are supported)',
+    input_id_placeholder:'Please enter ID (Chinese is not supported)',
     source:'User source',
     Administrator:'Administrator',
   },

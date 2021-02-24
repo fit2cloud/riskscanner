@@ -191,6 +191,11 @@ public class RuleService {
             ruleRequest.setLastModified(System.currentTimeMillis());
             ruleRequest.setId(UUIDUtil.newUUID());
             ruleRequest.setFlag(false);
+
+            Plugin plugin = pluginMapper.selectByPrimaryKey(ruleRequest.getPluginId());
+            ruleRequest.setPluginName(plugin.getName());
+            ruleRequest.setPluginIcon(plugin.getIcon());
+
             ruleMapper.insertSelective(ruleRequest);
             if (ruleRequest.getTags() != null) {
                 List<String> tags = ruleRequest.getTags();

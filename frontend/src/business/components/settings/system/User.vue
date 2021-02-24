@@ -86,24 +86,24 @@
 
       </el-form>
       <dialog-footer
-        @cancel="createVisible = false"
+        @cancel="handleClose()"
         @confirm="createUser('createUserForm')"/>
     </el-drawer>
 
     <!--Modify user information in system settings-->
     <el-drawer class="rtl" :title="$t('user.modify')" :visible.sync="updateVisible" size="60%" :before-close="handleClose" :direction="direction" :destroy-on-close="true"
-               v-loading="result.loading">
+               :validate-on-rule-change="true" v-loading="result.loading">
       <el-form :model="form" label-position="right" label-width="120px" size="small" :rules="rule" ref="updateUserForm">
         <el-form-item label="ID" prop="id">
           <el-input v-model="form.id" autocomplete="off" :disabled="true"/>
         </el-form-item>
-        <el-form-item :label="$t('commons.username')" prop="name">
+        <el-form-item :label="$t('commons.username')" prop="name" ref="nameForm">
           <el-input v-model="form.name" autocomplete="off"/>
         </el-form-item>
-        <el-form-item :label="$t('commons.email')" prop="email">
+        <el-form-item :label="$t('commons.email')" prop="email" ref="emailForm">
           <el-input v-model="form.email" autocomplete="off" :disabled="form.source === 'LDAP'"/>
         </el-form-item>
-        <el-form-item :label="$t('commons.phone')" prop="phone">
+        <el-form-item :label="$t('commons.phone')" prop="phone" ref="phoneForm">
           <el-input v-model="form.phone" autocomplete="off"/>
         </el-form-item>
         <div v-for="(role, index) in form.roles" :key="index">
@@ -122,7 +122,7 @@
         </div>
       </el-form>
       <dialog-footer
-        @cancel="updateVisible = false"
+        @cancel="handleClose()"
         @confirm="updateUser('updateUserForm')"/>
     </el-drawer>
 
@@ -139,7 +139,7 @@
         </el-form-item>
       </el-form>
       <dialog-footer
-        @cancel="editPasswordVisible = false"
+        @cancel="handleClose()"
         @confirm="editUserPassword('editPasswordForm')"/>
     </el-drawer>
 
@@ -203,6 +203,7 @@
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
             {
               required: true,
+              pattern: '^[^\u4e00-\u9fa5]+$',
               message: this.$t('user.special_characters_are_not_supported'),
               trigger: 'blur'
             }
@@ -266,7 +267,7 @@
       },
       edit(row) {
         this.updateVisible = true;
-        this.form = Object.assign({}, row);
+        this.form = Object.assign({roles: [{id: ''}]}, row);
         if (row.id) {
           this.$get('/userrole/all/' + encodeURIComponent(row.id), response => {
             let data = response.data;
@@ -364,6 +365,9 @@
         this.editPasswordVisible =  false;
         this.createVisible =  false;
         this.updateVisible =  false;
+        this.$refs['phoneForm'].clearValidate(); // 清除phone的验证
+        this.$refs['emailForm'].clearValidate();
+        this.$refs['nameForm'].clearValidate();
       },
       changeSwitch(row) {
         this.$post('/user/special/update_status', row, () => {

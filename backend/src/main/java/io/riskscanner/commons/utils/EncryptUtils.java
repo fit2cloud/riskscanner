@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class EncryptUtils extends CodingUtil {
 
-    private static final String secretKey = "www.fit2cloud.com";
+    private static final String secretKey = "www.fit2cloud.co";
     private static final String iv = "1234567890123456";
 
 

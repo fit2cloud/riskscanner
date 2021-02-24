@@ -102,7 +102,7 @@
   import TablePagination from "../../common/pagination/TablePagination";
   import TableOperator from "../../common/components/TableOperator";
   import DialogFooter from "../../common/components/DialogFooter";
-  import {ACCOUNT_ID} from "../../../../common/js/constants";
+  import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
   import {_sort} from "@/common/js/utils";
 
   /* eslint-disable */
@@ -137,6 +137,7 @@
         rule: {
         },
         accountId: '',
+        accountName: '',
         condition: {
           components: []
         },
@@ -241,6 +242,7 @@
                 callback: (action) => {
                   if (action === 'confirm') {
                     localStorage.setItem(ACCOUNT_ID, this.accountId);
+                    localStorage.setItem(ACCOUNT_NAME, this.accountName);
                     this.$router.push({
                       path: '/resource/result',
                     }).catch(error => error);
@@ -308,6 +310,7 @@
           return;
         }
         this.result = await this.$get("/account/getAccount/" + this.accountId, res => {
+          this.accountName = res.data.name;
           this.regions = typeof(res.data.regions) == 'string'?JSON.parse(res.data.regions):res.data.regions;
           this.condition.pluginId = res.data.pluginId;
           this.condition.accountId = this.accountId;

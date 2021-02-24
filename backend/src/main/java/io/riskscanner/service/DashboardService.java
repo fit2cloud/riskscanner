@@ -56,10 +56,6 @@ public class DashboardService {
 
     public List<DashboardTarget> target(Map<String, Object> params) {
         List<DashboardTarget> targets = extVulnMapper.target(params);
-//        targets.stream().forEach(dashboardTarget -> {
-//            String type = ruleService.getResourceTypesById(dashboardTarget.getId());
-//            JSONArray jsonArray = JSONArray.parseArray(DashboardConstants.assets);
-//        });
         return targets;
     }
 

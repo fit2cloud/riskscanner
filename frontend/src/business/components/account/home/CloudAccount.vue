@@ -64,11 +64,11 @@
       <!--Create account-->
       <el-drawer class="rtl" :title="$t('account.create')" :visible.sync="createVisible" size="65%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
-        <el-form :model="form" label-position="right" label-width="150px" size="small" :rules="rule" ref="createAccountForm">
-          <el-form-item :label="$t('account.name')">
+        <el-form :model="form" label-position="right" label-width="150px" size="small" :rules="rule" ref="accountForm">
+          <el-form-item :label="$t('account.name')"  ref="name" prop="name">
             <el-input v-model="form.name" autocomplete="off" :placeholder="$t('account.input_name')"/>
           </el-form-item>
-          <el-form-item :label="$t('account.cloud_platform')">
+          <el-form-item :label="$t('account.cloud_platform')" :rules="{required: true, message: $t('account.cloud_platform'), trigger: 'change'}">
             <el-select style="width: 100%;" v-model="form.pluginId" :placeholder="$t('account.please_choose_plugin')" @change="changePlugin(form.pluginId)">
               <el-option
                 v-for="item in plugins"
@@ -113,11 +113,11 @@
       <!--Update account-->
       <el-drawer class="rtl" :title="$t('account.update')" :visible.sync="updateVisible" size="65%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
-        <el-form :model="form" label-position="right" label-width="150px" size="small" :rules="rule" ref="updateAccountForm">
-          <el-form-item :label="$t('account.name')">
+        <el-form :model="form" label-position="right" label-width="150px" size="small" :rules="rule" ref="accountForm">
+          <el-form-item :label="$t('account.name')"  ref="name" prop="name">
             <el-input v-model="form.name" autocomplete="off" :placeholder="$t('account.input_name')"/>
           </el-form-item>
-          <el-form-item :label="$t('account.cloud_platform')">
+          <el-form-item :label="$t('account.cloud_platform')" :rules="{required: true, message: $t('account.cloud_platform'), trigger: 'change'}">
             <el-select style="width: 100%;" disabled v-model="form.pluginId" :placeholder="$t('account.please_choose_plugin')" @change="changePlugin(form.pluginId)">
               <el-option
                 v-for="item in plugins"
@@ -182,8 +182,8 @@
   import TableOperators from "../../common/components/TableOperators";
   import {_filter, _sort} from "@/common/js/utils";
   import {ACCOUNT_CONFIGS} from "../../common/components/search/search-components";
-  import {LIST_CHANGE} from "@/business/components/common/head/ListEvent";
   import DialogFooter from "../../common/components/DialogFooter";
+  import {ACCOUNT_NAME} from "../../../../common/js/constants";
 
   /* eslint-disable */
   export default {
@@ -228,15 +228,6 @@
         script: '',
         direction: 'rtl',
         rule: {
-          pluginId: [
-            {required: true, message: this.$t('user.input_id'), trigger: 'blur'},
-            {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
-            {
-              required: true,
-              message: this.$t('user.special_characters_are_not_supported'),
-              trigger: 'blur'
-            }
-          ],
           name: [
             {required: true, message: this.$t('commons.input_name'), trigger: 'blur'},
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
@@ -432,37 +423,43 @@
           this.$error(this.$t('account.i18n_account_cloud_plugin_param'));
           return;
         }
-        let data = {}, key = {};
-        for (let tmp of this.tmpList) {
-          key[tmp.name] = tmp.input;
-        }
-        data["credential"] = JSON.stringify(key);
-        data["name"] = item.name;
-        data["pluginId"] = item.pluginId;
-
-        if (type === 'add') {
-          this.result = this.$post("/account/add", data,response => {
-            if (response.success) {
-              this.$success(this.$t('account.i18n_cs_create_success'));
-              this.search();
-              this.handleClose();
-            } else {
-              this.$error(response.message);
+        this.$refs['accountForm'].validate(valid => {
+          if (valid) {
+            let data = {}, key = {};
+            for (let tmp of this.tmpList) {
+              key[tmp.name] = tmp.input;
             }
-          });
-        } else {
-          data["id"] = item.id;
-          this.result = this.$post("/account/update", data,response => {
-            if (response.success) {
-              this.$success(this.$t('account.i18n_cs_update_success'));
-              this.search();
-              this.handleClose();
-            } else {
-              this.$error(response.message);
-            }
-          });
-        }
+            data["credential"] = JSON.stringify(key);
+            data["name"] = item.name;
+            data["pluginId"] = item.pluginId;
 
+            if (type === 'add') {
+              this.result = this.$post("/account/add", data,response => {
+                if (response.success) {
+                  this.$success(this.$t('account.i18n_cs_create_success'));
+                  this.search();
+                  this.handleClose();
+                } else {
+                  this.$error(response.message);
+                }
+              });
+            } else {
+              data["id"] = item.id;
+              this.result = this.$post("/account/update", data,response => {
+                if (response.success) {
+                  this.$success(this.$t('account.i18n_cs_update_success'));
+                  this.search();
+                  this.handleClose();
+                } else {
+                  this.$error(response.message);
+                }
+              });
+            }
+          } else {
+            this.$error(this.$t('rule.full_param'));
+            return false;
+          }
+        });
       },
       tableRowClassName({row, rowIndex}) {
         if (rowIndex % 4 === 0) {
@@ -497,6 +494,13 @@
                   'Content-Type': undefined
                 }
               }, () => {
+                for (let item of this.tableData) {
+                  if (this.selectIds[0]===item.id) {
+                    localStorage.setItem(ACCOUNT_ID, item.id);
+                    localStorage.setItem(ACCOUNT_NAME, item.name);
+                    break;
+                  }
+                }
                 this.$router.push({
                   path: '/resource/result',
                 }).catch(error => error);

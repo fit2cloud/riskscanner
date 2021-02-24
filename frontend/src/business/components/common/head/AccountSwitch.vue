@@ -29,6 +29,7 @@
 import SearchList from "@/business/components/common/head/SearchList";
 import {ACCOUNT_NAME} from "../../../../common/js/constants";
 
+/* eslint-disable */
 export default {
   name: "AccountSwitch",
   props: {
@@ -42,9 +43,9 @@ export default {
   },
   data() {
     return {
-      currentAccount: this.accountName
+      currentAccount: !!this.accountName?this.accountName:localStorage.getItem(ACCOUNT_NAME)
     }
-  }
+  },
 }
 </script>
 
