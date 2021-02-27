@@ -14,21 +14,27 @@ public class IndexController {
 
     @GetMapping(value = "/")
     public String index() {
-        return "index.html";
+        String s;
+        s = "index.html";
+        return s;
     }
 
     @GetMapping(value = "/login")
     public String login() {
+        String s;
         if (SessionUtils.getUser() == null) {
-            return "login.html";
+            s = "login.html";
         } else {
-            return "redirect:/";
+            s = "redirect:/";
         }
+        return s;
     }
 
     @GetMapping(value = "/sso/login")
     public String ossLogin() {
-        return "redirect:/";
+        String s;
+        s = "redirect:/";
+        return s;
     }
 
     @GetMapping(value = "/sso/logout")

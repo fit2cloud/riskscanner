@@ -12,17 +12,16 @@ import io.riskscanner.base.mapper.ext.ExtTaskMapper;
 import io.riskscanner.commons.constants.CommandEnum;
 import io.riskscanner.commons.constants.ResourceConstants;
 import io.riskscanner.commons.constants.TaskConstants;
+import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.*;
 import io.riskscanner.controller.request.excel.ExcelExportRequest;
 import io.riskscanner.controller.request.resource.ResourceRequest;
 import io.riskscanner.dto.*;
 import io.riskscanner.i18n.Translator;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,6 +31,9 @@ import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.alibaba.fastjson.JSON.parseArray;
+import static com.alibaba.fastjson.JSON.parseObject;
 
 /**
  * @author maguohao
@@ -82,7 +84,8 @@ public class ResourceService {
             List<ResourceDTO> complianceResultList = getComplianceResult(request);
             for (ResourceDTO resourceDTO : complianceResultList) {
                 //pretty the json  string
-                StringBuffer stringBuffer = new StringBuffer();
+                StringBuilder stringBuffer;
+                stringBuffer = new StringBuilder();
                 String pretty = JSON.toJSONString(resourceDTO, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat);
                 stringBuffer.append(pretty);
                 resourceDTO.setResourceStr(stringBuffer.toString());
@@ -99,24 +102,23 @@ public class ResourceService {
     }
 
     private List<ResourceDTO> getComplianceResult(ResourceRequest resourceRequest) {
-        List<ResourceDTO> complianceResult = extResourceMapper.getComplianceResult(resourceRequest);
-        return complianceResult;
+        return extResourceMapper.getComplianceResult(resourceRequest);
     }
 
-    public ResourceWithBLOBs saveResource(ResourceWithBLOBs resourceWithBLOBs, TaskItemWithBLOBs taskItem, Task task, TaskItemResourceWithBLOBs taskItemResource) throws Exception {
+    public ResourceWithBLOBs saveResource(ResourceWithBLOBs resourceWithBLOBs, TaskItemWithBLOBs taskItem, Task task, TaskItemResourceWithBLOBs taskItemResource) {
         try {
             //保存创建的资源
             long now = System.currentTimeMillis();
             resourceWithBLOBs.setCreateTime(now);
             resourceWithBLOBs.setUpdateTime(now);
-            JSONArray jsonArray = JSONArray.parseArray(resourceWithBLOBs.getResources());
+            JSONArray jsonArray = parseArray(resourceWithBLOBs.getResources());
             resourceWithBLOBs.setReturnSum((long) jsonArray.size());
             //执行去除filter的yaml，取到总数
             resourceWithBLOBs = updateResourceSum(resourceWithBLOBs);
 
             for (Object obj : jsonArray) {
                 //资源详情
-                saveResourceItem(resourceWithBLOBs, JSONObject.parseObject(obj.toString()));
+                saveResourceItem(resourceWithBLOBs, parseObject(obj.toString()));
             }
             //资源、规则、申请人关联表
             ResourceRule resourceRule = new ResourceRule();
@@ -134,23 +136,23 @@ public class ResourceService {
             insertTaskItemResource(taskItemResource);
 
             //计算sum资源总数与扫描的资源数到task
-            int resource_sum = extTaskMapper.getResourceSum(task.getId());
-            int return_sum = extTaskMapper.getReturnSum(task.getId());
-            task.setResourcesSum((long) resource_sum);
-            task.setReturnSum((long) return_sum);
+            int resourceSum = extTaskMapper.getResourceSum(task.getId());
+            int returnSum = extTaskMapper.getReturnSum(task.getId());
+            task.setResourcesSum((long) resourceSum);
+            task.setReturnSum((long) returnSum);
             taskMapper.updateByPrimaryKeySelective(task);
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
-            throw e;
+            RSException.throwException(e.getMessage());
         }
 
         return resourceWithBLOBs;
     }
 
-    private ResourceItem saveResourceItem(ResourceWithBLOBs resourceWithBLOBs, JSONObject jsonObject) throws Exception {
+    private void saveResourceItem(ResourceWithBLOBs resourceWithBLOBs, JSONObject jsonObject) {
         ResourceItem resourceItem = new ResourceItem();
         try{
-            String F2CId = jsonObject.getString("F2CId");
+            String fid = jsonObject.getString("F2CId");
             resourceItem.setAccountId(resourceWithBLOBs.getAccountId());
             resourceItem.setUpdateTime(System.currentTimeMillis());
             resourceItem.setPluginIcon(resourceWithBLOBs.getPluginIcon());
@@ -161,13 +163,13 @@ public class ResourceService {
             resourceItem.setResourceId(resourceWithBLOBs.getId());
             resourceItem.setSeverity(resourceWithBLOBs.getSeverity());
             resourceItem.setResourceType(resourceWithBLOBs.getResourceType());
-            resourceItem.setF2cId(F2CId);
+            resourceItem.setF2cId(fid);
             resourceItem.setResource(jsonObject.toJSONString());
 
             ResourceItemExample example = new ResourceItemExample();
-            example.createCriteria().andF2cIdEqualTo(F2CId).andResourceIdEqualTo(resourceWithBLOBs.getId());
+            example.createCriteria().andF2cIdEqualTo(fid).andResourceIdEqualTo(resourceWithBLOBs.getId());
             List<ResourceItem> resourceItems = resourceItemMapper.selectByExampleWithBLOBs(example);
-            if (resourceItems.size() > 0) {
+            if (!resourceItems.isEmpty()) {
                 resourceItem.setId(resourceItems.get(0).getId());
                 resourceItemMapper.updateByPrimaryKeySelective(resourceItem);
             } else {
@@ -179,10 +181,9 @@ public class ResourceService {
             LogUtil.error(e.getMessage());
             throw e;
         }
-        return resourceItem;
     }
 
-    private ResourceWithBLOBs updateResourceSum(ResourceWithBLOBs resourceWithBLOBs) throws Exception {
+    private ResourceWithBLOBs updateResourceSum(ResourceWithBLOBs resourceWithBLOBs) {
         try {
             resourceWithBLOBs = calculateTotal(resourceWithBLOBs);
             AccountWithBLOBs account = accountMapper.selectByPrimaryKey(resourceWithBLOBs.getAccountId());
@@ -208,8 +209,8 @@ public class ResourceService {
         return resourceWithBLOBs;
     }
 
-    public ResourceWithBLOBs calculateTotal(ResourceWithBLOBs resourceWithBLOBs) throws Exception {
-        String dirPath = "";
+    public ResourceWithBLOBs calculateTotal(ResourceWithBLOBs resourceWithBLOBs) {
+        String dirPath;
         try {
             String uuid = resourceWithBLOBs.getId() != null ? resourceWithBLOBs.getId() : UUIDUtil.newUUID();
             String resultFile = ResourceConstants.QUERY_ALL_RESOURCE.replace("{resource_name}", resourceWithBLOBs.getDirName());
@@ -223,7 +224,7 @@ public class ResourceService {
                 LogUtil.getLogger().debug("resource created: {}", resultStr);
             }
             String resources = ReadFileUtils.readJsonFile(dirPath + "/" + resourceWithBLOBs.getDirName() + "/", TaskConstants.RESOURCES_RESULT_FILE);
-            JSONArray jsonArray = JSONArray.parseArray(resources);
+            JSONArray jsonArray = parseArray(resources);
             if ((long) jsonArray.size() < resourceWithBLOBs.getReturnSum()) {
                 resourceWithBLOBs.setResourcesSum(resourceWithBLOBs.getReturnSum());
             } else {
@@ -234,7 +235,7 @@ public class ResourceService {
             String deleteResourceDir = "rm -rf " + dirPath;
             CommandUtils.commonExecCmdWithResult(deleteResourceDir, dirPath);
         } catch (Exception e) {
-            throw e;
+            RSException.throwException(e.getMessage());
         }
         return resourceWithBLOBs;
     }
@@ -269,17 +270,15 @@ public class ResourceService {
     }
 
     public String toJSONString(String jsonString) {
-        JSONObject object = JSONObject.parseObject(jsonString);
-        String pretty = JSON.toJSONString(object, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
+        JSONObject object = parseObject(jsonString);
+        return JSON.toJSONString(object, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat);
-        return pretty;
     }
 
     public String toJSONString2(String jsonString) {
-        JSONArray jsonArray = JSONArray.parseArray(jsonString);
-        String pretty = JSON.toJSONString(jsonArray, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
+        JSONArray jsonArray = parseArray(jsonString);
+        return JSON.toJSONString(jsonArray, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat);
-        return pretty;
     }
 
     public List<String> getResourceIdsByTaskItemId(String taskItemId) {
@@ -291,29 +290,10 @@ public class ResourceService {
                 .collect(Collectors.toList());
     }
 
-    public List<ResourceWithBLOBs> getResourceByTaskItemId(String taskItemId) {
-        List<ResourceWithBLOBs> list = new LinkedList<>();
-        TaskItemResourceExample example = new TaskItemResourceExample();
-        example.createCriteria().andTaskItemIdEqualTo(taskItemId);
-        List<TaskItemResource> taskItemResources = taskItemResourceMapper.selectByExample(example);
-        if (CollectionUtils.size(taskItemResources) != 1) {
-            return null;
-        }
-        for (TaskItemResource itemResource : taskItemResources) {
-            ResourceWithBLOBs resourceWithBLOBs = resourceMapper.selectByPrimaryKey(itemResource.getResourceId());
-            list.add(resourceWithBLOBs);
-        }
-        return list;
-    }
-
     /**
      * 执行actions(修复动作)
-     * @param id
-     * @param operating
-     * @return
-     * @throws Exception
      */
-    public ResourceWithBLOBs operatingResource(String id, String operating) throws Exception {
+    public ResourceWithBLOBs operatingResource(String id, String operating) {
         ResourceWithBLOBs resourceWithBLOBs = resourceMapper.selectByPrimaryKey(id);
         try {
             operatingDetail(resourceWithBLOBs, operating);
@@ -328,12 +308,12 @@ public class ResourceService {
         } catch (Exception e) {
             resourceWithBLOBs.setResourceStatus(ResourceConstants.RESOURCE_STATUS.Error.name());
             resourceMapper.updateByPrimaryKeySelective(resourceWithBLOBs);
-            throw e;
+            RSException.throwException(e.getMessage());
         }
         return resourceWithBLOBs;
     }
 
-    public ResourceWithBLOBs operatingDetail(ResourceWithBLOBs resourceWithBLOBs, String operating) throws Exception {
+    public ResourceWithBLOBs operatingDetail(ResourceWithBLOBs resourceWithBLOBs, String operating) {
         try {
             String operation = "";
             String finalScript = "";
@@ -344,7 +324,7 @@ public class ResourceService {
                 operation = Translator.get("i18n_more_resource");
                 finalScript = resourceWithBLOBs.getResourceCommand();
             }
-            String dirPath = "";
+            String dirPath;
             AccountExample example = new AccountExample();
             example.createCriteria().andPluginNameEqualTo(resourceWithBLOBs.getPluginName()).andStatusEqualTo("VALID");
             String region = resourceWithBLOBs.getRegionId();
@@ -360,18 +340,18 @@ public class ResourceService {
             String command = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.run.getCommand(), dirPath, "policy.yml", map);
             String resultStr = CommandUtils.commonExecCmdWithResult(command, dirPath);
             if (!resultStr.isEmpty() && !resultStr.contains("INFO")) {
-                throw new Exception(Translator.get("i18n_compliance_rule_error") + ": " + resultStr);
+                RSException.throwException(Translator.get("i18n_compliance_rule_error") + ": " + resultStr);
             }
             CommandUtils.commonExecCmdWithResult(command, dirPath);//第一次执行action会修复资源，但是会返回修复之前的数据回来。所以此处再执行一次
-            String custodian_run = ReadFileUtils.readJsonFile(dirPath + "/" + taskItemResource.getDirName() + "/", TaskConstants.CUSTODIAN_RUN_RESULT_FILE);
+            String custodianRun = ReadFileUtils.readJsonFile(dirPath + "/" + taskItemResource.getDirName() + "/", TaskConstants.CUSTODIAN_RUN_RESULT_FILE);
             String metadata = ReadFileUtils.readJsonFile(dirPath + "/" + taskItemResource.getDirName() + "/", TaskConstants.METADATA_RESULT_FILE);
             String resources = ReadFileUtils.readJsonFile(dirPath + "/" + taskItemResource.getDirName() + "/", TaskConstants.RESOURCES_RESULT_FILE);
 
-            resourceWithBLOBs.setCustodianRunLog(custodian_run);
+            resourceWithBLOBs.setCustodianRunLog(custodianRun);
             resourceWithBLOBs.setMetadata(metadata);
             resourceWithBLOBs.setResources(resources);
 
-            JSONArray jsonArray = JSONArray.parseArray(resourceWithBLOBs.getResources());
+            JSONArray jsonArray = parseArray(resourceWithBLOBs.getResources());
             resourceWithBLOBs.setReturnSum((long) jsonArray.size());
             resourceWithBLOBs = calculateTotal(resourceWithBLOBs);
 
@@ -379,7 +359,7 @@ public class ResourceService {
                     + Translator.get("i18n_region") + ": " + resourceWithBLOBs.getRegionName() + "，" + Translator.get("i18n_rule_type") + ": " + resourceWithBLOBs.getResourceType() + "，" + Translator.get("i18n_resource_manage") + ": "
                     + resourceWithBLOBs.getResourceName() + "，" + Translator.get("i18n_resource_manage") + ": " + resourceWithBLOBs.getReturnSum() + "/" + resourceWithBLOBs.getResourcesSum(), true);
         } catch (Exception e) {
-            throw e;
+            RSException.throwException(e.getMessage());
         }
         return resourceWithBLOBs;
     }
@@ -413,10 +393,8 @@ public class ResourceService {
 
     /**
      * 导出excel
-     * @param request
-     * @return
-     * @throws Exception
      */
+    @SuppressWarnings(value={"unchecked","deprecation", "serial"})
     public byte[] export(ExcelExportRequest request) throws Exception {
         Map<String, Object> params = request.getParams();
         ResourceRequest resourceRequest = new ResourceRequest();
@@ -425,42 +403,44 @@ public class ResourceService {
         }
         List<ExcelExportRequest.Column> columns = request.getColumns();
         List<ResourceDTO> resourceDTOS = search(resourceRequest);
-        List<List<Object>> data = resourceDTOS.stream().map(resource -> new ArrayList<Object>() {{
-            columns.forEach(column -> {
-                try {
-                    switch (column.getKey()) {
-                        case "cloud_account":
-                            add(resource.getPluginName());
-                            break;
-                        case "severity":
-                            add(Translator.get(resource.getSeverity()));
-                            break;
-                        case "return_sum":
-                            add(resource.getResourceWithBLOBs().getReturnSum() + "/" + resource.getResourceWithBLOBs().getResourcesSum());
-                            break;
-                        case "resource_status":
-                            add(Translator.get(resource.getResourceWithBLOBs().getResourceStatus()));
-                            break;
-                        case "bug_fix":
-                            if (resource.getResourceWithBLOBs().getReturnSum() > 0 && resource.getResourceWithBLOBs().getResourceCommandAction().contains("actions")) {
-                                add(Translator.get("i18n_fix"));
-                            } else if (resource.getResourceWithBLOBs().getReturnSum() == 0 && StringUtils.equals("NotNeedFix", resource.getResourceWithBLOBs().getResourceStatus())) {
-                                add(Translator.get("NotNeedFix"));
-                            } else if (resource.getResourceWithBLOBs().getReturnSum() > 0 && !resource.getResourceWithBLOBs().getResourceCommandAction().contains("actions")) {
-                                add(Translator.get("i18n_no_fix"));
-                            } else {
-                                add("N/A");
-                            }
-                            break;
-                        default:
-                            add(MethodUtils.invokeMethod(resource, "get" + StringUtils.capitalize(ExcelExportUtils.underlineToCamelCase(column.getKey()))));
-                            break;
+        List<List<Object>> data = resourceDTOS.stream().map(resource -> {
+            return new ArrayList<Object>() {{
+                columns.forEach(column -> {
+                    try {
+                        switch (column.getKey()) {
+                            case "cloud_account":
+                                add(resource.getPluginName());
+                                break;
+                            case "severity":
+                                add(Translator.get(resource.getSeverity()));
+                                break;
+                            case "return_sum":
+                                add(resource.getResourceWithBLOBs().getReturnSum() + "/" + resource.getResourceWithBLOBs().getResourcesSum());
+                                break;
+                            case "resource_status":
+                                add(Translator.get(resource.getResourceWithBLOBs().getResourceStatus()));
+                                break;
+                            case "bug_fix":
+                                if (resource.getResourceWithBLOBs().getReturnSum() > 0 && resource.getResourceWithBLOBs().getResourceCommandAction().contains("actions")) {
+                                    add(Translator.get("i18n_fix"));
+                                } else if (resource.getResourceWithBLOBs().getReturnSum() == 0 && StringUtils.equals("NotNeedFix", resource.getResourceWithBLOBs().getResourceStatus())) {
+                                    add(Translator.get("NotNeedFix"));
+                                } else if (resource.getResourceWithBLOBs().getReturnSum() > 0 && !resource.getResourceWithBLOBs().getResourceCommandAction().contains("actions")) {
+                                    add(Translator.get("i18n_no_fix"));
+                                } else {
+                                    add("N/A");
+                                }
+                                break;
+                            default:
+                                add(MethodUtils.invokeMethod(resource, "get" + StringUtils.capitalize(ExcelExportUtils.underlineToCamelCase(column.getKey()))));
+                                break;
+                        }
+                    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                        LogUtil.error("export resource excel error: ", ExceptionUtils.getStackTrace(e));
                     }
-                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                    LogUtil.error("export resource excel error: ", ExceptionUtils.getStackTrace(e));
-                }
-            });
-        }}).collect(Collectors.toList());
+                });
+            }};
+        }).collect(Collectors.toList());
         return ExcelExportUtils.exportExcelData("resource detail", request.getColumns().stream().map(ExcelExportRequest.Column::getValue).collect(Collectors.toList()), data);
     }
 
@@ -483,11 +463,11 @@ public class ResourceService {
         List<ScanHistory> list = scanHistoryMapper.selectByExample(scanHistoryExample);
 
         ScanHistory history = new ScanHistory();
-        history.setResourcesSum(Long.valueOf(0));
-        history.setReturnSum(Long.valueOf(0));
+        history.setResourcesSum(0L);
+        history.setReturnSum(0L);
         history.setScanScore(100);
         history.setOperator("System");
-        if (list.size() > 0) {
+        if (!list.isEmpty()) {
             int id = list.get(0).getId();
             history.setId(id);
             extScanHistoryMapper.updateByExampleSelective(history);

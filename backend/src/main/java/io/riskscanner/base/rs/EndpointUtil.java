@@ -32,7 +32,7 @@ public class EndpointUtil {
             }
         }
         if (null == endPoint){
-            throw new RSException("没有对应的endpoint");
+            RSException.throwException("没有对应的endpoint");
         }
         return endPoint;
     }

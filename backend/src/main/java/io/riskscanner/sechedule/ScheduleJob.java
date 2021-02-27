@@ -43,17 +43,17 @@ public abstract class ScheduleJob implements Job {
     abstract void businessExecute(JobExecutionContext context);
 
     @QuartzScheduled(cron = "${cron.regions.sync}")
-    public void SyncRegions() throws PluginException, ClientException {
+    public void SyncRegions() {
         accountService.syncRegions();
     }
 
     @QuartzScheduled(cron = "${cron.taskSum.sync}")
-    public void SyncTaskSum() throws PluginException {
+    public void SyncTaskSum() {
         taskService.syncTaskSum();
     }
 
     @QuartzScheduled(cron = "${cron.history.sync}")
-    public void SyncScan() throws PluginException, ClientException {
+    public void SyncScan() {
         ruleService.syncScanHistory();
     }
 }

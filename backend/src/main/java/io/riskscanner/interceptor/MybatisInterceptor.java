@@ -67,7 +67,6 @@ public class MybatisInterceptor implements Interceptor {
         if (interceptorConfigMap.get(pClassName) != null) {
             return interceptorConfigMap.get(pClassName);
         }
-        Map<String, List<MybatisInterceptorConfig>> m = new HashMap<>();
         for (MybatisInterceptorConfig interceptorConfig : interceptorConfigList) {
             String className = interceptorConfig.getModelName();
             String attrName = interceptorConfig.getAttrName();
@@ -82,15 +81,9 @@ public class MybatisInterceptor implements Interceptor {
                     }
                 }
                 if (c.isInstance(p)) {
-                    if (result.get(attrName) == null) {
-                        result.put(attrName, new HashMap<>());
-                    }
-                    if (StringUtils.isNotBlank(interceptorConfig.getInterceptorMethod())) {
-                        result.get(attrName).put(Methods.encrypt.name(), interceptorConfig);
-                    }
-                    if (StringUtils.isNotBlank(interceptorConfig.getInterceptorMethod())) {
-                        result.get(attrName).put(Methods.decrypt.name(), interceptorConfig);
-                    }
+                    if (result.get(attrName) == null) result.put(attrName, new HashMap<>());
+                    if (StringUtils.isNotBlank(interceptorConfig.getInterceptorMethod())) result.get(attrName).put(Methods.encrypt.name(), interceptorConfig);
+                    if (StringUtils.isNotBlank(interceptorConfig.getInterceptorMethod())) result.get(attrName).put(Methods.decrypt.name(), interceptorConfig);
                 }
             }
         }
@@ -185,8 +178,6 @@ public class MybatisInterceptor implements Interceptor {
 
     @Override
     public void setProperties(Properties properties) {
-        // TODO Auto-generated method stub
-
     }
 
     public List<MybatisInterceptorConfig> getInterceptorConfigList() {

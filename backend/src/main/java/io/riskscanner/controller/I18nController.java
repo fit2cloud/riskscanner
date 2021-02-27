@@ -37,24 +37,22 @@ public class I18nController {
             response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
             LogUtil.error("Invalid parameter: " + lang);
             RSException.throwException(Translator.get("error_lang_invalid"));
-        }
-        userService.setLanguage(targetLang.getDesc());
-        Cookie cookie = new Cookie(I18nConstants.LANG_COOKIE_NAME, targetLang.getDesc());
-        cookie.setPath("/");
-        cookie.setMaxAge(FOR_EVER);
-        response.addCookie(cookie);
-        //重新登录
-        if ("release".equals(runMode)) {
-            Cookie f2cCookie = new Cookie("RS_SESSION_ID", "deleteMe");
-            f2cCookie.setPath("/");
-            f2cCookie.setMaxAge(0);
-            response.addCookie(f2cCookie);
-        }
-        //本地测试用
-        if ("local".equals(runMode)) {
-            if (request != null) {
-                request.getSession(true).setAttribute(I18nConstants.LANG_COOKIE_NAME, lang);
+        } else {
+            userService.setLanguage(targetLang.getDesc());
+            Cookie cookie = new Cookie(I18nConstants.LANG_COOKIE_NAME, targetLang.getDesc());
+            cookie.setPath("/");
+            cookie.setMaxAge(FOR_EVER);
+            response.addCookie(cookie);
+            //重新登录
+            if ("release".equals(runMode)) {
+                Cookie f2cCookie = new Cookie("RS_SESSION_ID", "deleteMe");
+                f2cCookie.setPath("/");
+                f2cCookie.setMaxAge(0);
+                response.addCookie(f2cCookie);
             }
+            //本地测试用
+            if ("local".equals(runMode))
+                if (request != null) request.getSession(true).setAttribute(I18nConstants.LANG_COOKIE_NAME, lang);
         }
     }
 }

@@ -1,9 +1,7 @@
 package io.riskscanner.service;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.Gson;
 import io.riskscanner.base.domain.*;
 import io.riskscanner.base.mapper.*;
 import io.riskscanner.base.mapper.ext.ExtRuleGroupMapper;
@@ -33,7 +31,8 @@ import org.yaml.snakeyaml.Yaml;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static com.alibaba.fastjson.JSON.parseArray;
 
 /**
  * @author maguohao
@@ -84,25 +83,20 @@ public class RuleService {
     private ExtRuleGroupMapper extRuleGroupMapper;
     @Resource
     private TaskItemMapper taskItemMapper;
-    @Resource
-    private ScanTaskHistoryMapper scanTaskHistoryMapper;
 
     public List<RuleDTO> getRules(CreateRuleRequest ruleRequest) {
-        List<RuleDTO> ruleDTOS = extRuleMapper.listAllWithTag(ruleRequest);
-        return ruleDTOS;
+        return extRuleMapper.listAllWithTag(ruleRequest);
     }
 
     public List<RuleTag> ruleTagList(RuleTagRequest request) {
-        List<RuleTag> ruleTagList = extRuleTagMapper.list(request);
-        return ruleTagList;
+        return extRuleTagMapper.list(request);
     }
 
     public List<RuleGroupDTO> ruleGroupList(RuleGroupRequest request) {
-        List<RuleGroupDTO> ruleGroupList = extRuleGroupMapper.list(request);
-        return ruleGroupList;
+        return extRuleGroupMapper.list(request);
     }
 
-    public Rule saveRules(CreateRuleRequest ruleRequest) throws Exception {
+    public Rule saveRules(CreateRuleRequest ruleRequest) {
         try {
             taskService.validateYaml(BeanUtils.copyBean(new QuartzTaskDTO(), ruleRequest));
             if (StringUtils.isBlank(ruleRequest.getId())) {
@@ -132,8 +126,7 @@ public class RuleService {
                 List<String> tags = ruleRequest.getTags();
                 saveRuleTagMapping(ruleRequest.getId(), tags.toArray(new String[0]));
             } else {
-                String[] tagKeys = new String[0];
-                tagKeys[0] = ruleRequest.getTagKey();
+                String[] tagKeys = {ruleRequest.getTagKey()};
                 saveRuleTagMapping(ruleRequest.getId(), tagKeys);
             }
 
@@ -142,15 +135,16 @@ public class RuleService {
             saveRuleType(ruleRequest);
             OperationLogService.log(SessionUtils.getUser(), ruleRequest.getId(), ruleRequest.getName(), ResourceTypeConstants.RULE.name(), ResourceOperation.CREATE, "创建规则");
         } catch (Exception e) {
-            throw e;
+            RSException.throwException(e.getMessage());
         }
         return ruleRequest;
     }
 
-    public boolean saveRuleType(CreateRuleRequest ruleRequest) throws Exception {
+    @SuppressWarnings({"unchecked"})
+    public boolean saveRuleType(CreateRuleRequest ruleRequest) {
         try {
             String script = ruleRequest.getScript();
-            JSONArray jsonArray = JSON.parseArray(ruleRequest.getParameter());
+            JSONArray jsonArray = parseArray(ruleRequest.getParameter());
             for (Object o : jsonArray) {
                 JSONObject jsonObject = (JSONObject) o;
                 String key = "${{" + jsonObject.getString("key") + "}}";
@@ -159,7 +153,7 @@ public class RuleService {
                 }
             }
             Yaml yaml = new Yaml();
-            Map map = (Map) yaml.load(script);
+            Map map = yaml.load(script);
             RuleType ruleType = new RuleType();
             ruleType.setRuleId(ruleRequest.getId());
             RuleTypeExample example = new RuleTypeExample();
@@ -171,7 +165,7 @@ public class RuleService {
                     String resourceType = m.get("resource").toString();
                     example.createCriteria().andRuleIdEqualTo(ruleRequest.getId()).andResourceTypeEqualTo(resourceType);
                     List<RuleType> ruleTypes = ruleTypeMapper.selectByExample(example);
-                    if (ruleTypes.size() == 0) {
+                    if (ruleTypes.isEmpty()) {
                         ruleType.setId(UUIDUtil.newUUID());
                         ruleType.setResourceType(resourceType);
                         ruleTypeMapper.insertSelective(ruleType);
@@ -185,7 +179,7 @@ public class RuleService {
         return true;
     }
 
-    public Rule copyRule(CreateRuleRequest ruleRequest) throws Exception {
+    public Rule copyRule(CreateRuleRequest ruleRequest) {
         try {
             taskService.validateYaml(BeanUtils.copyBean(new QuartzTaskDTO(), ruleRequest));
             ruleRequest.setLastModified(System.currentTimeMillis());
@@ -205,11 +199,11 @@ public class RuleService {
             saveRuleInspectionReportMapping(ruleRequest.getId(), ruleRequest.getInspectionSeports());
             boolean flag = saveRuleType(ruleRequest);
             if (!flag) {
-                throw new Exception(Translator.get("i18n_compliance_rule_code_error"));
+                RSException.throwException(Translator.get("i18n_compliance_rule_code_error"));
             }
             OperationLogService.log(SessionUtils.getUser(), ruleRequest.getId(), ruleRequest.getName(), ResourceTypeConstants.RULE.name(), ResourceOperation.CREATE, "复制规则");
         } catch (Exception e) {
-            throw e;
+            RSException.throwException(e.getMessage());
         }
         return ruleRequest;
     }
@@ -229,7 +223,7 @@ public class RuleService {
 
     public void saveRuleGroupMapping(String ruleId, List<String> ruleGroups) {
         deleteRuleGroupMapping(ruleId);
-        if (ruleGroups == null || ruleGroups.size() < 1) {
+        if (ruleGroups.isEmpty()) {
             return;
         }
         for (String ruleGroup : ruleGroups) {
@@ -242,7 +236,7 @@ public class RuleService {
 
     public void saveRuleInspectionReportMapping(String ruleId, List<String> ruleInspectionReports) {
         deleteRuleInspectionReportMapping(ruleId);
-        if (ruleInspectionReports == null || ruleInspectionReports.size() < 1) {
+        if (ruleInspectionReports.isEmpty()) {
             return;
         }
         for (String ruleInspectionReport : ruleInspectionReports) {
@@ -253,7 +247,7 @@ public class RuleService {
         }
     }
 
-    public Object runRules(RuleDTO ruleDTO) throws Exception {
+    public Object runRules(RuleDTO ruleDTO) {
         try {
             taskService.validateYaml(BeanUtils.copyBean(new QuartzTaskDTO(), ruleDTO));
             QuartzTaskDTO quartzTaskDTO = new QuartzTaskDTO();
@@ -261,7 +255,7 @@ public class RuleService {
             quartzTaskDTO.setType("manual");
             return taskService.saveManualTask(quartzTaskDTO);
         } catch (Exception e) {
-            throw e;
+            throw new RSException(e.getMessage());
         }
     }
 
@@ -272,12 +266,12 @@ public class RuleService {
         return taskService.dryRun(quartzTaskDTO);
     }
 
-    public void deleteRule(String id) throws RSException {
+    public void deleteRule(String id) {
         Rule rule = ruleMapper.selectByPrimaryKey(id);
         ResourceRuleExample resourceItemRuleExample = new ResourceRuleExample();
         resourceItemRuleExample.createCriteria().andRuleIdEqualTo(id);
         List<ResourceRule> list = resourceRuleMapper.selectByExample(resourceItemRuleExample);
-        if (list.size() == 0) {
+        if (list.isEmpty()) {
             ruleMapper.deleteByPrimaryKey(id);
             RuleTagMappingExample example = new RuleTagMappingExample();
             example.createCriteria().andRuleIdEqualTo(id);
@@ -289,10 +283,11 @@ public class RuleService {
             deleteRuleGroupMapping(id);
             OperationLogService.log(SessionUtils.getUser(), id, rule.getName(), ResourceTypeConstants.RULE.name(), ResourceOperation.DELETE, "删除规则");
         } else {
-            throw new RSException(Translator.get("i18n_compliance_rule_useage_error"));
+            RSException.throwException(Translator.get("i18n_compliance_rule_useage_error"));
         }
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, rollbackFor = {RuntimeException.class, Exception.class})
     public RuleDTO getRuleById(String id) {
         RuleDTO ruleDTO = new RuleDTO();
         Rule rule = ruleMapper.selectByPrimaryKey(id);
@@ -303,7 +298,7 @@ public class RuleService {
         RuleTagMappingExample example = new RuleTagMappingExample();
         example.createCriteria().andRuleIdEqualTo(id);
         List<RuleTagMapping> ruleTagMappingList = ruleTagMappingMapper.selectByExample(example);
-        ruleTagMappingList.stream().forEach(obj -> tags.add(obj.getTagKey()));
+        ruleTagMappingList.forEach(obj -> tags.add(obj.getTagKey()));
         ruleDTO.setTags(tags);
 
         //规则组
@@ -311,7 +306,7 @@ public class RuleService {
         RuleGroupMappingExample ruleGroupMappingExample = new RuleGroupMappingExample();
         ruleGroupMappingExample.createCriteria().andRuleIdEqualTo(id);
         List<RuleGroupMapping> ruleGroupMappings = ruleGroupMappingMapper.selectByExample(ruleGroupMappingExample);
-        ruleGroupMappings.stream().forEach(obj -> ruleSets.add(Integer.valueOf(obj.getGroupId())));
+        ruleGroupMappings.forEach(obj -> ruleSets.add(Integer.valueOf(obj.getGroupId())));
         ruleDTO.setRuleSets(ruleSets);
 
         //规则条例
@@ -319,7 +314,7 @@ public class RuleService {
         RuleInspectionReportMappingExample ruleInspectionReportMappingExample = new RuleInspectionReportMappingExample();
         ruleInspectionReportMappingExample.createCriteria().andRuleIdEqualTo(id);
         List<RuleInspectionReportMapping> ruleInspectionReportMappings = ruleInspectionReportMappingMapper.selectByExample(ruleInspectionReportMappingExample);
-        ruleInspectionReportMappings.stream().forEach(obj -> inspectionSeports.add(Integer.valueOf(obj.getReportId())));
+        ruleInspectionReportMappings.forEach(obj -> inspectionSeports.add(Integer.valueOf(obj.getReportId())));
         ruleDTO.setInspectionSeports(inspectionSeports);
 
         return ruleDTO;
@@ -339,7 +334,7 @@ public class RuleService {
         RuleTagMappingExample example = new RuleTagMappingExample();
         example.createCriteria().andRuleIdEqualTo(id);
         List<RuleTagMapping> ruleTagMappingList = ruleTagMappingMapper.selectByExample(example);
-        ruleTagMappingList.stream().forEach(obj -> tags.add(obj.getTagKey()));
+        ruleTagMappingList.forEach(obj -> tags.add(obj.getTagKey()));
         ruleDTO.setTags(tags);
 
         //规则组
@@ -347,7 +342,7 @@ public class RuleService {
         RuleGroupMappingExample ruleGroupMappingExample = new RuleGroupMappingExample();
         ruleGroupMappingExample.createCriteria().andRuleIdEqualTo(id);
         List<RuleGroupMapping> ruleGroupMappings = ruleGroupMappingMapper.selectByExample(ruleGroupMappingExample);
-        ruleGroupMappings.stream().forEach(obj -> ruleSets.add(Integer.valueOf(obj.getGroupId())));
+        ruleGroupMappings.forEach(obj -> ruleSets.add(Integer.valueOf(obj.getGroupId())));
         ruleDTO.setRuleSets(ruleSets);
 
         //规则条例
@@ -355,7 +350,7 @@ public class RuleService {
         RuleInspectionReportMappingExample ruleInspectionReportMappingExample = new RuleInspectionReportMappingExample();
         ruleInspectionReportMappingExample.createCriteria().andRuleIdEqualTo(id);
         List<RuleInspectionReportMapping> ruleInspectionReportMappings = ruleInspectionReportMappingMapper.selectByExample(ruleInspectionReportMappingExample);
-        ruleInspectionReportMappings.stream().forEach(obj -> inspectionSeports.add(Integer.valueOf(obj.getReportId())));
+        ruleInspectionReportMappings.forEach(obj -> inspectionSeports.add(Integer.valueOf(obj.getReportId())));
         ruleDTO.setInspectionSeports(inspectionSeports);
 
         return ruleDTO;
@@ -367,18 +362,12 @@ public class RuleService {
         criteria.andNameEqualTo(request.getName());
         List<Rule> list = ruleMapper.selectByExample(example);
         if (StringUtils.equalsIgnoreCase(request.getType(), "edit")) {
-            if (list.size() > 1) {
+            if (!list.isEmpty() && list.size() > 1) {
                 return false;
             } else if (list.size() == 1) {
-                if (!StringUtils.equalsIgnoreCase(request.getId(), list.get(0).getId())) {
-                    return false;
-                }
+                return StringUtils.equalsIgnoreCase(request.getId(), list.get(0).getId());
             }
-        } else {
-            if (list.size() > 0) {
-                return false;
-            }
-        }
+        } else return list.isEmpty();
         return true;
     }
 
@@ -404,47 +393,41 @@ public class RuleService {
         return ruleTag;
     }
 
-    public int deleteRuleTag(String tagkey, String ruleId) {
-        int result = 0;
+    public void deleteRuleTag(String tagkey, String ruleId) {
         if (StringUtils.isNotBlank(tagkey)) {
-            result = ruleTagMapper.deleteByPrimaryKey(tagkey);
-            RuleTagExample RuleTagExample = new RuleTagExample();
-            RuleTagExample.createCriteria().andTagKeyEqualTo(tagkey);
-            ruleTagMapper.deleteByExample(RuleTagExample);
+            ruleTagMapper.deleteByPrimaryKey(tagkey);
+            RuleTagExample ruleTagExample = new RuleTagExample();
+            ruleTagExample.createCriteria().andTagKeyEqualTo(tagkey);
+            ruleTagMapper.deleteByExample(ruleTagExample);
         }
         if (StringUtils.isNotBlank(ruleId)) {
-            RuleTagMappingExample RuleTagMappingExample = new RuleTagMappingExample();
-            RuleTagMappingExample.createCriteria().andRuleIdEqualTo(ruleId);
-            ruleTagMappingMapper.deleteByExample(RuleTagMappingExample);
+            RuleTagMappingExample ruleTagMappingExample = new RuleTagMappingExample();
+            ruleTagMappingExample.createCriteria().andRuleIdEqualTo(ruleId);
+            ruleTagMappingMapper.deleteByExample(ruleTagMappingExample);
         }
-        return result;
     }
 
-    public int deleteRuleGroupMapping(String ruleId) {
-        int result = 0;
+    public void deleteRuleGroupMapping(String ruleId) {
         if (StringUtils.isNotBlank(ruleId)) {
             RuleGroupMappingExample example = new RuleGroupMappingExample();
             example.createCriteria().andRuleIdEqualTo(ruleId);
-            result = ruleGroupMappingMapper.deleteByExample(example);
+            ruleGroupMappingMapper.deleteByExample(example);
         }
-        return result;
     }
 
-    public int deleteRuleInspectionReportMapping(String ruleId) {
-        int result = 0;
+    public void deleteRuleInspectionReportMapping(String ruleId) {
         if (StringUtils.isNotBlank(ruleId)) {
             RuleInspectionReportMappingExample example = new RuleInspectionReportMappingExample();
             example.createCriteria().andRuleIdEqualTo(ruleId);
-            result = ruleInspectionReportMappingMapper.deleteByExample(example);
+            ruleInspectionReportMappingMapper.deleteByExample(example);
         }
-        return result;
     }
 
-    public int deleteRuleTagByTagKey(String tagkey) throws Exception {
+    public int deleteRuleTagByTagKey(String tagkey) {
         RuleTagMappingExample example = new RuleTagMappingExample();
         example.createCriteria().andTagKeyEqualTo(tagkey);
         List<RuleTagMapping> list = ruleTagMappingMapper.selectByExample(example);
-        if (list.size() > 0) throw new Exception(Translator.get("i18n_not_allowed"));
+        if (!list.isEmpty()) RSException.throwException(Translator.get("i18n_not_allowed"));
         OperationLogService.log(SessionUtils.getUser(), tagkey, tagkey, ResourceTypeConstants.RULE_TAG.name(), ResourceOperation.DELETE, "删除规则标签");
         return ruleTagMapper.deleteByPrimaryKey(tagkey);
     }
@@ -470,7 +453,7 @@ public class RuleService {
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, rollbackFor = {RuntimeException.class, Exception.class})
-    public void scan(List<String> ids) throws RSException {
+    public void scan(List<String> ids) {
         ids.forEach(id -> {
             AccountWithBLOBs account = accountMapper.selectByPrimaryKey(id);
             this.scan(account);
@@ -478,21 +461,19 @@ public class RuleService {
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, rollbackFor = {RuntimeException.class, Exception.class})
-    public void reScans(String accountId) throws RSException {
+    public void reScans(String accountId) {
         AccountWithBLOBs account = accountMapper.selectByPrimaryKey(accountId);
         this.scan(account);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, rollbackFor = {RuntimeException.class, Exception.class})
-    public void reScan(String taskId, String accountId) throws RSException {
+    public void reScan(String taskId, String accountId) {
         TaskItemExample example = new TaskItemExample();
         example.createCriteria().andTaskIdEqualTo(taskId);
         List<TaskItem> taskItems = taskItemMapper.selectByExample(example);
         AccountWithBLOBs account = accountMapper.selectByPrimaryKey(accountId);
         RuleDTO rule = getRuleById(taskItems.get(0).getRuleId());
-        if (!rule.getStatus()) {
-            throw new RSException(Translator.get("i18n_disabled_rules_not_scanning"));
-        }
+        if (!rule.getStatus()) RSException.throwException(Translator.get("i18n_disabled_rules_not_scanning"));
         Integer scanId = orderService.insertScanHistory(account);
         this.dealTask(rule, account, scanId);
     }
@@ -512,38 +493,40 @@ public class RuleService {
 
     private void dealTask (RuleDTO rule, AccountWithBLOBs account, Integer scanId) {
         try {
-            if (!rule.getStatus()) {
+            if (rule.getStatus()) {
+                QuartzTaskDTO quartzTaskDTO = new QuartzTaskDTO();
+                BeanUtils.copyBean(quartzTaskDTO, rule);
+                List<SelectTag> selectTags = new LinkedList<>();
+                SelectTag s = new SelectTag();
+                s.setAccountId(account.getId());
+                JSONArray array = parseArray(account.getRegions());
+                JSONObject object;
+                List<String> regions = new ArrayList<>();
+                for (int i = 0; i < array.size(); i++) {
+                    object = array.getJSONObject(i);
+                    String value = object.getString("regionId");
+                    regions.add(value);
+                }
+                s.setRegions(regions);
+                selectTags.add(s);
+                quartzTaskDTO.setSelectTags(selectTags);
+                quartzTaskDTO.setType("manual");
+                quartzTaskDTO.setAccountId(account.getId());
+                quartzTaskDTO.setTaskName(rule.getName());
+                Task task = taskService.saveManualTask(quartzTaskDTO);
+                orderService.insertTaskHistory(task, scanId);
+            } else {
                 LogUtil.warn(rule.getName() + ": " + Translator.get("i18n_disabled_rules_not_scanning"));
-                return;
+                RSException.throwException(rule.getName() + ": " + Translator.get("i18n_disabled_rules_not_scanning"));
             }
-            QuartzTaskDTO quartzTaskDTO = new QuartzTaskDTO();
-            BeanUtils.copyBean(quartzTaskDTO, rule);
-            List<SelectTag> SelectTags = new LinkedList<>();
-            SelectTag s = new SelectTag();
-            s.setAccountId(account.getId());
-            JSONArray array = JSONArray.parseArray(account.getRegions());
-            JSONObject object = null;
-            List<String> regions = new ArrayList<>();
-            for (int i = 0; i < array.size(); i++) {
-                object = array.getJSONObject(i);
-                String value = object.getString("regionId");
-                regions.add(value);
-            }
-            s.setRegions(regions);
-            SelectTags.add(s);
-            quartzTaskDTO.setSelectTags(SelectTags);
-            quartzTaskDTO.setType("manual");
-            quartzTaskDTO.setAccountId(account.getId());
-            quartzTaskDTO.setTaskName(rule.getName());
-            Task task = taskService.saveManualTask(quartzTaskDTO);
-            orderService.insertTaskHistory(task, scanId);
         } catch (java.lang.Exception e) {
             LogUtil.error(e);
+            RSException.throwException(e.getMessage());
         }
     }
 
-    public Integer insertScanHistory (String accountId) {
-        return orderService.insertScanHistory(accountMapper.selectByPrimaryKey(accountId));
+    public void insertScanHistory (String accountId) {
+        orderService.insertScanHistory(accountMapper.selectByPrimaryKey(accountId));
     }
 
     public void syncScanHistory () {
@@ -556,7 +539,7 @@ public class RuleService {
                 RuleExample ruleExample = new RuleExample();
                 ruleExample.createCriteria().andPluginIdEqualTo(account.getPluginId());
                 List<Rule> rules = ruleMapper.selectByExample(ruleExample);
-                if (rules.size() == 0) return;
+                if (rules.isEmpty()) return;
 
                 long current = System.currentTimeMillis();
                 long zero = current/(1000*3600*24)*(1000*3600*24) - TimeZone.getDefault().getRawOffset();//当天00点
@@ -564,7 +547,7 @@ public class RuleService {
                 ScanHistoryExample example = new ScanHistoryExample();
                 example.createCriteria().andAccountIdEqualTo(account.getId()).andCreateTimeEqualTo(zero);
                 List<ScanHistory> list = scanHistoryMapper.selectByExample(example);
-                if (list.size() > 0) {
+                if (!list.isEmpty()) {
                     orderService.insertScanHistory(account);
                 } else {
                     Integer scanId = orderService.insertScanHistory(account);
@@ -579,20 +562,20 @@ public class RuleService {
                             try {
                                 QuartzTaskDTO quartzTaskDTO = new QuartzTaskDTO();
                                 BeanUtils.copyBean(quartzTaskDTO, rule);
-                                List<SelectTag> SelectTags = new LinkedList<>();
+                                List<SelectTag> selectTags = new LinkedList<>();
                                 SelectTag s = new SelectTag();
                                 s.setAccountId(account.getId());
-                                JSONArray array = JSONArray.parseArray(account.getRegions());
-                                JSONObject object = null;
+                                JSONArray jsonArray = parseArray(account.getRegions());
+                                JSONObject object;
                                 List<String> regions = new ArrayList<>();
-                                for (int i = 0; i < array.size(); i++) {
-                                    object = array.getJSONObject(i);
+                                for (int i = 0; i < jsonArray.size(); i++) {
+                                    object = jsonArray.getJSONObject(i);
                                     String value = object.getString("regionId");
                                     regions.add(value);
                                 }
                                 s.setRegions(regions);
-                                SelectTags.add(s);
-                                quartzTaskDTO.setSelectTags(SelectTags);
+                                selectTags.add(s);
+                                quartzTaskDTO.setSelectTags(selectTags);
                                 quartzTaskDTO.setType("manual");
                                 quartzTaskDTO.setAccountId(account.getId());
                                 quartzTaskDTO.setTaskName(rule.getName());
@@ -621,7 +604,6 @@ public class RuleService {
     }
 
     public int deleteRuleGroupById(Integer id) {
-        int result = ruleGroupMapper.deleteByPrimaryKey(id);
-        return result;
+        return ruleGroupMapper.deleteByPrimaryKey(id);
     }
 }

@@ -13,13 +13,11 @@ import io.riskscanner.base.mapper.ext.ExtAccountMapper;
 import io.riskscanner.commons.constants.CloudAccountConstants;
 import io.riskscanner.commons.constants.ResourceOperation;
 import io.riskscanner.commons.constants.ResourceTypeConstants;
-import io.riskscanner.commons.exception.PluginException;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.*;
 import io.riskscanner.controller.request.account.CloudAccountRequest;
 import io.riskscanner.controller.request.account.CreateCloudAccountRequest;
 import io.riskscanner.controller.request.account.UpdateCloudAccountRequest;
-import io.riskscanner.controller.request.resource.JsonRequest;
 import io.riskscanner.dto.AccountDTO;
 import io.riskscanner.dto.QuartzTaskDTO;
 import io.riskscanner.dto.RuleDTO;
@@ -32,12 +30,16 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static com.alibaba.fastjson.JSON.parseArray;
+import static com.alibaba.fastjson.JSON.parseObject;
 
 /**
  * @author maguohao
  */
 @Service
-@Transactional(rollbackFor = RSException.class)
+@Transactional(rollbackFor = Exception.class)
 public class AccountService {
 
     @Resource
@@ -52,36 +54,25 @@ public class AccountService {
     private RuleAccountParameterMapper ruleAccountParameterMapper;
 
     public List<AccountDTO> getCloudAccountList(CloudAccountRequest request) {
-        List<AccountDTO> getCloudAccountList = extAccountMapper.getCloudAccountList(request);
-        return getCloudAccountList;
+        return extAccountMapper.getCloudAccountList(request);
     }
 
-    public List<AccountWithBLOBs> getAllCloudAccount(CloudAccountRequest request) {
-        AccountExample example = new AccountExample();
-        if (StringUtils.isNotEmpty(request.getPluginName())) {
-            example.createCriteria().andPluginNameEqualTo(request.getPluginName());
-        }
-        return accountMapper.selectByExampleWithBLOBs(example);
-    }
-
-    public Object getAccount(String id) {
+    public AccountWithBLOBs getAccount(String id) {
        return accountMapper.selectByPrimaryKey(id);
     }
 
-    public void validate(List<String> ids) throws RSException {
-        ids.forEach(id -> {
-            commonThreadPool.addTask(() -> {
-                try {
-                    validate(id);
-                } catch (RSException e) {
-                    LogUtil.error(e);
-                }
-            });
-        });
+    public void validate(List<String> ids) {
+        ids.forEach(id -> commonThreadPool.addTask(() -> {
+            try {
+                validate(id);
+            } catch (Exception e) {
+                LogUtil.error(e);
+            }
+        }));
     }
 
 
-    public boolean validate(String id) throws RSException {
+    public boolean validate(String id) {
         AccountWithBLOBs account = accountMapper.selectByPrimaryKey(id);
         //检验账号的有效性
         boolean valid = validateAccount(account);
@@ -94,28 +85,21 @@ public class AccountService {
         return valid;
     }
 
-    private boolean validateAccount(AccountWithBLOBs account) throws RSException {
+    private boolean validateAccount(AccountWithBLOBs account) {
         try {
             return PlatformUtils.validateCredential(account);
-        } catch (RSException e) {
-            Throwable t = e;
-            LogUtil.error(String.format("RSException in verifying cloud account, cloud account: [%s], plugin: [%s], error information:%s", account.getName(), account.getPluginName(), t.getMessage()), t);
+        } catch (Exception e) {
+            LogUtil.error(String.format("RSException in verifying cloud account, cloud account: [%s], plugin: [%s], error information:%s", account.getName(), account.getPluginName(), e.getMessage()), e);
             return false;
         }
     }
 
-    public AccountWithBLOBs addAccount(CreateCloudAccountRequest request) throws java.lang.Exception {
+    public AccountWithBLOBs addAccount(CreateCloudAccountRequest request) {
         try{
             //参数校验
             if (StringUtils.isEmpty(request.getCredential())
                     || StringUtils.isEmpty(request.getName()) || StringUtils.isEmpty(request.getPluginId())) {
                 RSException.throwException(Translator.get("i18n_ex_cloud_account_name_or_plugin"));
-            }
-
-            //校验云插件是否存在
-            Plugin plugin = pluginMapper.selectByPrimaryKey(request.getPluginId());
-            if (plugin == null) {
-                RSException.throwException(Translator.get("i18n_ex_cloud_account_no_exist_plugin"));
             }
 
             //云账号名称不能重复
@@ -128,40 +112,39 @@ public class AccountService {
 
             AccountWithBLOBs account = new AccountWithBLOBs();
 
-            BeanUtils.copyBean(account, request);
-            account.setPluginIcon(plugin.getIcon());
-            account.setPluginName(plugin.getName());
-            account.setCreateTime(System.currentTimeMillis());
-            account.setUpdateTime(System.currentTimeMillis());
-            account.setCreator(SessionUtils.getUser().getId());
-            account.setId(UUIDUtil.newUUID());
-            accountMapper.insertSelective(account);
-            updateRegions(account);
-            OperationLogService.log(SessionUtils.getUser(), account.getId(), account.getName(), ResourceTypeConstants.CLOUD_ACCOUNT.name(), ResourceOperation.CREATE, "创建云账号");
-            return getCloudAccountById(account.getId());
-        } catch (RSException e) {
+            //校验云插件是否存在
+            Plugin plugin = pluginMapper.selectByPrimaryKey(request.getPluginId());
+            if (plugin == null) {
+                RSException.throwException(Translator.get("i18n_ex_cloud_account_no_exist_plugin"));
+            } else {
+                BeanUtils.copyBean(account, request);
+                account.setPluginIcon(Objects.requireNonNull(plugin.getIcon()));
+                account.setPluginName(plugin.getName());
+                account.setCreateTime(System.currentTimeMillis());
+                account.setUpdateTime(System.currentTimeMillis());
+                account.setCreator(Objects.requireNonNull(SessionUtils.getUser()).getId());
+                account.setId(UUIDUtil.newUUID());
+                accountMapper.insertSelective(account);
+                updateRegions(account);
+                OperationLogService.log(SessionUtils.getUser(), account.getId(), account.getName(), ResourceTypeConstants.CLOUD_ACCOUNT.name(), ResourceOperation.CREATE, "创建云账号");
+                return getCloudAccountById(account.getId());
+            }
+        } catch (RSException | ClientException e) {
             RSException.throwException(e.getMessage());
-            return null;
         }
+        return null;
     }
 
     private AccountWithBLOBs getCloudAccountById(String id) {
-        AccountWithBLOBs account = accountMapper.selectByPrimaryKey(id);
-        return account;
+        return accountMapper.selectByPrimaryKey(id);
     }
 
-    public AccountWithBLOBs editAccount(UpdateCloudAccountRequest request) throws java.lang.Exception {
+    public AccountWithBLOBs editAccount(UpdateCloudAccountRequest request) {
         try {
             //参数校验
             if (StringUtils.isEmpty(request.getCredential())
                     || StringUtils.isEmpty(request.getId())) {
                 RSException.throwException(Translator.get("i18n_ex_cloud_account_id_or_plugin"));
-            }
-
-            //校验云插件是否存在
-            Plugin plugin = pluginMapper.selectByPrimaryKey(request.getPluginId());
-            if (plugin == null) {
-                RSException.throwException(Translator.get("i18n_ex_cloud_account_no_exist_plugin"));
             }
 
             //云账号名称不能重复
@@ -177,21 +160,28 @@ public class AccountService {
             }
 
             AccountWithBLOBs account = new AccountWithBLOBs();
-            BeanUtils.copyBean(account, request);
-            account.setPluginIcon(plugin.getIcon());
-            account.setPluginName(plugin.getName());
-            account.setUpdateTime(System.currentTimeMillis());
-            accountMapper.updateByPrimaryKeySelective(account);
-            account = accountMapper.selectByPrimaryKey(account.getId());
-            updateRegions(account);
+            //校验云插件是否存在
+            Plugin plugin = pluginMapper.selectByPrimaryKey(request.getPluginId());
+            if (plugin == null) {
+                RSException.throwException(Translator.get("i18n_ex_cloud_account_no_exist_plugin"));
+            } else {
+                BeanUtils.copyBean(account, request);
+                account.setPluginIcon(plugin.getIcon());
+                account.setPluginName(plugin.getName());
+                account.setUpdateTime(System.currentTimeMillis());
+                accountMapper.updateByPrimaryKeySelective(account);
+                account = accountMapper.selectByPrimaryKey(account.getId());
+                updateRegions(account);
 
-            //检验账号已更新状态
-            OperationLogService.log(SessionUtils.getUser(), account.getId(), account.getName(), ResourceTypeConstants.CLOUD_ACCOUNT.name(), ResourceOperation.UPDATE, "更新云账号");
-            return getCloudAccountById(account.getId());
-        } catch (RSException e) {
+                //检验账号已更新状态
+                OperationLogService.log(SessionUtils.getUser(), account.getId(), account.getName(), ResourceTypeConstants.CLOUD_ACCOUNT.name(), ResourceOperation.UPDATE, "更新云账号");
+                return getCloudAccountById(account.getId());
+            }
+
+        } catch (RSException | ClientException e) {
             RSException.throwException(e.getMessage());
-            return null;
         }
+        return null;
     }
 
     public void delete(String accountId) {
@@ -200,11 +190,11 @@ public class AccountService {
         OperationLogService.log(SessionUtils.getUser(), accountId, accountWithBLOBs.getName(), ResourceTypeConstants.CLOUD_ACCOUNT.name(), ResourceOperation.DELETE, "删除云账号");
     }
 
-    public Object getRegions(String id) throws RSException {
+    public Object getRegions(String id) {
         try {
             boolean flag = validate(id);
             if (!flag) {
-                throw new RSException(Translator.get("i18n_ex_plugin_validate"));
+                RSException.throwException(Translator.get("i18n_ex_plugin_validate"));
             }
             AccountWithBLOBs account = accountMapper.selectByPrimaryKey(id);
             String regions = account.getRegions();
@@ -218,25 +208,25 @@ public class AccountService {
         }
     }
 
-    public void syncRegions() throws RSException, PluginException, ClientException {
+    public void syncRegions() {
         try {
             List<AccountWithBLOBs> list = accountMapper.selectByExampleWithBLOBs(null);
             list.forEach(account -> {
                 try {
                     updateRegions(account);
-                } catch (PluginException | ClientException e) {
+                } catch (ClientException e) {
                     LogUtil.error(e.getMessage());
                 }
             });
         } catch (RSException e) {
-            throw new RSException(e.getMessage());
+            RSException.throwException(e.getMessage());
         }
     }
 
-    public void updateRegions(AccountWithBLOBs account) throws RSException, PluginException, ClientException {
+    public void updateRegions(AccountWithBLOBs account) throws ClientException {
         try {
             JSONArray jsonArray = PlatformUtils._getRegions(account, validate(account.getId()));
-            if (jsonArray != null && jsonArray.size() > 0) {
+            if (!jsonArray.isEmpty()) {
                 account.setRegions(jsonArray.toJSONString());
                 accountMapper.updateByPrimaryKeySelective(account);
             }
@@ -246,15 +236,14 @@ public class AccountService {
     }
 
     public String string2PrettyFormat (String regions) {
-        StringBuffer stringBuffer = new StringBuffer();
-        JSONArray jsonArray = JSON.parseArray(regions);
+        StringBuilder stringBuffer = new StringBuilder();
+        JSONArray jsonArray = parseArray(regions);
         String pretty = JSON.toJSONString(jsonArray, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat);
         stringBuffer.append(pretty);
         return stringBuffer.toString();
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public Object cleanParameter(List<RuleAccountParameter> list) throws RSException {
+    public Object cleanParameter(List<RuleAccountParameter> list) {
         try {
             list.forEach(rule -> {
                 if (rule.getRuleId() != null) {
@@ -271,25 +260,9 @@ public class AccountService {
         return true;
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public Object saveParameter(List<QuartzTaskDTO> list) throws RSException {
+    public Object saveParameter(List<QuartzTaskDTO> list) {
         try {
-            list.forEach(quartzTaskDTO -> {
-                RuleAccountParameter parameter = new RuleAccountParameter();
-                parameter.setAccountId(quartzTaskDTO.getAccountId());
-                parameter.setRuleId(quartzTaskDTO.getId());
-                parameter.setParameter(quartzTaskDTO.getParameter());
-                parameter.setRegions(quartzTaskDTO.getRegions());
-
-                RuleAccountParameterExample example = new RuleAccountParameterExample();
-                example.createCriteria().andAccountIdEqualTo(quartzTaskDTO.getAccountId()).andRuleIdEqualTo(quartzTaskDTO.getId());
-                List<RuleAccountParameter> parameters = ruleAccountParameterMapper.selectByExample(example);
-                if (parameters.size() > 0) {
-                    ruleAccountParameterMapper.updateByExampleSelective(parameter, example);
-                } else {
-                    ruleAccountParameterMapper.insertSelective(parameter);
-                }
-            });
+            list.forEach(this::accept);
             OperationLogService.log(SessionUtils.getUser(), list.get(0).getId(), accountMapper.selectByPrimaryKey(list.get(0).getAccountId()).getName(), ResourceTypeConstants.CLOUD_ACCOUNT.name(), ResourceOperation.CREATE, "保存云账号参数");
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
@@ -299,33 +272,27 @@ public class AccountService {
     }
 
     public List<RuleDTO> getRules(QuartzTaskDTO dto) {
-        List<RuleDTO> ruleDTOS = extAccountMapper.ruleList(dto);
-        return ruleDTOS;
+        return extAccountMapper.ruleList(dto);
     }
 
     public List<Map<String, Object>> groupList(Map<String, Object> params) {
-        List<Map<String, Object>> groupList = extAccountMapper.groupList(params);
-        return groupList;
+        return extAccountMapper.groupList(params);
     }
 
     public List<Map<String, Object>> reportList(Map<String, Object> params) {
-        List<Map<String, Object>> reportList = extAccountMapper.reportList(params);
-        return reportList;
+        return extAccountMapper.reportList(params);
     }
 
     public List<Map<String, Object>> tagList(Map<String, Object> params) {
-        List<Map<String, Object>> tagList = extAccountMapper.tagList(params);
-        return tagList;
+        return extAccountMapper.tagList(params);
     }
 
     public List<Map<String, Object>> regionsList(Map<String, Object> params) {
-        List<Map<String, Object>> regionsList = extAccountMapper.regionsList(params);
-        return regionsList;
+        return extAccountMapper.regionsList(params);
     }
 
     public List<Map<String, Object>> resourceList(Map<String, Object> params) {
-        List<Map<String, Object>> resourceList = extAccountMapper.resourceList(params);
-        return resourceList;
+        return extAccountMapper.resourceList(params);
     }
 
     public String strategy(String type) throws Exception {
@@ -339,16 +306,31 @@ public class AccountService {
     }
 
     public String toJSONString(String jsonString) {
-        JSONObject object = JSONObject.parseObject(jsonString);
-        String pretty = JSON.toJSONString(object, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
+        JSONObject object = parseObject(jsonString);
+        return JSON.toJSONString(object, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat);
-        return pretty;
     }
 
     public String toJSONString2(String jsonString) {
-        JSONArray jsonArray = JSONArray.parseArray(jsonString);
-        String pretty = JSON.toJSONString(jsonArray, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
+        JSONArray jsonArray = parseArray(jsonString);
+        return JSON.toJSONString(jsonArray, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat);
-        return pretty;
+    }
+
+    private void accept(QuartzTaskDTO quartzTaskDTO) {
+        RuleAccountParameter parameter = new RuleAccountParameter();
+        parameter.setAccountId(quartzTaskDTO.getAccountId());
+        parameter.setRuleId(quartzTaskDTO.getId());
+        parameter.setParameter(quartzTaskDTO.getParameter());
+        parameter.setRegions(quartzTaskDTO.getRegions());
+
+        RuleAccountParameterExample example = new RuleAccountParameterExample();
+        example.createCriteria().andAccountIdEqualTo(quartzTaskDTO.getAccountId()).andRuleIdEqualTo(quartzTaskDTO.getId());
+        List<RuleAccountParameter> parameters = ruleAccountParameterMapper.selectByExample(example);
+        if (!parameters.isEmpty()) {
+            ruleAccountParameterMapper.updateByExampleSelective(parameter, example);
+        } else {
+            ruleAccountParameterMapper.insertSelective(parameter);
+        }
     }
 }

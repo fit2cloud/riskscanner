@@ -43,15 +43,14 @@ public class SystemParameterService {
 
     public void editMail(List<SystemParameter> parameters) {
         List<SystemParameter> paramList = this.getParamList(ParamConstants.Classify.MAIL.getValue());
-        boolean empty = paramList.size() <= 0;
+        if (paramList.isEmpty()) return;
 
         parameters.forEach(parameter -> {
             SystemParameterExample example = new SystemParameterExample();
-            if (parameter.getParamKey().equals(ParamConstants.MAIL.PASSWORD.getKey())) {
-                if (!StringUtils.isBlank(parameter.getParamValue())) {
-                    String string = EncryptUtils.aesEncrypt(parameter.getParamValue()).toString();
-                    parameter.setParamValue(string);
-                }
+            if (parameter.getParamKey().equals(ParamConstants.MAIL.PASSWORD.getKey()) &&
+                    !StringUtils.isBlank(parameter.getParamValue())) {
+                String string = EncryptUtils.aesEncrypt(parameter.getParamValue()).toString();
+                parameter.setParamValue(string);
             }
             example.createCriteria().andParamKeyEqualTo(parameter.getParamKey());
             if (systemParameterMapper.countByExample(example) > 0) {
@@ -74,7 +73,7 @@ public class SystemParameterService {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setDefaultEncoding("UTF-8");
         javaMailSender.setHost(hashMap.get(ParamConstants.MAIL.SERVER.getKey()));
-        javaMailSender.setPort(Integer.valueOf(hashMap.get(ParamConstants.MAIL.PORT.getKey())));
+        javaMailSender.setPort(Integer.parseInt(hashMap.get(ParamConstants.MAIL.PORT.getKey())));
         javaMailSender.setUsername(hashMap.get(ParamConstants.MAIL.ACCOUNT.getKey()));
         javaMailSender.setPassword(hashMap.get(ParamConstants.MAIL.PASSWORD.getKey()));
         Properties props = new Properties();
@@ -130,7 +129,7 @@ public class SystemParameterService {
 
     public void saveLdap(List<SystemParameter> parameters) {
         SystemParameterExample example = new SystemParameterExample();
-        parameters.forEach(param -> {
+        for (SystemParameter param : parameters) {
             if (param.getParamKey().equals(ParamConstants.LDAP.PASSWORD.getValue())) {
                 String string = EncryptUtils.aesEncrypt(param.getParamValue()).toString();
                 param.setParamValue(string);
@@ -142,7 +141,7 @@ public class SystemParameterService {
                 systemParameterMapper.insert(param);
             }
             example.clear();
-        });
+        }
     }
 
     public LdapInfo getLdapInfo(String type) {

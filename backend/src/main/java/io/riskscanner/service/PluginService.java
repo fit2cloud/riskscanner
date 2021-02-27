@@ -29,18 +29,17 @@ public class PluginService {
         return pluginMapper.selectByExample(null);
     }
 
-    public Object getCredential(String pluginId) {
+    public String getCredential(String pluginId) {
         try {
             return ReadFileUtils.readConfigFile(BASE_CREDENTIAL_DIC, pluginId, JSON_EXTENSION);
         } catch (RSException e) {
             LogUtil.error("Error getting credential parameters: " + pluginId, e);
             RSException.throwException(Translator.get("i18n_ex_plugin_get"));
-            return "";
-        } catch (java.lang.Exception e) {
+        } catch (Exception e) {
             LogUtil.error("Error getting credential parameters: " + pluginId, e);
             RSException.throwException(Translator.get("i18n_ex_plugin_get"));
-            return "";
         }
+        return Translator.get("i18n_ex_plugin_get");
     }
 
     public List<Plugin> getPluginList(PluginRequest request) {

@@ -37,10 +37,10 @@ public class ClientUtil {
 
     private static ClientBuilder clientBuilder(String busiType) throws RSException {
         if (clientClassMap == null ){
-            throw new RSException("All client classes are not loaded");
+            RSException.throwException("All client classes are not loaded");
         }
         if (!clientClassMap.containsKey(busiType)){
-            throw new RSException("This business type client does not exist");
+            RSException.throwException("This business type client does not exist");
         }
         ClientBuilder clientBuilder = clientClassMap.get(busiType);
         return clientBuilder;
@@ -95,7 +95,7 @@ public class ClientUtil {
         Boolean projectIdNull = StringUtils.isEmpty(busiRequest.getHuaweiCloudCredential().getProjectId());
         Boolean regionIdNull =  StringUtils.isEmpty(busiRequest.getRegionId());
         if (projectIdNull && regionIdNull){
-            throw new RSException("Missing required parameters['projectId'||'regionId'] for constructing client");
+            RSException.throwException("Missing required parameters['projectId'||'regionId'] for constructing client");
         }
 
         if (StringUtils.isNotEmpty(busiRequest.getBusiType())) {
@@ -109,7 +109,7 @@ public class ClientUtil {
                 List<ProjectResult> projectResults = ProjectUtil.listProjects(iamClient, userId);
                 projectResults = ProjectUtil.filterWithRequest(projectResults, busiRequest);
                 if (projectResults.size() == 0 ){
-                    throw new RSException("There are no projects in this region["+busiRequest.getRegionId()+"]");
+                    RSException.throwException("There are no projects in this region["+busiRequest.getRegionId()+"]");
                 }
                 ProjectResult projectResult = projectResults.get(0);
                 busiRequest.getHuaweiCloudCredential().setProjectId(projectResult.getId());

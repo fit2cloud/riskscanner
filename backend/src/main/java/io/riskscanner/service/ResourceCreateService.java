@@ -1,6 +1,5 @@
 package io.riskscanner.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fit2cloud.quartz.anno.QuartzScheduled;
 import com.google.gson.Gson;
 import io.riskscanner.base.domain.*;
@@ -9,6 +8,7 @@ import io.riskscanner.base.mapper.ext.ExtScanHistoryMapper;
 import io.riskscanner.commons.constants.CloudAccountConstants;
 import io.riskscanner.commons.constants.CommandEnum;
 import io.riskscanner.commons.constants.TaskConstants;
+import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.*;
 import io.riskscanner.controller.request.resource.ResourceRequest;
 import io.riskscanner.dto.ResourceDTO;
@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.alibaba.fastjson.JSON.toJSONString;
 
 /**
  * @author maguohao
@@ -50,8 +52,6 @@ public class ResourceCreateService {
     @Resource
     private ResourceMapper resourceMapper;
     @Resource
-    private TaskService taskService;
-    @Resource
     private OrderService orderService;
     @Resource
     private Environment env;
@@ -61,9 +61,9 @@ public class ResourceCreateService {
     @QuartzScheduled(cron = "${cron.expression.local}")
     public void handleTasks() {
         // 本地调试时注释掉此方法
-//        if (!StringUtils.equals(env.getProperty("run.mode", "local"), "release")) {
-//            return;
-//        }
+        if (!StringUtils.equals(env.getProperty("run.mode", "local"), "release")) {
+            return;
+        }
         final TaskExample taskExample = new TaskExample();
         TaskExample.Criteria criteria = taskExample.createCriteria();
         criteria.andStatusEqualTo(TaskConstants.TASK_STATUS.APPROVED.toString());
@@ -74,7 +74,7 @@ public class ResourceCreateService {
         List<Task> taskList = taskMapper.selectByExample(taskExample);
         if (CollectionUtils.isNotEmpty(taskList)) {
             taskList.forEach(task -> {
-                LogUtil.info("handling task: {}", JSONObject.toJSONString(task));
+                LogUtil.info("handling task: {}", toJSONString(task));
                 final Task taskToBeProceed = BeanUtils.copyBean(new Task(), task);
                 if (processingGroupIdMap.get(taskToBeProceed.getId()) != null) {
                     return;
@@ -95,9 +95,7 @@ public class ResourceCreateService {
             accountExample.createCriteria().andStatusEqualTo(CloudAccountConstants.Status.VALID.name());
             List<AccountWithBLOBs> accountList = accountMapper.selectByExampleWithBLOBs(accountExample);
 
-            accountList.forEach(account -> {
-                orderService.insertScanHistory(account);
-            });
+            accountList.forEach(account -> orderService.insertScanHistory(account));
         }
     }
 
@@ -114,16 +112,15 @@ public class ResourceCreateService {
             int successCount = 0;
             for (TaskItemWithBLOBs taskItem : taskItemWithBLOBs) {
                 if (LogUtil.getLogger().isDebugEnabled()) {
-                    LogUtil.getLogger().debug("handling taskItem: {}", JSONObject.toJSONString(taskItem));
+                    LogUtil.getLogger().debug("handling taskItem: {}", toJSONString(taskItem));
                 }
                 if (handleTaskItem(BeanUtils.copyBean(new TaskItemWithBLOBs(), taskItem), task)) {
                     successCount++;
                 }
             }
-            if (taskItemWithBLOBs.size() > 0 && successCount == 0) {
-                throw new Exception("Faild to handle all taskItems, taskId: " + task.getId());
-            }
-            String taskStatus = "";
+            if (!taskItemWithBLOBs.isEmpty() && successCount == 0)
+                RSException.throwException("Faild to handle all taskItems, taskId: " + task.getId());
+            String taskStatus;
             if (StringUtils.equalsIgnoreCase(task.getType(), TaskConstants.TaskType.quartz.name())) {
                 taskStatus = TaskConstants.TASK_STATUS.RUNNING.toString();
             } else {
@@ -134,8 +131,9 @@ public class ResourceCreateService {
             }
             orderService.updateTaskStatus(taskId, null, taskStatus);
             // 任务成功之后发送邮件
-            if (StringUtils.equals(TaskConstants.TASK_STATUS.FINISHED.name(), taskStatus) || StringUtils.equals(TaskConstants.TASK_STATUS.RUNNING.name(), taskStatus)) {
-                Map<String, Object> params = getParameters(taskId);
+            if (StringUtils.equals(TaskConstants.TASK_STATUS.FINISHED.name(), taskStatus) ||
+                    StringUtils.equals(TaskConstants.TASK_STATUS.RUNNING.name(), taskStatus)) {
+//                Map<String, Object> params = getParameters(taskId);
 //                processMessageService.sendProcessMessage(taskId, ProcessConstants.MessageOperation.BUSINESS_COMPLETE, params);
             }
         } catch (Exception e) {
@@ -150,7 +148,6 @@ public class ResourceCreateService {
     private boolean handleTaskItem(TaskItemWithBLOBs taskItem, Task task) {
         orderService.updateTaskItemStatus(taskItem.getId(), TaskConstants.TASK_STATUS.PROCESSING);
         try {
-            int index = resourceService.getResourceIdsByTaskItemId(taskItem.getId()).size();
             for (int i = 0; i < taskItem.getCount(); i++) {
                 createResource(taskItem, task);
             }
@@ -164,7 +161,7 @@ public class ResourceCreateService {
     }
 
     private void createResource(TaskItemWithBLOBs taskItem, Task task) throws Exception {
-        LogUtil.getLogger().info("createResource for taskItem: {}", JSONObject.toJSONString(taskItem));
+        LogUtil.info("createResource for taskItem: {}", toJSONString(taskItem));
         String operation = Translator.get("i18n_create_resource");
         String resultStr = "";
         try {
@@ -177,9 +174,8 @@ public class ResourceCreateService {
             if (LogUtil.getLogger().isDebugEnabled()) {
                 LogUtil.getLogger().debug("resource created: {}", resultStr);
             }
-            if (resultStr.contains("ERROR")) {
-                throw new Exception(Translator.get("i18n_create_resource_failed") + ": " + resultStr);
-            }
+            if (resultStr.contains("ERROR"))
+                RSException.throwException(Translator.get("i18n_create_resource_failed") + ": " + resultStr);
 
             TaskItemResourceExample example = new TaskItemResourceExample();
             example.createCriteria().andTaskIdEqualTo(task.getId()).andTaskItemIdEqualTo(taskItem.getId());
@@ -194,9 +190,9 @@ public class ResourceCreateService {
                 Rule rule = ruleService.getRuleById(taskItem.getRuleId());
                 if (rule == null) {
                     orderService.saveTaskItemLog(taskItemId, taskItemId, Translator.get("i18n_operation_ex") + ": " + operation, Translator.get("i18n_ex_rule_not_exist"), false);
-                    throw new Exception(Translator.get("i18n_ex_rule_not_exist") + ":" + taskItem.getRuleId());
+                    RSException.throwException(Translator.get("i18n_ex_rule_not_exist") + ":" + taskItem.getRuleId());
                 }
-                String custodian_run = ReadFileUtils.readToBuffer(dirPath + "/" + taskItemResource.getDirName() + "/" + TaskConstants.CUSTODIAN_RUN_RESULT_FILE);
+                String custodianRun = ReadFileUtils.readToBuffer(dirPath + "/" + taskItemResource.getDirName() + "/" + TaskConstants.CUSTODIAN_RUN_RESULT_FILE);
                 String metadata = ReadFileUtils.readJsonFile(dirPath + "/" + taskItemResource.getDirName() + "/", TaskConstants.METADATA_RESULT_FILE);
                 String resources = ReadFileUtils.readJsonFile(dirPath + "/" + taskItemResource.getDirName() + "/", TaskConstants.RESOURCES_RESULT_FILE);
 
@@ -204,7 +200,7 @@ public class ResourceCreateService {
                 if (taskItemResource.getResourceId() != null) {
                     resourceWithBLOBs = resourceMapper.selectByPrimaryKey(taskItemResource.getResourceId());
                 }
-                resourceWithBLOBs.setCustodianRunLog(custodian_run);
+                resourceWithBLOBs.setCustodianRunLog(custodianRun);
                 resourceWithBLOBs.setMetadata(metadata);
                 resourceWithBLOBs.setResources(resources);
                 resourceWithBLOBs.setResourceName(resourceName);

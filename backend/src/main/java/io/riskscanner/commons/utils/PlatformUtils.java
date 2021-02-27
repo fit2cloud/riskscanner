@@ -53,8 +53,7 @@ public class PlatformUtils {
      * @return
      */
     public final static List<String> getPlugin() {
-        List<String> list = Arrays.asList(aws, azure, aliyun, huawei, tencent);
-        return list;
+        return Arrays.asList(aws, azure, aliyun, huawei, tencent);
     }
 
     /**
@@ -63,8 +62,7 @@ public class PlatformUtils {
      * @return
      */
     public final static List<String> getAzureResions() {
-        List<String> list = Arrays.asList("AzureCloud", "AzureChinaCloud", "AzureGermanyCloud", "AzureUSGov");
-        return list;
+        return Arrays.asList("AzureCloud", "AzureChinaCloud", "AzureGermanyCloud", "AzureUSGov");
     }
 
     /**
@@ -118,10 +116,10 @@ public class PlatformUtils {
                         "HUAWEI_DEFAULT_REGION=" + region + " ";
                 break;
             case tencent:
-                String QSecretId = params.get("secretId");
-                String QSecretKey = params.get("secretKey");
-                pre = "TENCENT_SECRETID=" + QSecretId + " " +
-                        "TENCENT_SECRETKEY=" + QSecretKey + " " +
+                String qSecretId = params.get("secretId");
+                String qSecretKey = params.get("secretKey");
+                pre = "TENCENT_SECRETID=" + qSecretId + " " +
+                        "TENCENT_SECRETKEY=" + qSecretKey + " " +
                         "TENCENT_DEFAULT_REGION=" + region + " ";
                 break;
         }
@@ -192,6 +190,8 @@ public class PlatformUtils {
                 map.put("secretKey", tencentCredential.getSecretKey());
                 map.put("region", region);
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + account.getPluginId());
         }
         return map;
     }
@@ -202,10 +202,9 @@ public class PlatformUtils {
      * @param account
      * @param flag
      * @return
-     * @throws PluginException
      * @throws ClientException
      */
-    public static final JSONArray _getRegions(AccountWithBLOBs account, boolean flag) throws RSException, ClientException {
+    public static final JSONArray _getRegions(AccountWithBLOBs account, boolean flag) throws ClientException {
         try {
             JSONArray jsonArray = new JSONArray();
             if (!flag) {
@@ -290,7 +289,7 @@ public class PlatformUtils {
                             jsonArray.add(jsonObject);
                         }
                     } catch (RSException | PluginException e) {
-                        throw new RSException(e.getMessage());
+                        RSException.throwException(e.getMessage());
                     }
                     break;
                 case tencent:
@@ -315,12 +314,12 @@ public class PlatformUtils {
                     throw new IllegalStateException("Unexpected regions value{}: " + account.getPluginName());
             }
             return jsonArray;
-        } catch (RSException e) {
+        } catch (Exception e) {
             throw new RSException(e.getMessage());
         }
     }
 
-    public final static boolean validateCredential (AccountWithBLOBs account) throws RSException {
+    public static boolean validateCredential (AccountWithBLOBs account) {
         switch (account.getPluginId()) {
             case aws:
                 try {
@@ -328,13 +327,13 @@ public class PlatformUtils {
                     awsReq.setCredential(account.getCredential());
                     AmazonEC2Client client = awsReq.getAmazonEC2Client();
                     String region = null;
-                    if (region != null && region.trim().length() > 0) {
+                    if (!region.isEmpty() && region.trim().length() > 0) {
                         client.setRegion(RegionUtils.getRegion(region));
                     }
                     try {
                         client.describeRegions();
                     } catch (Exception e) {
-                        if (region != null && region.trim().length() > 0) {
+                        if (!region.isEmpty() && region.trim().length() > 0) {
                             if (e instanceof AmazonServiceException) {
                                 String errCode = ((AmazonServiceException) e).getErrorCode();
                                 if ("AuthFailure".equals(errCode)) {
@@ -360,10 +359,7 @@ public class PlatformUtils {
                     AzureBaseRequest req = new AzureBaseRequest();
                     req.setCredential(account.getCredential());
                     AzureClient azureClient = req.getAzureClient();
-                    if (azureClient.getCurrentSubscription() == null) {
-                        return false;
-                    }
-                    return true;
+                    return azureClient.getCurrentSubscription() != null;
                 } catch (Exception e) {
                     LogUtil.error("Account verification failed : " + e.getMessage());
                     break;
@@ -387,6 +383,7 @@ public class PlatformUtils {
                 try {
                     HuaweiCloudCredential huaweiCloudCredential = new Gson().fromJson(account.getCredential(), HuaweiCloudCredential.class);
                     IamClient iamClient = ClientUtil.getIamClient(account.getCredential());
+                    assert iamClient != null;
                     ShowCredential showCredential = AuthUtil.validate(iamClient, huaweiCloudCredential.getAk());
                     return null != showCredential;
                 } catch (Exception e) {
@@ -405,6 +402,8 @@ public class PlatformUtils {
                     LogUtil.error("Account verification failed : " + e.getMessage());
                     break;
                 }
+            default:
+                throw new IllegalStateException("Unexpected value: " + account.getPluginId());
         }
         return false;
     }
@@ -417,7 +416,7 @@ public class PlatformUtils {
             if (CollectionUtils.isEmpty(projectResults)){
                 List<Map<String, String>> temp = new ArrayList<>();
                 for (Region tmp : regions) {//获取全部的Region，带中文
-                    Map<String, String> region = new HashMap<String, String>();
+                    Map<String, String> region = new HashMap<>();
                     region.put("key", tmp.getId());
 
                     List<RegionLocales> l = new ArrayList<>();
@@ -453,7 +452,7 @@ public class PlatformUtils {
     }
 
     public static String tranforRegionId2RegionName (String strEn, String pluginId) {
-        String strCn = "";
+        String strCn;
         switch (pluginId) {
             case aws:
                 strCn = RegionsConstants.AwsMap.get(strEn);
@@ -470,6 +469,8 @@ public class PlatformUtils {
             case tencent:
                 strCn = RegionsConstants.TencentMap.get(strEn);
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + pluginId);
         }
         if (StringUtils.isEmpty(strCn)) return strEn;
         return strCn;

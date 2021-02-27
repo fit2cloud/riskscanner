@@ -35,7 +35,7 @@ public class UserModularRealmAuthenticator extends ModularRealmAuthenticator {
             }
         }
 
-        if (typeRealms.size() == 0) {
+        if (typeRealms.isEmpty()) {
             RSException.throwException("No realm");
         }
         // 判断是单Realm还是多Realm

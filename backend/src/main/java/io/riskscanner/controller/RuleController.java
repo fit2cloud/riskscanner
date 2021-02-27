@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import io.riskscanner.base.domain.Rule;
 import io.riskscanner.base.domain.RuleGroup;
+import io.riskscanner.base.domain.RuleInspectionReport;
 import io.riskscanner.base.domain.RuleTag;
 import io.riskscanner.commons.utils.PageUtils;
 import io.riskscanner.commons.utils.Pager;
@@ -12,147 +13,178 @@ import io.riskscanner.controller.request.rule.RuleGroupRequest;
 import io.riskscanner.controller.request.rule.RuleTagRequest;
 import io.riskscanner.dto.RuleDTO;
 import io.riskscanner.dto.RuleGroupDTO;
+import io.riskscanner.dto.RuleTagDTO;
 import io.riskscanner.service.RuleService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 规则
  */
+@Api(tags = "规则")
 @RestController
-@RequestMapping(value = "rule", headers = "Accept=application/json")
+@RequestMapping(value = "rule")
 public class RuleController {
     @Resource
     private RuleService ruleService;
 
+    @ApiOperation(value = "规则列表")
     @PostMapping(value = "list/{goPage}/{pageSize}")
     public Pager<List<RuleDTO>> listAll(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody CreateRuleRequest rule) {
-        Page page = PageHelper.startPage(goPage, pageSize, true);
+        Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
         return PageUtils.setPageInfo(page, ruleService.getRules(rule));
     }
 
+    @ApiOperation(value = "规则标签列表")
     @PostMapping(value = "ruleTag/list/{goPage}/{pageSize}")
     public Pager<List<RuleTag>> ruleTagList(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody RuleTagRequest request) {
-        Page page = PageHelper.startPage(goPage, pageSize, true);
+        Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
         return PageUtils.setPageInfo(page, ruleService.ruleTagList(request));
     }
 
+    @ApiOperation(value = "规则组列表")
     @PostMapping(value = "ruleGroup/list/{goPage}/{pageSize}")
     public Pager<List<RuleGroupDTO>> ruleGroupList(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody RuleGroupRequest request) {
-        Page page = PageHelper.startPage(goPage, pageSize, true);
+        Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
         return PageUtils.setPageInfo(page, ruleService.ruleGroupList(request));
     }
 
+    @ApiOperation(value = "规则标签")
     @GetMapping(value = "ruleTags")
-    public Object getRuleTags() {
+    public List<RuleTagDTO> getRuleTags() {
         return ruleService.getRuleTags();
     }
 
+    @ApiOperation(value = "添加规则")
     @PostMapping(value = "add")
     public Rule addRule(@RequestBody CreateRuleRequest createRuleRequest) throws Exception {
         createRuleRequest.setId(null);
         return ruleService.saveRules(createRuleRequest);
     }
 
+    @ApiOperation(value = "修改规则")
     @PostMapping(value = "update")
     public Rule updateRule(@RequestBody CreateRuleRequest createRuleRequest) throws Exception {
         return ruleService.saveRules(createRuleRequest);
     }
 
+    @ApiOperation(value = "复制规则")
     @PostMapping(value = "copy")
     public Rule copyRule(@RequestBody CreateRuleRequest createRuleRequest) throws Exception {
         return ruleService.copyRule(createRuleRequest);
     }
 
+    @ApiOperation(value = "运行规则")
     @PostMapping(value = "run")
     public Object runRule(@RequestBody RuleDTO ruleDTO) throws Exception {
         return ruleService.runRules(ruleDTO);
     }
 
+    @ApiOperation(value = "测试运行规则")
     @PostMapping(value = "dryRun")
     public Object dryRun(@RequestBody RuleDTO ruleDTO) throws Exception {
         return ruleService.dryRun(ruleDTO);
     }
 
+    @ApiOperation(value = "删除规则")
     @GetMapping(value = "delete/{id}")
-    public void deleteRule(@PathVariable String id) throws Exception {
+    public void deleteRule(@PathVariable String id) {
         ruleService.deleteRule(id);
     }
 
+    @ApiOperation(value = "规则详情")
     @GetMapping(value = "get/{ruleId}")
-    public Object getRule(@PathVariable String ruleId) {
+    public RuleDTO getRule(@PathVariable String ruleId) {
         return ruleService.getRuleById(ruleId);
     }
 
+    @ApiIgnore
     @GetMapping(value = "getRuleByTaskId/{taskId}")
-    public Object getRuleByTaskId(@PathVariable String taskId) {
+    public RuleDTO getRuleByTaskId(@PathVariable String taskId) {
         return ruleService.getRuleByTaskId(taskId);
     }
 
+    @ApiOperation(value = "规则重复")
     @PostMapping(value = "getRuleByName")
-    public Object getRuleByName(@RequestBody CreateRuleRequest request) {
+    public boolean getRuleByName(@RequestBody CreateRuleRequest request) {
         return ruleService.getRuleByName(request);
     }
 
+    @ApiOperation(value = "规则类型")
     @GetMapping(value = "all/resourceTypes")
-    public Object getAllResourceTypes() {
+    public List<Map<String, String>> getAllResourceTypes() {
         return ruleService.getAllResourceTypes();
     }
 
+    @ApiOperation(value = "规则组")
     @GetMapping(value = "all/ruleGroups")
-    public Object getRuleGroups() {
+    public List<RuleGroup> getRuleGroups() {
         return ruleService.getRuleGroups();
     }
 
+    @ApiOperation(value = "规则条例")
     @GetMapping(value = "all/ruleInspectionReport")
-    public Object getRuleInspectionReport() {
+    public List<RuleInspectionReport> getRuleInspectionReport() {
         return ruleService.getRuleInspectionReport();
     }
 
+    @ApiIgnore
     @GetMapping(value = "getResourceTypesById/{ruleId}")
-    public Object getResourceTypesById(@PathVariable String ruleId) {
+    public String getResourceTypesById(@PathVariable String ruleId) {
         return ruleService.getResourceTypesById(ruleId);
     }
 
+    @ApiOperation(value = "规则启用")
     @PostMapping(value = "changeStatus")
-    public Object changeStatus(@RequestBody Rule rule) {
+    public int changeStatus(@RequestBody Rule rule) {
         return ruleService.changeStatus(rule);
     }
 
+    @ApiOperation(value = "批量重新扫描")
     @GetMapping("reScans/{accountId}")
-    public void reScans(@PathVariable String accountId) throws Exception {
+    public void reScans(@PathVariable String accountId) {
         ruleService.reScans(accountId);
     }
 
+    @ApiIgnore
     @GetMapping("reScan/{taskId}/{accountId}")
-    public void reScan(@PathVariable String taskId, @PathVariable String accountId) throws Exception {
+    public void reScan(@PathVariable String taskId, @PathVariable String accountId) {
         ruleService.reScan(taskId, accountId);
     }
 
+    @ApiOperation(value = "批量扫描")
     @PostMapping("scan")
-    public void scan(@RequestPart(value = "selectIds") List<String> ids) throws Exception {
+    public void scan(@RequestPart(value = "selectIds") List<String> ids) {
         ruleService.scan(ids);
     }
 
+    @ApiOperation(value = "历史扫描")
     @GetMapping("insertScanHistory/{accountId}")
-    public void insertScanHistory(@PathVariable String accountId) throws Exception {
+    public void insertScanHistory(@PathVariable String accountId) {
         ruleService.insertScanHistory(accountId);
     }
 
+    @ApiOperation(value = "新增规则组")
     @RequestMapping(value = "group/save")
-    public Object saveRuleGroup(@RequestBody RuleGroup ruleGroup) {
+    public RuleGroup saveRuleGroup(@RequestBody RuleGroup ruleGroup) {
         return ruleService.saveRuleGroup(ruleGroup);
     }
 
+    @ApiOperation(value = "修改规则组")
     @RequestMapping(value = "group/update")
-    public Object updateRuleGroup(@RequestBody RuleGroup ruleGroup) {
+    public RuleGroup updateRuleGroup(@RequestBody RuleGroup ruleGroup) {
         return ruleService.updateRuleGroup(ruleGroup);
     }
 
+    @ApiOperation(value = "删除规则组")
     @GetMapping(value = "group/delete/{id}")
-    public int deleteRuleGroup(@PathVariable Integer id) throws Exception {
+    public int deleteRuleGroup(@PathVariable Integer id) {
         return ruleService.deleteRuleGroupById(id);
     }
 }

@@ -14,9 +14,12 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
+@ApiIgnore
 @RestController
 @RequestMapping
 public class LoginController {
@@ -30,9 +33,8 @@ public class LoginController {
     public ResultHolder isLogin() {
         if (SecurityUtils.getSubject().isAuthenticated()) {
             SessionUser user = SessionUtils.getUser();
-            if (StringUtils.isBlank(user.getLanguage())) {
-                user.setLanguage(LocaleContextHolder.getLocale().toString());
-            }
+            if ((user!= null) && StringUtils.isBlank(user.getLanguage()))
+                    user.setLanguage(LocaleContextHolder.getLocale().toString());
             return ResultHolder.success(user);
         }
         String ssoMode = env.getProperty("sso.mode");
@@ -56,12 +58,12 @@ public class LoginController {
     @GetMapping(value = "/signout")
     public ResultHolder logout() throws Exception {
         String ssoMode = env.getProperty("sso.mode");
-        if (ssoMode != null && StringUtils.equalsIgnoreCase(SsoMode.CAS.name(), ssoMode)) {
+        if ((ssoMode != null) && StringUtils.equalsIgnoreCase(SsoMode.CAS.name(), ssoMode)) {
             return ResultHolder.error("sso");
         } else {
             userService.logout();
             SecurityUtils.getSubject().logout();
-            OperationLogService.log(SessionUtils.getUser(), SessionUtils.getUser().getId(), SessionUtils.getUser().getName(), ResourceTypeConstants.USER.name(), ResourceOperation.LOGOUT, "用户登出");
+            OperationLogService.log(SessionUtils.getUser(), Objects.requireNonNull(SessionUtils.getUser()).getId(), SessionUtils.getUser().getName(), ResourceTypeConstants.USER.name(), ResourceOperation.LOGOUT, "用户登出");
         }
         return ResultHolder.success("");
     }

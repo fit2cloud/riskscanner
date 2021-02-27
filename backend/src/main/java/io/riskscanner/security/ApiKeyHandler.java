@@ -7,6 +7,7 @@ import io.riskscanner.service.UserKeyService;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 public class ApiKeyHandler {
 
@@ -32,7 +33,7 @@ public class ApiKeyHandler {
         if (StringUtils.isBlank(accessKey) || StringUtils.isBlank(signature)) {
             return null;
         }
-        UserKey userKey = CommonBeanFactory.getBean(UserKeyService.class).getUserKey(accessKey);
+        UserKey userKey = Objects.requireNonNull(CommonBeanFactory.getBean(UserKeyService.class)).getUserKey(accessKey);
         if (userKey == null) {
             throw new RuntimeException("invalid accessKey");
         }

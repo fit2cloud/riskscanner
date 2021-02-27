@@ -7,31 +7,37 @@ import io.riskscanner.commons.utils.PageUtils;
 import io.riskscanner.commons.utils.Pager;
 import io.riskscanner.controller.request.Plugin.PluginRequest;
 import io.riskscanner.service.PluginService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 
+@Api(tags = "插件")
 @RestController
 @RequestMapping(value = "plugin")
 public class PluginController {
     @Resource
     private PluginService pluginService;
 
-    @RequestMapping(value = "all")
+    @ApiOperation(value = "所有插件")
+    @GetMapping("all")
     public List<Plugin> getAllPlugin() {
         return pluginService.getAllPlugin();
     }
 
-    @RequestMapping(value = "{pluginId}", method = RequestMethod.GET)
-    public Object getCredential(@PathVariable String pluginId) {
+    @ApiOperation(value = "插件详情")
+    @GetMapping("{pluginId}")
+    public String getCredential(@PathVariable String pluginId) {
         return pluginService.getCredential(pluginId);
     }
 
+    @ApiOperation(value = "插件列表")
     @PostMapping("list/{goPage}/{pageSize}")
     public Pager<List<Plugin>> getPluginList(
             @PathVariable int goPage, @PathVariable int pageSize, @RequestBody PluginRequest request) {
-        Page page = PageHelper.startPage(goPage, pageSize, true);
+        Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
         return PageUtils.setPageInfo(page, pluginService.getPluginList(request));
     }
 }

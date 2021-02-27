@@ -1,7 +1,9 @@
 package io.riskscanner.service;
 
 import io.riskscanner.base.domain.*;
-import io.riskscanner.base.mapper.*;
+import io.riskscanner.base.mapper.RoleMapper;
+import io.riskscanner.base.mapper.UserMapper;
+import io.riskscanner.base.mapper.UserRoleMapper;
 import io.riskscanner.base.mapper.ext.ExtUserMapper;
 import io.riskscanner.base.mapper.ext.ExtUserRoleMapper;
 import io.riskscanner.commons.constants.*;
@@ -28,7 +30,6 @@ import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -88,9 +89,9 @@ public class UserService {
 
     }
 
+    @SuppressWarnings("unchecked")
     private void insertUserRole(List<Map<String, Object>> roles, String userId) {
-        for (int i = 0; i < roles.size(); i++) {
-            Map<String, Object> map = roles.get(i);
+        for (Map<String, Object> map : roles) {
             String role = (String) map.get("id");
             if (StringUtils.equals(role, RoleConstants.ADMIN)) {
                 UserRole userRole = new UserRole();
@@ -99,22 +100,18 @@ public class UserService {
                 userRole.setUpdateTime(System.currentTimeMillis());
                 userRole.setCreateTime(System.currentTimeMillis());
                 userRole.setRoleId(role);
-                // TODO 修改
                 userRole.setSourceId("adminSourceId");
                 userRoleMapper.insertSelective(userRole);
             } else {
-//                if (!map.keySet().contains("ids")) {
-//                    RSException.throwException(role + " no source id");
-//                }
                 List<String> list = (List<String>) map.get("ids");
-                for (int j = 0; j < list.size(); j++) {
+                for (String s : list) {
                     UserRole userRole1 = new UserRole();
                     userRole1.setId(UUID.randomUUID().toString());
                     userRole1.setUserId(userId);
                     userRole1.setRoleId(role);
                     userRole1.setUpdateTime(System.currentTimeMillis());
                     userRole1.setCreateTime(System.currentTimeMillis());
-                    userRole1.setSourceId(list.get(j));
+                    userRole1.setSourceId(s);
                     userRoleMapper.insertSelective(userRole1);
                 }
             }
@@ -134,7 +131,6 @@ public class UserService {
         if (StringUtils.isBlank(user.getEmail())) {
             RSException.throwException(Translator.get("user_email_is_null"));
         }
-        // password
     }
 
     public void createUser(User userRequest) {
@@ -159,17 +155,6 @@ public class UserService {
         checkEmailIsExist(user.getEmail());
         userMapper.insertSelective(user);
     }
-
-    public void createOssUser(User user) {
-        user.setCreateTime(System.currentTimeMillis());
-        user.setUpdateTime(System.currentTimeMillis());
-        user.setStatus(UserStatus.NORMAL);
-        if (StringUtils.isBlank(user.getEmail())) {
-            user.setEmail(user.getId() + "@metershpere.io");
-        }
-        userMapper.insertSelective(user);
-    }
-
 
     private void checkEmailIsExist(String email) {
         UserExample userExample = new UserExample();
@@ -218,7 +203,7 @@ public class UserService {
 
         List<User> users = userMapper.selectByExample(example);
 
-        if (users == null || users.size() <= 0) {
+        if (users.isEmpty()) {
             return null;
         }
 
@@ -261,6 +246,7 @@ public class UserService {
 
     public void deleteUser(String userId) {
         SessionUser user = SessionUtils.getUser();
+        if(user == null) return;
         if (StringUtils.equals(user.getId(), userId)) {
             RSException.throwException(Translator.get("cannot_delete_current_user"));
         }
@@ -277,8 +263,6 @@ public class UserService {
         String userId = user.getId();
         UserRoleExample userRoleExample = new UserRoleExample();
         userRoleExample.createCriteria().andUserIdEqualTo(userId);
-        List<UserRole> userRoles = userRoleMapper.selectByExample(userRoleExample);
-        List<String> list = userRoles.stream().map(UserRole::getSourceId).collect(Collectors.toList());
 
         userRoleMapper.deleteByExample(userRoleExample);
         List<Map<String, Object>> roles = user.getRoles();
@@ -303,18 +287,6 @@ public class UserService {
         userMapper.updateByPrimaryKeySelective(user);
     }
 
-    public void switchUserRole(String sign, String sourceId) {
-        SessionUser sessionUser = SessionUtils.getUser();
-        // 获取最新UserDTO
-        UserDTO user = getUserDTO(sessionUser.getId());
-        User newUser = new User();
-
-        BeanUtils.copyProperties(user, newUser);
-        // 切换工作空间或组织之后更新 session 里的 user
-        SessionUtils.putUser(SessionUser.fromUser(user));
-        userMapper.updateByPrimaryKeySelective(newUser);
-    }
-
     public UserDTO getUserInfo(String userId) {
         return getUserDTO(userId);
     }
@@ -329,7 +301,7 @@ public class UserService {
                 UserRoleExample userRoleExample = new UserRoleExample();
                 userRoleExample.createCriteria().andUserIdEqualTo(userId).andSourceIdEqualTo(request.getWorkspaceId());
                 List<UserRole> userRoles = userRoleMapper.selectByExample(userRoleExample);
-                if (userRoles.size() > 0) {
+                if (!userRoles.isEmpty()) {
                     RSException.throwException(Translator.get("user_already_exists"));
                 } else {
                     for (String roleId : request.getRoleIds()) {
@@ -352,8 +324,6 @@ public class UserService {
         example.createCriteria().andRoleIdLike("%test%")
                 .andUserIdEqualTo(userId).andSourceIdEqualTo(workspaceId);
 
-        User user = userMapper.selectByPrimaryKey(userId);
-
         userRoleMapper.deleteByExample(example);
     }
 
@@ -363,7 +333,7 @@ public class UserService {
                 UserRoleExample userRoleExample = new UserRoleExample();
                 userRoleExample.createCriteria().andUserIdEqualTo(userId).andSourceIdEqualTo(request.getOrganizationId());
                 List<UserRole> userRoles = userRoleMapper.selectByExample(userRoleExample);
-                if (userRoles.size() > 0) {
+                if (!userRoles.isEmpty()) {
                     RSException.throwException(Translator.get("user_already_exists") + ": " + userId);
                 } else {
                     for (String roleId : request.getRoleIds()) {
@@ -384,8 +354,6 @@ public class UserService {
     public void delOrganizationMember(String organizationId, String userId) {
         UserRoleExample userRoleExample = new UserRoleExample();
         userRoleExample.createCriteria().andRoleIdLike("%org%").andUserIdEqualTo(userId).andSourceIdEqualTo(organizationId);
-
-        User user = userMapper.selectByPrimaryKey(userId);
 
         userRoleMapper.deleteByExample(userRoleExample);
     }
@@ -423,34 +391,21 @@ public class UserService {
         }
     }
 
-    public void refreshSessionUser(String sign, String sourceId) {
-        SessionUser sessionUser = SessionUtils.getUser();
-        // 获取最新UserDTO
-        UserDTO user = getUserDTO(sessionUser.getId());
-        User newUser = new User();
-
-        BeanUtils.copyProperties(user, newUser);
-
-        SessionUtils.putUser(SessionUser.fromUser(user));
-        userMapper.updateByPrimaryKeySelective(newUser);
-    }
-
-
     /*修改当前用户用户密码*/
     private User updateCurrentUserPwd(EditPassWordRequest request) {
         String oldPassword = CodingUtil.md5(request.getPassword(), "utf-8");
         String newPassword = request.getNewpassword();
         UserExample userExample = new UserExample();
-        userExample.createCriteria().andIdEqualTo(SessionUtils.getUser().getId()).andPasswordEqualTo(oldPassword);
+        userExample.createCriteria().andIdEqualTo(Objects.requireNonNull(SessionUtils.getUser()).getId()).andPasswordEqualTo(oldPassword);
         List<User> users = userMapper.selectByExample(userExample);
         if (!CollectionUtils.isEmpty(users)) {
             User user = users.get(0);
             user.setPassword(CodingUtil.md5(newPassword));
             user.setUpdateTime(System.currentTimeMillis());
             return user;
+        } else {
+            throw new RSException(Translator.get("password_modification_failed"));
         }
-        RSException.throwException(Translator.get("password_modification_failed"));
-        return null;
     }
 
     public int updateCurrentUserPassword(EditPassWordRequest request) {
@@ -464,7 +419,7 @@ public class UserService {
         String newped = request.getNewpassword();
         user.setPassword(CodingUtil.md5(newped));
         user.setUpdateTime(System.currentTimeMillis());
-        OperationLogService.log(SessionUtils.getUser(), SessionUtils.getUser().getId(), SessionUtils.getUser().getName(), ResourceTypeConstants.USER.name(), ResourceOperation.UPDATE, "修改密码");
+        OperationLogService.log(SessionUtils.getUser(), Objects.requireNonNull(SessionUtils.getUser()).getId(), SessionUtils.getUser().getName(), ResourceTypeConstants.USER.name(), ResourceOperation.UPDATE, "修改密码");
         return user;
     }
 
@@ -495,8 +450,8 @@ public class UserService {
         try {
             subject.login(token);
             if (subject.isAuthenticated()) {
-                UserDTO user = (UserDTO) subject.getSession().getAttribute(ATTR_USER);
-                OperationLogService.log(SessionUtils.getUser(), SessionUtils.getUser().getId(), SessionUtils.getUser().getName(), ResourceTypeConstants.USER.name(), ResourceOperation.LOGIN, "用户登录");
+                subject.getSession().getAttribute(ATTR_USER);
+                OperationLogService.log(SessionUtils.getUser(), Objects.requireNonNull(SessionUtils.getUser()).getId(), SessionUtils.getUser().getName(), ResourceTypeConstants.USER.name(), ResourceOperation.LOGIN, "用户登录");
                 // 返回 userDTO
                 return ResultHolder.success(subject.getSession().getAttribute("user"));
             } else {

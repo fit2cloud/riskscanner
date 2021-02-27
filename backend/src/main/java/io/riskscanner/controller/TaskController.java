@@ -2,6 +2,8 @@ package io.riskscanner.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.riskscanner.base.domain.Task;
+import io.riskscanner.base.domain.TaskItemLog;
 import io.riskscanner.base.domain.TaskItemWithBLOBs;
 import io.riskscanner.commons.utils.PageUtils;
 import io.riskscanner.commons.utils.Pager;
@@ -11,10 +13,13 @@ import io.riskscanner.service.OrderService;
 import io.riskscanner.service.TaskService;
 import org.quartz.CronExpression;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
+@ApiIgnore
 @RestController
 @RequestMapping(value = "task")
 public class TaskController {
@@ -44,9 +49,9 @@ public class TaskController {
     }
 
     @PostMapping("quartz/log/{taskItemId}/{goPage}/{pageSize}")
-    public Pager getquartzLogDetails(@PathVariable int goPage, @PathVariable int pageSize, @PathVariable String taskItemId) {
+    public Pager<List<TaskItemLog>> getquartzLogDetails(@PathVariable int goPage, @PathVariable int pageSize, @PathVariable String taskItemId) {
         TaskItemWithBLOBs taskItem = orderService.taskItemWithBLOBs(taskItemId);
-        Page page = PageHelper.startPage(goPage, pageSize, true);
+        Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
         return PageUtils.setPageInfo(page, orderService.getQuartzLogByTaskItemId(taskItem));
     }
 
@@ -66,55 +71,55 @@ public class TaskController {
     }
 
     @PostMapping("manual/list/{goPage}/{pageSize}")
-    public Pager getManualTasks(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody Map<String, Object> param) {
-        Page page = PageHelper.startPage(goPage, pageSize, true);
+    public Pager<List<Task>> getManualTasks(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody Map<String, Object> param) {
+        Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
         param.put("type", "manual");
         return PageUtils.setPageInfo(page, taskService.selectQuartzTasks(param));
     }
 
     @PostMapping("manual/Alllist")
-    public Object getAllManualTasks(@RequestBody Map<String, Object> param) {
+    public List<Task> getAllManualTasks(@RequestBody Map<String, Object> param) {
         param.put("type", "manual");
         return taskService.selectQuartzTasks(param);
     }
 
     @GetMapping("manual/more/{taskId}")
-    public Object morelTask(@PathVariable String taskId) throws Exception {
+    public boolean morelTask(@PathVariable String taskId) throws Exception {
         return taskService.morelTask(taskId);
     }
 
     @PostMapping("manual/create")
-    public Object saveManualTask(@RequestBody QuartzTaskDTO quartzTaskDTO) throws Exception {
+    public Task saveManualTask(@RequestBody QuartzTaskDTO quartzTaskDTO) throws Exception {
         quartzTaskDTO.setType("manual");
         return taskService.saveManualTask(quartzTaskDTO);
     }
 
     @PostMapping("manual/delete")
-    public void deleteManualTask(@RequestBody String quartzTaskId) throws Exception {
+    public void deleteManualTask(@RequestBody String quartzTaskId) {
         taskService.deleteManualTask(quartzTaskId);
     }
 
     @PostMapping(value = "manual/dryRun")
-    public Object dryRun(@RequestBody QuartzTaskDTO quartzTaskDTO) throws Exception {
+    public boolean dryRun(@RequestBody QuartzTaskDTO quartzTaskDTO) throws Exception {
         quartzTaskDTO.setType("manual");
         return taskService.dryRun(quartzTaskDTO);
     }
 
     @PostMapping("quartz/list/{goPage}/{pageSize}")
-    public Pager getQuartzTasks(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody Map<String, Object> param) {
-        Page page = PageHelper.startPage(goPage, pageSize, true);
+    public Pager<List<Task>> getQuartzTasks(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody Map<String, Object> param) {
+        Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
         param.put("type", "quartz");
         return PageUtils.setPageInfo(page, taskService.selectQuartzTasks(param));
     }
 
     @PostMapping("quartz/Alllist")
-    public Object getQuartzTasks(@RequestBody Map<String, Object> param) {
+    public List<Task> getQuartzTasks(@RequestBody Map<String, Object> param) {
         param.put("type", "quartz");
         return taskService.selectQuartzTasks(param);
     }
 
     @PostMapping("quartz/create")
-    public Object saveQuartzTask(@RequestBody QuartzTaskDTO quartzTaskDTO) throws Exception {
+    public boolean saveQuartzTask(@RequestBody QuartzTaskDTO quartzTaskDTO) throws Exception {
         quartzTaskDTO.setType("quartz");
         return taskService.saveQuartzTask(quartzTaskDTO);
     }
@@ -130,7 +135,7 @@ public class TaskController {
     }
 
     @PostMapping("quartz/delete")
-    public void deleteQuartzTask(@RequestBody String quartzTaskId) throws Exception {
+    public void deleteQuartzTask(@RequestBody String quartzTaskId) {
         taskService.deleteQuartzTask(quartzTaskId);
     }
 
@@ -141,7 +146,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "quartz/validateCron")
-    public Object validateCron(@RequestBody Map map) throws Exception {
-        return CronExpression.isValidExpression(map.get("cron").toString());
+    public boolean validateCron(@RequestBody Map<String, String> map) {
+        return CronExpression.isValidExpression(map.get("cron"));
     }
 }

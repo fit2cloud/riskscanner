@@ -58,25 +58,25 @@ public class TaskService {
     @Resource
     private ResourceItemMapper resourceItemMapper;
 
-    public Task saveManualTask(QuartzTaskDTO quartzTaskDTO) throws Exception {
+    public Task saveManualTask(QuartzTaskDTO quartzTaskDTO) {
         try {
 
             this.validateYaml(quartzTaskDTO);
             return orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.APPROVED.name());
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
-            throw e;
+            throw new RSException(e.getMessage());
         }
     }
 
-    public Object morelTask(String taskId) throws Exception {
+    public boolean morelTask(String taskId)  {
         try {
             Task task = taskMapper.selectByPrimaryKey(taskId);
             if (task != null) {
                 task.setStatus(TaskConstants.TASK_STATUS.APPROVED.name());
                 taskMapper.updateByPrimaryKeySelective(task);
             } else {
-                throw new Exception("Task not found");
+                RSException.throwException("Task not found");
             }
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
@@ -85,7 +85,7 @@ public class TaskService {
         return true;
     }
 
-    public boolean validateYaml (QuartzTaskDTO quartzTaskDTO) throws Exception {
+    public boolean validateYaml (QuartzTaskDTO quartzTaskDTO) {
         try {
             String script = quartzTaskDTO.getScript();
             JSONArray jsonArray = JSON.parseArray(quartzTaskDTO.getParameter());
@@ -97,20 +97,17 @@ public class TaskService {
                 }
             }
             Yaml yaml = new Yaml();
-            Map map = (Map) yaml.load(script);
+            Map map = yaml.load(script);
             if (map != null) {
                 List<Map> list = (List) map.get("policies");
-                for (Map m : list) {
-                    m.get("resource").toString();
-                }
+                for (Map m : list) m.get("resource").toString();
             }
         } catch (Exception e) {
-            throw new Exception(Translator.get("i18n_compliance_rule_code_error"));
+            RSException.throwException(Translator.get("i18n_compliance_rule_code_error"));
         }
         return true;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public void deleteManualTask(String taskId) {
         Task task = taskMapper.selectByPrimaryKey(taskId);
         TaskItemExample taskItemExample = new TaskItemExample();
@@ -153,11 +150,11 @@ public class TaskService {
             OperationLogService.log(SessionUtils.getUser(), taskId, task.getDescription(), ResourceTypeConstants.TASK.name(), ResourceOperation.DELETE, "删除任务");
         } catch (Exception e) {
             LogUtil.error("Delete manual task error{} " + e.getMessage());
-            throw e;
+            RSException.throwException(e.getMessage());
         }
     }
 
-    public Object dryRun(QuartzTaskDTO quartzTaskDTO) throws Exception {
+    public boolean dryRun(QuartzTaskDTO quartzTaskDTO) {
         //validate && dryrun
         String uuid = UUIDUtil.newUUID();
         try {
@@ -171,7 +168,7 @@ public class TaskService {
                 }
             }
             final String finalScript = script;
-            String dirPath = "";
+            String dirPath;
             AccountExample example = new AccountExample();
             example.createCriteria().andPluginIdEqualTo(quartzTaskDTO.getPluginId()).andStatusEqualTo("VALID");
             AccountWithBLOBs account = accountMapper.selectByExampleWithBLOBs(example).get(0);
@@ -182,17 +179,17 @@ public class TaskService {
             String resultStr = CommandUtils.commonExecCmdWithResult(command, dirPath);
             if (!resultStr.isEmpty() && !resultStr.contains("INFO")) {
                 LogUtil.error(Translator.get("i18n_compliance_rule_error")+ " {validate}:" + resultStr);
-                throw new Exception(Translator.get("i18n_compliance_rule_error"));
+                RSException.throwException(Translator.get("i18n_compliance_rule_error"));
             }
             String command2 = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.dryrun.getCommand(), dirPath, "policy.yml", map);
             String resultStr2 = CommandUtils.commonExecCmdWithResult(command2, dirPath);
             if (!resultStr.isEmpty() && !resultStr2.contains("INFO")) {
                 LogUtil.error(Translator.get("i18n_compliance_rule_error")+ " {dryrun}:" + resultStr);
-                throw new Exception(Translator.get("i18n_compliance_rule_error"));
+                RSException.throwException(Translator.get("i18n_compliance_rule_error"));
             }
         } catch (Exception e) {
             LogUtil.error("[{}] validate && dryrun generate policy.yml file failed:{}", uuid, e.getMessage());
-            throw new Exception(Translator.get("i18n_compliance_rule_error"));
+            RSException.throwException(Translator.get("i18n_compliance_rule_error"));
         }
         return true;
     }
@@ -229,12 +226,10 @@ public class TaskService {
             criteria.andResourceTypesLike("%" + params.get("resourceType").toString() + "%");
         }
         example.setOrderByClause("return_sum desc, create_time desc, status");
-        List<Task> quartzTaskList = taskMapper.selectByExample(example);
-        return quartzTaskList;
+        return taskMapper.selectByExample(example);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public Object saveQuartzTask(QuartzTaskDTO quartzTaskDTO) throws Exception {
+    public boolean saveQuartzTask(QuartzTaskDTO quartzTaskDTO) throws Exception {
         try {
             this.validateYaml(quartzTaskDTO);
             Task task = orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.RUNNING.name());
@@ -287,8 +282,7 @@ public class TaskService {
     }
 
     public Task getResources(String quartzTaskId) {
-        Task quartzTask = taskMapper.selectByPrimaryKey(quartzTaskId);
-        return quartzTask;
+        return taskMapper.selectByPrimaryKey(quartzTaskId);
     }
 
     public void syncTriggerTime() {
@@ -316,10 +310,10 @@ public class TaskService {
         List<Task> tasks = taskMapper.selectByExample(example);
         tasks.forEach(task -> {
             if (task.getResourcesSum() != null && task.getReturnSum() != null) {
-                int resource_sum = extTaskMapper.getResourceSum(task.getId());
-                int return_sum = extTaskMapper.getReturnSum(task.getId());
-                task.setResourcesSum((long) resource_sum);
-                task.setReturnSum((long) return_sum);
+                int resourceSum = extTaskMapper.getResourceSum(task.getId());
+                int returnSum = extTaskMapper.getReturnSum(task.getId());
+                task.setResourcesSum((long) resourceSum);
+                task.setReturnSum((long) returnSum);
                 taskMapper.updateByPrimaryKeySelective(task);
             }
         });
@@ -351,7 +345,7 @@ public class TaskService {
     public void deleteQuartzTask(String quartzTaskId) {
         Task quartzTask = taskMapper.selectByPrimaryKey(quartzTaskId);
         String triggerId = quartzTask.getTriggerId();
-        Trigger trigger = null;
+        Trigger trigger;
         try {
             trigger = quartzManageService.getTrigger(new TriggerKey(triggerId));
             quartzManageService.deleteJob(trigger.getJobKey());
@@ -365,13 +359,13 @@ public class TaskService {
 }
 
 class QuartzTaskStatus {
-    public final static String ERROR = "ERROR";
-    public final static String PAUSE = "PAUSE";
-    public final static String RUNNING = "RUNNING";
+    protected final static String ERROR = "ERROR";
+    protected final static String PAUSE = "PAUSE";
+    protected final static String RUNNING = "RUNNING";
 }
 
 class QuartzTaskAction {
-    public final static String PAUSE = "pause";
-    public final static String RESUME = "resume";
+    protected final static String PAUSE = "pause";
+    protected final static String RESUME = "resume";
 }
 

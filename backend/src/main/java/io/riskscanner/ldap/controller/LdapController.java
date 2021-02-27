@@ -14,9 +14,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 
+@ApiIgnore
 @RestController
 @RequestMapping("/ldap")
 public class LdapController {

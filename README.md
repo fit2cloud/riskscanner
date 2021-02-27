@@ -20,7 +20,7 @@ RiskScanner 是开源企业级公有云安全合规平台，公有云安全合�
 
 - 后端: [Spring Boot](https://www.tutorialspoint.com/spring_boot/spring_boot_introduction.htm)
 - 前端: [Vue.js](https://vuejs.org/)
-- 中间件: [MySQL](https://www.mysql.com/), [Kafka](https://kafka.apache.org/)
+- 中间件: [MySQL](https://www.mysql.com/)
 - 基础设施: [Docker](https://www.docker.com/), [Kubernetes](https://kubernetes.io/)
 
 ## License & Copyright

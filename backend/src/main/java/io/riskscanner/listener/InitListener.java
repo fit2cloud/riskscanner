@@ -15,7 +15,7 @@ public class InitListener implements ApplicationRunner {
     private TaskService taskService;
 
     @Override
-    public void run(ApplicationArguments args) throws PluginException {
+    public void run(ApplicationArguments args) {
         taskService.reAddQuartzOnStart();
     }
 

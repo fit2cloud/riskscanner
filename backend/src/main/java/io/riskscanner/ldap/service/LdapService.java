@@ -29,6 +29,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import static com.alibaba.fastjson.JSON.parseObject;
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
 @Service
@@ -91,7 +92,7 @@ public class LdapService {
         for (String ou : arr) {
             try {
                 result = ldapTemplate.search(query().base(ou.trim()).filter(filter, username), new MsContextMapper());
-                if (result.size() == 1) {
+                if (!result.isEmpty() && result.size() == 1) {
                     return result.get(0);
                 }
             } catch (NameNotFoundException | InvalidNameException e) {
@@ -103,7 +104,7 @@ public class LdapService {
             }
         }
 
-        if (result.size() != 1) {
+        if (!result.isEmpty() && result.size() != 1) {
             RSException.throwException(Translator.get("user_not_found_or_not_unique"));
         }
 
@@ -204,7 +205,7 @@ public class LdapService {
     public String getMappingAttr(String attr, DirContextOperations dirContext) {
         // 检查LDAP映射属性
         String mapping = getLdapMapping();
-        JSONObject jsonObject = JSONObject.parseObject(mapping);
+        JSONObject jsonObject = parseObject(mapping);
 
         String mapAttr = jsonObject.getString(attr);
         if (StringUtils.isBlank(mapAttr)) {
@@ -221,7 +222,7 @@ public class LdapService {
 
     public String getNotRequiredMappingAttr(String attr, DirContextOperations dirContext) {
         String mapping = getLdapMapping();
-        JSONObject jsonObject = JSONObject.parseObject(mapping);
+        JSONObject jsonObject = parseObject(mapping);
 
         String mapAttr = jsonObject.getString(attr);
 

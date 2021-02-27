@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Objects;
 
-
+@ApiIgnore
 @RestController
 public class GlobalExceptionHandler implements ErrorController {
 
@@ -35,7 +36,7 @@ public class GlobalExceptionHandler implements ErrorController {
     }
 
     @RequestMapping(value = {PATH}, produces = {"text/html"})
-    public ModelAndView errorHtml(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView errorHtml(HttpServletRequest request) {
         return new ModelAndView("error", this.getErrorAttributes(request, false));
     }
 
@@ -48,9 +49,8 @@ public class GlobalExceptionHandler implements ErrorController {
         response.setStatus(code);
         String errorMessage = StringUtils.EMPTY;
         if (t != null) {
-            if (Logger.isDebugEnabled()) {
+            if (Logger.isDebugEnabled())
                 Logger.error("Fail to proceed " + errorAttributeMap.get("path"), t);
-            }
             errorMessage = t.getMessage();
         }
         if (StringUtils.isBlank(errorMessage)) {

@@ -81,18 +81,6 @@ public class OperationLogService {
         return operationLogMapper.selectByExample(example);
     }
 
-    public List<OperationLog> selectUserOperationLog(String userId) {
-        OperationLogExample example = new OperationLogExample();
-        example.createCriteria().andResourceUserIdEqualTo(userId);
-        example.setOrderByClause("time desc");
-        return operationLogMapper.selectByExample(example);
-    }
-
-    public List<OperationLog> selectWorkspaceOperationLog() {
-        OperationLogExample example = new OperationLogExample();
-        example.setOrderByClause("time desc");
-        return operationLogMapper.selectByExample(example);
-    }
 }
 
 class SystemUserConstants extends User {

@@ -42,18 +42,20 @@ public class UserRoleService {
         userRoleExample.createCriteria().andUserIdEqualTo(userId);
         List<UserRole> userRoles = userRoleMapper.selectByExample(userRoleExample);
         List<String> collect = userRoles.stream()
-                .map(userRole -> userRole.getRoleId())
+                .map(userRole -> {
+                    return userRole.getRoleId();
+                })
                 .distinct()
                 .collect(Collectors.toList());
-        for (int i = 0; i < collect.size(); i++) {
+        for (String s : collect) {
             Map<String, Object> map = new HashMap<>(2);
-            map.put("id", collect.get(i));
+            map.put("id", s);
             map.put("ids", new ArrayList<>());
-            for (int j = 0; j < userRoles.size(); j++) {
-                String role = userRoles.get(j).getRoleId();
-                if (StringUtils.equals(role, collect.get(i))) {
+            for (UserRole userRole : userRoles) {
+                String role = userRole.getRoleId();
+                if (StringUtils.equals(role, s)) {
                     List ids = (List) map.get("ids");
-                    ids.add(userRoles.get(j).getSourceId());
+                    ids.add(userRole.getSourceId());
                 }
             }
             list.add(map);

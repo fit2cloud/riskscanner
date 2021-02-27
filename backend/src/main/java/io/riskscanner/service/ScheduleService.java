@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
  * @author maguohao
  */
 @Service
-@Transactional(rollbackFor = RSException.class)
+@Transactional(rollbackFor = Exception.class)
 public class ScheduleService {
 
     @Resource
@@ -62,7 +63,7 @@ public class ScheduleService {
         ScheduleExample example = new ScheduleExample();
         example.createCriteria().andResourceIdEqualTo(resourceId).andGroupEqualTo(group);
         List<Schedule> schedules = scheduleMapper.selectByExample(example);
-        if (schedules.size() > 0) {
+        if (!schedules.isEmpty()) {
             return schedules.get(0);
         }
         return null;
@@ -115,12 +116,11 @@ public class ScheduleService {
         schedule.setEnable(request.getEnable());
         schedule.setValue(request.getValue().trim());
         schedule.setKey(request.getResourceId());
-        schedule.setUserId(SessionUtils.getUser().getId());
+        schedule.setUserId(Objects.requireNonNull(SessionUtils.getUser()).getId());
         return schedule;
     }
 
     public void removeJob(String resourceId) {
-        //todo
     }
 
     public void addOrUpdateCronJob(Schedule request, JobKey jobKey, TriggerKey triggerKey, Class clazz) {
