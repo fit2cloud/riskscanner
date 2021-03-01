@@ -305,8 +305,10 @@
                   'Content-Type': undefined
                 }
               }, res => {
-                this.$success(this.$t('account.success'));
                 this.search();
+                if (res.success) {
+                  this.$success(this.$t('account.success'));
+                }
               });
             }
           }

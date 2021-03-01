@@ -94,6 +94,7 @@ CREATE TABLE IF NOT EXISTS `rule_inspection_report_mapping` (
     KEY `IDX_REPORT_ID` (`report_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
+
 INSERT INTO rule_tag (tag_key, tag_name, _index, flag) VALUES ('safety', '安全', 1, 1);
 INSERT INTO rule_tag (tag_key, tag_name, _index, flag) VALUES ('cost', '费用', 2, 1);
 INSERT INTO rule_tag (tag_key, tag_name, _index, flag) VALUES ('tagging', '标签', 3, 1);
@@ -102,9 +103,6 @@ INSERT INTO rule_tag (tag_key, tag_name, _index, flag) VALUES ('tagging', '标�
 INSERT INTO rule_group VALUES (1, 'Aliyun 等保预检', '配置审计提供的等保预检功能为您提供了自动且持续的云上信息系统预检能力，帮助您了解并持续监控合规现状，在正式检测之前避免多次反复整改，助您快速通过等保检测。', '等保三级', 'fit2cloud-aliyun-plugin', 1);
 INSERT INTO rule_group VALUES (2, 'Aliyun CIS合规检查', 'CIS 合规检查帮助您持续检测云上资源是否符合CIS Control网络安全架构的要求。', '高风险', 'fit2cloud-aliyun-plugin', 1);
 INSERT INTO rule_group VALUES (3, 'Aliyun OSS合规基线', 'OSS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-aliyun-plugin', 1);
-INSERT INTO rule_group VALUES (4, 'Huawei 等保预检', '配置审计提供的等保预检功能为您提供了自动且持续的云上信息系统预检能力，帮助您了解并持续监控合规现状，在正式检测之前避免多次反复整改，助您快速通过等保检测。', '等保三级', 'fit2cloud-huawei-plugin', 1);
-INSERT INTO rule_group VALUES (5, 'Huawei CIS合规检查', 'CIS 合规检查帮助您持续检测云上资源是否符合CIS Control网络安全架构的要求。', '高风险', 'fit2cloud-huawei-plugin', 1);
-INSERT INTO rule_group VALUES (6, 'Huawei COS合规基线', 'COS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-huawei-plugin', 1);
 
 
 INSERT INTO rule_inspection_report VALUES (1, '应保证网络设备的业务处理能力满足业务高峰期需要。', '安全通信网络', '网络架构', '您可以通过VPC控制台，定期查看当前资源配额使用情况。');
@@ -205,11 +203,7 @@ INSERT INTO rule_inspection_report VALUES (95, '确保仅审核通过的端口�
 INSERT INTO rule_inspection_report VALUES (96, '确保服务器端加密设置为“用服务密钥加密”。', '安全计算环境', '安全数据保护', '查看您账号下的OSS Bucket是否启用了加密，若未加密，会导致该规则不合规。');
 INSERT INTO rule_inspection_report VALUES (97, '确保RDS实例不对外开放。', '安全计算环境', '安全数据保护', '查看您账号下的OSS Bucket是否启用了加密，若未加密，会导致该规则不合规。');
 
-INSERT INTO `rule` VALUES ('f7e8d1c4-16f7-4079-b110-b60db0cd91bf', 'Huawei ECS实例网络类型扫描', 1, 'HighRisk', 'Huawei  账号下所有ECS实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”', 'policies:\n    # 账号下所有ECS实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”\n    - name: huawei-ecs-instance-network-type\n      resource: huawei.ecs\n      filters:\n        - type: InstanceNetworkType\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的网络类型:classic经典网络/vpc网络\",\"defaultValue\":\"vpc\",\"required\":true}]', 'fit2cloud-huawei-plugin', '华为云', 'fusion.png', concat(unix_timestamp(now()), '002'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('108c875b-bf3c-4034-b07d-15faa8715257', 'Huawei ECS实例公网IP扫描', 1, 'HighRisk', 'Huawei ECS实例未直接绑定公网IP，视为“合规”，否则属于“不合规”。该规则仅适用于 IPv4 协议', 'policies:\n    # ECS实例未直接绑定公网IP，视为“合规”。该规则仅适用于 IPv4 协议\n    - name: huawei-ecs-public-ipaddress\n      resource: huawei.ecs\n      filters:\n        - type: PublicIpAddress', '[]', 'fit2cloud-huawei-plugin', '华为云', 'fusion.png', concat(unix_timestamp(now()), '002'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('36908c29-c15e-4c73-a964-5fb97bbb27fa', 'Huawei Disk磁盘加密状态扫描', 1, 'HighRisk', 'Huawei 账号下所有处于关联状态的磁盘均已加密；若您配置阈值，则磁盘加密的Id需存在您列出的阈值中，视为“合规”', 'policies:\n    - name: huawei-encrypted-disk\n      resource: huawei.disk\n      filters:\n        - type: encrypted\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"磁盘是否加密( true/false )\",\"defaultValue\":\"false\",\"required\":true}]', 'fit2cloud-huawei-plugin', '华为云', 'fusion.png', concat(unix_timestamp(now()), '002'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('3b3a76cf-78e4-4c48-84da-baf2af6be696', 'Huawei EIP带宽峰值扫描', 1, 'HighRisk', 'Huawei 检测您账号下的弹性IP实例是否达到最低带宽要求', 'policies:\n    # 检测您账号下的弹性IP实例是否达到最低带宽要求\n    - name: huawei-eip-bandwidth\n      resource: huawei.eip\n      filters:\n        - type: Bandwidth\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"按带宽计费的公网型实例的带宽峰值\",\"defaultValue\":\"10\",\"required\":true}]', 'fit2cloud-huawei-plugin', '华为云', 'fusion.png', concat(unix_timestamp(now()), '002'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('3c4f6db4-6f8d-4e42-9c7e-d209fe5489fb', 'Huawei ELB负载均衡HTTPS监听扫描', 1, 'HighRisk', 'Huawei  ELB负载均衡开启HTTPS监听，视为“合规”，否则属于“不合规”', 'policies:\n    # 负载均衡开启HTTPS监听，视为“合规”。\n    - name: huawei-elb-listener\n      resource: huawei.elb\n      filters:\n        - type: listener\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"负载均衡实例前端使用的协议\",\"defaultValue\":\"HTTPS\",\"required\":true}]', 'fit2cloud-huawei-plugin', '华为云', 'fusion.png', concat(unix_timestamp(now()), '002'), 1, 'custodian');
+
 INSERT INTO `rule` VALUES ('028b8362-08f2-404c-8e15-935426bb8545', 'Aliyun RDS实例公网访问扫描', 1, 'HighRisk', 'Aliyun  检测您账号下RDS实例不允许任意来源公网访问，视为“合规”', 'policies:\n    # 检测您账号下RDS实例不允许任意来源公网访问，视为“合规”\n    - name: aliyun-rds-internet-access\n      resource: aliyun.rds\n      filters:\n        - type: InternetAccess\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"启用公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
 INSERT INTO `rule` VALUES ('083d24e2-881f-488b-b120-8f2cd961707f', 'Aliyun SecurityGroup安全组配置扫描', 1, 'HighRisk', 'Aliyun  账号下ECS安全组配置不为“0.0.0.0/0”，视为“合规”，否则属于“不合规”', 'policies:\n    # 账号下ECS安全组配置不为“0.0.0.0/0”，视为“合规”。\n    - name: aliyun-sg-sourcecidrip\n      resource: aliyun.security-group\n      filters:\n        - type: SourceCidrIp\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"目标IP地址段\",\"defaultValue\":\"\\\"0.0.0.0/0\\\"\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
 INSERT INTO `rule` VALUES ('0b2ece35-a17e-4584-ac2d-0b11483d04fb', 'Aliyun EIP带宽峰值扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的弹性IP实例是否达到最低带宽要求', 'policies:\n    # 检测您账号下的弹性IP实例是否达到最低带宽要求\n    - name: aliyun-eip-bandwidth\n      resource: aliyun.eip\n      filters:\n        - type: Bandwidth\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"按带宽计费的公网型实例的带宽峰值\",\"defaultValue\":\"10\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
@@ -241,6 +235,7 @@ INSERT INTO `rule` VALUES ('e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', 'Aliyun SLB�
 INSERT INTO `rule` VALUES ('fdef013f-ce14-468a-9af4-1c0fabc7e6e1', 'Aliyun OSS对象存储桶冗余存储扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的对象存储桶是否启用同城冗余存储（数据容灾类型），若开启视为“合规”，否则视为不合规', 'policies:\n    # 检测您账号下的对象存储桶是否启用同城冗余存储，若开启视为“合规”。\n    - name: aliyun-oss-dataredundancy-type\n      resource: aliyun.oss\n      filters:\n        - type: DataRedundancyType\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"Bucket的数据容灾类型。有效值：LRS、ZRS\",\"defaultValue\":\"ZRS\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
 INSERT INTO `rule` VALUES ('ff153eea-2628-440b-b054-186d6f5a7708', 'Aliyun Redis实例公网访问扫描', 1, 'HighRisk', 'Aliyun  账号下Redis实例不允许任意来源公网访问，视为“合规”', 'policies:\n    # 账号下Redis实例不允许任意来源公网访问，视为“合规”\n    - name: aliyun-redis-internet-access\n      resource: aliyun.redis\n      filters:\n        - type: InternetAccess\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
 
+
 INSERT INTO `rule_tag_mapping` VALUES (1, 'd690be79-2e8c-4054-bbe6-496bd29e91fe', 'safety');
 INSERT INTO `rule_tag_mapping` VALUES (2, '6fd132c0-b4df-4685-b132-5441d1aef2f8', 'safety');
 INSERT INTO `rule_tag_mapping` VALUES (3, 'c95fde94-53a5-4658-98a4-56a0c6d951d4', 'safety');
@@ -271,11 +266,7 @@ INSERT INTO `rule_tag_mapping` VALUES (27, '028b8362-08f2-404c-8e15-935426bb8545
 INSERT INTO `rule_tag_mapping` VALUES (28, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', 'safety');
 INSERT INTO `rule_tag_mapping` VALUES (29, 'beda16d0-93fd-4366-9ebf-f5ce1360cd60', 'safety');
 INSERT INTO `rule_tag_mapping` VALUES (30, '2adbae64-6403-4dfb-92ab-637354da49f8', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (31, '3c4f6db4-6f8d-4e42-9c7e-d209fe5489fb', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (32, '108c875b-bf3c-4034-b07d-15faa8715257', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (33, 'f7e8d1c4-16f7-4079-b110-b60db0cd91bf', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (34, '36908c29-c15e-4c73-a964-5fb97bbb27fa', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (35, '3b3a76cf-78e4-4c48-84da-baf2af6be696', 'safety');
+
 
 INSERT INTO `rule_inspection_report_mapping` VALUES (1, '0b2ece35-a17e-4584-ac2d-0b11483d04fb', '2');
 INSERT INTO `rule_inspection_report_mapping` VALUES (2, '594e7673-c0db-40a4-9a0c-f70f0e58cc62', '2');
@@ -348,12 +339,7 @@ INSERT INTO `rule_inspection_report_mapping` VALUES (68, 'df4fb45c-f9bc-4c8e-996
 INSERT INTO `rule_inspection_report_mapping` VALUES (69, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '95');
 INSERT INTO `rule_inspection_report_mapping` VALUES (70, '2adbae64-6403-4dfb-92ab-637354da49f8', '10');
 INSERT INTO `rule_inspection_report_mapping` VALUES (71, '2adbae64-6403-4dfb-92ab-637354da49f8', '13');
-INSERT INTO `rule_inspection_report_mapping` VALUES (72, '3c4f6db4-6f8d-4e42-9c7e-d209fe5489fb', '52');
-INSERT INTO `rule_inspection_report_mapping` VALUES (73, 'f7e8d1c4-16f7-4079-b110-b60db0cd91bf', '3');
-INSERT INTO `rule_inspection_report_mapping` VALUES (74, 'f7e8d1c4-16f7-4079-b110-b60db0cd91bf', '5');
-INSERT INTO `rule_inspection_report_mapping` VALUES (75, '36908c29-c15e-4c73-a964-5fb97bbb27fa', '53');
-INSERT INTO `rule_inspection_report_mapping` VALUES (76, '36908c29-c15e-4c73-a964-5fb97bbb27fa', '94');
-INSERT INTO `rule_inspection_report_mapping` VALUES (77, '3b3a76cf-78e4-4c48-84da-baf2af6be696', '2');
+
 
 INSERT INTO `rule_group_mapping` VALUES (1, 'd690be79-2e8c-4054-bbe6-496bd29e91fe', '1');
 INSERT INTO `rule_group_mapping` VALUES (2, '6fd132c0-b4df-4685-b132-5441d1aef2f8', '1');
@@ -397,25 +383,17 @@ INSERT INTO `rule_group_mapping` VALUES (39, 'df4fb45c-f9bc-4c8e-996d-036c9d2f18
 INSERT INTO `rule_group_mapping` VALUES (40, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '2');
 INSERT INTO `rule_group_mapping` VALUES (41, 'beda16d0-93fd-4366-9ebf-f5ce1360cd60', '1');
 INSERT INTO `rule_group_mapping` VALUES (42, '2adbae64-6403-4dfb-92ab-637354da49f8', '1');
-INSERT INTO `rule_group_mapping` VALUES (43, '3c4f6db4-6f8d-4e42-9c7e-d209fe5489fb', '1');
-INSERT INTO `rule_group_mapping` VALUES (44, '108c875b-bf3c-4034-b07d-15faa8715257', '1');
-INSERT INTO `rule_group_mapping` VALUES (45, 'f7e8d1c4-16f7-4079-b110-b60db0cd91bf', '1');
-INSERT INTO `rule_group_mapping` VALUES (46, '36908c29-c15e-4c73-a964-5fb97bbb27fa', '1');
-INSERT INTO `rule_group_mapping` VALUES (47, '3b3a76cf-78e4-4c48-84da-baf2af6be696', '1');
 
 
 INSERT INTO `rule_type` VALUES ('245bc538-2c33-430a-a61c-37000d058263', 'ff153eea-2628-440b-b054-186d6f5a7708', 'aliyun.redis');
 INSERT INTO `rule_type` VALUES ('26b965d0-a16e-4d4a-b727-1816f07ce49a', 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', 'aliyun.polardb');
 INSERT INTO `rule_type` VALUES ('4155c0ce-6f20-43a2-9a1f-678ed0e2ee0f', '083d24e2-881f-488b-b120-8f2cd961707f', 'aliyun.security-group');
-INSERT INTO `rule_type` VALUES ('421ae776-4b20-4f80-89f6-4133f1a6a62e', '36908c29-c15e-4c73-a964-5fb97bbb27fa', 'huawei.disk');
 INSERT INTO `rule_type` VALUES ('4b3dd93c-6f3a-4bdb-afd7-6039d826b541', '3e5d47ac-86b6-40d1-a191-1b2ff2496118', 'aliyun.ecs');
 INSERT INTO `rule_type` VALUES ('50e1f0a2-2c98-4af3-b458-847771cdf80c', 'e054787c-5826-4242-8450-b0daa926ea40', 'aliyun.rds');
 INSERT INTO `rule_type` VALUES ('545f8a99-b613-4d6e-85da-1f48cc076cbf', 'beda16d0-93fd-4366-9ebf-f5ce1360cd60', 'aliyun.rds');
 INSERT INTO `rule_type` VALUES ('63d01a83-df8c-4b3c-a244-12031698568f', '339cf3fc-f9d9-457e-ac72-40d37c402bdf', 'aliyun.slb');
 INSERT INTO `rule_type` VALUES ('66f5bfd5-48f4-4454-9df0-3e6d856aa36f', '44343a84-39e2-4fbc-b8c5-d3ac06186501', 'aliyun.mongodb');
 INSERT INTO `rule_type` VALUES ('75bd5124-f247-4cdc-a0d5-fdd9a573b1f3', '6fd132c0-b4df-4685-b132-5441d1aef2f8', 'aliyun.ecs');
-INSERT INTO `rule_type` VALUES ('807fe630-cbfa-4b7b-b842-c655dda7672d', '3c4f6db4-6f8d-4e42-9c7e-d209fe5489fb', 'huawei.elb');
-INSERT INTO `rule_type` VALUES ('813913d4-80b6-43eb-b361-13f8858191d1', '108c875b-bf3c-4034-b07d-15faa8715257', 'huawei.ecs');
 INSERT INTO `rule_type` VALUES ('883d6aa5-a59d-4844-98fa-5a53d1acb6ef', 'd690be79-2e8c-4054-bbe6-496bd29e91fe', 'aliyun.rds');
 INSERT INTO `rule_type` VALUES ('922e73cd-a782-4238-9381-277c0e54f9d7', '2adbae64-6403-4dfb-92ab-637354da49f8', 'aliyun.polardb');
 INSERT INTO `rule_type` VALUES ('a1bbf517-80f6-4a6d-b043-3e2654b9efbb', '0b2ece35-a17e-4584-ac2d-0b11483d04fb', 'aliyun.eip');
@@ -423,7 +401,8 @@ INSERT INTO `rule_type` VALUES ('a71f9bc1-6c08-4618-bad8-5da9d4452968', '70c1e70
 INSERT INTO `rule_type` VALUES ('b79afedc-1880-4aac-8bbf-f4d05eaea1d3', 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', 'aliyun.security-group');
 INSERT INTO `rule_type` VALUES ('bbd20d15-6e27-4a53-b67b-0890c0d0c452', '594e7673-c0db-40a4-9a0c-f70f0e58cc62', 'aliyun.slb');
 INSERT INTO `rule_type` VALUES ('bd0f8305-661a-40f3-a4e0-ee457e6da76e', 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', 'aliyun.oss');
-INSERT INTO `rule_type` VALUES ('bee9a2a0-0dc7-468b-8ded-2a36f861be89', 'f7e8d1c4-16f7-4079-b110-b60db0cd91bf', 'huawei.ecs');
+
+
 INSERT INTO `rule_type` VALUES ('bfc2ce96-e36f-4280-bdeb-9b88204aff0a', '2533542d-5422-4bd5-8849-6a69ec05a874', 'aliyun.disk');
 INSERT INTO `rule_type` VALUES ('c36099af-2a2f-496f-8bf7-4435e3edd64e', '88a77028-0e2a-4201-a713-ded3a94864f9', 'aliyun.slb');
 INSERT INTO `rule_type` VALUES ('c9a126eb-41e8-4e8c-b2dd-57b9c4df9a34', '29763f5e-ef4c-431d-b44f-39cd1b5b5363', 'aliyun.redis');
@@ -432,7 +411,6 @@ INSERT INTO `rule_type` VALUES ('e39bb334-d7ae-4fc5-9caa-e91ac5e594e0', '429f839
 INSERT INTO `rule_type` VALUES ('e4f77952-ef02-4d6d-8771-502ef1343811', '9d94781e-922d-48c3-90a1-393dc79f2442', 'aliyun.oss');
 INSERT INTO `rule_type` VALUES ('eb725846-fe34-4d48-9e13-5c727c268dfd', '028b8362-08f2-404c-8e15-935426bb8545', 'aliyun.rds');
 INSERT INTO `rule_type` VALUES ('ebcac89f-9f95-4bbf-8843-3591232150d6', 'ba1edc8f-0944-4ebb-a953-f655aa710e84', 'aliyun.cdn');
-INSERT INTO `rule_type` VALUES ('f070dab9-9c35-4806-8388-afcbf22f85c3', '3b3a76cf-78e4-4c48-84da-baf2af6be696', 'huawei.eip');
 INSERT INTO `rule_type` VALUES ('f08d6448-024f-4d03-bf4d-705c8c973704', 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', 'aliyun.oss');
 INSERT INTO `rule_type` VALUES ('f3686b01-3bf7-4e5b-b55d-14b607323bf0', '7d323895-f07b-4845-8b3d-01c78180f270', 'aliyun.mongodb');
 INSERT INTO `rule_type` VALUES ('f5d5b91f-1530-42d2-b007-603184247f24', '8c635fda-7f89-4d5c-b0f4-2116f1b65554', 'aliyun.oss');

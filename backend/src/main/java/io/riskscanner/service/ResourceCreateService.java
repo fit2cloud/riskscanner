@@ -60,10 +60,9 @@ public class ResourceCreateService {
 
     @QuartzScheduled(cron = "${cron.expression.local}")
     public void handleTasks() {
-        // 本地调试时注释掉此方法
-        if (!StringUtils.equals(env.getProperty("run.mode", "local"), "release")) {
-            return;
-        }
+//        if (!StringUtils.equals(env.getProperty("run.mode", "local"), "release")) {
+//            return;
+//        }
         final TaskExample taskExample = new TaskExample();
         TaskExample.Criteria criteria = taskExample.createCriteria();
         criteria.andStatusEqualTo(TaskConstants.TASK_STATUS.APPROVED.toString());
@@ -133,8 +132,7 @@ public class ResourceCreateService {
             // 任务成功之后发送邮件
             if (StringUtils.equals(TaskConstants.TASK_STATUS.FINISHED.name(), taskStatus) ||
                     StringUtils.equals(TaskConstants.TASK_STATUS.RUNNING.name(), taskStatus)) {
-//                Map<String, Object> params = getParameters(taskId);
-//                processMessageService.sendProcessMessage(taskId, ProcessConstants.MessageOperation.BUSINESS_COMPLETE, params);
+                Map<String, Object> params = getParameters(taskId);
             }
         } catch (Exception e) {
             orderService.updateTaskStatus(taskId, null, TaskConstants.TASK_STATUS.ERROR.name());

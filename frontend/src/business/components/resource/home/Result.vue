@@ -18,7 +18,7 @@
                       </el-tooltip>
                     </span>
                     <span v-else>
-                      <i class="el-icon-loading icon-loading"></i>
+                      <img class="" :src="require(`@/assets/img/loading.gif`)" alt=""/>
                     </span>
                   </el-col>
                 </el-row>
@@ -397,7 +397,8 @@
           lineNumbers: true,
           line: true,
           indentWithTabs: true,
-        }
+        },
+        iconLoading: {url: require(`@/assets/img/loading.gif`)}
       }
     },
     methods: {

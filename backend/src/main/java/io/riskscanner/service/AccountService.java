@@ -61,14 +61,16 @@ public class AccountService {
        return accountMapper.selectByPrimaryKey(id);
     }
 
-    public void validate(List<String> ids) {
+    public boolean validate(List<String> ids) {
         ids.forEach(id -> commonThreadPool.addTask(() -> {
             try {
                 validate(id);
             } catch (Exception e) {
-                LogUtil.error(e);
+                LogUtil.error(e.getMessage());
+                throw new RSException(e.getMessage());
             }
         }));
+        return true;
     }
 
 
