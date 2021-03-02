@@ -2,7 +2,7 @@
 
 INSERT INTO rule_group VALUES (4, 'Huawei 等保预检', '配置审计提供的等保预检功能为您提供了自动且持续的云上信息系统预检能力，帮助您了解并持续监控合规现状，在正式检测之前避免多次反复整改，助您快速通过等保检测。', '等保三级', 'fit2cloud-huawei-plugin', 1);
 INSERT INTO rule_group VALUES (5, 'Huawei CIS合规检查', 'CIS 合规检查帮助您持续检测云上资源是否符合CIS Control网络安全架构的要求。', '高风险', 'fit2cloud-huawei-plugin', 1);
-INSERT INTO rule_group VALUES (6, 'Huawei COS合规基线', 'COS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-huawei-plugin', 1);
+INSERT INTO rule_group VALUES (6, 'Huawei OBS合规基线', 'OBS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-huawei-plugin', 1);
 
 
 INSERT INTO `rule`(`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('0cf1e428-3c37-4aa6-b651-acb46c4838c0', 'Huawei Redis实例公网访问扫描', 1, 'HighRisk', 'Huawei  账号下Redis实例不允许任意来源公网访问，视为“合规”', 'policies:\n    # 账号下Redis实例不允许任意来源公网访问，视为“合规”\n    - name: huawei-redis-internet-access\n      resource: huawei.redis\n      filters:\n        - type: InternetAccess\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-huawei-plugin', '华为云', 'fusion.png', concat(unix_timestamp(now()), '002'), 1, 'custodian');
