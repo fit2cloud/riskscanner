@@ -30,6 +30,7 @@ public interface ParamConstants {
     enum Classify implements ParamConstants {
         MAIL("smtp"),
         LDAP("ldap"),
+        MESSAGE("message"),
         REGISTRY("registry");
 
         private String value;
@@ -95,7 +96,7 @@ public interface ParamConstants {
         SSL("smtp.ssl", 5),
         TLS("smtp.tls", 6),
         SMTP("smtp.smtp", 7);
-        /* ANON("smtp.anon", 7);*/
+//        ANON("smtp.anon", 8);
 
         private String key;
         private Integer value;
@@ -132,6 +133,32 @@ public interface ParamConstants {
         @Override
         public String getValue() {
             return value;
+        }
+    }
+
+    enum MEAASGE {
+        SERVER("meaasge.title", 1),
+        PORT("smtp.recipient", 2),
+        ACCOUNT("smtp.mails", 3),
+        PASSWORD("smtp.mailContent", 4),
+        SSL("smtp.textContent", 5),
+        TLS("smtp.messageType", 6),
+        SMTP("smtp.triggerAction", 7);
+
+        private String key;
+        private Integer value;
+
+        private MEAASGE(String key, Integer value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public String getKey() {
+            return this.key;
+        }
+
+        public Integer getValue() {
+            return this.value;
         }
     }
 }

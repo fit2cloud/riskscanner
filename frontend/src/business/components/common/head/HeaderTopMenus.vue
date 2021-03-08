@@ -1,6 +1,6 @@
 <template>
   <el-menu mode="horizontal" menu-trigger="click"
-           background-color="#FF9933"
+           background-color="#004a71"
            class="header-top-menus"
            text-color="#F2F2F2"
            active-text-color="#FFF"

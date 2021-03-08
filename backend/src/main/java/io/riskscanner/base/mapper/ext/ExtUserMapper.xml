@@ -50,4 +50,16 @@
         select id, name, email, last_account_id from `user` where id like CONCAT('%', #{condition},'%') or email like CONCAT('%', #{condition},'%') limit 100;
     </select>
 
+    <select id="queryTypeByIds" parameterType="java.lang.String" resultType="io.riskscanner.base.domain.UserDetail">
+        SELECT
+        email,phone
+        from user
+        WHERE id IN
+        <foreach collection="list" item="id" index="index"
+                 open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+
+    </select>
+
 </mapper>

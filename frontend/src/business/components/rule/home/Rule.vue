@@ -110,7 +110,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('rule.rule_tag')" :rules="{required: true, message: $t('rule.rule_tag'), trigger: 'change'}">
-            <el-select style="width: 100%;" multiple v-model="createRuleForm.tags" :placeholder="$t('rule.please_choose_tag')">
+            <el-select style="width: 100%;" v-model="createRuleForm.tagKey" :placeholder="$t('rule.please_choose_tag')">
               <el-option
                 v-for="item in tags"
                 :key="item.tagKey"
@@ -207,7 +207,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('rule.rule_tag')" :rules="{required: true, message: $t('rule.rule_tag'), trigger: 'change'}">
-            <el-select style="width: 100%;" multiple v-model="updateRuleForm.tags" :placeholder="$t('rule.please_choose_tag')">
+            <el-select style="width: 100%;" v-model="updateRuleForm.tagKey" :placeholder="$t('rule.please_choose_tag')">
               <el-option
                 v-for="item in tags"
                 :key="item.tagKey"
@@ -304,7 +304,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('rule.rule_tag')" :rules="{required: true, message: $t('rule.rule_tag'), trigger: 'change'}">
-            <el-select style="width: 100%;" multiple v-model="copyRuleForm.tags" :placeholder="$t('rule.please_choose_tag')">
+            <el-select style="width: 100%;" v-model="copyRuleForm.tagKey" :placeholder="$t('rule.please_choose_tag')">
               <el-option
                 v-for="item in tags"
                 :key="item.tagKey"
@@ -653,11 +653,7 @@
             let param = Object.assign({}, mdObj);
             param.parameter = JSON.stringify(param.parameter);
             param.type = type;
-            if (!!param.tags && param.tags.length != 1) {
-              let tags = [];
-              tags.push(param.tags);
-              param.tags = tags;
-            }
+
             if (url === '') {
               this.$error(this.$t('rule.ex_request_parameter_error'));
             }

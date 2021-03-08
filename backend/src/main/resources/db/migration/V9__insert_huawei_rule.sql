@@ -1,7 +1,7 @@
 
 
-INSERT INTO rule_group VALUES (4, 'Huawei 等保预检', '配置审计提供的等保预检功能为您提供了自动且持续的云上信息系统预检能力，帮助您了解并持续监控合规现状，在正式检测之前避免多次反复整改，助您快速通过等保检测。', '等保三级', 'fit2cloud-huawei-plugin', 1);
-INSERT INTO rule_group VALUES (5, 'Huawei CIS合规检查', 'CIS 合规检查帮助您持续检测云上资源是否符合CIS Control网络安全架构的要求。', '高风险', 'fit2cloud-huawei-plugin', 1);
+INSERT INTO rule_group VALUES (4, 'Huawei 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-huawei-plugin', 1);
+INSERT INTO rule_group VALUES (5, 'Huawei CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-huawei-plugin', 1);
 INSERT INTO rule_group VALUES (6, 'Huawei OBS合规基线', 'OBS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-huawei-plugin', 1);
 
 

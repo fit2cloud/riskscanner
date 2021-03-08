@@ -22,7 +22,7 @@ public class OperationLogController {
     private OperationLogService operationLogService;
 
     @ApiOperation(value = "日志列表")
-    @GetMapping("query/resource/{goPage}/{pageSize}")
+    @PostMapping("query/resource/{goPage}/{pageSize}")
     public Pager<List<OperationLog>> queryOperationLog(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody OperayionLogRequest dto) {
         Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
         return PageUtils.setPageInfo(page, operationLogService.selectOperationLog(dto));

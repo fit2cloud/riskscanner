@@ -20,6 +20,7 @@
     <resultMap id="BaseResultMap2" type="io.riskscanner.dto.RuleDTO"
                extends="io.riskscanner.base.mapper.RuleMapper.BaseResultMap">
         <result column="isSaveParam" property="isSaveParam" jdbcType="BOOLEAN"/>
+        <result column="tagKey" property="tagKey" jdbcType="VARCHAR"/>
         <collection property="tags" javaType="list" ofType="string" select="getTags" column="id">
             <result column="tagKey" jdbcType="VARCHAR" property="tagKey"/>
         </collection>
@@ -121,7 +122,8 @@
     <select id="listAllWithTag" parameterType="io.riskscanner.controller.request.rule.CreateRuleRequest"
             resultMap="BaseResultMap2">
         SELECT
-        t.*
+        t.*,
+        (select tag_key from rule_tag_mapping where rule_id = t.id limit 1) as tagKey
         FROM rule t
         <where>
             <if test="id != null">

@@ -191,7 +191,7 @@
     margin: 20px auto 20px;
     position: relative;
     width: 80px;
-    background: #FF9933;
+    background: #004a71;
   }
 
   .welcome {
@@ -216,18 +216,18 @@
   .btn > .submit {
     width: 100%;
     border-radius: 0;
-    border-color: #FF9933;
-    background-color: #FF9933;
+    border-color: #004a71;
+    background-color: #004a71;
   }
 
   .btn > .submit:hover {
-    border-color: #FF7700;
-    background-color: #FF7700;
+    border-color: #003b5a;
+    background-color: #003b5a;
   }
 
   .btn > .submit:active {
-    border-color: #FF7700;
-    background-color: #FF7700;
+    border-color: #003b5a;
+    background-color: #003b5a;
   }
 
   .msg {

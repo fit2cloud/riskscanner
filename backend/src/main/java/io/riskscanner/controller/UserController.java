@@ -137,7 +137,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "所有用户")
-    @GetMapping("/list")
+    @GetMapping("/list/all")
     public List<User> getUserList() {
         return userService.getUserList();
     }

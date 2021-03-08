@@ -63,32 +63,32 @@ public class RuleController {
 
     @ApiOperation(value = "添加规则")
     @PostMapping(value = "add")
-    public Rule addRule(@RequestBody CreateRuleRequest createRuleRequest) throws Exception {
+    public Rule addRule(@RequestBody CreateRuleRequest createRuleRequest) {
         createRuleRequest.setId(null);
         return ruleService.saveRules(createRuleRequest);
     }
 
     @ApiOperation(value = "修改规则")
     @PostMapping(value = "update")
-    public Rule updateRule(@RequestBody CreateRuleRequest createRuleRequest) throws Exception {
+    public Rule updateRule(@RequestBody CreateRuleRequest createRuleRequest) {
         return ruleService.saveRules(createRuleRequest);
     }
 
     @ApiOperation(value = "复制规则")
     @PostMapping(value = "copy")
-    public Rule copyRule(@RequestBody CreateRuleRequest createRuleRequest) throws Exception {
+    public Rule copyRule(@RequestBody CreateRuleRequest createRuleRequest) {
         return ruleService.copyRule(createRuleRequest);
     }
 
     @ApiOperation(value = "运行规则")
     @PostMapping(value = "run")
-    public Object runRule(@RequestBody RuleDTO ruleDTO) throws Exception {
+    public Object runRule(@RequestBody RuleDTO ruleDTO) {
         return ruleService.runRules(ruleDTO);
     }
 
     @ApiOperation(value = "测试运行规则")
     @PostMapping(value = "dryRun")
-    public Object dryRun(@RequestBody RuleDTO ruleDTO) throws Exception {
+    public Object dryRun(@RequestBody RuleDTO ruleDTO) {
         return ruleService.dryRun(ruleDTO);
     }
 

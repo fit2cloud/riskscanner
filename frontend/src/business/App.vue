@@ -54,7 +54,7 @@
   #header-top {
     width: 100%;
     padding: 0 10px;
-    background-color: #FF9933;
+    background-color: #004a71;
     color: rgb(245, 245, 245);
     font-size: 14px;
   }

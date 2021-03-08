@@ -482,4 +482,12 @@ public class UserService {
             ssoService.logout();
         }
     }
+
+    public User getUserById(String userId) {
+        return userMapper.selectByPrimaryKey(userId);
+    }
+
+    public List<UserDetail> queryTypeByIds(List<String> userIds) {
+        return extUserMapper.queryTypeByIds(userIds);
+    }
 }

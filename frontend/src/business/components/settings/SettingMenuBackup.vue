@@ -7,6 +7,7 @@
       </template>
       <el-menu-item index="/setting/user">{{$t('commons.user')}}</el-menu-item>
       <el-menu-item index="/setting/systemparametersetting">{{$t('commons.system_parameter_setting')}}</el-menu-item>
+      <el-menu-item index="/setting/messagesetting">{{$t('system_parameter_setting.message.setting')}}</el-menu-item>
     </el-submenu>
 
     <el-submenu index="4">

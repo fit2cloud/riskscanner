@@ -38,6 +38,27 @@ public class TaskConstants {
         manual, quartz
     }
 
+    /**
+     * 触发操作
+     */
+    public enum MessageOperation {
+        PENDING, COMPLETE, TERMINATE, BUSINESS_COMPLETE, CANCEL
+    }
+
+    /**
+     * 消息状态
+     */
+    public enum MessageStatus {
+        READ, UNREAD, SUCCESS, ERROR
+    }
+
+    /**
+     * 消息种类
+     */
+    public enum SmsType {
+        EMAIL, SMS, ANNOUNCEMENT
+    }
+
     public final static String CUSTODIAN_RUN_RESULT_FILE = "custodian-run.log";
     public final static String METADATA_RESULT_FILE = "metadata.json";
     public final static String RESOURCES_RESULT_FILE = "resources.json";

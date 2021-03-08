@@ -122,17 +122,12 @@ public class RuleService {
                 ruleRequest.setLastModified(System.currentTimeMillis());
                 ruleMapper.updateByPrimaryKeySelective(ruleRequest);
             }
-            if (ruleRequest.getTags() != null) {
-                List<String> tags = ruleRequest.getTags();
-                saveRuleTagMapping(ruleRequest.getId(), tags.toArray(new String[0]));
-            } else {
-                String[] tagKeys = {ruleRequest.getTagKey()};
-                saveRuleTagMapping(ruleRequest.getId(), tagKeys);
-            }
 
+            saveRuleTagMapping(ruleRequest.getId(), ruleRequest.getTagKey());
             saveRuleGroupMapping(ruleRequest.getId(), ruleRequest.getRuleSets());
             saveRuleInspectionReportMapping(ruleRequest.getId(), ruleRequest.getInspectionSeports());
             saveRuleType(ruleRequest);
+
             OperationLogService.log(SessionUtils.getUser(), ruleRequest.getId(), ruleRequest.getName(), ResourceTypeConstants.RULE.name(), ResourceOperation.CREATE, "创建规则");
         } catch (Exception e) {
             RSException.throwException(e.getMessage());
@@ -191,10 +186,7 @@ public class RuleService {
             ruleRequest.setPluginIcon(plugin.getIcon());
 
             ruleMapper.insertSelective(ruleRequest);
-            if (ruleRequest.getTags() != null) {
-                List<String> tags = ruleRequest.getTags();
-                saveRuleTagMapping(ruleRequest.getId(), tags.toArray(new String[0]));
-            }
+            saveRuleTagMapping(ruleRequest.getId(), ruleRequest.getTagKey());
             saveRuleGroupMapping(ruleRequest.getId(), ruleRequest.getRuleSets());
             saveRuleInspectionReportMapping(ruleRequest.getId(), ruleRequest.getInspectionSeports());
             boolean flag = saveRuleType(ruleRequest);
@@ -208,12 +200,9 @@ public class RuleService {
         return ruleRequest;
     }
 
-    public void saveRuleTagMapping(String ruleId, String[] tagKeys) {
+    public void saveRuleTagMapping(String ruleId, String tagKey) {
         deleteRuleTag(null, ruleId);
-        if (tagKeys == null || tagKeys.length < 1) {
-            return;
-        }
-        for (String tagKey : tagKeys) {
+        if (StringUtils.isNotEmpty(tagKey)) {
             RuleTagMapping sfRulesTagMapping = new RuleTagMapping();
             sfRulesTagMapping.setRuleId(ruleId);
             sfRulesTagMapping.setTagKey(tagKey);
@@ -259,7 +248,7 @@ public class RuleService {
         }
     }
 
-    public Object dryRun(RuleDTO ruleDTO) throws Exception {
+    public Object dryRun(RuleDTO ruleDTO) {
         QuartzTaskDTO quartzTaskDTO = new QuartzTaskDTO();
         BeanUtils.copyBean(quartzTaskDTO, ruleDTO);
         //validate && dryrun

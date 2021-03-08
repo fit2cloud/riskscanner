@@ -42,9 +42,6 @@ public class SystemParameterService {
     }
 
     public void editMail(List<SystemParameter> parameters) {
-        List<SystemParameter> paramList = this.getParamList(ParamConstants.Classify.MAIL.getValue());
-        if (paramList.isEmpty()) return;
-
         parameters.forEach(parameter -> {
             SystemParameterExample example = new SystemParameterExample();
             if (parameter.getParamKey().equals(ParamConstants.MAIL.PASSWORD.getKey()) &&
@@ -59,7 +56,19 @@ public class SystemParameterService {
                 systemParameterMapper.insert(parameter);
             }
             example.clear();
+        });
+    }
 
+    public void editMessage(List<SystemParameter> parameters) {
+        parameters.forEach(parameter -> {
+            SystemParameterExample example = new SystemParameterExample();
+            example.createCriteria().andParamKeyEqualTo(parameter.getParamKey());
+            if (systemParameterMapper.countByExample(example) > 0) {
+                systemParameterMapper.updateByPrimaryKey(parameter);
+            } else {
+                systemParameterMapper.insert(parameter);
+            }
+            example.clear();
         });
     }
 
@@ -69,7 +78,7 @@ public class SystemParameterService {
         return systemParameterMapper.selectByExample(example);
     }
 
-    public void testConnection(HashMap<String, String> hashMap) {
+    public void testConnection(Map<String, String> hashMap) {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setDefaultEncoding("UTF-8");
         javaMailSender.setHost(hashMap.get(ParamConstants.MAIL.SERVER.getKey()));
@@ -78,12 +87,10 @@ public class SystemParameterService {
         javaMailSender.setPassword(hashMap.get(ParamConstants.MAIL.PASSWORD.getKey()));
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
-        if (BooleanUtils.toBoolean(hashMap.get(ParamConstants.MAIL.SSL.getKey()))) {
+        if (BooleanUtils.toBoolean(hashMap.get(ParamConstants.MAIL.SSL.getKey())))
             props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        }
-        if (BooleanUtils.toBoolean(hashMap.get(ParamConstants.MAIL.TLS.getKey()))) {
+        if (BooleanUtils.toBoolean(hashMap.get(ParamConstants.MAIL.TLS.getKey())))
             props.put("mail.smtp.starttls.enable", "true");
-        }
         props.put("mail.smtp.timeout", "30000");
         props.put("mail.smtp.connectiontimeout", "5000");
         javaMailSender.setJavaMailProperties(props);
@@ -95,11 +102,12 @@ public class SystemParameterService {
     }
 
     public String getVersion() {
-        return System.getenv("MS_VERSION");
+        return System.getenv("RS_VERSION");
     }
 
-    public Object mailInfo(String type) {
+    public List<SystemParameter> info(String type) {
         List<SystemParameter> paramList = this.getParamList(type);
+        if (!StringUtils.equalsIgnoreCase(type, ParamConstants.Classify.MAIL.getValue())) return paramList;
         if (CollectionUtils.isEmpty(paramList)) {
             paramList = new ArrayList<>();
             ParamConstants.MAIL[] values = ParamConstants.MAIL.values();
