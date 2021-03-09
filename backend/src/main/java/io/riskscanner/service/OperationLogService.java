@@ -80,7 +80,6 @@ public class OperationLogService {
         example.setOrderByClause("time desc");
         return operationLogMapper.selectByExample(example);
     }
-
 }
 
 class SystemUserConstants extends User {

@@ -131,7 +131,7 @@ public class AccountService {
                 OperationLogService.log(SessionUtils.getUser(), account.getId(), account.getName(), ResourceTypeConstants.CLOUD_ACCOUNT.name(), ResourceOperation.CREATE, "创建云账号");
                 return getCloudAccountById(account.getId());
             }
-        } catch (RSException | ClientException e) {
+        } catch (Exception e) {
             RSException.throwException(e.getMessage());
         }
         return null;
@@ -205,7 +205,7 @@ public class AccountService {
             } else {
                 return regions;
             }
-        } catch (RSException | ClientException e) {
+        } catch (Exception e) {
             throw new RSException(e.getMessage());
         }
     }
@@ -220,7 +220,7 @@ public class AccountService {
                     LogUtil.error(e.getMessage());
                 }
             });
-        } catch (RSException e) {
+        } catch (Exception e) {
             RSException.throwException(e.getMessage());
         }
     }
@@ -232,7 +232,7 @@ public class AccountService {
                 account.setRegions(jsonArray.toJSONString());
                 accountMapper.updateByPrimaryKeySelective(account);
             }
-        } catch (RSException e) {
+        } catch (Exception e) {
             LogUtil.error(e.getMessage());
         }
     }

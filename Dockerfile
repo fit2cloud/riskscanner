@@ -1,4 +1,4 @@
-FROM registry.fit2cloud.com/riskscanner/custodian:riskscanner
+FROM registry.cn-qingdao.aliyuncs.com/x-lab/riskscanner/custodian:master
 
 MAINTAINER FIT2CLOUD <support@fit2cloud.com>
 

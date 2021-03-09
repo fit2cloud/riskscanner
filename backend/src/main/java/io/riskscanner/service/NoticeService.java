@@ -5,8 +5,6 @@ import io.riskscanner.base.domain.MessageTask;
 import io.riskscanner.base.domain.MessageTaskExample;
 import io.riskscanner.base.mapper.MessageTaskMapper;
 import io.riskscanner.commons.exception.RSException;
-import io.riskscanner.commons.user.SessionUser;
-import io.riskscanner.commons.utils.SessionUtils;
 import io.riskscanner.i18n.Translator;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

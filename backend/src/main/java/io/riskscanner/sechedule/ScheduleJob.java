@@ -56,4 +56,8 @@ public abstract class ScheduleJob implements Job {
     public void SyncScan() {
         ruleService.syncScanHistory();
     }
+
+    @QuartzScheduled(cron = "${cron.expression.local}")
+    public void SyncMessage() {
+    }
 }

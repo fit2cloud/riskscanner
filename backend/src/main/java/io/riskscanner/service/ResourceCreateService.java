@@ -8,7 +8,6 @@ import io.riskscanner.base.mapper.ext.ExtScanHistoryMapper;
 import io.riskscanner.commons.constants.CloudAccountConstants;
 import io.riskscanner.commons.constants.CommandEnum;
 import io.riskscanner.commons.constants.TaskConstants;
-import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.*;
 import io.riskscanner.controller.request.resource.ResourceRequest;
 import io.riskscanner.dto.ResourceDTO;
@@ -60,9 +59,9 @@ public class ResourceCreateService {
 
     @QuartzScheduled(cron = "${cron.expression.local}")
     public void handleTasks() {
-//        if (!StringUtils.equals(env.getProperty("run.mode", "local"), "release")) {
-//            return;
-//        }
+        if (!StringUtils.equals(env.getProperty("run.mode", "local"), "release")) {
+            return;
+        }
         final TaskExample taskExample = new TaskExample();
         TaskExample.Criteria criteria = taskExample.createCriteria();
         criteria.andStatusEqualTo(TaskConstants.TASK_STATUS.APPROVED.toString());
@@ -118,7 +117,7 @@ public class ResourceCreateService {
                 }
             }
             if (!taskItemWithBLOBs.isEmpty() && successCount == 0)
-                RSException.throwException("Faild to handle all taskItems, taskId: " + task.getId());
+                throw new Exception("Faild to handle all taskItems, taskId: " + task.getId());
             String taskStatus;
             if (StringUtils.equalsIgnoreCase(task.getType(), TaskConstants.TaskType.quartz.name())) {
                 taskStatus = TaskConstants.TASK_STATUS.RUNNING.toString();
@@ -129,11 +128,7 @@ public class ResourceCreateService {
                 taskStatus = TaskConstants.TASK_STATUS.WARNING.toString();
             }
             orderService.updateTaskStatus(taskId, null, taskStatus);
-            // 任务成功之后发送邮件
-            if (StringUtils.equals(TaskConstants.TASK_STATUS.FINISHED.name(), taskStatus) ||
-                    StringUtils.equals(TaskConstants.TASK_STATUS.RUNNING.name(), taskStatus)) {
-                Map<String, Object> params = getParameters(taskId);
-            }
+
         } catch (Exception e) {
             orderService.updateTaskStatus(taskId, null, TaskConstants.TASK_STATUS.ERROR.name());
             LogUtil.error("handleTask, taskId: " + taskId, e);
@@ -173,7 +168,7 @@ public class ResourceCreateService {
                 LogUtil.getLogger().debug("resource created: {}", resultStr);
             }
             if (resultStr.contains("ERROR"))
-                RSException.throwException(Translator.get("i18n_create_resource_failed") + ": " + resultStr);
+                throw new Exception(Translator.get("i18n_create_resource_failed") + ": " + resultStr);
 
             TaskItemResourceExample example = new TaskItemResourceExample();
             example.createCriteria().andTaskIdEqualTo(task.getId()).andTaskItemIdEqualTo(taskItem.getId());
@@ -188,7 +183,7 @@ public class ResourceCreateService {
                 Rule rule = ruleService.getRuleById(taskItem.getRuleId());
                 if (rule == null) {
                     orderService.saveTaskItemLog(taskItemId, taskItemId, Translator.get("i18n_operation_ex") + ": " + operation, Translator.get("i18n_ex_rule_not_exist"), false);
-                    RSException.throwException(Translator.get("i18n_ex_rule_not_exist") + ":" + taskItem.getRuleId());
+                    throw new Exception(Translator.get("i18n_ex_rule_not_exist") + ":" + taskItem.getRuleId());
                 }
                 String custodianRun = ReadFileUtils.readToBuffer(dirPath + "/" + taskItemResource.getDirName() + "/" + TaskConstants.CUSTODIAN_RUN_RESULT_FILE);
                 String metadata = ReadFileUtils.readJsonFile(dirPath + "/" + taskItemResource.getDirName() + "/", TaskConstants.METADATA_RESULT_FILE);
@@ -227,7 +222,7 @@ public class ResourceCreateService {
     }
 
 
-    private Map<String, Object> getParameters(String taskId) {
+    public Map<String, Object> getParameters(String taskId) {
         Map<String, Object> map = new HashMap<>();
         Task task = taskMapper.selectByPrimaryKey(taskId);
         map.put("TASK_DESCRIPTION", task.getDescription());

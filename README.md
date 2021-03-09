@@ -16,12 +16,43 @@ RiskScanner 是开源企业级公有云安全合规平台，公有云安全合�
 
 - 它与每个供应商的云本机无服务器功能集成在一起，以通过内置配置实时实施策略。或者，它可以作为简单的cron作业在服务器上运行，以针对大型现有集群执行。
 
+![产品的功能域能力](./frontend/src/assets/img/readme/产品的功能域能力.png)
+
+## 帮助文档
+
+- [帮助文档](https://rs-docs.fit2cloud.com/)
+
+## 系统架构
+
+![runoob](./frontend/src/assets/img/readme/system-arch.png)
+
+## 组件说明
+- Smart R&D: RiskScanner Web 基于 VUE2.6.10 、 Server 基于 SpringBoot 框架进行的开发
+- 安全策略: RiskScanner 以简单的YAML配置文件编写安全策略
+- 多云管理: RiskScanner 对常见公有云平台（如AWS，Azure，Aliyun，Huawei，Tencent，K8s和GCP等）进行资源扫描与管理
+- 漏洞扫描: RiskScanner 由安全策略里的过滤器进行资源的漏洞扫描
+- 云账号: RiskScanner 的公有云账号信息的基础配置
+- 扫描规则: RiskScanner 的公有云云平台的资源扫描规则
+- 扫描结果: RiskScanner 针对公有云云账号下资源的统一扫描回归数据
+- 统计分析: RiskScanner 针对公有云已有的扫描结果进行统一的数据分析与展示
+- Cloud-Custodian: RiskScanner 的核心组件，扫描云平台资源的规则引擎
+- 云平台插件: Custodian 与公有云平台 SDK 对接的适配器
+- 数据库: RiskScanner 的主要数据均存储在 MySQL
+- 其他组件: 用于处理 RiskScanner 的资源数据
+- Docker Engine: 各组件都是以 Docker 容器运行在节点计算机
+
+![组件说明](./frontend/src/assets/img/readme/components.png)
+
+## 使用流程
+
+![runoob](./frontend/src/assets/img/readme/process.png)
+
 ## 技术栈
 
 - 后端: [Spring Boot](https://www.tutorialspoint.com/spring_boot/spring_boot_introduction.htm)
 - 前端: [Vue.js](https://vuejs.org/)
 - 中间件: [MySQL](https://www.mysql.com/)
-- 基础设施: [Docker](https://www.docker.com/), [Kubernetes](https://kubernetes.io/)
+- 基础设施: [Docker](https://www.docker.com/)
 
 ## License & Copyright
 
