@@ -18,6 +18,19 @@ RiskScanner 是开源企业级公有云安全合规平台，公有云安全合�
 
 ![产品的功能域能力](./frontend/src/assets/img/readme/产品的功能域能力.png)
 
+## 快速开始
+
+仅需两步快速安装 RiskScanner：
+  * 操作系统: CentOS 7.x
+  * CPU/内存: 4核16G
+  * 磁盘空间: 100G
+      
+```sh
+curl -sSL https://github.com/RiskScanner/riskscanner/releases/latest/download/quick_start.sh | sh
+```
+
+* 详细的离线&在线安装教程请看 [安装文档](https://rs-docs.fit2cloud.com/quick_start/)
+
 ## 帮助文档
 
 - [帮助文档](https://rs-docs.fit2cloud.com/)
@@ -53,6 +66,10 @@ RiskScanner 是开源企业级公有云安全合规平台，公有云安全合�
 - 前端: [Vue.js](https://vuejs.org/)
 - 中间件: [MySQL](https://www.mysql.com/)
 - 基础设施: [Docker](https://www.docker.com/)
+
+## 微信群
+
+![wechat-group](./frontend/src/assets/img/readme/group.png)
 
 ## License & Copyright
 
