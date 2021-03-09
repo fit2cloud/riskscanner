@@ -1,0 +1,62 @@
+
+name: Create Release And Upload assets
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create Release File To Upload
+        id: create_release_file
+        env:
+          RELEASE_VERSION: ${{github.ref}}
+        run: |
+          git clone https://github.com/RiskScanner/riskscanner-installer.git
+          cd riskscanner-installer
+          rm -rf docker .git
+          cd ..
+          chmod +x riskscanner-installer/riskscanner/install.sh
+          version=`echo $RELEASE_VERSION | tr 'a-z' 'A-Z' | tr -d 'REFS/TAGS/' | tr -d 'a-zA-Z'`
+          filename=riskscanner-release-$version-offline
+          mkdir $filename
+          mv riskscanner-installer $filename
+          tar -czvf $filename.tar.gz $filename
+          echo "::set-output name=VERSION::$(echo $version)"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+          body: |
+            # 快速开始
+            仅需两步快速安装 RiskScanner：
+              * 操作系统: CentOS 7.x
+              * CPU/内存: 4核16G
+              * 磁盘空间: 100G
+            ```sh
+              curl -sSL https://github.com/RiskScanner/riskscanner/releases/latest/download/quick_start.sh | sh
+            ```
+            点击 [完整文档](https://rs-docs.fit2cloud.com/) 查看完整的安装和使用文档
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./riskscanner-release-${{ steps.create_release_file.outputs.VERSION }}-offline.tar.gz
+          asset_name: riskscanner-release-${{ steps.create_release_file.outputs.VERSION }}-offline.tar.gz
+          asset_content_type: application/zip
