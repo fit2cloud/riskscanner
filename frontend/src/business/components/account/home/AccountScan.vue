@@ -237,18 +237,18 @@
             flag++;
             if (flag == this.ruleList.length) {
               this.$success(this.$t("resource.i18n_create_manual_task_success"));
-              this.$alert(this.$t('resource.i18n_comfirm_resource'), '', {
-                confirmButtonText: this.$t('commons.confirm'),
-                callback: (action) => {
-                  if (action === 'confirm') {
-                    localStorage.setItem(ACCOUNT_ID, this.accountId);
-                    localStorage.setItem(ACCOUNT_NAME, this.accountName);
-                    this.$router.push({
-                      path: '/resource/result',
-                    }).catch(error => error);
-                  }
-                }
-              });
+              // this.$alert(this.$t('resource.i18n_comfirm_resource'), '', {
+              //   confirmButtonText: this.$t('commons.confirm'),
+              //   callback: (action) => {
+              //     if (action === 'confirm') {
+              //       localStorage.setItem(ACCOUNT_ID, this.accountId);
+              //       localStorage.setItem(ACCOUNT_NAME, this.accountName);
+              //       this.$router.push({
+              //         path: '/resource/result',
+              //       }).catch(error => error);
+              //     }
+              //   }
+              // });
             }
           });
         }

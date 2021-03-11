@@ -124,19 +124,9 @@ public class OrderService {
                     }
                     if (map != null) {
                         List<Map> list = (List) map.get("policies");
-                        int count = list.size();
                         for (Map m : list) {
                             String dirName = m.get("name").toString();
                             String resourceType = m.get("resource").toString();
-
-                            if(!PlatformUtils.checkAvailableRegion(selectTag.getAccountId(), resourceType, regionId)){
-                                if (count == 0){
-                                    taskItemMapper.deleteByPrimaryKey(uuid);
-                                    count ++;
-                                    break;
-                                }
-                                continue;
-                            }
 
                             TaskItemResourceWithBLOBs taskItemResource = new TaskItemResourceWithBLOBs();
                             taskItemResource.setTaskId(taskId);
@@ -157,18 +147,15 @@ public class OrderService {
                             taskItemResourceMapper.insertSelective(taskItemResource);
 
                             resourceTypes.add(resourceType);
-                            count --;
                         }
 
-                        if (count == 0) {
-                            map.put("policies", list);
-                            sc = yaml.dump(map);
-                            taskItemWithBLOBs.setDetails(sc);
-                            taskItemMapper.updateByPrimaryKeySelective(taskItemWithBLOBs);
+                        map.put("policies", list);
+                        sc = yaml.dump(map);
+                        taskItemWithBLOBs.setDetails(sc);
+                        taskItemMapper.updateByPrimaryKeySelective(taskItemWithBLOBs);
 
-                            task.setResourceTypes(resourceTypes.toString());
-                            taskMapper.updateByPrimaryKeySelective(task);
-                        }
+                        task.setResourceTypes(resourceTypes.toString());
+                        taskMapper.updateByPrimaryKeySelective(task);
                     }
                 });
             }
