@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 /**
  * @author maguohao
  * @desc 与云平台相关的公共方法统一在此文件
- * @date 2020-07-20 00:40
  */
 public class PlatformUtils {
 
@@ -50,7 +49,6 @@ public class PlatformUtils {
     /**
      * 支持的插件（云平台）
      *
-     * @return
      */
     public final static List<String> getPlugin() {
         return Arrays.asList(aws, azure, aliyun, huawei, tencent);
@@ -59,7 +57,6 @@ public class PlatformUtils {
     /**
      * azure 所有区域
      *
-     * @return
      */
     public final static List<String> getAzureResions() {
         return Arrays.asList("AzureCloud", "AzureChinaCloud", "AzureGermanyCloud", "AzureUSGov");
@@ -136,8 +133,9 @@ public class PlatformUtils {
             case "report":
                 return pre +
                         custodian + " " + behavior + " -s " + dirPath + "/" + fileName;
+            default:
+                throw new IllegalStateException("Unexpected value: " + behavior);
         }
-        return null;
     }
 
     /**
@@ -474,6 +472,48 @@ public class PlatformUtils {
         }
         if (StringUtils.isEmpty(strCn)) return strEn;
         return strCn;
+    }
+
+    public static boolean checkAvailableRegion (String pluginId, String resource, String region) {
+        String[] stringArray;
+        List<String> tempList;
+        switch (pluginId) {
+            case aws:
+                break;
+            case azure:
+                break;
+            case aliyun:
+                if (StringUtils.contains(resource, "aliyun.slb")) {
+                    // 不支持aliyun.slb资源的区域
+                    stringArray = new String[]{"cn-qingdao", "cn-zhangjiakou", "cn-huhehaote", "cn-wulanchabu", "cn-heyuan", "cn-guangzhou", "cn-chengdu", "ap-southeast-3",
+                            "ap-northeast-1", "ap-south-1", "us-east-1", "us-west-1", "eu-west-1", "me-east-1", "eu-central-1"};
+                    tempList = Arrays.asList(stringArray);
+                    // 利用list的包含方法,进行判断
+                    return !tempList.contains(region);
+                } else if (StringUtils.contains(resource, "aliyun.polardb")) {
+                    // 不支持aliyun.polardb资源的区域
+                    stringArray = new String[]{"cn-wulanchabu", "cn-heyuan", "cn-guangzhou", "me-east-1"};
+                    tempList = Arrays.asList(stringArray);
+                    return !tempList.contains(region);
+                } else if (StringUtils.contains(resource, "aliyun.mongodb")) {
+                    // 不支持aliyun.mongodb资源的区域
+                    stringArray = new String[]{"cn-guangzhou"};
+                    tempList = Arrays.asList(stringArray);
+                    return !tempList.contains(region);
+                }
+                break;
+            case huawei:
+                break;
+            case tencent:
+                // 不支持资源的区域
+                stringArray = new String[]{"ap-shanghai-fsi", "ap-shenzhen-fsi"};
+                tempList = Arrays.asList(stringArray);
+                // 利用list的包含方法,进行判断
+                return !tempList.contains(region);
+            default:
+                return true;
+        }
+        return true;
     }
 
 }

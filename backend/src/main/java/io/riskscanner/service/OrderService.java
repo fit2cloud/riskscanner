@@ -87,7 +87,8 @@ public class OrderService {
         for (SelectTag selectTag : quartzTaskDTO.getSelectTags()) {
             for (String regionId : selectTag.getRegions()) {
                 TaskItemWithBLOBs taskItemWithBLOBs = new TaskItemWithBLOBs();
-                taskItemWithBLOBs.setId(UUIDUtil.newUUID());
+                String uuid = UUIDUtil.newUUID();
+                taskItemWithBLOBs.setId(uuid);
                 taskItemWithBLOBs.setTaskId(task.getId());
                 taskItemWithBLOBs.setRuleId(quartzTaskDTO.getId());
                 taskItemWithBLOBs.setCustomData(script);
@@ -123,9 +124,20 @@ public class OrderService {
                     }
                     if (map != null) {
                         List<Map> list = (List) map.get("policies");
+                        int count = list.size();
                         for (Map m : list) {
                             String dirName = m.get("name").toString();
                             String resourceType = m.get("resource").toString();
+
+                            if(!PlatformUtils.checkAvailableRegion(selectTag.getAccountId(), resourceType, regionId)){
+                                if (count == 0){
+                                    taskItemMapper.deleteByPrimaryKey(uuid);
+                                    count ++;
+                                    break;
+                                }
+                                continue;
+                            }
+
                             TaskItemResourceWithBLOBs taskItemResource = new TaskItemResourceWithBLOBs();
                             taskItemResource.setTaskId(taskId);
                             taskItemResource.setTaskItemId(taskItemWithBLOBs.getId());
@@ -145,14 +157,18 @@ public class OrderService {
                             taskItemResourceMapper.insertSelective(taskItemResource);
 
                             resourceTypes.add(resourceType);
+                            count --;
                         }
-                        map.put("policies", list);
-                        sc = yaml.dump(map);
-                        taskItemWithBLOBs.setDetails(sc);
-                        taskItemMapper.updateByPrimaryKeySelective(taskItemWithBLOBs);
 
-                        task.setResourceTypes(resourceTypes.toString());
-                        taskMapper.updateByPrimaryKeySelective(task);
+                        if (count == 0) {
+                            map.put("policies", list);
+                            sc = yaml.dump(map);
+                            taskItemWithBLOBs.setDetails(sc);
+                            taskItemMapper.updateByPrimaryKeySelective(taskItemWithBLOBs);
+
+                            task.setResourceTypes(resourceTypes.toString());
+                            taskMapper.updateByPrimaryKeySelective(task);
+                        }
                     }
                 });
             }
@@ -627,5 +643,4 @@ public class OrderService {
             RSException.throwException(quartzTaskId + "{createQuartzTask}: " + e);
         }
     }
-
 }

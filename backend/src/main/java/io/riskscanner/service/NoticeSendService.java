@@ -1,10 +1,10 @@
 package io.riskscanner.service;
 
-import io.riskscanner.base.domain.MessageDetail;
-import io.riskscanner.commons.utils.NoticeConstants;
-import io.riskscanner.process.MailNoticeSender;
-import io.riskscanner.process.NoticeModel;
-import io.riskscanner.process.NoticeSender;
+import io.riskscanner.message.MessageDetail;
+import io.riskscanner.commons.constants.NoticeConstants;
+import io.riskscanner.message.MailNoticeSender;
+import io.riskscanner.message.NoticeModel;
+import io.riskscanner.message.NoticeSender;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 

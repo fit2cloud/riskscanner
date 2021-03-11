@@ -1,6 +1,6 @@
 package io.riskscanner.controller;
 
-import io.riskscanner.base.domain.MessageDetail;
+import io.riskscanner.message.MessageDetail;
 import io.riskscanner.service.NoticeService;
 import org.springframework.web.bind.annotation.*;
 

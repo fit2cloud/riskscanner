@@ -73,18 +73,37 @@ CREATE TABLE IF NOT EXISTS `operation_log` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS message_task (
-    id                  varchar(64)  NOT NULL,
-    type                varchar(50)  DEFAULT NULL COMMENT '消息类型',
-    event               varchar(255) DEFAULT NULL COMMENT '通知事件类型',
-    user_id             varchar(50)  DEFAULT NULL COMMENT '接收人id',
-    task_type           varchar(64)  DEFAULT NULL,
-    webhook             varchar(255) DEFAULT NULL COMMENT 'webhook地址',
-    identification      varchar(255) DEFAULT NULL,
-    template            TEXT         DEFAULT NULL,
-    is_set              tinyint(1)   DEFAULT NULL,
-    resource_id         varchar(50)  DEFAULT NULL,
-    create_time         bigint(13)   DEFAULT NULL,
+    `id`                  int(10)           NOT NULL AUTO_INCREMENT,
+    `type`                varchar(50)       DEFAULT NULL COMMENT '消息类型',
+    `event`               varchar(255)      DEFAULT NULL COMMENT '通知事件类型',
+    `user_id`             varchar(512)      DEFAULT NULL COMMENT '接收人ID',
+    `task_type`           varchar(64)       DEFAULT NULL COMMENT '任务类型',
+    `identification`      varchar(255)      DEFAULT NULL COMMENT '凭证',
+    `template`            TEXT              DEFAULT NULL COMMENT '模板',
+    `is_set`              tinyint(1)        DEFAULT NULL COMMENT '是否设置',
+    `create_time`         bigint(13)        DEFAULT NULL COMMENT '创建时间',
     PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS message_order (
+    `id`                        varchar(64)         NOT NULL,
+    `message_task_id`           int(10)             DEFAULT NULL COMMENT '消息任务ID',
+    `account_id`                varchar(64)         DEFAULT NULL COMMENT '云账号ID',
+    `account_name`              varchar(64)         DEFAULT NULL COMMENT '云账号名称',
+    `status`                    varchar(64)         DEFAULT NULL COMMENT '消息通知状态',
+    `create_time`               bigint(13)          DEFAULT NULL COMMENT '创建时间',
+    `send_time`                 bigint(13)          DEFAULT NULL COMMENT '发送消息通知时间',
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS message_order_item (
+     `id`                        int(10)             NOT NULL AUTO_INCREMENT,
+     `message_order_id`          varchar(64)         DEFAULT NULL COMMENT '消息订单ID',
+     `task_id`                   varchar(64)         DEFAULT NULL COMMENT '扫描任务ID',
+     `task_name`                 varchar(64)         DEFAULT NULL COMMENT '扫描任务名称',
+     `status`                    varchar(64)         DEFAULT NULL COMMENT '消息通知状态',
+     `create_time`               bigint(13)          DEFAULT NULL COMMENT '创建时间',
+     `send_time`                 bigint(13)          DEFAULT NULL COMMENT '发送消息通知时间',
+     PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 

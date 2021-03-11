@@ -1,8 +1,11 @@
 package io.riskscanner.service;
 
-import io.riskscanner.base.domain.MessageDetail;
-import io.riskscanner.base.domain.MessageTask;
-import io.riskscanner.base.domain.MessageTaskExample;
+import io.riskscanner.base.domain.*;
+import io.riskscanner.base.mapper.MessageOrderItemMapper;
+import io.riskscanner.base.mapper.MessageOrderMapper;
+import io.riskscanner.commons.constants.NoticeConstants;
+import io.riskscanner.commons.utils.UUIDUtil;
+import io.riskscanner.message.MessageDetail;
 import io.riskscanner.base.mapper.MessageTaskMapper;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.i18n.Translator;
@@ -20,6 +23,10 @@ import java.util.stream.Collectors;
 public class NoticeService {
     @Resource
     private MessageTaskMapper messageTaskMapper;
+    @Resource
+    private MessageOrderMapper messageOrderMapper;
+    @Resource
+    private MessageOrderItemMapper messageOrderItemMapper;
 
     public void saveMessageTask(MessageDetail messageDetail) {
         MessageTaskExample example = new MessageTaskExample();
@@ -36,15 +43,12 @@ public class NoticeService {
         for (String userId : messageDetail.getUserIds()) {
             checkUserIdExist(userId, messageDetail);
             MessageTask messageTask = new MessageTask();
-            messageTask.setId(UUID.randomUUID().toString());
             messageTask.setEvent(messageDetail.getEvent());
             messageTask.setTaskType(messageDetail.getTaskType());
             messageTask.setUserId(userId);
             messageTask.setType(messageDetail.getType());
-            messageTask.setWebhook(messageDetail.getWebhook());
             messageTask.setIdentification(identification);
             messageTask.setIsSet(false);
-            messageTask.setResourceId(messageDetail.getResourceId());
             messageTask.setCreateTime(time);
             setTemplate(messageDetail, messageTask);
             messageTaskMapper.insertSelective(messageTask);
@@ -59,20 +63,11 @@ public class NoticeService {
 
     private void checkUserIdExist(String userId, MessageDetail list) {
         MessageTaskExample example = new MessageTaskExample();
-        if (StringUtils.isBlank(list.getResourceId())) {
-            example.createCriteria()
-                    .andUserIdEqualTo(userId)
-                    .andEventEqualTo(list.getEvent())
-                    .andTypeEqualTo(list.getType())
-                    .andTaskTypeEqualTo(list.getTaskType());
-        } else {
-            example.createCriteria()
-                    .andUserIdEqualTo(userId)
-                    .andEventEqualTo(list.getEvent())
-                    .andTypeEqualTo(list.getType())
-                    .andTaskTypeEqualTo(list.getTaskType())
-                    .andResourceIdEqualTo(list.getResourceId());
-        }
+        example.createCriteria()
+                .andUserIdEqualTo(userId)
+                .andEventEqualTo(list.getEvent())
+                .andTypeEqualTo(list.getType())
+                .andTaskTypeEqualTo(list.getTaskType());
         if (messageTaskMapper.countByExample(example) > 0) {
             RSException.throwException(Translator.get("message_task_already_exists"));
         }
@@ -80,7 +75,6 @@ public class NoticeService {
 
     public List<MessageDetail> searchMessageByResourceId(String resourceId) {
         MessageTaskExample example = new MessageTaskExample();
-        example.createCriteria().andResourceIdEqualTo(resourceId);
         List<MessageTask> messageTaskLists = messageTaskMapper.selectByExampleWithBLOBs(example);
         List<MessageDetail> scheduleMessageTask = new ArrayList<>();
         Map<String, List<MessageTask>> MessageTaskMap = messageTaskLists.stream().collect(Collectors.groupingBy(MessageTask::getIdentification));
@@ -122,10 +116,9 @@ public class NoticeService {
             userIds.add(m.getUserId());
             messageDetail.setEvent(m.getEvent());
             messageDetail.setTaskType(m.getTaskType());
-            messageDetail.setWebhook(m.getWebhook());
             messageDetail.setIdentification(m.getIdentification());
             messageDetail.setType(m.getType());
-            messageDetail.setSet(m.getIsSet());
+            messageDetail.setIsSet(m.getIsSet());
             messageDetail.setCreateTime(m.getCreateTime());
             messageDetail.setTemplate(m.getTemplate());
         }
@@ -144,4 +137,41 @@ public class NoticeService {
         example.createCriteria().andIdentificationEqualTo(identification);
         return messageTaskMapper.deleteByExample(example);
     }
+
+    public String createMessageOrder (MessageTask messageTask, Account account) {
+        MessageOrder messageOrder = new MessageOrder();
+        String uuid = UUIDUtil.newUUID();
+        messageOrder.setId(uuid);
+        messageOrder.setAccountId(account.getId());
+        messageOrder.setAccountName(account.getName());
+        messageOrder.setCreateTime(System.currentTimeMillis());
+        messageOrder.setMessageTaskId(messageTask.getId());
+        messageOrder.setStatus(NoticeConstants.MessageOrderStatus.PROCESSING);
+        messageOrderMapper.insertSelective(messageOrder);
+        return uuid;
+    }
+
+    public void finishMessageOrder (MessageOrder messageOrder) {
+        messageOrder.setSendTime(System.currentTimeMillis());
+        messageOrder.setStatus(NoticeConstants.MessageOrderStatus.FINISHED);
+        messageOrderMapper.updateByPrimaryKeySelective(messageOrder);
+    }
+
+    public void createMessageOrderItem (String messageOrderId, Task task) {
+        MessageOrderItem messageOrderItem = new MessageOrderItem();
+        messageOrderItem.setMessageOrderId(messageOrderId);
+        messageOrderItem.setTaskId(task.getId());
+        messageOrderItem.setTaskName(task.getTaskName());
+        messageOrderItem.setCreateTime(System.currentTimeMillis());
+        messageOrderItem.setStatus(NoticeConstants.MessageOrderStatus.PROCESSING);
+        messageOrderItemMapper.insertSelective(messageOrderItem);
+    }
+
+    public void finishMessageOrderItem (MessageOrderItem messageOrderItem) {
+        messageOrderItem.setSendTime(System.currentTimeMillis());
+        messageOrderItem.setStatus(NoticeConstants.MessageOrderStatus.FINISHED);
+        messageOrderItemMapper.updateByPrimaryKeySelective(messageOrderItem);
+    }
+
+
 }
