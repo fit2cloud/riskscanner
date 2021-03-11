@@ -1,7 +1,4 @@
-package io.riskscanner.process;
-
-import lombok.Builder;
-import lombok.Data;
+package io.riskscanner.message;
 
 import java.util.List;
 import java.util.Map;

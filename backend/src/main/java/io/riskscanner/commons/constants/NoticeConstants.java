@@ -1,4 +1,4 @@
-package io.riskscanner.commons.utils;
+package io.riskscanner.commons.constants;
 
 public interface NoticeConstants {
 
@@ -30,5 +30,10 @@ public interface NoticeConstants {
 
     interface RelatedUser {
         String FOUNDER = "FOUNDER";//创建人
+    }
+
+    interface MessageOrderStatus {
+        String PROCESSING = "PROCESSING";
+        String FINISHED = "FINISHED";
     }
 }

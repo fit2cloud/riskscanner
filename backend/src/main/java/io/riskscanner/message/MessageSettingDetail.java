@@ -1,8 +1,9 @@
-package io.riskscanner.base.domain;
+package io.riskscanner.message;
 
 import java.util.List;
 
 public class MessageSettingDetail {
+
     private List<MessageDetail> resources;
 
     public List<MessageDetail> getResources() {

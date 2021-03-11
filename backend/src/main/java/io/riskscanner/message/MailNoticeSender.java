@@ -1,6 +1,5 @@
-package io.riskscanner.process;
+package io.riskscanner.message;
 
-import io.riskscanner.base.domain.MessageDetail;
 import io.riskscanner.commons.utils.LogUtil;
 import io.riskscanner.service.MailService;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
