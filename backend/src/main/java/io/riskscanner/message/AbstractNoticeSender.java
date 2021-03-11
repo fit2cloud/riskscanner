@@ -1,9 +1,8 @@
-package io.riskscanner.process;
+package io.riskscanner.message;
 
-import io.riskscanner.base.domain.MessageDetail;
 import io.riskscanner.base.domain.UserDetail;
 import io.riskscanner.commons.utils.LogUtil;
-import io.riskscanner.commons.utils.NoticeConstants;
+import io.riskscanner.commons.constants.NoticeConstants;
 import io.riskscanner.service.UserService;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;

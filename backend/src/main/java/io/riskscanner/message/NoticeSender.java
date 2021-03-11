@@ -1,6 +1,5 @@
-package io.riskscanner.process;
+package io.riskscanner.message;
 
-import io.riskscanner.base.domain.MessageDetail;
 import org.springframework.scheduling.annotation.Async;
 
 public interface NoticeSender {
