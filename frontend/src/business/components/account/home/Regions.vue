@@ -42,7 +42,7 @@
       }
     },
     created() {
-      this.string2PrettyFormat = typeof(this.row.regions) == 'string'?JSON.parse(this.row.regions):this.row.regions;
+      this.string2PrettyFormat = typeof(this.row) == 'string'?JSON.parse(this.row):this.row;
     },
     methods: {
       showRegions() {
@@ -76,4 +76,5 @@
     /* Set height, width, borders, and global font properties here */
     height: 600px !important;
   }
+  /deep/ :focus{outline:0;}
 </style>

@@ -681,4 +681,5 @@
   .icon-loading {
     font-size: 100px;
   }
+  /deep/ :focus{outline:0;}
 </style>

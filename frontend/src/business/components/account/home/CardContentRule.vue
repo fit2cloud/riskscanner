@@ -577,4 +577,5 @@
   .text-click {
     color: #0066ac;
   }
+  /deep/ :focus{outline:0;}
 </style>

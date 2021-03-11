@@ -399,4 +399,5 @@
   .el-checkbox >>> .el-checkbox__label{
     margin-right: 20px;
   }
+  /deep/ :focus{outline:0;}
 </style>

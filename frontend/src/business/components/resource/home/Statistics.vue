@@ -590,4 +590,5 @@
 
   .border-card {
   }
+  /deep/ :focus{outline:0;}
 </style>

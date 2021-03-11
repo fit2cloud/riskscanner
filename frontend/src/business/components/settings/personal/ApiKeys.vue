@@ -204,5 +204,5 @@ export default {
 .rtl >>> .el-form-item__content {
   width: 60%;
 }
-
+/deep/ :focus{outline:0;}
 </style>

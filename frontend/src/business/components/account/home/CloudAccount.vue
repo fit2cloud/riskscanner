@@ -49,7 +49,7 @@
           <el-table-column prop="userName" :label="$t('account.creator')" min-width="8%" show-overflow-tooltip/>
           <el-table-column :label="$t('account.regions')" min-width="7%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              <regions :row="scope.row"/>
+              <regions :row="scope.row.regions"/>
             </template>
           </el-table-column>
           <el-table-column min-width="15%" :label="$t('commons.operating')">
@@ -450,8 +450,8 @@
               this.result = this.$post("/account/update", data,response => {
                 if (response.success) {
                   this.$success(this.$t('account.i18n_cs_update_success'));
-                  this.search();
                   this.handleClose();
+                  this.search();
                 } else {
                   this.$error(response.message);
                 }
@@ -562,4 +562,5 @@
     /* Set height, width, borders, and global font properties here */
     height: 600px !important;
   }
+  /deep/ :focus{outline:0;}
 </style>
