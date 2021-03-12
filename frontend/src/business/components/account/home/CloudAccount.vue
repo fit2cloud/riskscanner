@@ -62,10 +62,10 @@
       </el-card>
 
       <!--Create account-->
-      <el-drawer class="rtl" :title="$t('account.create')" :visible.sync="createVisible" size="65%" :before-close="handleClose" :direction="direction"
+      <el-drawer class="rtl" :title="$t('account.create')" :visible.sync="createVisible" size="50%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
-        <el-form :model="form" label-position="right" label-width="150px" size="small" :rules="rule" ref="accountForm">
-          <el-form-item :label="$t('account.name')"  ref="name" prop="name">
+        <el-form :model="form" label-position="right" label-width="150px" size="medium" :rules="rule" ref="accountForm">
+          <el-form-item :label="$t('account.name')" ref="name" prop="name">
             <el-input v-model="form.name" autocomplete="off" :placeholder="$t('account.input_name')"/>
           </el-form-item>
           <el-form-item :label="$t('account.cloud_platform')" :rules="{required: true, message: $t('account.cloud_platform'), trigger: 'change'}">
@@ -111,7 +111,7 @@
       <!--Create account-->
 
       <!--Update account-->
-      <el-drawer class="rtl" :title="$t('account.update')" :visible.sync="updateVisible" size="65%" :before-close="handleClose" :direction="direction"
+      <el-drawer class="rtl" :title="$t('account.update')" :visible.sync="updateVisible" size="50%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
         <el-form :model="form" label-position="right" label-width="150px" size="small" :rules="rule" ref="accountForm">
           <el-form-item :label="$t('account.name')"  ref="name" prop="name">
@@ -553,7 +553,7 @@
     width: 80%;
   }
   .rtl >>> .el-form-item__content {
-    width: 60%;
+    width: 75%;
   }
   .code-mirror {
     height: 600px !important;

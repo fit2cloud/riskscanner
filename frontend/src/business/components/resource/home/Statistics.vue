@@ -92,9 +92,9 @@
           </el-table-column>
           <el-table-column v-slot:default="scope" :label="$t('resource.suggestions_for_improvement')" min-width="10%">
             <el-tooltip v-if="scope.row.status === 'risky'" class="item" effect="dark" :content="scope.row.improvement" placement="top">
-              <el-link type="primary" class="md-primary text-click">
+              <span style="color: #0066ac;">
                 {{$t('resource.suggestions_for_improvement')}} <i class="el-icon-question"></i>
-              </el-link>
+              </span>
             </el-tooltip>
             <span v-if="scope.row.status === 'risk_free'">
               <i class="el-icon-minus"></i>
@@ -310,7 +310,7 @@
         },
         buttons: [
           {
-            tip: this.$t('resource.i18n_detail'), icon: "el-icon-more", type: "primary",
+            tip: this.$t('resource.i18n_detail'), icon: "el-icon-edit-outline", type: "primary",
             exec: this.handleDetails
           }
         ],

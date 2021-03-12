@@ -348,7 +348,7 @@
         ],
         rule_buttons: [
           {
-            tip: this.$t('resource.result_details_list'), icon: "el-icon-more", type: "success",
+            tip: this.$t('resource.result_details_list'), icon: "el-icon-edit-outline", type: "success",
             exec: this.goResource
           },
           {

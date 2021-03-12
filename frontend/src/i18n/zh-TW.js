@@ -449,7 +449,7 @@ export default {
     i18n_logout: '登出',
     i18n_sync: '同步',
     active_list: '活動列表',
-    search_by_name: '按所有者名稱搜索',
+    search_by_name: '按操作者名稱搜索',
   },
   rule: {
     rule: '掃描規則',

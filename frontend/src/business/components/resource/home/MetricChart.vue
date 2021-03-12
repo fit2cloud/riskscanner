@@ -121,7 +121,7 @@ export default {
     },
 
     fail() {
-      return ((this.content.returnSum?this.content.returnSum:0) / (this.content.resourcesSum?this.content.resourcesSum:0) * 100).toFixed(0) + "%";
+      return ((this.content.returnSum?this.content.returnSum:0) / (this.content.resourcesSum != 0?this.content.resourcesSum:1) * 100).toFixed(0) + "%";
     },
     assertions() {
       return (this.content.returnSum?this.content.returnSum:0) + ' / ' + (this.content.resourcesSum?this.content.resourcesSum:0);

@@ -140,6 +140,7 @@
                     <property name="condition" value="combine"/>
                 </include>
             </if>
+            and t.plugin_id in (select plugin_id from cloud_account)
         </where>
         ORDER BY t.last_modified desc
     </select>

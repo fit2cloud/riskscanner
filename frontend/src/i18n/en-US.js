@@ -449,7 +449,7 @@ export default {
     i18n_logout:'Logout',
     i18n_sync:'Sync',
     active_list:'Active list',
-    search_by_name:'Search by owner name',
+    search_by_name:'Search by operator name',
   },
   rule: {
     rule:'Scan rule',

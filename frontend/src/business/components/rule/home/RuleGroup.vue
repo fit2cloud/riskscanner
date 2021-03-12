@@ -194,7 +194,7 @@
         },
         buttonsN: [
           {
-            tip: this.$t('commons.detail'), icon: "el-icon-more", type: "primary",
+            tip: this.$t('commons.detail'), icon: "el-icon-edit-outline", type: "primary",
             exec: this.handleInfo
           }
         ],

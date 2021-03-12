@@ -7,8 +7,8 @@
       trigger="hover">
       <el-table :border="true" :stripe="true" :data="string2PrettyFormat" class="adjust-table table-content">
           <el-table-column type="index" min-width="10%"/>
-          <el-table-column prop="regionId" :label="$t('account.region_id')" min-width="45%" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="regionName" :label="$t('account.region_name')" min-width="45%" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="regionId" :label="$t('account.region_id')" min-width="45%"></el-table-column>
+          <el-table-column prop="regionName" :label="$t('account.region_name')" min-width="45%"></el-table-column>
       </el-table>
       <el-button slot="reference" size="mini" type="primary" plain @click="showRegions">
         {{ $t('account.regions') }}
@@ -20,8 +20,8 @@
                :destroy-on-close="true">
       <el-table :border="true" :stripe="true" :data="string2PrettyFormat" class="adjust-table table-content">
         <el-table-column type="index" min-width="10%"/>
-        <el-table-column prop="regionId" :label="$t('account.region_id')" min-width="45%" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="regionName" :label="$t('account.region_name')" min-width="45%" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="regionId" :label="$t('account.region_id')" min-width="45%"></el-table-column>
+        <el-table-column prop="regionName" :label="$t('account.region_name')" min-width="45%"></el-table-column>
       </el-table>
     </el-drawer>
     <!--regions-->

@@ -47,7 +47,7 @@
             <el-input v-model="createForm.tagName" autocomplete="off" :placeholder="$t('commons.please_input')"/>
           </el-form-item>
           <el-form-item :label="$t('rule._index')" prop="index">
-            <el-input v-model="createForm.index" autocomplete="off" :placeholder="$t('commons.please_input')"/>
+            <el-input type="number" v-model="createForm.index" autocomplete="off" :placeholder="$t('commons.please_input')"/>
           </el-form-item>
         </el-form>
         <dialog-footer
@@ -67,7 +67,7 @@
               <el-input v-model="updateForm.tagName" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
             </el-form-item>
             <el-form-item :label="$t('rule._index')">
-              <el-input v-model="updateForm.index" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
+              <el-input type="number" v-model="updateForm.index" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
             </el-form-item>
           </el-form>
         <dialog-footer
@@ -88,7 +88,7 @@
               <el-input v-model="updateForm.tagName" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
             </el-form-item>
             <el-form-item :label="$t('rule._index')">
-              <el-input v-model="updateForm.index" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
+              <el-input type="number" v-model="updateForm.index" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
             </el-form-item>
           </el-form>
         </el-tooltip>
@@ -177,7 +177,7 @@
         ],
         buttonsN: [
           {
-            tip: this.$t('commons.detail'), icon: "el-icon-more", type: "primary",
+            tip: this.$t('commons.detail'), icon: "el-icon-edit-outline", type: "primary",
             exec: this.handleInfo
           }
         ],
