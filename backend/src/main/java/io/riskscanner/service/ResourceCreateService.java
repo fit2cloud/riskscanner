@@ -59,9 +59,6 @@ public class ResourceCreateService {
 
     @QuartzScheduled(cron = "${cron.expression.local}")
     public void handleTasks() {
-//        if (!StringUtils.equals(env.getProperty("run.mode", "local"), "release")) {
-//            return;
-//        }
         final TaskExample taskExample = new TaskExample();
         TaskExample.Criteria criteria = taskExample.createCriteria();
         criteria.andStatusEqualTo(TaskConstants.TASK_STATUS.APPROVED.toString());

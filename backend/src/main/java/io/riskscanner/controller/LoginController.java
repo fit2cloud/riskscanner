@@ -57,14 +57,9 @@ public class LoginController {
 
     @GetMapping(value = "/signout")
     public ResultHolder logout() throws Exception {
-        String ssoMode = env.getProperty("sso.mode");
-        if ((ssoMode != null) && StringUtils.equalsIgnoreCase(SsoMode.CAS.name(), ssoMode)) {
-            return ResultHolder.error("sso");
-        } else {
-            userService.logout();
-            SecurityUtils.getSubject().logout();
-            OperationLogService.log(SessionUtils.getUser(), Objects.requireNonNull(SessionUtils.getUser()).getId(), SessionUtils.getUser().getName(), ResourceTypeConstants.USER.name(), ResourceOperation.LOGOUT, "用户登出");
-        }
+        userService.logout();
+        SecurityUtils.getSubject().logout();
+        OperationLogService.log(SessionUtils.getUser(), Objects.requireNonNull(SessionUtils.getUser()).getId(), SessionUtils.getUser().getName(), ResourceTypeConstants.USER.name(), ResourceOperation.LOGOUT, "用户登出");
         return ResultHolder.success("");
     }
 
