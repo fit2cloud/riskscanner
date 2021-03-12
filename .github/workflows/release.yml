@@ -24,9 +24,11 @@ jobs:
           rm -rf docker .git
           cd ..
           chmod +x riskscanner-installer/riskscanner/install.sh
+          mv riskscanner-installer/riskscanner/{rsctl,install.conf,install.sh} riskscanner-installer/
           version=`echo $RELEASE_VERSION | tr 'a-z' 'A-Z' | tr -d 'REFS/TAGS/' | tr -d 'a-zA-Z'`
           filename=riskscanner-release-$version
           mv riskscanner-installer $filename
+          echo $version > $filename/riskscanner/templates/version
           tar -czvf $filename.tar.gz $filename
           echo "::set-output name=VERSION::$(echo $version)"
       - name: Create Release
