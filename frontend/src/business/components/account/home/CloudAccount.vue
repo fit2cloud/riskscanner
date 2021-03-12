@@ -49,7 +49,7 @@
           <el-table-column prop="userName" :label="$t('account.creator')" min-width="8%" show-overflow-tooltip/>
           <el-table-column :label="$t('account.regions')" min-width="7%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              <regions :row="scope.row.regions"/>
+              <regions :row="scope.row"/>
             </template>
           </el-table-column>
           <el-table-column min-width="15%" :label="$t('commons.operating')">
@@ -294,21 +294,20 @@
           callback: (action) => {
             if (action === 'confirm') {
               let formData = new FormData();
-              formData.append('selectIds', new Blob([JSON.stringify(Array.from(this.selectIds))], {
-                type: "application/json"
-              }));
               this.result = this.$request({
                 method: 'POST',
                 url: "/account/validate",
-                data: formData,
+                data: Array.from(this.selectIds),
                 headers: {
                   'Content-Type': undefined
                 }
               }, res => {
-                this.search();
-                if (res.success) {
+                if (res.data) {
                   this.$success(this.$t('account.success'));
+                } else {
+                  this.$error(this.$t('account.error'));
                 }
+                this.search();
               });
             }
           }

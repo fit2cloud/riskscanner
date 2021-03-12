@@ -128,6 +128,10 @@ public class OrderService {
                             String dirName = m.get("name").toString();
                             String resourceType = m.get("resource").toString();
 
+                            if (!PlatformUtils.checkAvailableRegion(account.getPluginId(), resourceType, regionId)) {
+                                continue;
+                            }
+
                             TaskItemResourceWithBLOBs taskItemResource = new TaskItemResourceWithBLOBs();
                             taskItemResource.setTaskId(taskId);
                             taskItemResource.setTaskItemId(taskItemWithBLOBs.getId());

@@ -511,7 +511,6 @@ public class PlatformUtils {
                 // 利用list的包含方法,进行判断
                 return !tempList.contains(region);
             default:
-                return true;
         }
         return true;
     }

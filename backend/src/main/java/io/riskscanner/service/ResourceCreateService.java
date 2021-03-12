@@ -151,9 +151,6 @@ public class ResourceCreateService {
     }
 
     private void createResource(TaskItemWithBLOBs taskItem, Task task) throws Exception {
-//        if(!PlatformUtils.checkAvailableRegion(task.getPluginId(), taskItem.getDetails(), taskItem.getRegionId())){
-//            throw new Exception(Translator.get("i18n_create_resource_region_failed"));
-//        }
         LogUtil.info("createResource for taskItem: {}", toJSONString(taskItem));
         String operation = Translator.get("i18n_create_resource");
         String resultStr = "";

@@ -598,6 +598,8 @@ export default {
     handle_scans: '重新扫描会全部覆盖掉之前的数据，是否继续?',
     search_by_report_name: '根据要求条款名称搜索',
     search_by_f2cid: '根据资源标识搜索',
+    the_cloud_platform: '该云平台',
+    not_currently: '暂时不支持此类型的资源: 0/0',
   },
   account: {
     cloud_account_setting: '云账号设置',
@@ -630,7 +632,7 @@ export default {
     i18n_cs_create_success: '创建成功',
     i18n_cs_update_success: '编辑成功',
     delete_confirm: '确认删除 ',
-    success: '开始校验',
+    success: '校验成功',
     error: '校验报错',
     quick_settings: '快捷设置',
     start_batch: '快速扫描',

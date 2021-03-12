@@ -525,6 +525,7 @@
           url = "/task/log/taskId/";
         }
         this.logForm.taskItemLogDTOs = [];
+        this.logForm.showLogTaskId = showLogTaskId;
         this.$get(url + showLogTaskId, response => {
           this.logForm.taskItemLogDTOs = response.data;
           this.logVisible =  true;
@@ -588,7 +589,6 @@
     mounted() {
       this.timer = setInterval(this.getStatus,5000);
       this.init();
-
     },
     beforeDestroy() {
       clearInterval(this.timer);
