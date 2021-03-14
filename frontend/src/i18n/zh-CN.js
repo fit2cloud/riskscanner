@@ -599,7 +599,7 @@ export default {
     search_by_report_name: '根据要求条款名称搜索',
     search_by_f2cid: '根据资源标识搜索',
     the_cloud_platform: '该云平台',
-    not_currently: '暂时不支持此类型的资源: 0/0',
+    not_currently: '暂时不支持此类型的资源的扫描: 0/0',
   },
   account: {
     cloud_account_setting: '云账号设置',

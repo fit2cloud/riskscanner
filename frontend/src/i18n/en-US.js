@@ -599,7 +599,7 @@ export default {
     search_by_report_name:'Search by name of the required terms',
     search_by_f2cid:'Search based on resource identification',
     the_cloud_platform:'The cloud platform',
-    not_currently:'This type of resource is temporarily not supported: 0/0',
+    not_currently:'Scanning of this type of resource is temporarily not supported: 0/0',
   },
   account: {
     cloud_account_setting:'Cloud account settings',

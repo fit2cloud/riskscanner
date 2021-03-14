@@ -599,7 +599,7 @@ export default {
     search_by_report_name: '根據要求條款名稱搜索',
     search_by_f2cid: '根據資源標識搜索',
     the_cloud_platform: '該雲平台',
-    not_currently: '暫時不支持此類型的資源: 0/0',
+    not_currently: '暫時不支持此類型的資源的掃描：0/0',
   },
   account: {
     cloud_account_setting: '雲賬號設置',

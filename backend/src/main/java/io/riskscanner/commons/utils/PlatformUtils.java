@@ -503,6 +503,39 @@ public class PlatformUtils {
                 }
                 break;
             case huawei:
+                if (StringUtils.contains(resource, "huawei.vpc")) {
+                    stringArray = new String[]{"cn-northeast-1", "la-south-2", "sa-brazil-1", "na-mexico-1"};
+                    tempList = Arrays.asList(stringArray);
+                    return !tempList.contains(region);
+                } else if (StringUtils.contains(resource, "huawei.security-group")) {
+                    stringArray = new String[]{"cn-northeast-1", "la-south-2", "sa-brazil-1", "na-mexico-1"};
+                    tempList = Arrays.asList(stringArray);
+                    return !tempList.contains(region);
+                } else if (StringUtils.contains(resource, "huawei.iam")) {
+                    stringArray = new String[]{"la-south-2", "sa-brazil-1", "na-mexico-1"};
+                    tempList = Arrays.asList(stringArray);
+                    return !tempList.contains(region);
+                } else if (StringUtils.contains(resource, "huawei.rds")) {
+                    stringArray = new String[]{"la-south-2", "sa-brazil-1", "na-mexico-1"};
+                    tempList = Arrays.asList(stringArray);
+                    return !tempList.contains(region);
+                } else if (StringUtils.contains(resource, "huawei.dds")) {
+                    stringArray = new String[]{"la-south-2", "sa-brazil-1", "na-mexico-1"};
+                    tempList = Arrays.asList(stringArray);
+                    return !tempList.contains(region);
+                } else if (StringUtils.contains(resource, "huawei.redis")) {
+                    stringArray = new String[]{"la-south-2", "sa-brazil-1", "na-mexico-1"};
+                    tempList = Arrays.asList(stringArray);
+                    return !tempList.contains(region);
+                } else if (StringUtils.contains(resource, "huawei.elb")) {
+                    stringArray = new String[]{"la-south-2", "sa-brazil-1", "na-mexico-1"};
+                    tempList = Arrays.asList(stringArray);
+                    return !tempList.contains(region);
+                } else if (StringUtils.contains(resource, "huawei.eip")) {
+                    stringArray = new String[]{"la-south-2", "sa-brazil-1", "na-mexico-1"};
+                    tempList = Arrays.asList(stringArray);
+                    return !tempList.contains(region);
+                }
                 break;
             case tencent:
                 // 不支持资源的区域

@@ -47,7 +47,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="userName" :label="$t('account.creator')" min-width="8%" show-overflow-tooltip/>
-          <el-table-column :label="$t('account.regions')" min-width="7%" show-overflow-tooltip>
+          <el-table-column :label="$t('account.regions')" min-width="7%">
             <template v-slot:default="scope">
               <regions :row="scope.row"/>
             </template>

@@ -621,10 +621,10 @@
         } else if (type === 'edit') {
           url = '/rule/update';
           form = 'updateRuleForm';
-          // if (mdObj.flag == 1) {
-          //   this.$warning(this.$t('rule.rule_flag'));
-          //   return;
-          // }
+          if (mdObj.flag == 1) {
+            this.$warning(this.$t('rule.rule_flag'));
+            return;
+          }
         } else if (type === 'copy') {
           form = 'copyRuleForm';
           url = '/rule/copy';
