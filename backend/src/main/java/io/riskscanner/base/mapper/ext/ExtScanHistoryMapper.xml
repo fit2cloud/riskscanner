@@ -14,7 +14,7 @@
       limit 1
     </select>
 
-    <update id="updateByPrimaryKeySelective" parameterType="io.riskscanner.base.domain.ScanHistory">
+    <update id="updateByExampleSelective" parameterType="io.riskscanner.base.domain.ScanHistory">
         UPDATE scan_history
         <set>
             <if test="operator != null">
