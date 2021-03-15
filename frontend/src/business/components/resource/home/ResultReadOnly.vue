@@ -1,13 +1,17 @@
 <template>
   <div>
-    <el-form label-position="left" inline class="demo-table-expand">
+    <el-form label-position="left" inline class="el-table-expand">
       <el-form-item :key="element.key" v-for="element in elements" :label="element.key + ' : '">
         <span v-if="!element.flag" show-overflow-tooltip>
           <el-tooltip class="item" effect="dark" :content="JSON.stringify(element.value)" placement="top">
             <el-link type="primary" @click="showJson(element)">{{'Details'}}</el-link>
           </el-tooltip>
         </span>
-        <span v-if="element.flag && !!element.value">{{element.value}}</span>
+        <el-tooltip v-if="element.flag && !!element.value" class="item" effect="light" :content="element.value" placement="top">
+          <span class="table-expand-span-value">
+              {{element.value}}
+          </span>
+        </el-tooltip>
         <span v-if="element.flag && !element.value"> N/A</span>
       </el-form-item>
     </el-form>
@@ -55,10 +59,10 @@
           let value = this.row[item];
           //string && boolean的值直接显示, object是[{}]
           if (typeof (value) === 'object') {
-            if (value != null && JSON.stringify(value) != '[]') {
+            if (value != null && JSON.stringify(value) != '[]' && JSON.stringify(value) != '{}') {
               flag = false;
             }
-            if (JSON.stringify(value) == '[]') {
+            if (JSON.stringify(value) == '[]' || JSON.stringify(value) == '{}') {
               value = "";
             }
           }
@@ -92,21 +96,31 @@
 </script>
 
 <style scoped>
-  .demo-table-expand {
+  .el-table-expand {
     font-size: 0;
   }
-  .demo-table-expand label {
+  .el-table-expand label {
     width: 90px;
     color: #99a9bf;
   }
-  .demo-table-expand .el-form-item {
+  .el-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
-    padding: 10px 10%;
+    padding: 10px 20px;
     width: 47%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .el-table-expand >>> .el-form-item__content {
+    width: 100%;
+  }
+  .el-table-expand .table-expand-span-value {
+    max-width: 15em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; /*超出部分用...代替*/
+    display: inline-block;
   }
   .rtl >>> .el-drawer__body {
     overflow-y: auto;

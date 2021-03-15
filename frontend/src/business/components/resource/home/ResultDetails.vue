@@ -45,11 +45,6 @@
               <span><i class="el-icon-time"></i> {{ scope.row.updateTime | timestampFormatDate }}</span>
             </template>
           </el-table-column>
-<!--          <el-table-column min-width="7%" :label="$t('commons.operating')">-->
-<!--            <template v-slot:default="scope">-->
-<!--              <table-operators :buttons="buttons" :row="scope.row"/>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
         </el-table>
         <table-pagination :change="search" :current-page.sync="currentPage" :page-size.sync="pageSize" :total="total"/>
       </el-card>

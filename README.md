@@ -1,4 +1,4 @@
-# RiskScanner 公有云安全合规平台
+# RiskScanner 开源公有云安全合规扫描平台
 
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![License](https://img.shields.io/badge/License-Apache%202.0-red)](https://img.shields.io/badge/License-Apache%202.0-red)
@@ -6,7 +6,9 @@
 
 > [English](README_EN.md) | 中文
 
-RiskScanner 是开源企业级公有云安全合规平台，公有云安全合规服务通过灵活多变的合规规则，对常见公有云平台（如AWS，Azure，Aliyun，Huawei，Tencent，K8s和GCP等）提供公有云资源的安全扫描，帮助企业有效提升公有云使用的合规性。
+RiskScanner 是开源的公有云安全合规扫描平台，通过 Cloud Custodian 的 YAML DSL 来定义扫描规则，实现对主流公有云资源的安全合规扫描及使用优化。
+
+RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，界面美观、用户体验好，支持的公有云包括阿里云、腾讯云、华为云、AWS 和 Azure等。
 
 - 用于管理公共云帐户和资源的规则引擎。它允许用户定义策略以启用管理良好的云基础架构，既安全又优化成本。它将组织具有的许多脚本整合为一个轻量级且灵活的工具，并具有统一的指标和报告。
 

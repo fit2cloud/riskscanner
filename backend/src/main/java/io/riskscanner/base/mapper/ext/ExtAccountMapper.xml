@@ -157,9 +157,12 @@
             <if test="accountId != null">
                 AND t4.account_id = #{accountId}
             </if>
+            AND t4.return_sum != 0
         </where>
         GROUP BY
             t.id
+        ORDER BY
+            returnSum desc
     </select>
 
     <select id="reportList" resultType="java.util.Map">
@@ -191,13 +194,14 @@
             <if test="accountId != null">
                 AND t4.account_id = #{accountId}
             </if>
+            AND t4.return_sum != 0
         </where>
         GROUP BY
             t.id
         HAVING
             returnSum != 0
         ORDER BY
-            returnSum desc
+            returnSum DESC
     </select>
 
     <select id="tagList" resultType="java.util.Map">
@@ -218,11 +222,12 @@
             <if test="accountId != null">
                 AND t4.account_id = #{accountId}
             </if>
+            AND t4.return_sum != 0
         </where>
         GROUP BY
             t.tag_key
         ORDER BY
-            t._index DESC
+            returnSum DESC
     </select>
 
     <select id="regionsList" resultType="java.util.Map">
@@ -239,9 +244,10 @@
             <if test="accountId != null">
                 AND t.account_id = #{accountId}
             </if>
+            AND t2.return_sum != 0
         </where>
         GROUP BY
-            t.region_id, t.region_name
+            t2.return_sum DESC, t.region_id, t.region_name
     </select>
 
     <select id="resourceList" resultType="java.util.Map">

@@ -35,7 +35,7 @@
       title: {
         type: String,
         default() {
-          return this.$t('commons.name');
+          return this.$t('resource.search_by_f2cid');
         }
       },
       showBack: {
@@ -51,7 +51,7 @@
       tip: {
         String,
         default() {
-          return this.$t('commons.search_by_name');
+          return this.$t('resource.search_by_f2cid');
         }
       }
     },

@@ -123,6 +123,12 @@
             <if test="ruleName != null">
                 AND t6.name like CONCAT('%',#{ruleName},'%')
             </if>
+            <if test="ruleName != null">
+                AND t6.name like CONCAT('%',#{ruleName},'%')
+            </if>
+            <if test="name != null">
+                AND t.f2c_id like CONCAT('%',#{name},'%')
+            </if>
         </where>
         <if test="sort != null">
             ORDER BY ${sort}
