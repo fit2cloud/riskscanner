@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%;height: 400px;">
+  <div class="md-card-overall">
       <el-row :gutter="24" class="el-row-mr" @click="goResource('count', 'all')">
           <el-button class="md-button-dashboard bg-purple-dark">
             <I class="md-primary">
@@ -145,5 +145,9 @@
   }
   .el-col-mr {
     margin-left: 5%;
+  }
+  .md-card-overall {
+    width: 100%;
+    min-height: 340px;
   }
 </style>

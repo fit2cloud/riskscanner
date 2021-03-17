@@ -11,6 +11,7 @@
         <!-- float right -->
         <cs-user/>
         <cs-language-switch/>
+        <help/>
       </el-col>
     </el-row>
 
@@ -22,6 +23,7 @@
   import CsTopMenus from "./components/common/head/HeaderTopMenus";
   import CsView from "./components/common/router/CsView";
   import CsUser from "./components/common/head/HeaderUser";
+  import Help from "./components/common/head/Help";
   import CsLanguageSwitch from "./components/common/head/LanguageSwitch";
   import {saveLocalStorage} from "../common/js/utils";
 
@@ -45,7 +47,7 @@
         window.location.href = "/login"
       });
     },
-    components: {CsLanguageSwitch, CsUser, CsView, CsTopMenus},
+    components: {CsLanguageSwitch, CsUser, CsView, CsTopMenus, Help},
     methods: {}
   }
 </script>

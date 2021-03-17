@@ -295,10 +295,10 @@ export default {
 
 <style scoped>
 
-  .echarts {
-    margin: 0 auto;
-    min-width: 510px;
-    min-height: 340px;
-  }
+.echarts {
+  margin: 0 auto;
+  max-width: 512px;
+  max-height: 341px;
+}
 
 </style>

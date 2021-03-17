@@ -483,14 +483,7 @@ public class PlatformUtils {
             case azure:
                 break;
             case aliyun:
-                if (StringUtils.contains(resource, "aliyun.slb")) {
-                    // 不支持aliyun.slb资源的区域
-                    stringArray = new String[]{"cn-qingdao", "cn-zhangjiakou", "cn-huhehaote", "cn-wulanchabu", "cn-heyuan", "cn-guangzhou", "cn-chengdu", "ap-southeast-3",
-                            "ap-northeast-1", "ap-south-1", "us-east-1", "us-west-1", "eu-west-1", "me-east-1", "eu-central-1"};
-                    tempList = Arrays.asList(stringArray);
-                    // 利用list的包含方法,进行判断
-                    return !tempList.contains(region);
-                } else if (StringUtils.contains(resource, "aliyun.polardb")) {
+                if (StringUtils.contains(resource, "aliyun.polardb")) {
                     // 不支持aliyun.polardb资源的区域
                     stringArray = new String[]{"cn-wulanchabu", "cn-heyuan", "cn-guangzhou", "me-east-1"};
                     tempList = Arrays.asList(stringArray);

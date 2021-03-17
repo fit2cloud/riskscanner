@@ -33,6 +33,6 @@
 <style scoped>
 .table-card {
   margin-bottom: 2%;
-  min-height: 46%;
+  min-height: 26%;
 }
 </style>

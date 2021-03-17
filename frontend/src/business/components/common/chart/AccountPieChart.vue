@@ -84,8 +84,8 @@ export default {
 
   .echarts {
     margin: 0 auto;
-    min-width: 650px;
-    min-height: 340px;
+    min-width: 300px;
+    min-height: 200px;
   }
 
 </style>

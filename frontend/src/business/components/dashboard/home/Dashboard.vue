@@ -19,7 +19,6 @@
     </main-container>
 </template>
 <script>
-  import Container from "../../common/components/Container";
   import MainContainer from "../../common/components/MainContainer";
   import AccountList from "./AccountList";
   import RegionsList from "./RegionsList";
@@ -29,7 +28,6 @@
   export default {
     name: "dashboard",
     components: {
-      Container,
       MainContainer,
       AccountList,
       RegionsList,

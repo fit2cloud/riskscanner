@@ -1,8 +1,8 @@
 # RiskScanner 开源公有云安全合规扫描平台
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/956d688c965044d49ec807817efd3ca0)](https://app.codacy.com/gh/riskscanner/riskscanner?utm_source=github.com&utm_medium=referral&utm_content=riskscanner/riskscanner&utm_campaign=Badge_Grade)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/riskscanner/riskscanner)](https://github.com/RiskScanner/riskscanner/releases/latest)
-[![GitHub All Releases](https://img.shields.io/github/downloads/riskscanner/riskscanner/total)](https://github.com/RiskScanner/riskscanner/releases)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/riskscanner/riskscanner)](https://github.com/riskscanner/riskscanner/releases/latest)
+[![GitHub All Releases](https://img.shields.io/github/downloads/riskscanner/riskscanner/total)](https://github.com/riskscanner/riskscanner/releases)
 
 RiskScanner 是开源的公有云安全合规扫描平台，通过 Cloud Custodian 的 YAML DSL 定义扫描规则，实现对主流公有云资源的安全合规扫描及使用优化建议。
 
@@ -27,8 +27,9 @@ RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，�
 ## 快速开始
 
 仅需两步快速安装 RiskScanner：
-  * 操作系统: CentOS 7.x 64 bit
-  * CPU/内存: 2核 4G
+
+1.  准备一台不小于 4 G内存的 64位 Linux 主机；
+2.  以 root 用户执行如下命令一键安装 RiskScanner。
       
 ```sh
 curl -sSL https://github.com/RiskScanner/riskscanner/releases/latest/download/quick_start.sh | sh
@@ -36,11 +37,15 @@ curl -sSL https://github.com/RiskScanner/riskscanner/releases/latest/download/qu
 
 ## 帮助文档
 
-- [帮助文档](https://rs-docs.fit2cloud.com/)
+- [帮助文档](https://docs.riskscanner.io/)
 
 ## 微信群
 
-![wechat-group](./frontend/src/assets/img/readme/group.png)
+![wechat-group](./frontend/src/assets/img/readme/wechat-group.png)
+
+## QQ群
+
+- 729460399
 
 ## 技术栈
 

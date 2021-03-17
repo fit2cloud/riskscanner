@@ -44,9 +44,9 @@
     data() {
       return {
         dialogVisible: false,
-        githubUrl: 'https://github.com/risk-scanner/riskscanner',
-        websiteUrl: 'https://risk-scanner.io',
-        version: '1.0.0npm'
+        githubUrl: 'https://github.com/riskscanner/riskscanner',
+        websiteUrl: 'https://docs.riskscanner.io',
+        version: '1.0.0'
       }
     },
     created() {

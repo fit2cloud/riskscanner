@@ -19,7 +19,7 @@ jobs:
         env:
           RELEASE_VERSION: ${{github.ref}}
         run: |
-          git clone https://github.com/RiskScanner/riskscanner-installer.git
+          git clone https://github.com/riskscanner/riskscanner-installer.git
           cd riskscanner-installer
           rm -rf docker .git
           cd ..
@@ -48,9 +48,9 @@ jobs:
               * CPU/内存: 4核16G
               * 磁盘空间: 100G
             ```sh
-              curl -sSL https://github.com/RiskScanner/riskscanner/releases/latest/download/quick_start.sh | sh
+              curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/quick_start.sh | sh
             ```
-            点击 [完整文档](https://rs-docs.fit2cloud.com/) 查看完整的安装和使用文档
+            点击 [完整文档](https://docs.riskscanner.io/) 查看完整的安装和使用文档
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
