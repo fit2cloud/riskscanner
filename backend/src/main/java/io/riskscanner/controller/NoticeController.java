@@ -3,10 +3,12 @@ package io.riskscanner.controller;
 import io.riskscanner.message.MessageDetail;
 import io.riskscanner.service.NoticeService;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import java.util.List;
 
+@ApiIgnore
 @RestController
 @RequestMapping("notice")
 public class NoticeController {

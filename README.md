@@ -1,8 +1,8 @@
 # RiskScanner 开源公有云安全合规扫描平台
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/956d688c965044d49ec807817efd3ca0)](https://app.codacy.com/gh/RiskScanner/riskscanner?utm_source=github.com&utm_medium=referral&utm_content=RiskScanner/riskscanner&utm_campaign=Badge_Grade)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/RiskScanner/riskscanner)](https://github.com/RiskScanner/riskscanner/releases/latest)
-[![GitHub All Releases](https://img.shields.io/github/downloads/RiskScanner/riskscanner/total)](https://github.com/RiskScanner/riskscanner/releases)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/956d688c965044d49ec807817efd3ca0)](https://app.codacy.com/gh/riskscanner/riskscanner?utm_source=github.com&utm_medium=referral&utm_content=riskscanner/riskscanner&utm_campaign=Badge_Grade)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/riskscanner/riskscanner)](https://github.com/RiskScanner/riskscanner/releases/latest)
+[![GitHub All Releases](https://img.shields.io/github/downloads/riskscanner/riskscanner/total)](https://github.com/RiskScanner/riskscanner/releases)
 
 RiskScanner 是开源的公有云安全合规扫描平台，通过 Cloud Custodian 的 YAML DSL 定义扫描规则，实现对主流公有云资源的安全合规扫描及使用优化建议。
 
