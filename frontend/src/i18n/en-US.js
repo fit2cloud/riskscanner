@@ -157,6 +157,7 @@ export default {
       },
     },
     more:'More',
+    cannot_be_empty:'Cannot be empty',
   },
   workspace: {
     create:'Create a workspace',
@@ -516,6 +517,7 @@ export default {
     change_status_on:'Enabled',
     change_status_off:'Disabled',
     full_param:'Please fill in the complete parameters',
+    tag_key_pattern:'Can only match English letters',
   },
   resource: {
     statistics:'Compliance Report',
@@ -600,6 +602,7 @@ export default {
     search_by_f2cid:'Search based on resource identification',
     the_cloud_platform:'The cloud platform',
     not_currently:'Scanning of this type of resource is temporarily not supported: 0/0',
+    status_on_off:'Is it compliant',
   },
   account: {
     cloud_account_setting:'Cloud account settings',

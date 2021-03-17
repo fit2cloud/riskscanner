@@ -181,7 +181,7 @@
                 <el-link type="primary" class="text-click" @click="goResource(scope.row)">{{scope.row.returnSum}}/{{scope.row.resourcesSum}}</el-link>
               </span>
             </el-table-column>
-            <el-table-column v-slot:default="scope" :label="$t('resource.status')" prop="returnSum" sortable show-overflow-tooltip min-width="7%">
+            <el-table-column v-slot:default="scope" :label="$t('resource.status_on_off')" prop="returnSum" sortable show-overflow-tooltip min-width="7%">
               <span v-if="scope.row.returnSum == 0" style="color: #46ad59;">{{$t('resource.i18n_compliance_true')}}</span>
               <span v-else-if="(scope.row.returnSum != null) && (scope.row.returnSum > 0)" style="color: #f84846;">{{$t('resource.i18n_compliance_false')}}</span>
               <span v-else-if="scope.row.returnSum == null && scope.row.resourcesSum == null"> N/A</span>
@@ -471,6 +471,7 @@
       },
       getStatus () {
         if (this.checkStatus(this.tableData)) {
+          this.search();
           return;
         }
         this.$get("/resource/source/" + this.accountId, response => {

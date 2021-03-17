@@ -157,6 +157,7 @@ export default {
       },
     },
     more: '更多',
+    cannot_be_empty: '不能为空',
   },
   workspace: {
     create: '创建工作空间',
@@ -516,6 +517,7 @@ export default {
     change_status_on: '已启用',
     change_status_off: '已停用',
     full_param: '请填写完整参数',
+    tag_key_pattern: '只能匹配英文字母',
   },
   resource: {
     statistics: '合规报告',
@@ -600,6 +602,7 @@ export default {
     search_by_f2cid: '根据资源标识搜索',
     the_cloud_platform: '该云平台',
     not_currently: '暂时不支持此类型的资源的扫描: 0/0',
+    status_on_off: '是否合规',
   },
   account: {
     cloud_account_setting: '云账号设置',

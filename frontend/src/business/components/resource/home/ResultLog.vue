@@ -86,9 +86,16 @@
         }
         let showLogTaskId = this.row.showLogTaskId;
         let url = "/task/log/taskId/";
-        this.row.taskItemLogDTOs = [];
         this.$get(url + showLogTaskId, response => {
-          this.row.taskItemLogDTOs = response.data;
+          console.log(response.data, this.row.taskItemLogDTOs)
+          for (let obj of response.data) {
+            for (let item of this.row.taskItemLogDTOs) {
+              if (obj.taskItem.id === item.taskItem.id) {
+                item.taskItem.status = obj.taskItem.status;
+                item.taskItemLogList = obj.taskItemLogList;
+              }
+            }
+          }
         });
       },
       //是否是结束状态，返回false代表都在运行中，true代表已结束

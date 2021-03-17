@@ -138,6 +138,7 @@ public class ResourceCreateService {
     private boolean handleTaskItem(TaskItemWithBLOBs taskItem, Task task) {
         orderService.updateTaskItemStatus(taskItem.getId(), TaskConstants.TASK_STATUS.PROCESSING);
         try {
+            Thread.sleep(1000);//手动休眠1秒，云平台调用太快容易出达到最大连接数而超时
             for (int i = 0; i < taskItem.getCount(); i++) {
                 createResource(taskItem, task);
             }

@@ -70,7 +70,7 @@ export default {
               }
             }
           ],
-            color: ['#11cfae', '#009ef0', '#627dec', '#893fdc', '#89ffff','#0051a4', '#0099ff', '#0033ff', '#006666', '#ff33ff', '#00ee00']
+          color: ['#11cfae', '#009ef0', '#627dec', '#893fdc', '#89ffff','#0051a4', '#0099ff', '#0033ff', '#006666', '#7700ee', '#00ee00']
         };
       });
     },
@@ -86,7 +86,7 @@ export default {
 
   .echarts {
     margin: 0 auto;
-    min-width: 810px;
+    min-width: 650px;
     min-height: 340px;
   }
 

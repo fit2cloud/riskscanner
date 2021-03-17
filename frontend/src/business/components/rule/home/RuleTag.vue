@@ -52,7 +52,7 @@
         </el-form>
         <dialog-footer
           @cancel="createVisible = false"
-          @confirm="save(createForm, 'add')"/>
+          @confirm="save(createForm, 'createForm')"/>
       </el-drawer>
       <!--Create ruleTag-->
 
@@ -60,38 +60,36 @@
       <el-drawer class="rtl" :title="$t('rule.update_tag')" :visible.sync="updateVisible" size="45%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
         <el-form :model="updateForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="updateForm">
-            <el-form-item :label="$t('rule.tag_key')">
+            <el-form-item :label="$t('rule.tag_key')" prop="tagKey">
               <el-input v-model="updateForm.tagKey" :disabled="true" autocomplete="off" :placeholder="$t('commons.please_input')"/>
             </el-form-item>
-            <el-form-item :label="$t('rule.tag_name')">
+            <el-form-item :label="$t('rule.tag_name')" prop="tagName">
               <el-input v-model="updateForm.tagName" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
             </el-form-item>
-            <el-form-item :label="$t('rule._index')">
+            <el-form-item :label="$t('rule._index')" prop="index">
               <el-input type="number" v-model="updateForm.index" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
             </el-form-item>
           </el-form>
         <dialog-footer
           @cancel="updateVisible = false"
-          @confirm="save(updateForm, 'update')"/>
+          @confirm="save(updateForm, 'updateForm')"/>
       </el-drawer>
       <!--Update ruleTag-->
 
       <!--Info ruleTag-->
       <el-drawer class="rtl" :title="$t('rule.update_tag')" :visible.sync="infoVisible" size="45%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
-        <el-tooltip v-model="updateForm.flag" class="item" effect="dark" :content="$t('rule.rule_tag_flag')" placement="bottom">
-          <el-form :model="updateForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="updateForm">
-            <el-form-item :label="$t('rule.tag_key')">
-              <el-input v-model="updateForm.tagKey" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
-            </el-form-item>
-            <el-form-item :label="$t('rule.tag_name')">
-              <el-input v-model="updateForm.tagName" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
-            </el-form-item>
-            <el-form-item :label="$t('rule._index')">
-              <el-input type="number" v-model="updateForm.index" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
-            </el-form-item>
-          </el-form>
-        </el-tooltip>
+        <el-form :model="updateForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="infoForm">
+          <el-form-item :label="$t('rule.tag_key')" prop="tagKey">
+            {{updateForm.tagKey}}
+          </el-form-item>
+          <el-form-item :label="$t('rule.tag_name')" prop="tagName">
+            {{updateForm.tagName}}
+          </el-form-item>
+          <el-form-item :label="$t('rule._index')" prop="index">
+            {{updateForm.index}}
+          </el-form-item>
+        </el-form>
       </el-drawer>
       <!--Info ruleTag-->
 
@@ -140,7 +138,7 @@
         direction: 'rtl',
         rule: {
           tagKey: [
-            {required: true, message: this.$t('rule.tag_key'), trigger: 'blur'},
+            {required: true, pattern: '[a-zA-Z]', message: this.$t('rule.tag_key_pattern'), trigger: 'blur'},
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
             {
               required: true,
@@ -149,7 +147,7 @@
             }
           ],
           tagName: [
-            {required: true, message: this.$t('rule.tag_name'), trigger: 'blur'},
+            {required: true, message: this.$t('rule.tag_name') + this.$t('commons.cannot_be_empty'), trigger: 'blur'},
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
             {
               required: true,
@@ -160,7 +158,6 @@
           index: [
             {
               required: true,
-              pattern: '^[1-9]\\d*|0$',
               message: this.$t('rule.number_format_is_incorrect'),
               trigger: 'blur'
             }
@@ -253,14 +250,18 @@
         this.init();
       },
       save(item, type) {
-        let params = item;
-        params.flag = item.flag ? item.flag : false;
-        let url = type == "add" ? "/tag/rule/save" : "/tag/rule/update";
-        this.result = this.$post(url, params, response => {
-          this.search();
-          this.createVisible =  false;
-          this.updateVisible =  false;
-          this.$success(this.$t('commons.opt_success'));
+        this.$refs[type].validate(valid => {
+            if (valid) {
+              let params = item;
+              params.flag = item.flag ? item.flag : false;
+              let url = type == "createForm" ? "/tag/rule/save" : "/tag/rule/update";
+              this.result = this.$post(url, params, response => {
+                this.search();
+                this.createVisible =  false;
+                this.updateVisible =  false;
+                this.$success(this.$t('commons.opt_success'));
+              });
+            }
         });
       },
     },

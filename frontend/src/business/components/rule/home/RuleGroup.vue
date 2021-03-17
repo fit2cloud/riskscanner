@@ -53,7 +53,7 @@
           <el-form-item :label="$t('commons.description')" prop="description">
             <el-input v-model="createForm.description" autocomplete="off" :placeholder="$t('commons.please_input')"/>
           </el-form-item>
-          <el-form-item :label="$t('account.cloud_platform')">
+          <el-form-item :label="$t('account.cloud_platform')" prop="pluginId" :rules="{required: true, message: $t('account.cloud_platform') + this.$t('commons.cannot_be_empty'), trigger: 'change'}">
             <el-select style="width: 100%;" v-model="createForm.pluginId" :placeholder="$t('account.please_choose_plugin')">
               <el-option
                 v-for="item in plugins"
@@ -68,7 +68,7 @@
         </el-form>
         <dialog-footer
           @cancel="createVisible = false"
-          @confirm="save(createForm, 'add')"/>
+          @confirm="save(createForm, 'createForm')"/>
       </el-drawer>
       <!--Create group-->
 
@@ -82,7 +82,7 @@
             <el-form-item :label="$t('commons.description')" prop="description">
               <el-input v-model="updateForm.description" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
             </el-form-item>
-          <el-form-item :label="$t('account.cloud_platform')">
+          <el-form-item :label="$t('account.cloud_platform')" prop="pluginId" :rules="{required: true, message: $t('account.cloud_platform') + this.$t('commons.cannot_be_empty'), trigger: 'change'}">
             <el-select style="width: 100%;" v-model="updateForm.pluginId" :disabled="updateForm.flag" :placeholder="$t('account.please_choose_plugin')">
               <el-option
                 v-for="item in plugins"
@@ -97,35 +97,33 @@
         </el-form>
         <dialog-footer
           @cancel="updateVisible = false"
-          @confirm="save(updateForm, 'update')"/>
+          @confirm="save(updateForm, 'updateForm')"/>
       </el-drawer>
       <!--Update group-->
 
       <!--Info group-->
       <el-drawer class="rtl" :title="$t('rule.update_group')" :visible.sync="infoVisible" size="45%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
-        <el-tooltip v-model="updateForm.flag" class="item" effect="dark" :content="$t('rule.rule_group_flag')" placement="bottom">
-          <el-form :model="updateForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="updateForm">
-            <el-form-item :label="$t('rule.rule_set')" prop="name">
-              <el-input v-model="updateForm.name" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
-            </el-form-item>
-            <el-form-item :label="$t('commons.description')" prop="description">
-              <el-input v-model="updateForm.description" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
-            </el-form-item>
-            <el-form-item :label="$t('account.cloud_platform')">
-              <el-select style="width: 100%;" v-model="createForm.pluginId" :disabled="updateForm.flag" :placeholder="$t('account.please_choose_plugin')">
-                <el-option
-                  v-for="item in plugins"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id">
-                  <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                  &nbsp;&nbsp; {{$t(item.name)}}
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-        </el-tooltip>
+        <el-form :model="updateForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="infoForm">
+          <el-form-item :label="$t('rule.rule_set')" prop="name">
+            {{updateForm.name}}
+          </el-form-item>
+          <el-form-item :label="$t('commons.description')" prop="description">
+            {{updateForm.description}}
+          </el-form-item>
+          <el-form-item :label="$t('account.cloud_platform')">
+            <el-select style="width: 100%;" v-model="updateForm.pluginId" :disabled="updateForm.flag" :placeholder="$t('account.please_choose_plugin')">
+              <el-option
+                v-for="item in plugins"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+                <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
+                &nbsp;&nbsp; {{$t(item.name)}}
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
       </el-drawer>
       <!--Info group-->
     </main-container>
@@ -174,7 +172,7 @@
         direction: 'rtl',
         rule: {
           name: [
-            {required: true, message: this.$t('rule.tag_name'), trigger: 'blur'},
+            {required: true, message: this.$t('rule.tag_name') + this.$t('commons.cannot_be_empty'), trigger: 'blur'},
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
             {
               required: true,
@@ -183,7 +181,7 @@
             }
           ],
           description: [
-            {required: true, message: this.$t('rule.tag_name'), trigger: 'blur'},
+            {required: true, message: this.$t('rule.description') + this.$t('commons.cannot_be_empty'), trigger: 'blur'},
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
             {
               required: true,
@@ -285,14 +283,18 @@
         this.init();
       },
       save(item, type) {
-        let params = item;
-        params.flag = item.flag ? item.flag : false;
-        let url = type == "add" ? "/rule/group/save" : "/rule/group/update";
-        this.result = this.$post(url, params, response => {
-          this.search();
-          this.createVisible =  false;
-          this.updateVisible =  false;
-          this.$success(this.$t('commons.opt_success'));
+        this.$refs[type].validate(valid => {
+            if (valid) {
+              let params = item;
+              params.flag = item.flag ? item.flag : false;
+              let url = type == "createForm" ? "/rule/group/save" : "/rule/group/update";
+              this.result = this.$post(url, params, response => {
+                this.search();
+                this.createVisible =  false;
+                this.updateVisible =  false;
+                this.$success(this.$t('commons.opt_success'));
+              });
+            }
         });
       },
     },

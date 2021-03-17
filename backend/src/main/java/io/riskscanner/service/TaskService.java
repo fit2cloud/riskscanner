@@ -225,7 +225,7 @@ public class TaskService {
         if (params.get("resourceType") != null && StringUtils.isNotEmpty(params.get("resourceType").toString())) {
             criteria.andResourceTypesLike("%" + params.get("resourceType").toString() + "%");
         }
-        example.setOrderByClause("return_sum desc, create_time desc, status");
+        example.setOrderByClause("FIELD(`status`, 'PROCESSING', 'APPROVED', 'FINISHED', 'WARNING', 'ERROR'), return_sum desc, create_time desc");
         return taskMapper.selectByExample(example);
     }
 

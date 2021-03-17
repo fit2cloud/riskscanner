@@ -157,6 +157,7 @@ export default {
       },
     },
     more: '更多',
+    cannot_be_empty: '不能為空',
   },
   workspace: {
     create: '創建工作空間',
@@ -516,6 +517,7 @@ export default {
     change_status_on: '已啟用',
     change_status_off: '已停用',
     full_param: '請填寫完整參數',
+    tag_key_pattern: '只能匹配英文字母',
   },
   resource: {
     statistics: '合規報告',
@@ -600,6 +602,7 @@ export default {
     search_by_f2cid: '根據資源標識搜索',
     the_cloud_platform: '該雲平台',
     not_currently: '暫時不支持此類型的資源的掃描：0/0',
+    status_on_off: '是否合規',
   },
   account: {
     cloud_account_setting: '雲賬號設置',

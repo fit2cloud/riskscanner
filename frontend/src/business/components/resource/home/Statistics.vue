@@ -357,7 +357,7 @@
         await this.groupSearch();
       },
       async groupSearch () {
-        await this.$post("/resource/rule/groups", {accountId: this.accountId}, response => {
+        this.result = await this.$post("/resource/rule/groups", {accountId: this.accountId}, response => {
           this.groups = response.data;
           if(this.groups.length > 0) {
             this.groupId = this.groups[0].id;
@@ -378,7 +378,7 @@
         //在这里实现事件
         this.condition.accountId = this.accountId;
         this.condition.groupId = this.groupId;
-        this.result = await this.$post(url, this.condition, response => {
+        await this.$post(url, this.condition, response => {
           let data = response.data;
           this.total = data.itemCount;
           this.tableData = data.listObject;
