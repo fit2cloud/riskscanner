@@ -46,7 +46,7 @@
         dialogVisible: false,
         githubUrl: 'https://github.com/riskscanner/riskscanner',
         websiteUrl: 'https://docs.riskscanner.io',
-        version: '1.0.0'
+        version: '1.0.0',
       }
     },
     created() {
@@ -59,7 +59,7 @@
       getVersion() {
         this.$get('/system/version', response => {
 
-          this.version = response.data;
+          // this.version = response.data;
         });
       }
     }

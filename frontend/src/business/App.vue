@@ -73,7 +73,7 @@
     height: 37px;
     background-repeat: no-repeat;
     background-position: 50% center;
-    background-image: url("../assets/logo-light.png");
+    background-image: url("../assets/logo-red.png");
   }
 
   .menus > * {

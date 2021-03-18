@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     init () {
-      this.$post("/dashboard/distribution", {group: "ruleGroup"}, response => {
+      this.$post("/dashboard/distribution", {group: "ruleGroup", limit: 6}, response => {
         let data = '{"rule":"规则组不合规资源", "key1":value1, "key2":value2, "key3":value3}';
         let i = 1;
         for (let obj of response.data) {

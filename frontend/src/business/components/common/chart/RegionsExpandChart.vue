@@ -9,51 +9,53 @@
 import RsChart from "@/business/components/common/chart/RsChart";
 
 export default {
-  name: "AccountPieChart",
+  name: "RegionsExpandChart",
   components: {RsChart},
-  props: {
-    data: {},
-  },
   data() {
     return {
       options: {},
+      accountId: "all"
     }
   },
   methods: {
+    focus(data) {
+      this.accountId = data;
+      this.init();
+    },
     init() {
-      this.$post("/dashboard/distribution", {group: "accountList", limit: 5}, response => {
+      let params = this.accountId != "all"?{group: "regionsList", accountId: this.accountId}:{group: "regionsList"};
+      this.$post("/dashboard/distribution", params, response => {
         let legendData = [];
         let seriesData = [];
         for (let obj of response.data) {
-          legendData.push(obj.groupName + ' ' + obj.xAxis + ' 分(' + obj.yAxis + '/' + obj.yAxis2 + ')');
+          legendData.push(obj.groupName + " (" + obj.yAxis + "/" + obj.yAxis2 +  ") ");
           seriesData.push({
-            name: obj.groupName + ' ' + obj.xAxis + ' 分(' + obj.yAxis + '/' + obj.yAxis2 + ')',
+            name: obj.groupName + " (" + obj.yAxis + "/" + obj.yAxis2 +  ") ",
             value: obj.yAxis
           });
         }
         this.options = {
           title: {
-            text: this.$t('dashboard.cloud_account_statistics_top'),
-            subtext: this.$t('resource.resource_result_score'),
-            left: 'center'
+            text: this.$t('dashboard.regions_statistics'),
+              subtext: this.$t('dashboard.resource_result_region'),
+              left: 'center'
           },
           tooltip: {
             trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)'
+              formatter: '{a} <br/>{b} : {c} ({d}%)'
           },
           legend: {
             type: 'scroll',
-            orient: 'vertical',
-            right: 10,
-            top: 20,
-            bottom: 20,
-            data: legendData,
-
+              orient: 'vertical',
+              right: 10,
+              top: 20,
+              bottom: 20,
+              data: legendData,
+            // data: this.sycData("legendData"),
           },
           series: [
             {
-
-              name: this.$t('resource.resource_result_score'),
+              name: this.$t('dashboard.resource_result_region'),
               type: 'pie',
               radius: '55%',
               center: ['40%', '50%'],
@@ -68,7 +70,7 @@ export default {
               }
             }
           ],
-          color: ['#11cfae', '#009ef0', '#627dec', '#893fdc', '#89ffff','#0051a4' ]
+          color: ['#11cfae', '#009ef0', '#627dec', '#893fdc', '#89ffff','#0051a4', '#0099ff', '#0033ff', '#006666', '#7700ee', '#00ee00']
         };
       });
     },
@@ -84,8 +86,8 @@ export default {
 
   .echarts {
     margin: 0 auto;
-    min-width: 300px;
-    min-height: 200px;
+    min-width: 600px;
+    min-height: 400px;
   }
 
 </style>

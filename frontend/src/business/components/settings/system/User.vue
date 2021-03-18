@@ -185,7 +185,7 @@
         multipleSelection: [],
         userRole: [],
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 10,
         total: 0,
         condition: {},
         tableData: [],
@@ -455,7 +455,7 @@
     width: 100%;
   }
   .rtl >>> .el-form-item__content {
-    width: 60%;
+    width: 80%;
   }
   /deep/ :focus{outline:0;}
 </style>

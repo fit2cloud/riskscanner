@@ -46,7 +46,7 @@ export default {
     },
     init () {
       let data=[];
-      this.$post("/dashboard/distribution", {group: "ruleList", limit: 5}, response => {
+      this.$post("/dashboard/distribution", {group: "ruleList", limit: 10}, response => {
         for (let obj of response.data) {
           let param = {
             code: obj.groupName,
@@ -88,7 +88,7 @@ export default {
               color: "#444"
             },
             selectedMode: false,
-            data: [this.$t('dashboard.rule_detail_top')]
+            data: [this.$t('dashboard.rule_detail')]
           },
           xAxis: {
             type: "value",
@@ -265,7 +265,7 @@ export default {
             }
           ],
           grid: {
-            left: "-35%",
+            left: "-30%",
             right: "0%",
             width:"130%",
             bottom: "0%",
@@ -297,8 +297,8 @@ export default {
 
 .echarts {
   margin: 0 auto;
-  max-width: 650px;
-  max-height: 300px;
+  min-width: 750px;
+  min-height: 500px;
 }
 
 </style>

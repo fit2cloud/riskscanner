@@ -129,7 +129,9 @@
             t.name
         ORDER BY
             yAxis desc
-        LIMIT 6
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
     </select>
 
     <select id="report" resultType="io.riskscanner.base.rs.ChartData">
@@ -166,7 +168,9 @@
             t.id, t.name
         ORDER BY
             yAxis desc
-        LIMIT 10
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
     </select>
 
     <select id="accountList" resultType="io.riskscanner.base.rs.ChartData">
@@ -184,7 +188,9 @@
             yAxis != 0
         ORDER BY
             yAxis desc
-        LIMIT 10
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
     </select>
 
     <select id="regionsList" resultType="io.riskscanner.base.rs.ChartData">
@@ -208,7 +214,9 @@
             yAxis != 0
         ORDER BY
             yAxis desc
-        LIMIT 10
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
     </select>
 
     <select id="totalPolicy" resultType="java.util.Map">

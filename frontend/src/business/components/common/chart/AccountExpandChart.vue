@@ -9,7 +9,7 @@
 import RsChart from "@/business/components/common/chart/RsChart";
 
 export default {
-  name: "AccountPieChart",
+  name: "AccountExpandChart",
   components: {RsChart},
   props: {
     data: {},
@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     init() {
-      this.$post("/dashboard/distribution", {group: "accountList", limit: 5}, response => {
+      this.$post("/dashboard/distribution", {group: "accountList"}, response => {
         let legendData = [];
         let seriesData = [];
         for (let obj of response.data) {
@@ -33,7 +33,7 @@ export default {
         }
         this.options = {
           title: {
-            text: this.$t('dashboard.cloud_account_statistics_top'),
+            text: this.$t('dashboard.cloud_account_statistics'),
             subtext: this.$t('resource.resource_result_score'),
             left: 'center'
           },
@@ -84,8 +84,8 @@ export default {
 
   .echarts {
     margin: 0 auto;
-    min-width: 300px;
-    min-height: 200px;
+    min-width: 600px;
+    min-height: 400px;
   }
 
 </style>

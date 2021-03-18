@@ -23,7 +23,7 @@ export default {
       this.init();
     },
     init() {
-      let params = this.accountId != "all"?{group: "regionsList", accountId: this.accountId}:{group: "regionsList"};
+      let params = this.accountId != "all"?{group: "regionsList", accountId: this.accountId, limit: 5}:{group: "regionsList", limit: 5};
       this.$post("/dashboard/distribution", params, response => {
         let legendData = [];
         let seriesData = [];
@@ -36,7 +36,7 @@ export default {
         }
         this.options = {
           title: {
-            text: this.$t('dashboard.regions_statistics'),
+            text: this.$t('dashboard.regions_statistics_top'),
               subtext: this.$t('dashboard.resource_result_region'),
               left: 'center'
           },
@@ -86,7 +86,7 @@ export default {
 
   .echarts {
     margin: 0 auto;
-    min-width: 400px;
+    min-width: 300px;
     min-height: 200px;
   }
 

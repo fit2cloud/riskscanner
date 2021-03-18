@@ -58,6 +58,9 @@
           let flag = true;
           let value = this.row[item];
           //string && boolean的值直接显示, object是[{}]
+          if (typeof (value) === 'number') {
+            value = String(value);
+          }
           if (typeof (value) === 'object') {
             if (value != null && JSON.stringify(value) != '[]' && JSON.stringify(value) != '{}') {
               flag = false;
@@ -106,7 +109,7 @@
   .el-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
-    padding: 10px 20px;
+    padding: 10px 20px 10px 50px;
     width: 47%;
     white-space: nowrap;
     overflow: hidden;
