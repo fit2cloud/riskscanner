@@ -19,7 +19,7 @@
             <template v-slot:default="scope">
               <span>
                 <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                 &nbsp;&nbsp; {{scope.row.pluginName}}
+                 &nbsp;&nbsp; {{ scope.row.pluginName }}
               </span>
             </template>
           </el-table-column>
@@ -61,7 +61,7 @@
                 :label="item.name"
                 :value="item.id">
                 <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                &nbsp;&nbsp; {{$t(item.name)}}
+                &nbsp;&nbsp; {{ $t(item.name) }}
               </el-option>
             </el-select>
           </el-form-item>
@@ -90,7 +90,7 @@
                 :label="item.name"
                 :value="item.id">
                 <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                &nbsp;&nbsp; {{$t(item.name)}}
+                &nbsp;&nbsp; {{ $t(item.name) }}
               </el-option>
             </el-select>
           </el-form-item>
@@ -106,10 +106,10 @@
                  :destroy-on-close="true">
         <el-form :model="updateForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="infoForm">
           <el-form-item :label="$t('rule.rule_set')" prop="name">
-            {{updateForm.name}}
+            {{ updateForm.name }}
           </el-form-item>
           <el-form-item :label="$t('commons.description')" prop="description">
-            {{updateForm.description}}
+            {{ updateForm.description }}
           </el-form-item>
           <el-form-item :label="$t('account.cloud_platform')">
             <el-select style="width: 100%;" v-model="updateForm.pluginId" :disabled="updateForm.flag" :placeholder="$t('account.please_choose_plugin')">
@@ -119,7 +119,7 @@
                 :label="item.name"
                 :value="item.id">
                 <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                &nbsp;&nbsp; {{$t(item.name)}}
+                &nbsp;&nbsp; {{ $t(item.name) }}
               </el-option>
             </el-select>
           </el-form-item>

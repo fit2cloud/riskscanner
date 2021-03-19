@@ -3,8 +3,8 @@
       <el-row :gutter="24" class="el-row-mr" @click="goResource('count', 'all')">
           <el-button class="md-button-dashboard bg-purple-dark">
             <I class="md-primary">
-              <el-col :span="8" class="el-col-mr">{{$t('dashboard.i18n_non_compliance_number')}} / {{$t('dashboard.i18n_total')}}</el-col>
-            &nbsp;&nbsp;<el-col :span="8" class="el-col-mr">{{$t('dashboard.i18n_non_compliance_proportion')}}</el-col>
+              <el-col :span="8" class="el-col-mr">{{ $t('dashboard.i18n_non_compliance_number') }} / {{ $t('dashboard.i18n_total') }}</el-col>
+            &nbsp;&nbsp;<el-col :span="8" class="el-col-mr">{{ $t('dashboard.i18n_non_compliance_proportion') }}</el-col>
               <el-col :span="8"></el-col>
             </I>
           </el-button>
@@ -12,8 +12,10 @@
       <el-row :gutter="24" class="el-row-mr" @click="goResource('count', 'all')">
         <span class="md-headline" style="font-size: 20px;" layout="row" layout-align="start center">
           <I class="md-primary">
-            <el-col :span="8" class="el-col-mr"><u>{{returnTotal}}</u> &nbsp;/ <u>{{resourceTotal}}</u></el-col>
-          &nbsp;&nbsp;<el-col :span="8" class="el-col-mr"><u style="color: #0000cc"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{totalPecent?totalPecent.toFixed(2):0}}%</u></el-col>
+            <el-col :span="8" class="el-col-mr">{{ returnTotal }} &nbsp;/ {{ resourceTotal }}</el-col>&nbsp;&nbsp;
+            <el-col :span="8" class="el-col-mr">
+              <span style="color: #0000cc"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ totalPecent?totalPecent.toFixed(2):0 }}%</span>
+            </el-col>
             <el-col :span="8"></el-col>
           </I>
         </span>

@@ -30,7 +30,7 @@ export default {
               return params.seriesName + ": 0.00%";
             } else {
               let num = 0;
-              if (typeof params.name == 'string' && params.name.indexOf("showtip_") != -1) {
+              if (typeof params.name == 'string' && params.name.indexOf("showtip_") !== -1) {
                 num = Number(params.name.split("_")[1]);
               } else {
                 num = params.value;

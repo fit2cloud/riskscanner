@@ -81,13 +81,13 @@
                  :destroy-on-close="true">
         <el-form :model="updateForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="infoForm">
           <el-form-item :label="$t('rule.tag_key')" prop="tagKey">
-            {{updateForm.tagKey}}
+            {{ updateForm.tagKey }}
           </el-form-item>
           <el-form-item :label="$t('rule.tag_name')" prop="tagName">
-            {{updateForm.tagName}}
+            {{ updateForm.tagName }}
           </el-form-item>
           <el-form-item :label="$t('rule._index')" prop="index">
-            {{updateForm.index}}
+            {{ updateForm.index }}
           </el-form-item>
         </el-form>
       </el-drawer>

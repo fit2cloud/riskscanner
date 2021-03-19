@@ -2,13 +2,13 @@
   <el-dropdown @command="handleCommand" class="dropdown">
     <slot>
       <span class="el-dropdown-link">
-        {{currentCommand}}
+        {{ currentCommand }}
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
     </slot>
     <el-dropdown-menu slot="dropdown" chang>
       <el-dropdown-item  v-for="(command, index) in commands" :key="index" :command="command">
-        {{command}}
+        {{ command }}
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>

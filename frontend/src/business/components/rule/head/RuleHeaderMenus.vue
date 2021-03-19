@@ -42,7 +42,7 @@ export default {
 <style scoped>
 #menu-bar {
   border-bottom: 1px solid #E6E6E6;
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 </style>

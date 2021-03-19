@@ -51,7 +51,7 @@ export function cronValidate(cronExpression ){
     }
 
     //Check year param
-    if (cronParams.length == 7) {
+    if (cronParams.length === 7) {
       if (!checkYearField(cronParams[6])) {
         return false;
       }
@@ -254,7 +254,7 @@ function checkFieldWithLetter(value, letter, minimalBefore, maximalBefore,
     }
 
     if (canHaveIntBefore) {
-      if (mustHaveIntBefore && beforeLetter.length == 0) {
+      if (mustHaveIntBefore && beforeLetter.length === 0) {
         return false;
       }
 
@@ -268,7 +268,7 @@ function checkFieldWithLetter(value, letter, minimalBefore, maximalBefore,
     }
 
     if (canHaveIntAfter) {
-      if ( mustHaveIntAfter && afterLetter.length == 0 ) {
+      if ( mustHaveIntAfter && afterLetter.length === 0 ) {
         return false;
       }
 

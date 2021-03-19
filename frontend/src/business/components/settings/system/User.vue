@@ -78,7 +78,7 @@
                 :key="item.id"
                 :label="$t('role.' + item.id)"
                 :value="item.id">
-                {{$t('role.' + item.id)}}
+                {{ $t('role.' + item.id) }}
               </el-option>
             </el-select>
           </el-form-item>

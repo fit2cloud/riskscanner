@@ -8,10 +8,10 @@
     <el-submenu index="1">
       <template slot="title">
         <font-awesome-icon class="icon global" :icon="['fas', 'globe']"/>
-        <span>{{language}}</span>
+        <span>{{ language }}</span>
       </template>
       <el-menu-item v-for="(value, key) in languageMap" :key="key" @click="changeLanguage(key)">
-        {{value}} <i class="el-icon-check" v-if="language === value"/>
+        {{ value }} <i class="el-icon-check" v-if="language === value"/>
       </el-menu-item>
     </el-submenu>
   </el-menu>

@@ -8,7 +8,9 @@ import io.riskscanner.base.domain.TaskItemWithBLOBs;
 import io.riskscanner.commons.utils.PageUtils;
 import io.riskscanner.commons.utils.Pager;
 import io.riskscanner.dto.QuartzTaskDTO;
+import io.riskscanner.dto.TaskCopyDTO;
 import io.riskscanner.dto.TaskDTO;
+import io.riskscanner.dto.TaskItemLogDTO;
 import io.riskscanner.service.OrderService;
 import io.riskscanner.service.TaskService;
 import org.quartz.CronExpression;
@@ -34,17 +36,17 @@ public class TaskController {
     }
 
     @GetMapping(value = "copy/{taskId}")
-    public Object copy(@PathVariable String taskId) {
+    public TaskCopyDTO copy(@PathVariable String taskId) {
         return orderService.copy(taskId);
     }
 
     @GetMapping(value = "log/taskId/{taskId}")
-    public Object getTaskItemLogByTask(@PathVariable String taskId) {
+    public List<TaskItemLogDTO> getTaskItemLogByTask(@PathVariable String taskId) {
         return orderService.getTaskItemLogByTaskId(taskId);
     }
 
     @GetMapping(value = "quartz/log/taskId/{taskId}")
-    public Object getQuartzLogByTask(@PathVariable String taskId) {
+    public List<TaskItemLogDTO> getQuartzLogByTask(@PathVariable String taskId) {
         return orderService.getQuartzLogByTask(taskId);
     }
 
@@ -84,12 +86,12 @@ public class TaskController {
     }
 
     @GetMapping("manual/more/{taskId}")
-    public boolean morelTask(@PathVariable String taskId) throws Exception {
+    public boolean morelTask(@PathVariable String taskId) {
         return taskService.morelTask(taskId);
     }
 
     @PostMapping("manual/create")
-    public Task saveManualTask(@RequestBody QuartzTaskDTO quartzTaskDTO) throws Exception {
+    public Task saveManualTask(@RequestBody QuartzTaskDTO quartzTaskDTO) {
         quartzTaskDTO.setType("manual");
         return taskService.saveManualTask(quartzTaskDTO);
     }
@@ -100,7 +102,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "manual/dryRun")
-    public boolean dryRun(@RequestBody QuartzTaskDTO quartzTaskDTO) throws Exception {
+    public boolean dryRun(@RequestBody QuartzTaskDTO quartzTaskDTO) {
         quartzTaskDTO.setType("manual");
         return taskService.dryRun(quartzTaskDTO);
     }
@@ -140,7 +142,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "quartz/dryRun")
-    public Object quartzDryRun(@RequestBody QuartzTaskDTO quartzTaskDTO) throws Exception {
+    public boolean quartzDryRun(@RequestBody QuartzTaskDTO quartzTaskDTO) {
         quartzTaskDTO.setType("quartz");
         return taskService.dryRun(quartzTaskDTO);
     }

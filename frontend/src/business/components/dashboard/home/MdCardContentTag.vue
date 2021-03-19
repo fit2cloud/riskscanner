@@ -5,7 +5,7 @@
         <el-card :body-style="{ padding: '0px' }" style="text-align: center">
           <el-button class="md-button-dashboard bg-purple-dark" @click="goResource('count', 'all')">
             <I class="md-primary">
-              {{$t('dashboard.i18n_cost')}}
+              {{ $t('dashboard.i18n_cost') }}
               <i class="el-icon-right"></i>
             </I>
           </el-button>
@@ -13,7 +13,7 @@
             <i style="color: #f6ebbc;font-size: 48px;" class="el-icon-money"></i>
           </div>
           <div style="padding: 14px;" class="md-card-content-dashboard-t">
-            <I><u style="color: red;font-size: 30px;">{{costYAxis}}</u></I>
+            <I><u style="color: red;font-size: 30px;">{{ costYAxis }}</u></I>
           </div>
         </el-card>
       </el-col>
@@ -21,7 +21,7 @@
         <el-card :body-style="{ padding: '0px' }" style="text-align: center">
           <el-button class="md-button-dashboard bg-purple-dark" @click="goResource('count', 'all')">
             <I class="md-primary">
-              {{$t('dashboard.i18n_security')}}
+              {{ $t('dashboard.i18n_security') }}
               <i class="el-icon-right"></i>
             </I>
           </el-button>
@@ -29,7 +29,7 @@
             <i style="color: #11cfae;font-size: 48px;" class="el-icon-bangzhu"></i>
           </div>
           <div style="padding: 14px;" class="md-card-content-dashboard-t">
-            <I><u style="color: red;font-size: 30px;">{{safetyYAxis}}</u></I>
+            <I><u style="color: red;font-size: 30px;">{{ safetyYAxis }}</u></I>
           </div>
         </el-card>
       </el-col>
@@ -39,7 +39,7 @@
         <el-card :body-style="{ padding: '0px' }" style="text-align: center">
           <el-button class="md-button-dashboard bg-purple-dark" @click="goResource('count', 'all')">
             <I class="md-primary">
-              {{$t('dashboard.i18n_tagging')}}
+              {{ $t('dashboard.i18n_tagging') }}
               <i class="el-icon-right"></i>
             </I>
           </el-button>
@@ -47,7 +47,7 @@
             <i style="color: #627dec;font-size: 48px;" class="el-icon-price-tag"></i>
           </div>
           <div style="padding: 14px;" class="md-card-content-dashboard-t">
-            <I><u style="color: red;font-size: 30px;">{{taggingYAxis}}</u></I>
+            <I><u style="color: red;font-size: 30px;">{{ taggingYAxis }}</u></I>
           </div>
         </el-card>
       </el-col>
@@ -55,7 +55,7 @@
         <el-card :body-style="{ padding: '0px' }" style="text-align: center">
           <el-button class="md-button-dashboard bg-purple-dark" @click="goResource('count', 'all')">
             <I class="md-primary">
-              {{$t('dashboard.i18n_other')}}
+              {{ $t('dashboard.i18n_other') }}
               <i class="el-icon-right"></i>
             </I>
           </el-button>
@@ -63,7 +63,7 @@
             <i style="color: #0051a4;font-size: 48px;" class="el-icon-data-board"></i>
           </div>
           <div style="padding: 14px;" class="md-card-content-dashboard-t">
-            <I><u style="color: red;font-size: 30px;">{{otherYAxis}}</u></I>
+            <I><u style="color: red;font-size: 30px;">{{ otherYAxis }}</u></I>
           </div>
         </el-card>
       </el-col>

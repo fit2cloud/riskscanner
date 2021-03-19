@@ -1,7 +1,7 @@
 <template>
   <el-card class="table-card" v-loading="result.loading">
     <template v-slot:header>
-      <span class="title">{{$t('resource.i18n_not_compliance')}}</span>
+      <span class="title">{{ $t('resource.i18n_not_compliance') }}</span>
     </template>
     <md-card-content-overall/>
   </el-card>

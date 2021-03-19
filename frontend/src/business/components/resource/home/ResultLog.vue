@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row class="el-form-item-dev" v-if="row.taskItemLogDTOs.length == 0">
-      <span>{{$t('resource.i18n_no_data')}}<br></span>
+      <span>{{ $t('resource.i18n_no_data') }}<br></span>
     </el-row>
     <el-row class="el-form-item-dev" v-if="row.taskItemLogDTOs.length > 0">
       <el-table :show-header="false" :data="row.taskItemLogDTOs" class="adjust-table table-content">
@@ -11,10 +11,10 @@
               <el-row>
                 <el-col :span="24">
                   <div class="grid-content bg-purple-light">
-                    <span class="grid-content-log-span"> {{scope.row.rule.name}}</span>
+                    <span class="grid-content-log-span"> {{ scope.row.rule.name }}</span>
                     <span class="grid-content-log-span">
                       <img :src="require(`@/assets/img/platform/${scope.row.rule.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                       &nbsp;&nbsp; {{scope.row.rule.pluginName}} | {{scope.row.taskItem.regionName}}
+                       &nbsp;&nbsp; {{ scope.row.rule.pluginName }} | {{ scope.row.taskItem.regionName }}
                     </span>
                     <span class="grid-content-status-span" v-if="scope.row.taskItem.status === 'UNCHECKED'" style="color: #919398">
                       <i class="el-icon-loading"></i> {{ $t('resource.i18n_in_process') }}...
@@ -41,16 +41,16 @@
             <div class="bg-purple-div">
               <span v-for="(logItem, index) in scope.row.taskItemLogList" :key="index"
                     v-bind:class="{true: 'color-red', false: ''}[logItem.result == false]">
-                    {{logItem.createTime | timestampFormatDate}}
-                    {{logItem.operator}}
-                    {{logItem.operation}}
-                    {{logItem.output}}<br>
+                    {{ logItem.createTime | timestampFormatDate }}
+                    {{ logItem.operator }}
+                    {{ logItem.operation }}
+                    {{ logItem.output }}<br>
               </span>
               <div v-if="(scope.row.taskItem.status === 'FINISHED' || scope.row.taskItem.status === 'ERROR' || scope.row.taskItem.status === 'WARNING')
                       && (scope.row.taskItemLogList.length === 0)">
                 {{ $t('resource.the_cloud_platform') }}
-                {{scope.row.taskItem.accountLabel}} |
-                {{scope.row.taskItem.regionName}}
+                {{ scope.row.taskItem.accountLabel }} |
+                {{ scope.row.taskItem.regionName }}
                 {{ $t('resource.not_currently') }}
               </div>
             </div>
@@ -87,7 +87,6 @@
         let showLogTaskId = this.row.showLogTaskId;
         let url = "/task/log/taskId/";
         this.$get(url + showLogTaskId, response => {
-          console.log(response.data, this.row.taskItemLogDTOs)
           for (let obj of response.data) {
             for (let item of this.row.taskItemLogDTOs) {
               if (obj.taskItem.id === item.taskItem.id) {

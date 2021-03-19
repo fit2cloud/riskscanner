@@ -136,7 +136,7 @@
       initData (count) {
         if (!this.row) {
           count++;
-          if (count == 10) return 100;
+          if (count === 10) return 100;
           this.initData(count);
         } else {
           return parseInt(this.row);

@@ -48,7 +48,6 @@
   border-right: none;
   width: 0;
 }
-/* Shown when moving in bi-directional text */
 .CodeMirror div.CodeMirror-secondarycursor {
   border-left: 1px solid silver;
 }

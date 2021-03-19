@@ -50,8 +50,11 @@ public class PlatformUtils {
      * 支持的插件（云平台）
      *
      */
+//    public final static List<String> getPlugin() {
+//        return Arrays.asList(aws, azure, aliyun, huawei, tencent);
+//    }
     public final static List<String> getPlugin() {
-        return Arrays.asList(aws, azure, aliyun, huawei, tencent);
+        return Arrays.asList(aliyun, huawei, tencent);
     }
 
     /**

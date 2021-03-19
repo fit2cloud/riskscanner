@@ -17,18 +17,18 @@
         <el-table-column prop="resourceUserId" :label="$t('dashboard.resource_user_id')" min-width="10%" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('commons.operating')" min-width="10%" show-overflow-tooltip>
           <template v-slot:default="scope">
-            {{$t(scope.row.operation)}}
+            {{ $t(scope.row.operation) }}
           </template>
         </el-table-column>
         <el-table-column :label="$t('commons.description')" min-width="15%" show-overflow-tooltip>
           <template v-slot:default="scope">
-            {{scope.row.message}}
+            {{ scope.row.message }}
           </template>
         </el-table-column>
         <el-table-column prop="resourceName" :label="$t('dashboard.resource_name')" min-width="10%" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('dashboard.resource_type')" min-width="10%" show-overflow-tooltip>
           <template v-slot:default="scope">
-            {{$t(scope.row.resourceType)}}
+            {{ $t(scope.row.resourceType) }}
           </template>
         </el-table-column>
         <el-table-column prop="sourceIp" :label="$t('dashboard.source_ip')" min-width="10%" show-overflow-tooltip>

@@ -2,13 +2,13 @@
   <div v-loading="result.loading">
     <div class="recent-text">
       <i class="el-icon-time"/>
-      <span>{{options.title}}</span>
+      <span>{{ options.title }}</span>
       <i class="el-icon-refresh" @click="recent"/>
     </div>
     <el-menu-item :key="i.id" v-for="i in items" :index="getIndex(i)" :route="getRouter(i)">
       <template slot="title">
         <div class="title">{{ i.name }}</div>
-        <div class="time" v-if="options.showTime && i.updateTime">{{ i.updateTime | timestampFormatDate}}</div>
+        <div class="time" v-if="options.showTime && i.updateTime">{{ i.updateTime | timestampFormatDate }}</div>
       </template>
     </el-menu-item>
   </div>
@@ -65,7 +65,7 @@
     margin-top: -5px;
     line-height: 36px;
     color: #777777;
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
   }
 
   .recent-text span {

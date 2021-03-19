@@ -1,11 +1,11 @@
 <template>
   <span>
-    <span v-if="enableSimpleMode">{{resultList && resultList.length > 0 ? resultList[0] : ''}}</span>
+    <span v-if="enableSimpleMode">{{ resultList && resultList.length > 0 ? resultList[0] : '' }}</span>
     <div v-if="!enableSimpleMode" class="popup-result">
-      <p class="title">{{$t('schedule.cron.recent_run_time')}}</p>
+      <p class="title">{{ $t('schedule.cron.recent_run_time') }}</p>
       <ul class="popup-result-scroll">
         <template>
-          <li v-for='item in resultList' :key="item">{{item}}</li>
+          <li v-for='item in resultList' :key="item">{{ item }}</li>
         </template>
       </ul>
     </div>

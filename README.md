@@ -6,7 +6,7 @@
 
 RiskScanner 是开源的公有云安全合规扫描平台，通过 Cloud Custodian 的 YAML DSL 定义扫描规则，实现对主流公有云资源的安全合规扫描及使用优化建议。
 
-##### 功能优势:
+##### 功能优势
 
 - 等保 2.0 预检：符合等保 2.0 规范，覆盖安全审计、访问控制、入侵防范、网络架构和管理中心等各项检查；
 - CIS 合规检查：符合 CIS 规范，检查和实时监控在云上的资源是否符合 CIS 要求；
@@ -14,7 +14,7 @@ RiskScanner 是开源的公有云安全合规扫描平台，通过 Cloud Custodi
 
 RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，界面美观、用户体验好，支持的公有云包括阿里云、腾讯云、华为云等。
 
-##### 技术优势:
+##### 技术优势
 
 - 规则简单灵活：扫描规则采用简单的 YAML 格式，简单易懂、并允许用户自定义规则；
 - 支持多公有云：支持的公有云包括阿里云、腾讯云、华为云等；
@@ -22,7 +22,7 @@ RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，�
 
 ## UI 界面展示
 
-![UI 界面展示](./frontend/src/assets/img/readme/首页.png)
+![UI 界面展示](./frontend/src/assets/img/readme/dashboard.png)
 
 ## 快速开始
 

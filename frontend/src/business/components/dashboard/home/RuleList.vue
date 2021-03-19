@@ -3,11 +3,11 @@
     <template v-slot:header>
       <el-row>
         <el-col :span="20">
-          <span class="title">{{$t('rule.rule')}}</span>
+          <span class="title">{{ $t('rule.rule') }}</span>
         </el-col>
         <el-col :span="4">
           <span class="title-unfold" @click="expand" style="max-height: 20px;">
-            {{$t('dashboard.expand_all')}}
+            {{ $t('dashboard.expand_all') }}
             <i class="el-icon-full-screen"></i>
           </span>
         </el-col>
@@ -26,7 +26,7 @@
       :before-close="handleClose">
       <rule-list-expand-chart/>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{$t('commons.cancel')}}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t('commons.cancel') }}</el-button>
       </span>
     </el-dialog>
   </el-card>

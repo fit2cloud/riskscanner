@@ -10,45 +10,45 @@
             :label="group.name">
             <el-row>
               <el-col :span="4">
-                <span style="color: #909090;">{{$t('resource.scene_name')}}</span>
+                <span style="color: #909090;">{{ $t('resource.scene_name') }}</span>
               </el-col>
               <el-col :span="8">
-                <span>{{group.name}}</span>
+                <span>{{ group.name }}</span>
               </el-col>
               <el-col :span="4">
-                <span style="color: #909090;">{{$t('resource.activation_time')}}</span>
+                <span style="color: #909090;">{{ $t('resource.activation_time') }}</span>
               </el-col>
               <el-col :span="8">
-                <span>{{group.createTime | timestampFormatDate}}</span>
+                <span>{{ group.createTime | timestampFormatDate }}</span>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="4">
-                <span style="color: #909090;">{{$t('resource.scene_description')}}</span>
+                <span style="color: #909090;">{{ $t('resource.scene_description') }}</span>
               </el-col>
               <el-col :span="8">
-                <span>{{group.description}}</span>
+                <span>{{ group.description }}</span>
               </el-col>
               <el-col :span="4">
-                <span style="color: #909090;">{{$t('resource.scene_state')}}</span>
+                <span style="color: #909090;">{{ $t('resource.scene_state') }}</span>
               </el-col>
               <el-col :span="8">
-                <span>{{group.state}}</span>
+                <span>{{ group.state }}</span>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="4">
-                <span style="color: #909090;">{{$t('resource.equal_guarantee_level')}}</span>
+                <span style="color: #909090;">{{ $t('resource.equal_guarantee_level') }}</span>
               </el-col>
               <el-col :span="8">
-                <span>{{group.level}}</span>
+                <span>{{ group.level }}</span>
               </el-col>
               <el-col :span="4">
-                <span style="color: #909090;">{{$t('resource.compliance_results')}}</span>
+                <span style="color: #909090;">{{ $t('resource.compliance_results') }}</span>
               </el-col>
               <el-col :span="8">
-                <span v-if="group.status == 'risky'" style="color: red;"><i class="el-icon-warning"></i> {{$t('resource.discover_risk')}}</span>
-                <span v-if="group.status == 'risk_free'" style="color: green;"><i class="el-icon-warning"></i> {{$t('resource.no_risk')}}</span>
+                <span v-if="group.status == 'risky'" style="color: red;"><i class="el-icon-warning"></i> {{ $t('resource.discover_risk') }}</span>
+                <span v-if="group.status == 'risk_free'" style="color: green;"><i class="el-icon-warning"></i> {{ $t('resource.no_risk') }}</span>
               </el-col>
             </el-row>
           </el-tab-pane>
@@ -80,12 +80,12 @@
             <template v-slot:default="scope">
               <el-tooltip class="item" effect="dark" :content="$t('resource.risk_of_non_compliance')" placement="top">
                 <span v-if="scope.row.status === 'risky'" style="color: red;">
-                    {{$t('resource.' + scope.row.status)}} <i class="el-icon-warning"></i>
+                    {{ $t('resource.' + scope.row.status) }} <i class="el-icon-warning"></i>
                 </span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" :content="$t('resource.requirements_of_the_regulations')" placement="top">
                 <span v-if="scope.row.status === 'risk_free'" style="color: #00bb00;">
-                    {{$t('resource.' + scope.row.status)}} <i class="el-icon-warning"></i>
+                    {{ $t('resource.' + scope.row.status) }} <i class="el-icon-warning"></i>
                 </span>
               </el-tooltip>
             </template>
@@ -93,7 +93,7 @@
           <el-table-column v-slot:default="scope" :label="$t('resource.suggestions_for_improvement')" min-width="10%">
             <el-tooltip v-if="scope.row.status === 'risky'" class="item" effect="dark" :content="scope.row.improvement" placement="top">
               <span style="color: #0066ac;">
-                {{$t('resource.suggestions_for_improvement')}} <i class="el-icon-question"></i>
+                {{ $t('resource.suggestions_for_improvement') }} <i class="el-icon-question"></i>
               </span>
             </el-tooltip>
             <span v-if="scope.row.status === 'risk_free'">
@@ -114,47 +114,47 @@
       <el-drawer class="rtl" :title="$t('resource.report_detail')" :visible.sync="visible" size="60%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
           <el-row class="el-row-c">
-            <el-col :span="8"><span style="color: #909090;">{{$t('resource.basic_requirements_for_grade_protection')}}</span></el-col>
-            <el-col :span="16"><span>{{detailForm.project}}</span></el-col>
+            <el-col :span="8"><span style="color: #909090;">{{ $t('resource.basic_requirements_for_grade_protection') }}</span></el-col>
+            <el-col :span="16"><span>{{ detailForm.project }}</span></el-col>
           </el-row>
           <el-row class="el-row-c">
-            <el-col :span="8"><span style="color: #909090;">{{$t('resource.security_level')}}</span></el-col>
-            <el-col :span="16"><span>{{detailForm.itemSortFirstLevel}}</span></el-col>
+            <el-col :span="8"><span style="color: #909090;">{{ $t('resource.security_level') }}</span></el-col>
+            <el-col :span="16"><span>{{ detailForm.itemSortFirstLevel }}</span></el-col>
           </el-row>
           <el-row class="el-row-c">
-            <el-col :span="8"><span style="color: #909090;">{{$t('resource.control_point')}}</span></el-col>
-            <el-col :span="16"><span>{{detailForm.itemSortSecondLevel}}</span></el-col>
+            <el-col :span="8"><span style="color: #909090;">{{ $t('resource.control_point') }}</span></el-col>
+            <el-col :span="16"><span>{{ detailForm.itemSortSecondLevel }}</span></el-col>
           </el-row>
           <el-row class="el-row-c">
-            <el-col :span="8"><span style="color: #909090;">{{$t('resource.pre_check_results')}}</span></el-col>
+            <el-col :span="8"><span style="color: #909090;">{{ $t('resource.pre_check_results') }}</span></el-col>
             <el-col :span="16"><span>
               <el-tooltip class="item" effect="dark" :content="$t('resource.risk_of_non_compliance')" placement="top">
                   <span v-if="detailForm.status === 'risky'" style="color: red;">
-                      {{$t('resource.' + detailForm.status)}} <i class="el-icon-warning"></i>
+                      {{ $t('resource.' + detailForm.status) }} <i class="el-icon-warning"></i>
                   </span>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" :content="$t('resource.requirements_of_the_regulations')" placement="top">
                   <span v-if="detailForm.status === 'risk_free'" style="color: #00bb00;">
-                      {{$t('resource.' + detailForm.status)}} <i class="el-icon-warning"></i>
+                      {{ $t('resource.' + detailForm.status) }} <i class="el-icon-warning"></i>
                   </span>
                 </el-tooltip>
             </span></el-col>
           </el-row>
           <el-row class="el-row-c">
-            <el-col :span="8"><span style="color: #909090;">{{$t('resource.i18n_detail')}} <i class="el-icon-question"></i></span></el-col>
+            <el-col :span="8"><span style="color: #909090;">{{ $t('resource.i18n_detail') }} <i class="el-icon-question"></i></span></el-col>
             <el-col :span="16">
               <span>
                 <el-table :data="detailForm.taskList" style="width: 100%">
                     <el-table-column :label="$t('rule.rule_name')" min-width="75%">
                       <template slot-scope="scope">
-                        <span v-if="!!scope.row.returnSum && scope.row.returnSum>0"><i class="el-icon-warning-outline" style="color: red"></i> {{scope.row.taskName}}</span>
-                        <span v-else><i class="el-icon-circle-check" style="color: #00bb00"></i> {{scope.row.taskName}}</span>
+                        <span v-if="!!scope.row.returnSum && scope.row.returnSum>0"><i class="el-icon-warning-outline" style="color: red"></i> {{ scope.row.taskName }}</span>
+                        <span v-else><i class="el-icon-circle-check" style="color: #00bb00"></i> {{ scope.row.taskName }}</span>
                       </template>
                     </el-table-column>
                     <el-table-column prop="returnSum" :label="$t('resource.risk_point')" min-width="25%">
                       <template slot-scope="scope">
-                        <el-link v-if="!!scope.row.returnSum && scope.row.returnSum>0" style="color: red" @click="innerDrawerOpen(scope.row)"> {{scope.row.returnSum?scope.row.returnSum:0}} / {{scope.row.resourcesSum?scope.row.resourcesSum:0}}</el-link>
-                        <span v-else> {{scope.row.returnSum?scope.row.returnSum:0}} / {{scope.row.resourcesSum?scope.row.resourcesSum:0}}</span>
+                        <el-link v-if="!!scope.row.returnSum && scope.row.returnSum>0" style="color: red" @click="innerDrawerOpen(scope.row)"> {{ scope.row.returnSum?scope.row.returnSum:0 }} / {{ scope.row.resourcesSum?scope.row.resourcesSum:0 }}</el-link>
+                        <span v-else> {{ scope.row.returnSum?scope.row.returnSum:0 }} / {{ scope.row.resourcesSum?scope.row.resourcesSum:0 }}</span>
                       </template>
                     </el-table-column>
                 </el-table>
@@ -162,8 +162,8 @@
             </el-col>
           </el-row>
           <el-row class="el-row-c">
-            <el-col :span="8"><span style="color: #909090;">{{$t('resource.suggestions_for_improvement')}} <i class="el-icon-question"></i></span></el-col>
-            <el-col :span="16"><span>{{detailForm.improvement}}</span></el-col>
+            <el-col :span="8"><span style="color: #909090;">{{ $t('resource.suggestions_for_improvement') }} <i class="el-icon-question"></i></span></el-col>
+            <el-col :span="16"><span>{{ detailForm.improvement }}</span></el-col>
           </el-row>
           <template v-slot:footer>
             <dialog-footer
@@ -191,7 +191,7 @@
                     :label="item.name"
                     :value="item.id">
                     <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                    &nbsp;&nbsp; {{$t(item.name)}}
+                    &nbsp;&nbsp; {{ $t(item.name) }}
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -318,8 +318,8 @@
           {text: this.$t('account.aliyun'), value: 'fit2cloud-aliyun-plugin'},
           {text: this.$t('account.tencent'), value: 'fit2cloud-qcloud-plugin'},
           {text: this.$t('account.huawei'), value: 'fit2cloud-huawei-plugin'},
-          {text: this.$t('account.aws'), value: 'fit2cloud-aws-plugin'},
-          {text: this.$t('account.azure'), value: 'fit2cloud-azure-plugin'}
+          // {text: this.$t('account.aws'), value: 'fit2cloud-aws-plugin'},
+          // {text: this.$t('account.azure'), value: 'fit2cloud-azure-plugin'}
         ],
         visible: false,
         accountId: localStorage.getItem(ACCOUNT_ID),
@@ -589,6 +589,10 @@
   }
 
   .border-card {
+  }
+
+  .rtl >>> .el-drawer{
+    overflow: scroll;
   }
   /deep/ :focus{outline:0;}
 </style>

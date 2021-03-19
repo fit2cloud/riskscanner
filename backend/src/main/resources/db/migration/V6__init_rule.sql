@@ -1,98 +1,98 @@
-CREATE TABLE IF NOT EXISTS `rule`
+CREATE TABLE IF NOT EXISTS rule
 (
-    `id`                         varchar(50)         NOT NULL,
-    `name`                       varchar(50)         DEFAULT NULL UNIQUE COMMENT '规则名称',
-    `status`                     tinyint(1)          DEFAULT 1 COMMENT '规则状态(启用1，停用0)',
-    `severity`                   varchar(32)         DEFAULT NULL COMMENT '风险等级',
-    `description`                varchar(255)        DEFAULT NULL COMMENT '`描述',
-    `script`                     mediumtext          DEFAULT NULL COMMENT '脚本',
-    `parameter`                  varchar(1024)       DEFAULT NULL COMMENT '参数',
-    `plugin_id`                  varchar(64)         DEFAULT NULL COMMENT '插件ID',
-    `plugin_name`                varchar(64)         DEFAULT NULL COMMENT '云平台名称',
-    `plugin_icon`                varchar(128)        DEFAULT NULL COMMENT '云平台图标',
-    `last_modified`              bigint(14)          DEFAULT NULL COMMENT '上次更新时间',
-    `flag`                       tinyint(1)          NOT NULL DEFAULT 0 COMMENT '是否内置',
-    `scan_type`                  varchar(32)         DEFAULT NULL COMMENT '扫描类型',
-    PRIMARY KEY (`id`),
-    KEY `IDX_NAME` (`name`)
+    id                         varchar(50)         NOT NULL,
+    name                       varchar(50)         DEFAULT NULL UNIQUE COMMENT '规则名称',
+    status                     tinyint(1)          DEFAULT 1 COMMENT '规则状态(启用1，停用0)',
+    severity                   varchar(32)         DEFAULT NULL COMMENT '风险等级',
+    description                varchar(255)        DEFAULT NULL COMMENT '描述',
+    script                     mediumtext          DEFAULT NULL COMMENT '脚本',
+    parameter                  varchar(1024)       DEFAULT NULL COMMENT '参数',
+    plugin_id                  varchar(64)         DEFAULT NULL COMMENT '插件 ID',
+    plugin_name                varchar(64)         DEFAULT NULL COMMENT '云平台名称',
+    plugin_icon                varchar(128)        DEFAULT NULL COMMENT '云平台图标',
+    last_modified              bigint(14)          DEFAULT NULL COMMENT '上次更新时间',
+    flag                       tinyint(1)          NOT NULL DEFAULT 0 COMMENT '是否内置',
+    scan_type                  varchar(32)         DEFAULT NULL COMMENT '扫描类型',
+    PRIMARY KEY ( id ),
+    KEY IDX_NAME ( name )
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
 
-CREATE TABLE IF NOT EXISTS `rule_tag`
+CREATE TABLE IF NOT EXISTS rule_tag
 (
-    `tag_key`                    varchar(50)         NOT NULL DEFAULT '' UNIQUE COMMENT '标签标识',
-    `tag_name`                   varchar(100)        NOT NULL DEFAULT '' UNIQUE COMMENT '标签名',
-    `_index`                     int(11)             NOT NULL AUTO_INCREMENT COMMENT '索引',
-    `flag`                       tinyint(1)          NOT NULL DEFAULT 0 COMMENT '是否内置',
-    PRIMARY KEY (`tag_key`),
-    KEY `IDX_KEY_NAME` (`tag_name`),
-    KEY `IDX_INDEX` (`_index`)
+    tag_key                    varchar(50)         NOT NULL DEFAULT '' UNIQUE COMMENT '标签标识',
+    tag_name                   varchar(100)        NOT NULL DEFAULT '' UNIQUE COMMENT '标签名',
+    _index                     int(11)             NOT NULL AUTO_INCREMENT COMMENT '索引',
+    flag                       tinyint(1)          NOT NULL DEFAULT 0 COMMENT '是否内置',
+    PRIMARY KEY ( tag_key ),
+    KEY IDX_KEY_NAME ( tag_name ),
+    KEY IDX_INDEX ( _index )
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 
-CREATE TABLE IF NOT EXISTS `rule_tag_mapping` (
-    `id`                         int(10)             NOT NULL AUTO_INCREMENT,
-    `rule_id`                    varchar(50)         NOT NULL DEFAULT '' COMMENT '规则ID',
-    `tag_key`                    varchar(50)         NOT NULL DEFAULT '' COMMENT '标签标识',
-    PRIMARY KEY (`id`),
-    KEY `IDX_RULE_ID` (`rule_id`),
-    KEY `IDX_TAG_KEY` (`tag_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS rule_tag_mapping (
+    id                         int(10)             NOT NULL AUTO_INCREMENT,
+    rule_id                    varchar(50)         NOT NULL DEFAULT '' COMMENT '规则 ID',
+    tag_key                    varchar(50)         NOT NULL DEFAULT '' COMMENT '标签标识',
+    PRIMARY KEY ( id ),
+    KEY IDX_RULE_ID ( rule_id ),
+    KEY IDX_TAG_KEY ( tag_key )
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
 
-CREATE TABLE IF NOT EXISTS `rule_type`
+CREATE TABLE IF NOT EXISTS rule_type
 (
-    `id`                         varchar(50)         NOT NULL,
-    `rule_id`                    varchar(50)         NOT NULL DEFAULT '' COMMENT '规则ID',
-    `resource_type`              varchar(50)         NOT NULL DEFAULT '' COMMENT '资源类型',
-    PRIMARY KEY (`id`)
+    id                         varchar(50)         NOT NULL,
+    rule_id                    varchar(50)         NOT NULL DEFAULT '' COMMENT '规则 ID',
+    resource_type              varchar(50)         NOT NULL DEFAULT '' COMMENT '资源类型',
+    PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
 
-CREATE TABLE IF NOT EXISTS `rule_account_parameter`
+CREATE TABLE IF NOT EXISTS rule_account_parameter
 (
-    `id`                         int(11)             NOT NULL AUTO_INCREMENT,
-    `account_id`                 varchar(50)         DEFAULT NULL COMMENT '云账号ID',
-    `rule_id`                    varchar(50)         DEFAULT NULL COMMENT '规则ID',
-    `parameter`                  varchar(1024)       DEFAULT NULL COMMENT '参数',
-    `regions`                    longtext            DEFAULT NULL COMMENT '区域',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+    id                         int(11)             NOT NULL AUTO_INCREMENT,
+    account_id                 varchar(50)         DEFAULT NULL COMMENT '云账号 ID',
+    rule_id                    varchar(50)         DEFAULT NULL COMMENT '规则 ID',
+    parameter                  varchar(1024)       DEFAULT NULL COMMENT '参数',
+    regions                    longtext            DEFAULT NULL COMMENT '区域',
+    PRIMARY KEY (id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `rule_group` (
-    `id`                         int(10)             NOT NULL AUTO_INCREMENT,
-    `name`                       varchar(50)         DEFAULT NULL COMMENT '规则组名称',
-    `description`                varchar(256)        DEFAULT NULL COMMENT '规则组描述',
-    `level`                      varchar(64)         DEFAULT NULL COMMENT '风险级别',
-    `plugin_id`                  varchar(64)         DEFAULT NULL COMMENT '插件ID',
-    `flag`                       tinyint(1)          NOT NULL DEFAULT 0 COMMENT '是否内置',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS rule_group (
+    id                         int(10)             NOT NULL AUTO_INCREMENT,
+    name                       varchar(50)         DEFAULT NULL COMMENT '规则组名称',
+    description                varchar(256)        DEFAULT NULL COMMENT '规则组描述',
+    level                      varchar(64)         DEFAULT NULL COMMENT '风险级别',
+    plugin_id                  varchar(64)         DEFAULT NULL COMMENT '插件 ID',
+    flag                       tinyint(1)          NOT NULL DEFAULT 0 COMMENT '是否内置',
+    PRIMARY KEY (id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `rule_group_mapping` (
-    `id`                         int(10)             NOT NULL AUTO_INCREMENT,
-    `rule_id`                    varchar(50)         DEFAULT NULL COMMENT '规则ID',
-    `group_id`                   varchar(50)         DEFAULT NULL COMMENT '规则组ID',
-    PRIMARY KEY (`id`),
-    KEY `IDX_RULE_ID` (`rule_id`),
-    KEY `IDX_GROUP_ID` (`group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS rule_group_mapping (
+    id                         int(10)             NOT NULL AUTO_INCREMENT,
+    rule_id                    varchar(50)         DEFAULT NULL COMMENT '规则 ID',
+    group_id                   varchar(50)         DEFAULT NULL COMMENT '规则组 ID',
+    PRIMARY KEY (id),
+    KEY IDX_RULE_ID (rule_id),
+    KEY IDX_GROUP_ID (group_id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `rule_inspection_report` (
-    `id`                         int(10)             NOT NULL AUTO_INCREMENT,
-    `project`                    varchar(256)        DEFAULT NULL COMMENT '检查项目',
-    `item_sort_first_level`      varchar(50)         DEFAULT NULL COMMENT '检查项一级分类',
-    `item_sort_second_level`     varchar(50)         DEFAULT NULL COMMENT '检查项二级分类',
-    `improvement`                varchar(512)        DEFAULT NULL COMMENT '改进建议',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS rule_inspection_report (
+    id                         int(10)             NOT NULL AUTO_INCREMENT,
+    project                    varchar(256)        DEFAULT NULL COMMENT '检查项目',
+    item_sort_first_level      varchar(50)         DEFAULT NULL COMMENT '检查项一级分类',
+    item_sort_second_level     varchar(50)         DEFAULT NULL COMMENT '检查项二级分类',
+    improvement                varchar(512)        DEFAULT NULL COMMENT '改进建议',
+    PRIMARY KEY (id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `rule_inspection_report_mapping` (
-    `id`                         int(10)             NOT NULL AUTO_INCREMENT,
-    `rule_id`                    varchar(50)         DEFAULT NULL COMMENT '规则ID',
-    `report_id`                  varchar(50)         DEFAULT NULL COMMENT '等保合规检查报告ID',
-    PRIMARY KEY (`id`),
-    KEY `IDX_RULE_ID` (`rule_id`),
-    KEY `IDX_REPORT_ID` (`report_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS rule_inspection_report_mapping (
+    id                         int(10)             NOT NULL AUTO_INCREMENT,
+    rule_id                    varchar(50)         DEFAULT NULL COMMENT '规则 ID',
+    report_id                  varchar(50)         DEFAULT NULL COMMENT '等保合规检查报告 ID',
+    PRIMARY KEY (id),
+    KEY IDX_RULE_ID (rule_id),
+    KEY IDX_REPORT_ID (report_id)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
 
 INSERT INTO rule_tag (tag_key, tag_name, _index, flag) VALUES ('safety', '安全', 1, 1);
@@ -204,217 +204,217 @@ INSERT INTO rule_inspection_report VALUES (96, '确保服务器端加密设置�
 INSERT INTO rule_inspection_report VALUES (97, '确保RDS实例不对外开放。', '安全计算环境', '安全数据保护', '查看您账号下的OSS Bucket是否启用了加密，若未加密，会导致该规则不合规。');
 
 
-INSERT INTO `rule` VALUES ('028b8362-08f2-404c-8e15-935426bb8545', 'Aliyun RDS实例公网访问扫描', 1, 'HighRisk', 'Aliyun  检测您账号下RDS实例不允许任意来源公网访问，视为“合规”', 'policies:\n    # 检测您账号下RDS实例不允许任意来源公网访问，视为“合规”。\n    - name: aliyun-rds-internet-access\n      resource: aliyun.rds\n      filters:\n        - type: internet-access\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"启用公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('083d24e2-881f-488b-b120-8f2cd961707f', 'Aliyun SecurityGroup安全组配置扫描', 1, 'HighRisk', 'Aliyun  账号下ECS安全组配置不为“0.0.0.0/0”，视为“合规”，否则属于“不合规”', 'policies:\n    # 账号下ECS安全组配置不为“0.0.0.0/0”，视为“合规”。\n    - name: aliyun-sg-source-cidr-ip\n      resource: aliyun.security-group\n      filters:\n        - type: source-cidr-ip\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"目标IP地址段\",\"defaultValue\":\"\\\"0.0.0.0/0\\\"\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('0b2ece35-a17e-4584-ac2d-0b11483d04fb', 'Aliyun EIP带宽峰值扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的弹性IP实例是否达到最低带宽要求', 'policies:\n    # 检测您账号下的弹性IP实例是否达到最低带宽要求。\n    - name: aliyun-eip-bandwidth\n      resource: aliyun.eip\n      filters:\n        - type: bandwidth\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"按带宽计费的公网型实例的带宽峰值\",\"defaultValue\":\"10\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('1299a29b-e19d-4186-93fd-a18ed1b2584a', 'Aliyun SLB负载均衡HTTPS监听扫描', 1, 'HighRisk', 'Aliyun  SLB负载均衡开启HTTPS监听，视为“合规”，否则属于“不合规”', 'policies:\n    # 负载均衡开启HTTPS监听，视为“合规”。\n    - name: aliyun-slb-listener\n      resource: aliyun.slb\n      filters:\n        - type: listener\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"负载均衡实例前端使用的协议\",\"defaultValue\":\"https\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('2533542d-5422-4bd5-8849-6a69ec05a874', 'Aliyun Disk磁盘加密状态扫描', 1, 'HighRisk', 'Aliyun 账号下所有的磁盘均已加密；若您配置阈值，则磁盘加密的Id需存在您列出的阈值中，视为“合规”', 'policies:\n    # 账号下所有的磁盘是否加密。\n    - name: aliyun-encrypted-disk\n      resource: aliyun.disk\n      filters:\n        - type: encrypted\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"磁盘是否加密( true/false )\",\"defaultValue\":\"false\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('29763f5e-ef4c-431d-b44f-39cd1b5b5363', 'Aliyun Redis实例网络类型扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的Redis实例是否运行在VPC网络环境下', 'policies:\n    # 检测您账号下的Redis实例是否运行在VPC网络环境下。\n    - name: aliyun-rds-network-type\n      resource: aliyun.redis\n      filters:\n        - type: network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的网络类型:CLASSIC经典网络/VPC网络\",\"defaultValue\":\"VPC\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('2adbae64-6403-4dfb-92ab-637354da49f8', 'Aliyun PolarDB实例公网访问扫描', 1, 'HighRisk', 'Aliyun  账号下PolarDB实例不允许任意来源公网访问，视为“合规”', 'policies:\n    # 账号下Polar实例不允许任意来源公网访问，视为“合规”。\n    - name: aliyun-polardb-internet-access\n      resource: aliyun.polardb\n      filters:\n        - type: internet-access\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('339cf3fc-f9d9-457e-ac72-40d37c402bdf', 'Aliyun SLB负载均衡实例公网IP扫描', 1, 'HighRisk', 'Aliyun  SLB负载均衡实例未直接绑定公网IP，视为“合规”。该规则仅适用于 IPv4 协议', 'policies:\n    # 负载均衡实例未直接绑定公网IP，视为“合规”。该规则仅适用于 IPv4 协议。\n    - name: aliyun-slb-address-type\n      resource: aliyun.slb\n      filters:\n        - type: address-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网IP/内网IP( internet/intranet )\",\"defaultValue\":\"internet\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('3e5d47ac-86b6-40d1-a191-1b2ff2496118', 'Aliyun ECS实例网络类型扫描', 1, 'HighRisk', 'Aliyun  账号下所有ECS实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”', 'policies:\n    # 账号下所有ECS实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”。\n    - name: aliyun-ecs-instance-network-type\n      resource: aliyun.ecs\n      filters:\n        - type: instance-network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的网络类型:classic经典网络/vpc网络\",\"defaultValue\":\"vpc\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('429f8396-e04b-49d9-8b38-80647ac87e66', 'Aliyun OSS公开读取访问权限扫描', 1, 'HighRisk', 'Aliyun  查看您的OSS存储桶是否不允许公开读取访问权限。如果某个OSS存储桶策略或存储桶 ACL 允许公开读取访问权限，则该存储桶不合规', 'policies:\n    # 查看您的OSS存储桶是否不允许公开读取访问权限。\n    - name: aliyun-oss-public-read\n      resource: aliyun.oss\n      filters:\n        - type: global-grants\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公开读取访问权限\",\"defaultValue\":\"public-read\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('44343a84-39e2-4fbc-b8c5-d3ac06186501', 'Aliyun MongoDB实例网络类型扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的MongoDB实例是否运行在VPC网络环境下', 'policies:\n    # 检测您账号下的MongoDB实例是否运行在VPC网络环境下。\n    - name: aliyun-mongodb-network-type\n      resource: aliyun.mongodb\n      filters:\n        - type: network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的网络类型:Classic经典网络/VPC网络\",\"defaultValue\":\"VPC\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('594e7673-c0db-40a4-9a0c-f70f0e58cc62', 'Aliyun SLB带宽峰值扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的负载均衡实例是否达到最低带宽要求', 'policies:\n    # 检测您账号下的负载均衡实例是否达到最低带宽要求。\n    - name: aliyun-slb-bandwidth\n      resource: aliyun.slb\n      filters:\n        - type: bandwidth\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"按带宽计费的公网型实例的带宽峰值\",\"defaultValue\":\"10\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('6fd132c0-b4df-4685-b132-5441d1aef2f8', 'Aliyun ECS实例公网IP扫描', 1, 'HighRisk', 'Aliyun ECS实例未直接绑定公网IP，视为“合规”，否则属于“不合规”。该规则仅适用于 IPv4 协议', 'policies:\n    # ECS实例未直接绑定公网IP，视为“合规”。该规则仅适用于 IPv4 协议。\n    - name: aliyun-ecs-public-ipaddress\n      resource: aliyun.ecs\n      filters:\n        - type: public-ip-address', '[]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('70c1e701-b87a-4e4d-8648-3db7ecc2c066', 'Aliyun RAM用户MFA扫描', 1, 'HighRisk', 'Aliyun 检测RAM用户是否开通MFA二次验证登录，开通视为“合规”，否则属于“不合规”', 'policies:\n    # 检测RAM用户是否开通MFA二次验证登录。\n    - name: aliyun-ram-mfa\n      resource: aliyun.ram\n      filters:\n        - type: mfa\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"RAM用户是否开通MFA二次验证登录(true/false)\",\"defaultValue\":\"false\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('7d323895-f07b-4845-8b3d-01c78180f270', 'Aliyun MongoDB实例公网访问扫描', 1, 'HighRisk', 'Aliyun  账号下MongoDB实例不允许任意来源公网访问，视为“合规”', 'policies:\n    # 账号下MongoDB实例不允许任意来源公网访问，视为“合规”。\n    - name: aliyun-mongodb-internet-access\n      resource: aliyun.mongodb\n      filters:\n        - type: internet-access\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('88a77028-0e2a-4201-a713-ded3a94864f9', 'Aliyun SLB公网访问扫描', 1, 'HighRisk', 'Aliyun  账号下SLB不允许任意来源公网访问，视为“合规”', 'policies:\n    # 账号下SLB不允许任意来源公网访问，视为“合规”。\n    - name: aliyun-slb-acls\n      resource: aliyun.slb\n      filters:\n        - type: acls\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('8c635fda-7f89-4d5c-b0f4-2116f1b65554', 'Aliyun OSS防盗链扫描', 1, 'HighRisk', 'Aliyun  检测OSS Bucket是否开启防盗链开关，已开通视为合规', 'policies:\n    # 检测OSS Bucket是否开启防盗链开关，已开通视为合规。\n    - name: aliyun-oss-bucket-referer\n      resource: aliyun.oss\n      filters:\n        - type: bucket-referer\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"是否开启防盗链开关\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('9d94781e-922d-48c3-90a1-393dc79f2442', 'Aliyun OSS存储桶加密扫描', 1, 'HighRisk', 'Aliyun  查看并确认您的OSS存储桶启用了默认加密，未开启则该存储桶不合规', 'policies:\n    # 查看并确认您的OSS存储桶是否启用了默认加密。\n    - name: aliyun-oss-encryption\n      resource: aliyun.oss\n      filters:\n        - type: encryption', '[]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('ae65e90c-124c-4a81-8081-746d47f44e8f', 'Aliyun RDS实例高可用状态扫描', 1, 'HighRisk', 'Aliyun 账号下RDS实例具备高可用能力，视为“合规”，否则属于“不合规”', 'policies:\n    # 账号下RDS实例具备高可用能力，视为“合规”，否则属于“不合规”。\n    - name: aliyun-rds-high-availability\n      resource: aliyun.rds\n      filters:\n        - type: high-availability', '[]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('ba1edc8f-0944-4ebb-a953-f655aa710e84', 'Aliyun CDN域名HTTPS监听扫描', 1, 'HighRisk', 'Aliyun  检测CDN域名是否开启HTTPS监听，若开启视为“合规”，否则视为不合规', 'policies:\n    # 检测CDN域名是否开启HTTPS监听，若开启视为“合规”。\n    - name: aliyun-cdn-ssl-protocol\n      resource: aliyun.cdn\n      filters:\n        - type: ssl-protocol\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"https开关。 \\\"on\\\"：已开启。\\\"off\\\"：未开启\",\"defaultValue\":\"\\\"off\\\"\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('beda16d0-93fd-4366-9ebf-f5ce1360cd60', 'Aliyun RDS实例多可用区扫描', 1, 'HighRisk', 'Aliyun 账号下RDS实例支持多可用区，视为“合规”，否则视为“不合规”', 'policies:\n    # 账号下RDS实例支持多可用区，视为“合规”。\n    - name: aliyun-rds-available-zones\n      resource: aliyun.rds\n      filters:\n        - type: available-zones\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"是否支持多可用区\",\"defaultValue\":\"false\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('c57f055e-fd84-4af3-ba97-892a8fdc1fed', 'Aliyun PolarDB实例网络类型扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的PolarDB实例是否运行在VPC网络环境下', 'policies:\n    # 检测您账号下的polardb实例是否运行在vpc网络环境下。\n    - name: aliyun-polardb-dbcluster-network-type\n      resource: aliyun.polardb\n      filters:\n        - type: dbcluster-network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的网络类型:Classic经典网络/VPC网络\",\"defaultValue\":\"VPC\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('c95fde94-53a5-4658-98a4-56a0c6d951d4', 'Aliyun RDS实例的访问模式扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的RDS实例是否启用数据库代理状态链接形式，Safe视为“合规”，Standard属于“不合规”', 'policies:\n    # 检测您账号下的RDS实例是否启用数据库代理状态链接形式，Safe视为“合规”，Standard属于“不合规”。\n    - name: aliyun-rds-connection-mode\n      resource: aliyun.rds\n      filters:\n       - type: connection-mode\n         value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的访问模式:Standard/Safe\",\"defaultValue\":\"Safe\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('d690be79-2e8c-4054-bbe6-496bd29e91fe', 'Aliyun RDS实例白名单扫描', 1, 'HighRisk', 'Aliyun  测您账号下RDS数据库实例是否启用安全白名单功能，已开通视为“合规”', 'policies:\n    #检测您账号下RDS数据库实例是否启用安全白名单功能，已开通视为“合规”。\n    - name: aliyun-rds-security-ip-mode\n      resource: aliyun.rds\n      filters:\n        - type: security-ip-mode\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"白名单模式:normal通用模式/safety高安全模式\",\"defaultValue\":\"safety\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('d826c85d-cb42-4824-ab13-6d7a8026d9ae', 'Aliyun OSS公开写入访问权限扫描', 1, 'HighRisk', 'Aliyun  查看OSS存储桶是否不允许公开写入访问权限。如果某个OSS存储桶策略或存储桶 ACL 允许公开写入访问权限，则该存储桶不合规', 'policies:\n    # 查看OSS存储桶是否不允许公开写入访问权限。\n    - name: aliyun-oss-public-read-write\n      resource: aliyun.oss\n      filters:\n        - type: global-grants\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公开写入访问权限\",\"defaultValue\":\"public-read-write\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('df4fb45c-f9bc-4c8e-996d-036c9d2f1800', 'Aliyun SecurityGroup高危安全组扫描', 1, 'HighRisk', 'Aliyun  检测安全组是否开启风险端口，未开启视为“合规”，否则属于“不合规”', 'policies:\n  #扫描开放以下高危端口的安全组：\n  #(20,21,22,25,80,773,765,1733,1737,3306,3389,7333,5732,5500)\n  - name: aliyun-security-group\n    resource: aliyun.security-group\n    description: |\n      Add Filter all security groups, filter ports\n      [20,21,22,25,80,773,765,1733,1737,3306,3389,7333,5732,5500]\n      on 0.0.0.0/0 or\n      [20,21,22,25,80,773,765, 1733,1737,3306,3389,7333,5732,5500]\n      on ::/0 (IPv6)\n    filters:\n        - or:\n            - type: ingress\n              IpProtocol: \"-1\"\n              Ports: ${{ipv4_port}}\n              Cidr: \"0.0.0.0/0\"\n            - type: ingress\n              IpProtocol: \"-1\"\n              Ports: ${{ipv6_port}}\n              Cidr: \"::/0\"', '[{\"key\":\"ipv4_port\",\"name\":\"ipv4端口\",\"defaultValue\":\"[20,21,22,25,80,773,765, 1733,1737,3306,3389,7333,5732,5500]\",\"required\":true},{\"key\":\"ipv6_port\",\"name\":\"ipv6端口\",\"defaultValue\":\"[20,21,22,25,80,773,765, 1733,1737,3306,3389,7333,5732,5500]\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('e054787c-5826-4242-8450-b0daa926ea40', 'Aliyun RDS实例网络类型扫描', 1, 'HighRisk', 'Aliyun  账号下RDS实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”', 'policies:\n    # 账号下RDS实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”。\n    - name: aliyun-rds-instance-network-type\n      resource: aliyun.rds\n      filters:\n        - type: instance-network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的网络类型:Classic经典网络/VPC网络\",\"defaultValue\":\"VPC\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', 'Aliyun SLB负载均衡实例关联到VPC扫描', 1, 'HighRisk', 'Aliyun  账号下负载均衡实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”，否则视为不合规', 'policies:\n    # 账号下负载均衡实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”。\n    - name: aliyun-slb-network-type\n      resource: aliyun.slb\n      filters:\n        - type: network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"负载均衡实例的网络类型(不等于)\",\"defaultValue\":\"vpc\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('fdef013f-ce14-468a-9af4-1c0fabc7e6e1', 'Aliyun OSS对象存储桶冗余存储扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的对象存储桶是否启用同城冗余存储（数据容灾类型），若开启视为“合规”，否则视为不合规', 'policies:\n    # 检测您账号下的对象存储桶是否启用同城冗余存储，若开启视为“合规”。\n    - name: aliyun-oss-data-redundancy-type\n      resource: aliyun.oss\n      filters:\n        - type: data-redundancy-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"Bucket的数据容灾类型。有效值：LRS、ZRS\",\"defaultValue\":\"ZRS\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
-INSERT INTO `rule` VALUES ('ff153eea-2628-440b-b054-186d6f5a7708', 'Aliyun Redis实例公网访问扫描', 1, 'HighRisk', 'Aliyun  账号下Redis实例不允许任意来源公网访问，视为“合规”', 'policies:\n    # 账号下Redis实例不允许任意来源公网访问，视为“合规”。\n    - name: aliyun-redis-internet-access\n      resource: aliyun.redis\n      filters:\n        - type: internet-access\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('028b8362-08f2-404c-8e15-935426bb8545', 'Aliyun RDS实例公网访问扫描', 1, 'HighRisk', 'Aliyun  检测您账号下RDS实例不允许任意来源公网访问，视为“合规”', 'policies:\n    # 检测您账号下RDS实例不允许任意来源公网访问，视为“合规”。\n    - name: aliyun-rds-internet-access\n      resource: aliyun.rds\n      filters:\n        - type: internet-access\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"启用公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('083d24e2-881f-488b-b120-8f2cd961707f', 'Aliyun SecurityGroup安全组配置扫描', 1, 'HighRisk', 'Aliyun  账号下ECS安全组配置不为“0.0.0.0/0”，视为“合规”，否则属于“不合规”', 'policies:\n    # 账号下ECS安全组配置不为“0.0.0.0/0”，视为“合规”。\n    - name: aliyun-sg-source-cidr-ip\n      resource: aliyun.security-group\n      filters:\n        - type: source-cidr-ip\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"目标IP地址段\",\"defaultValue\":\"\\\"0.0.0.0/0\\\"\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('0b2ece35-a17e-4584-ac2d-0b11483d04fb', 'Aliyun EIP带宽峰值扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的弹性IP实例是否达到最低带宽要求', 'policies:\n    # 检测您账号下的弹性IP实例是否达到最低带宽要求。\n    - name: aliyun-eip-bandwidth\n      resource: aliyun.eip\n      filters:\n        - type: bandwidth\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"按带宽计费的公网型实例的带宽峰值\",\"defaultValue\":\"10\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('1299a29b-e19d-4186-93fd-a18ed1b2584a', 'Aliyun SLB负载均衡HTTPS监听扫描', 1, 'HighRisk', 'Aliyun  SLB负载均衡开启HTTPS监听，视为“合规”，否则属于“不合规”', 'policies:\n    # 负载均衡开启HTTPS监听，视为“合规”。\n    - name: aliyun-slb-listener\n      resource: aliyun.slb\n      filters:\n        - type: listener\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"负载均衡实例前端使用的协议\",\"defaultValue\":\"https\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('2533542d-5422-4bd5-8849-6a69ec05a874', 'Aliyun Disk磁盘加密状态扫描', 1, 'HighRisk', 'Aliyun 账号下所有的磁盘均已加密；若您配置阈值，则磁盘加密的Id需存在您列出的阈值中，视为“合规”', 'policies:\n    # 账号下所有的磁盘是否加密。\n    - name: aliyun-encrypted-disk\n      resource: aliyun.disk\n      filters:\n        - type: encrypted\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"磁盘是否加密( true/false )\",\"defaultValue\":\"false\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('29763f5e-ef4c-431d-b44f-39cd1b5b5363', 'Aliyun Redis实例网络类型扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的Redis实例是否运行在VPC网络环境下', 'policies:\n    # 检测您账号下的Redis实例是否运行在VPC网络环境下。\n    - name: aliyun-rds-network-type\n      resource: aliyun.redis\n      filters:\n        - type: network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的网络类型:CLASSIC经典网络/VPC网络\",\"defaultValue\":\"VPC\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('2adbae64-6403-4dfb-92ab-637354da49f8', 'Aliyun PolarDB实例公网访问扫描', 1, 'HighRisk', 'Aliyun  账号下PolarDB实例不允许任意来源公网访问，视为“合规”', 'policies:\n    # 账号下Polar实例不允许任意来源公网访问，视为“合规”。\n    - name: aliyun-polardb-internet-access\n      resource: aliyun.polardb\n      filters:\n        - type: internet-access\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('339cf3fc-f9d9-457e-ac72-40d37c402bdf', 'Aliyun SLB负载均衡实例公网IP扫描', 1, 'HighRisk', 'Aliyun  SLB负载均衡实例未直接绑定公网IP，视为“合规”。该规则仅适用于 IPv4 协议', 'policies:\n    # 负载均衡实例未直接绑定公网IP，视为“合规”。该规则仅适用于 IPv4 协议。\n    - name: aliyun-slb-address-type\n      resource: aliyun.slb\n      filters:\n        - type: address-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网IP/内网IP( internet/intranet )\",\"defaultValue\":\"internet\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('3e5d47ac-86b6-40d1-a191-1b2ff2496118', 'Aliyun ECS实例网络类型扫描', 1, 'HighRisk', 'Aliyun  账号下所有ECS实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”', 'policies:\n    # 账号下所有ECS实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”。\n    - name: aliyun-ecs-instance-network-type\n      resource: aliyun.ecs\n      filters:\n        - type: instance-network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的网络类型:classic经典网络/vpc网络\",\"defaultValue\":\"vpc\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('429f8396-e04b-49d9-8b38-80647ac87e66', 'Aliyun OSS公开读取访问权限扫描', 1, 'HighRisk', 'Aliyun  查看您的OSS存储桶是否不允许公开读取访问权限。如果某个OSS存储桶策略或存储桶 ACL 允许公开读取访问权限，则该存储桶不合规', 'policies:\n    # 查看您的OSS存储桶是否不允许公开读取访问权限。\n    - name: aliyun-oss-public-read\n      resource: aliyun.oss\n      filters:\n        - type: global-grants\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公开读取访问权限\",\"defaultValue\":\"public-read\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('44343a84-39e2-4fbc-b8c5-d3ac06186501', 'Aliyun MongoDB实例网络类型扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的MongoDB实例是否运行在VPC网络环境下', 'policies:\n    # 检测您账号下的MongoDB实例是否运行在VPC网络环境下。\n    - name: aliyun-mongodb-network-type\n      resource: aliyun.mongodb\n      filters:\n        - type: network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的网络类型:Classic经典网络/VPC网络\",\"defaultValue\":\"VPC\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('594e7673-c0db-40a4-9a0c-f70f0e58cc62', 'Aliyun SLB带宽峰值扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的负载均衡实例是否达到最低带宽要求', 'policies:\n    # 检测您账号下的负载均衡实例是否达到最低带宽要求。\n    - name: aliyun-slb-bandwidth\n      resource: aliyun.slb\n      filters:\n        - type: bandwidth\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"按带宽计费的公网型实例的带宽峰值\",\"defaultValue\":\"10\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('6fd132c0-b4df-4685-b132-5441d1aef2f8', 'Aliyun ECS实例公网IP扫描', 1, 'HighRisk', 'Aliyun ECS实例未直接绑定公网IP，视为“合规”，否则属于“不合规”。该规则仅适用于 IPv4 协议', 'policies:\n    # ECS实例未直接绑定公网IP，视为“合规”。该规则仅适用于 IPv4 协议。\n    - name: aliyun-ecs-public-ipaddress\n      resource: aliyun.ecs\n      filters:\n        - type: public-ip-address', '[]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('70c1e701-b87a-4e4d-8648-3db7ecc2c066', 'Aliyun RAM用户MFA扫描', 1, 'HighRisk', 'Aliyun 检测RAM用户是否开通MFA二次验证登录，开通视为“合规”，否则属于“不合规”', 'policies:\n    # 检测RAM用户是否开通MFA二次验证登录。\n    - name: aliyun-ram-mfa\n      resource: aliyun.ram\n      filters:\n        - type: mfa\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"RAM用户是否开通MFA二次验证登录(true/false)\",\"defaultValue\":\"false\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('7d323895-f07b-4845-8b3d-01c78180f270', 'Aliyun MongoDB实例公网访问扫描', 1, 'HighRisk', 'Aliyun  账号下MongoDB实例不允许任意来源公网访问，视为“合规”', 'policies:\n    # 账号下MongoDB实例不允许任意来源公网访问，视为“合规”。\n    - name: aliyun-mongodb-internet-access\n      resource: aliyun.mongodb\n      filters:\n        - type: internet-access\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('88a77028-0e2a-4201-a713-ded3a94864f9', 'Aliyun SLB公网访问扫描', 1, 'HighRisk', 'Aliyun  账号下SLB不允许任意来源公网访问，视为“合规”', 'policies:\n    # 账号下SLB不允许任意来源公网访问，视为“合规”。\n    - name: aliyun-slb-acls\n      resource: aliyun.slb\n      filters:\n        - type: acls\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('8c635fda-7f89-4d5c-b0f4-2116f1b65554', 'Aliyun OSS防盗链扫描', 1, 'HighRisk', 'Aliyun  检测OSS Bucket是否开启防盗链开关，已开通视为合规', 'policies:\n    # 检测OSS Bucket是否开启防盗链开关，已开通视为合规。\n    - name: aliyun-oss-bucket-referer\n      resource: aliyun.oss\n      filters:\n        - type: bucket-referer\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"是否开启防盗链开关\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('9d94781e-922d-48c3-90a1-393dc79f2442', 'Aliyun OSS存储桶加密扫描', 1, 'HighRisk', 'Aliyun  查看并确认您的OSS存储桶启用了默认加密，未开启则该存储桶不合规', 'policies:\n    # 查看并确认您的OSS存储桶是否启用了默认加密。\n    - name: aliyun-oss-encryption\n      resource: aliyun.oss\n      filters:\n        - type: encryption', '[]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('ae65e90c-124c-4a81-8081-746d47f44e8f', 'Aliyun RDS实例高可用状态扫描', 1, 'HighRisk', 'Aliyun 账号下RDS实例具备高可用能力，视为“合规”，否则属于“不合规”', 'policies:\n    # 账号下RDS实例具备高可用能力，视为“合规”，否则属于“不合规”。\n    - name: aliyun-rds-high-availability\n      resource: aliyun.rds\n      filters:\n        - type: high-availability', '[]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('ba1edc8f-0944-4ebb-a953-f655aa710e84', 'Aliyun CDN域名HTTPS监听扫描', 1, 'HighRisk', 'Aliyun  检测CDN域名是否开启HTTPS监听，若开启视为“合规”，否则视为不合规', 'policies:\n    # 检测CDN域名是否开启HTTPS监听，若开启视为“合规”。\n    - name: aliyun-cdn-ssl-protocol\n      resource: aliyun.cdn\n      filters:\n        - type: ssl-protocol\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"https开关。 \\\"on\\\"：已开启。\\\"off\\\"：未开启\",\"defaultValue\":\"\\\"off\\\"\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('beda16d0-93fd-4366-9ebf-f5ce1360cd60', 'Aliyun RDS实例多可用区扫描', 1, 'HighRisk', 'Aliyun 账号下RDS实例支持多可用区，视为“合规”，否则视为“不合规”', 'policies:\n    # 账号下RDS实例支持多可用区，视为“合规”。\n    - name: aliyun-rds-available-zones\n      resource: aliyun.rds\n      filters:\n        - type: available-zones\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"是否支持多可用区\",\"defaultValue\":\"false\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('c57f055e-fd84-4af3-ba97-892a8fdc1fed', 'Aliyun PolarDB实例网络类型扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的PolarDB实例是否运行在VPC网络环境下', 'policies:\n    # 检测您账号下的polardb实例是否运行在vpc网络环境下。\n    - name: aliyun-polardb-dbcluster-network-type\n      resource: aliyun.polardb\n      filters:\n        - type: dbcluster-network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的网络类型:Classic经典网络/VPC网络\",\"defaultValue\":\"VPC\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('c95fde94-53a5-4658-98a4-56a0c6d951d4', 'Aliyun RDS实例的访问模式扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的RDS实例是否启用数据库代理状态链接形式，Safe视为“合规”，Standard属于“不合规”', 'policies:\n    # 检测您账号下的RDS实例是否启用数据库代理状态链接形式，Safe视为“合规”，Standard属于“不合规”。\n    - name: aliyun-rds-connection-mode\n      resource: aliyun.rds\n      filters:\n       - type: connection-mode\n         value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的访问模式:Standard/Safe\",\"defaultValue\":\"Safe\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('d690be79-2e8c-4054-bbe6-496bd29e91fe', 'Aliyun RDS实例白名单扫描', 1, 'HighRisk', 'Aliyun  测您账号下RDS数据库实例是否启用安全白名单功能，已开通视为“合规”', 'policies:\n    #检测您账号下RDS数据库实例是否启用安全白名单功能，已开通视为“合规”。\n    - name: aliyun-rds-security-ip-mode\n      resource: aliyun.rds\n      filters:\n        - type: security-ip-mode\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"白名单模式:normal通用模式/safety高安全模式\",\"defaultValue\":\"safety\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('d826c85d-cb42-4824-ab13-6d7a8026d9ae', 'Aliyun OSS公开写入访问权限扫描', 1, 'HighRisk', 'Aliyun  查看OSS存储桶是否不允许公开写入访问权限。如果某个OSS存储桶策略或存储桶 ACL 允许公开写入访问权限，则该存储桶不合规', 'policies:\n    # 查看OSS存储桶是否不允许公开写入访问权限。\n    - name: aliyun-oss-public-read-write\n      resource: aliyun.oss\n      filters:\n        - type: global-grants\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公开写入访问权限\",\"defaultValue\":\"public-read-write\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('df4fb45c-f9bc-4c8e-996d-036c9d2f1800', 'Aliyun SecurityGroup高危安全组扫描', 1, 'HighRisk', 'Aliyun  检测安全组是否开启风险端口，未开启视为“合规”，否则属于“不合规”', 'policies:\n  #扫描开放以下高危端口的安全组：\n  #(20,21,22,25,80,773,765,1733,1737,3306,3389,7333,5732,5500)\n  - name: aliyun-security-group\n    resource: aliyun.security-group\n    description: |\n      Add Filter all security groups, filter ports\n      [20,21,22,25,80,773,765,1733,1737,3306,3389,7333,5732,5500]\n      on 0.0.0.0/0 or\n      [20,21,22,25,80,773,765, 1733,1737,3306,3389,7333,5732,5500]\n      on ::/0 (IPv6)\n    filters:\n        - or:\n            - type: ingress\n              IpProtocol: \"-1\"\n              Ports: ${{ipv4_port}}\n              Cidr: \"0.0.0.0/0\"\n            - type: ingress\n              IpProtocol: \"-1\"\n              Ports: ${{ipv6_port}}\n              Cidr: \"::/0\"', '[{\"key\":\"ipv4_port\",\"name\":\"ipv4端口\",\"defaultValue\":\"[20,21,22,25,80,773,765, 1733,1737,3306,3389,7333,5732,5500]\",\"required\":true},{\"key\":\"ipv6_port\",\"name\":\"ipv6端口\",\"defaultValue\":\"[20,21,22,25,80,773,765, 1733,1737,3306,3389,7333,5732,5500]\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('e054787c-5826-4242-8450-b0daa926ea40', 'Aliyun RDS实例网络类型扫描', 1, 'HighRisk', 'Aliyun  账号下RDS实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”', 'policies:\n    # 账号下RDS实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”。\n    - name: aliyun-rds-instance-network-type\n      resource: aliyun.rds\n      filters:\n        - type: instance-network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"实例的网络类型:Classic经典网络/VPC网络\",\"defaultValue\":\"VPC\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', 'Aliyun SLB负载均衡实例关联到VPC扫描', 1, 'HighRisk', 'Aliyun  账号下负载均衡实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”，否则视为不合规', 'policies:\n    # 账号下负载均衡实例已关联到VPC；若您配置阈值，则关联的VpcId需存在您列出的阈值中，视为“合规”。\n    - name: aliyun-slb-network-type\n      resource: aliyun.slb\n      filters:\n        - type: network-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"负载均衡实例的网络类型(不等于)\",\"defaultValue\":\"vpc\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('fdef013f-ce14-468a-9af4-1c0fabc7e6e1', 'Aliyun OSS对象存储桶冗余存储扫描', 1, 'HighRisk', 'Aliyun  检测您账号下的对象存储桶是否启用同城冗余存储（数据容灾类型），若开启视为“合规”，否则视为不合规', 'policies:\n    # 检测您账号下的对象存储桶是否启用同城冗余存储，若开启视为“合规”。\n    - name: aliyun-oss-data-redundancy-type\n      resource: aliyun.oss\n      filters:\n        - type: data-redundancy-type\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"Bucket的数据容灾类型。有效值：LRS、ZRS\",\"defaultValue\":\"ZRS\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
+INSERT INTO rule VALUES ('ff153eea-2628-440b-b054-186d6f5a7708', 'Aliyun Redis实例公网访问扫描', 1, 'HighRisk', 'Aliyun  账号下Redis实例不允许任意来源公网访问，视为“合规”', 'policies:\n    # 账号下Redis实例不允许任意来源公网访问，视为“合规”。\n    - name: aliyun-redis-internet-access\n      resource: aliyun.redis\n      filters:\n        - type: internet-access\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
 
 
-INSERT INTO `rule_tag_mapping` VALUES (1, 'd690be79-2e8c-4054-bbe6-496bd29e91fe', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (2, '6fd132c0-b4df-4685-b132-5441d1aef2f8', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (3, 'c95fde94-53a5-4658-98a4-56a0c6d951d4', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (4, 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (5, '8c635fda-7f89-4d5c-b0f4-2116f1b65554', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (6, '0b2ece35-a17e-4584-ac2d-0b11483d04fb', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (7, '594e7673-c0db-40a4-9a0c-f70f0e58cc62', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (8, '44343a84-39e2-4fbc-b8c5-d3ac06186501', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (9, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (10, 'e054787c-5826-4242-8450-b0daa926ea40', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (11, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (12, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (13, 'ff153eea-2628-440b-b054-186d6f5a7708', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (14, '88a77028-0e2a-4201-a713-ded3a94864f9', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (15, '7d323895-f07b-4845-8b3d-01c78180f270', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (16, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (17, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (18, '429f8396-e04b-49d9-8b38-80647ac87e66', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (19, 'ba1edc8f-0944-4ebb-a953-f655aa710e84', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (20, '1299a29b-e19d-4186-93fd-a18ed1b2584a', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (21, 'ae65e90c-124c-4a81-8081-746d47f44e8f', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (22, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (23, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (24, '2533542d-5422-4bd5-8849-6a69ec05a874', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (25, '083d24e2-881f-488b-b120-8f2cd961707f', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (26, '9d94781e-922d-48c3-90a1-393dc79f2442', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (27, '028b8362-08f2-404c-8e15-935426bb8545', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (28, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (29, 'beda16d0-93fd-4366-9ebf-f5ce1360cd60', 'safety');
-INSERT INTO `rule_tag_mapping` VALUES (30, '2adbae64-6403-4dfb-92ab-637354da49f8', 'safety');
+INSERT INTO rule_tag_mapping VALUES (1, 'd690be79-2e8c-4054-bbe6-496bd29e91fe', 'safety');
+INSERT INTO rule_tag_mapping VALUES (2, '6fd132c0-b4df-4685-b132-5441d1aef2f8', 'safety');
+INSERT INTO rule_tag_mapping VALUES (3, 'c95fde94-53a5-4658-98a4-56a0c6d951d4', 'safety');
+INSERT INTO rule_tag_mapping VALUES (4, 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', 'safety');
+INSERT INTO rule_tag_mapping VALUES (5, '8c635fda-7f89-4d5c-b0f4-2116f1b65554', 'safety');
+INSERT INTO rule_tag_mapping VALUES (6, '0b2ece35-a17e-4584-ac2d-0b11483d04fb', 'safety');
+INSERT INTO rule_tag_mapping VALUES (7, '594e7673-c0db-40a4-9a0c-f70f0e58cc62', 'safety');
+INSERT INTO rule_tag_mapping VALUES (8, '44343a84-39e2-4fbc-b8c5-d3ac06186501', 'safety');
+INSERT INTO rule_tag_mapping VALUES (9, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', 'safety');
+INSERT INTO rule_tag_mapping VALUES (10, 'e054787c-5826-4242-8450-b0daa926ea40', 'safety');
+INSERT INTO rule_tag_mapping VALUES (11, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', 'safety');
+INSERT INTO rule_tag_mapping VALUES (12, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', 'safety');
+INSERT INTO rule_tag_mapping VALUES (13, 'ff153eea-2628-440b-b054-186d6f5a7708', 'safety');
+INSERT INTO rule_tag_mapping VALUES (14, '88a77028-0e2a-4201-a713-ded3a94864f9', 'safety');
+INSERT INTO rule_tag_mapping VALUES (15, '7d323895-f07b-4845-8b3d-01c78180f270', 'safety');
+INSERT INTO rule_tag_mapping VALUES (16, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', 'safety');
+INSERT INTO rule_tag_mapping VALUES (17, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', 'safety');
+INSERT INTO rule_tag_mapping VALUES (18, '429f8396-e04b-49d9-8b38-80647ac87e66', 'safety');
+INSERT INTO rule_tag_mapping VALUES (19, 'ba1edc8f-0944-4ebb-a953-f655aa710e84', 'safety');
+INSERT INTO rule_tag_mapping VALUES (20, '1299a29b-e19d-4186-93fd-a18ed1b2584a', 'safety');
+INSERT INTO rule_tag_mapping VALUES (21, 'ae65e90c-124c-4a81-8081-746d47f44e8f', 'safety');
+INSERT INTO rule_tag_mapping VALUES (22, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', 'safety');
+INSERT INTO rule_tag_mapping VALUES (23, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', 'safety');
+INSERT INTO rule_tag_mapping VALUES (24, '2533542d-5422-4bd5-8849-6a69ec05a874', 'safety');
+INSERT INTO rule_tag_mapping VALUES (25, '083d24e2-881f-488b-b120-8f2cd961707f', 'safety');
+INSERT INTO rule_tag_mapping VALUES (26, '9d94781e-922d-48c3-90a1-393dc79f2442', 'safety');
+INSERT INTO rule_tag_mapping VALUES (27, '028b8362-08f2-404c-8e15-935426bb8545', 'safety');
+INSERT INTO rule_tag_mapping VALUES (28, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', 'safety');
+INSERT INTO rule_tag_mapping VALUES (29, 'beda16d0-93fd-4366-9ebf-f5ce1360cd60', 'safety');
+INSERT INTO rule_tag_mapping VALUES (30, '2adbae64-6403-4dfb-92ab-637354da49f8', 'safety');
 
 
-INSERT INTO `rule_inspection_report_mapping` VALUES (1, '0b2ece35-a17e-4584-ac2d-0b11483d04fb', '2');
-INSERT INTO `rule_inspection_report_mapping` VALUES (2, '594e7673-c0db-40a4-9a0c-f70f0e58cc62', '2');
-INSERT INTO `rule_inspection_report_mapping` VALUES (3, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '3');
-INSERT INTO `rule_inspection_report_mapping` VALUES (4, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '4');
-INSERT INTO `rule_inspection_report_mapping` VALUES (5, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '5');
-INSERT INTO `rule_inspection_report_mapping` VALUES (6, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '6');
-INSERT INTO `rule_inspection_report_mapping` VALUES (7, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '7');
-INSERT INTO `rule_inspection_report_mapping` VALUES (8, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '3');
-INSERT INTO `rule_inspection_report_mapping` VALUES (9, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '4');
-INSERT INTO `rule_inspection_report_mapping` VALUES (10, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '5');
-INSERT INTO `rule_inspection_report_mapping` VALUES (11, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '6');
-INSERT INTO `rule_inspection_report_mapping` VALUES (12, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '7');
-INSERT INTO `rule_inspection_report_mapping` VALUES (13, 'e054787c-5826-4242-8450-b0daa926ea40', '3');
-INSERT INTO `rule_inspection_report_mapping` VALUES (14, 'e054787c-5826-4242-8450-b0daa926ea40', '4');
-INSERT INTO `rule_inspection_report_mapping` VALUES (15, 'e054787c-5826-4242-8450-b0daa926ea40', '5');
-INSERT INTO `rule_inspection_report_mapping` VALUES (16, 'e054787c-5826-4242-8450-b0daa926ea40', '6');
-INSERT INTO `rule_inspection_report_mapping` VALUES (17, 'e054787c-5826-4242-8450-b0daa926ea40', '7');
-INSERT INTO `rule_inspection_report_mapping` VALUES (18, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '3');
-INSERT INTO `rule_inspection_report_mapping` VALUES (19, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '4');
-INSERT INTO `rule_inspection_report_mapping` VALUES (20, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '5');
-INSERT INTO `rule_inspection_report_mapping` VALUES (21, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '6');
-INSERT INTO `rule_inspection_report_mapping` VALUES (22, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '7');
-INSERT INTO `rule_inspection_report_mapping` VALUES (23, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '3');
-INSERT INTO `rule_inspection_report_mapping` VALUES (24, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '4');
-INSERT INTO `rule_inspection_report_mapping` VALUES (25, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '5');
-INSERT INTO `rule_inspection_report_mapping` VALUES (26, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '6');
-INSERT INTO `rule_inspection_report_mapping` VALUES (27, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '7');
-INSERT INTO `rule_inspection_report_mapping` VALUES (28, 'ff153eea-2628-440b-b054-186d6f5a7708', '10');
-INSERT INTO `rule_inspection_report_mapping` VALUES (29, 'ff153eea-2628-440b-b054-186d6f5a7708', '13');
-INSERT INTO `rule_inspection_report_mapping` VALUES (30, '88a77028-0e2a-4201-a713-ded3a94864f9', '10');
-INSERT INTO `rule_inspection_report_mapping` VALUES (31, '88a77028-0e2a-4201-a713-ded3a94864f9', '13');
-INSERT INTO `rule_inspection_report_mapping` VALUES (32, '7d323895-f07b-4845-8b3d-01c78180f270', '10');
-INSERT INTO `rule_inspection_report_mapping` VALUES (33, '7d323895-f07b-4845-8b3d-01c78180f270', '13');
-INSERT INTO `rule_inspection_report_mapping` VALUES (34, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', '10');
-INSERT INTO `rule_inspection_report_mapping` VALUES (35, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', '13');
-INSERT INTO `rule_inspection_report_mapping` VALUES (36, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', '10');
-INSERT INTO `rule_inspection_report_mapping` VALUES (37, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', '13');
-INSERT INTO `rule_inspection_report_mapping` VALUES (38, '429f8396-e04b-49d9-8b38-80647ac87e66', '10');
-INSERT INTO `rule_inspection_report_mapping` VALUES (39, '429f8396-e04b-49d9-8b38-80647ac87e66', '13');
-INSERT INTO `rule_inspection_report_mapping` VALUES (40, 'ba1edc8f-0944-4ebb-a953-f655aa710e84', '52');
-INSERT INTO `rule_inspection_report_mapping` VALUES (41, '1299a29b-e19d-4186-93fd-a18ed1b2584a', '52');
-INSERT INTO `rule_inspection_report_mapping` VALUES (42, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '2');
-INSERT INTO `rule_inspection_report_mapping` VALUES (43, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '56');
-INSERT INTO `rule_inspection_report_mapping` VALUES (44, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '57');
-INSERT INTO `rule_inspection_report_mapping` VALUES (45, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '58');
-INSERT INTO `rule_inspection_report_mapping` VALUES (46, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', '32');
-INSERT INTO `rule_inspection_report_mapping` VALUES (47, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', '90');
-INSERT INTO `rule_inspection_report_mapping` VALUES (48, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '3');
-INSERT INTO `rule_inspection_report_mapping` VALUES (49, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '4');
-INSERT INTO `rule_inspection_report_mapping` VALUES (50, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '5');
-INSERT INTO `rule_inspection_report_mapping` VALUES (51, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '6');
-INSERT INTO `rule_inspection_report_mapping` VALUES (52, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '7');
-INSERT INTO `rule_inspection_report_mapping` VALUES (53, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '91');
-INSERT INTO `rule_inspection_report_mapping` VALUES (54, '2533542d-5422-4bd5-8849-6a69ec05a874', '53');
-INSERT INTO `rule_inspection_report_mapping` VALUES (55, '2533542d-5422-4bd5-8849-6a69ec05a874', '94');
-INSERT INTO `rule_inspection_report_mapping` VALUES (56, '083d24e2-881f-488b-b120-8f2cd961707f', '10');
-INSERT INTO `rule_inspection_report_mapping` VALUES (57, '083d24e2-881f-488b-b120-8f2cd961707f', '13');
-INSERT INTO `rule_inspection_report_mapping` VALUES (58, '083d24e2-881f-488b-b120-8f2cd961707f', '92');
-INSERT INTO `rule_inspection_report_mapping` VALUES (59, '083d24e2-881f-488b-b120-8f2cd961707f', '93');
-INSERT INTO `rule_inspection_report_mapping` VALUES (60, '083d24e2-881f-488b-b120-8f2cd961707f', '95');
-INSERT INTO `rule_inspection_report_mapping` VALUES (61, '9d94781e-922d-48c3-90a1-393dc79f2442', '53');
-INSERT INTO `rule_inspection_report_mapping` VALUES (62, '9d94781e-922d-48c3-90a1-393dc79f2442', '55');
-INSERT INTO `rule_inspection_report_mapping` VALUES (63, '9d94781e-922d-48c3-90a1-393dc79f2442', '96');
-INSERT INTO `rule_inspection_report_mapping` VALUES (64, '028b8362-08f2-404c-8e15-935426bb8545', '97');
-INSERT INTO `rule_inspection_report_mapping` VALUES (65, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '9');
-INSERT INTO `rule_inspection_report_mapping` VALUES (66, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '46');
-INSERT INTO `rule_inspection_report_mapping` VALUES (67, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '92');
-INSERT INTO `rule_inspection_report_mapping` VALUES (68, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '93');
-INSERT INTO `rule_inspection_report_mapping` VALUES (69, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '95');
-INSERT INTO `rule_inspection_report_mapping` VALUES (70, '2adbae64-6403-4dfb-92ab-637354da49f8', '10');
-INSERT INTO `rule_inspection_report_mapping` VALUES (71, '2adbae64-6403-4dfb-92ab-637354da49f8', '13');
+INSERT INTO rule_inspection_report_mapping VALUES (1, '0b2ece35-a17e-4584-ac2d-0b11483d04fb', '2');
+INSERT INTO rule_inspection_report_mapping VALUES (2, '594e7673-c0db-40a4-9a0c-f70f0e58cc62', '2');
+INSERT INTO rule_inspection_report_mapping VALUES (3, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '3');
+INSERT INTO rule_inspection_report_mapping VALUES (4, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '4');
+INSERT INTO rule_inspection_report_mapping VALUES (5, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '5');
+INSERT INTO rule_inspection_report_mapping VALUES (6, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '6');
+INSERT INTO rule_inspection_report_mapping VALUES (7, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '7');
+INSERT INTO rule_inspection_report_mapping VALUES (8, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '3');
+INSERT INTO rule_inspection_report_mapping VALUES (9, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '4');
+INSERT INTO rule_inspection_report_mapping VALUES (10, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '5');
+INSERT INTO rule_inspection_report_mapping VALUES (11, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '6');
+INSERT INTO rule_inspection_report_mapping VALUES (12, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '7');
+INSERT INTO rule_inspection_report_mapping VALUES (13, 'e054787c-5826-4242-8450-b0daa926ea40', '3');
+INSERT INTO rule_inspection_report_mapping VALUES (14, 'e054787c-5826-4242-8450-b0daa926ea40', '4');
+INSERT INTO rule_inspection_report_mapping VALUES (15, 'e054787c-5826-4242-8450-b0daa926ea40', '5');
+INSERT INTO rule_inspection_report_mapping VALUES (16, 'e054787c-5826-4242-8450-b0daa926ea40', '6');
+INSERT INTO rule_inspection_report_mapping VALUES (17, 'e054787c-5826-4242-8450-b0daa926ea40', '7');
+INSERT INTO rule_inspection_report_mapping VALUES (18, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '3');
+INSERT INTO rule_inspection_report_mapping VALUES (19, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '4');
+INSERT INTO rule_inspection_report_mapping VALUES (20, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '5');
+INSERT INTO rule_inspection_report_mapping VALUES (21, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '6');
+INSERT INTO rule_inspection_report_mapping VALUES (22, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '7');
+INSERT INTO rule_inspection_report_mapping VALUES (23, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '3');
+INSERT INTO rule_inspection_report_mapping VALUES (24, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '4');
+INSERT INTO rule_inspection_report_mapping VALUES (25, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '5');
+INSERT INTO rule_inspection_report_mapping VALUES (26, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '6');
+INSERT INTO rule_inspection_report_mapping VALUES (27, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '7');
+INSERT INTO rule_inspection_report_mapping VALUES (28, 'ff153eea-2628-440b-b054-186d6f5a7708', '10');
+INSERT INTO rule_inspection_report_mapping VALUES (29, 'ff153eea-2628-440b-b054-186d6f5a7708', '13');
+INSERT INTO rule_inspection_report_mapping VALUES (30, '88a77028-0e2a-4201-a713-ded3a94864f9', '10');
+INSERT INTO rule_inspection_report_mapping VALUES (31, '88a77028-0e2a-4201-a713-ded3a94864f9', '13');
+INSERT INTO rule_inspection_report_mapping VALUES (32, '7d323895-f07b-4845-8b3d-01c78180f270', '10');
+INSERT INTO rule_inspection_report_mapping VALUES (33, '7d323895-f07b-4845-8b3d-01c78180f270', '13');
+INSERT INTO rule_inspection_report_mapping VALUES (34, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', '10');
+INSERT INTO rule_inspection_report_mapping VALUES (35, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', '13');
+INSERT INTO rule_inspection_report_mapping VALUES (36, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', '10');
+INSERT INTO rule_inspection_report_mapping VALUES (37, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', '13');
+INSERT INTO rule_inspection_report_mapping VALUES (38, '429f8396-e04b-49d9-8b38-80647ac87e66', '10');
+INSERT INTO rule_inspection_report_mapping VALUES (39, '429f8396-e04b-49d9-8b38-80647ac87e66', '13');
+INSERT INTO rule_inspection_report_mapping VALUES (40, 'ba1edc8f-0944-4ebb-a953-f655aa710e84', '52');
+INSERT INTO rule_inspection_report_mapping VALUES (41, '1299a29b-e19d-4186-93fd-a18ed1b2584a', '52');
+INSERT INTO rule_inspection_report_mapping VALUES (42, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '2');
+INSERT INTO rule_inspection_report_mapping VALUES (43, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '56');
+INSERT INTO rule_inspection_report_mapping VALUES (44, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '57');
+INSERT INTO rule_inspection_report_mapping VALUES (45, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '58');
+INSERT INTO rule_inspection_report_mapping VALUES (46, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', '32');
+INSERT INTO rule_inspection_report_mapping VALUES (47, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', '90');
+INSERT INTO rule_inspection_report_mapping VALUES (48, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '3');
+INSERT INTO rule_inspection_report_mapping VALUES (49, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '4');
+INSERT INTO rule_inspection_report_mapping VALUES (50, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '5');
+INSERT INTO rule_inspection_report_mapping VALUES (51, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '6');
+INSERT INTO rule_inspection_report_mapping VALUES (52, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '7');
+INSERT INTO rule_inspection_report_mapping VALUES (53, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '91');
+INSERT INTO rule_inspection_report_mapping VALUES (54, '2533542d-5422-4bd5-8849-6a69ec05a874', '53');
+INSERT INTO rule_inspection_report_mapping VALUES (55, '2533542d-5422-4bd5-8849-6a69ec05a874', '94');
+INSERT INTO rule_inspection_report_mapping VALUES (56, '083d24e2-881f-488b-b120-8f2cd961707f', '10');
+INSERT INTO rule_inspection_report_mapping VALUES (57, '083d24e2-881f-488b-b120-8f2cd961707f', '13');
+INSERT INTO rule_inspection_report_mapping VALUES (58, '083d24e2-881f-488b-b120-8f2cd961707f', '92');
+INSERT INTO rule_inspection_report_mapping VALUES (59, '083d24e2-881f-488b-b120-8f2cd961707f', '93');
+INSERT INTO rule_inspection_report_mapping VALUES (60, '083d24e2-881f-488b-b120-8f2cd961707f', '95');
+INSERT INTO rule_inspection_report_mapping VALUES (61, '9d94781e-922d-48c3-90a1-393dc79f2442', '53');
+INSERT INTO rule_inspection_report_mapping VALUES (62, '9d94781e-922d-48c3-90a1-393dc79f2442', '55');
+INSERT INTO rule_inspection_report_mapping VALUES (63, '9d94781e-922d-48c3-90a1-393dc79f2442', '96');
+INSERT INTO rule_inspection_report_mapping VALUES (64, '028b8362-08f2-404c-8e15-935426bb8545', '97');
+INSERT INTO rule_inspection_report_mapping VALUES (65, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '9');
+INSERT INTO rule_inspection_report_mapping VALUES (66, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '46');
+INSERT INTO rule_inspection_report_mapping VALUES (67, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '92');
+INSERT INTO rule_inspection_report_mapping VALUES (68, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '93');
+INSERT INTO rule_inspection_report_mapping VALUES (69, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '95');
+INSERT INTO rule_inspection_report_mapping VALUES (70, '2adbae64-6403-4dfb-92ab-637354da49f8', '10');
+INSERT INTO rule_inspection_report_mapping VALUES (71, '2adbae64-6403-4dfb-92ab-637354da49f8', '13');
 
 
-INSERT INTO `rule_group_mapping` VALUES (1, 'd690be79-2e8c-4054-bbe6-496bd29e91fe', '1');
-INSERT INTO `rule_group_mapping` VALUES (2, '6fd132c0-b4df-4685-b132-5441d1aef2f8', '1');
-INSERT INTO `rule_group_mapping` VALUES (3, 'c95fde94-53a5-4658-98a4-56a0c6d951d4', '1');
-INSERT INTO `rule_group_mapping` VALUES (4, 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', '1');
-INSERT INTO `rule_group_mapping` VALUES (5, 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', '3');
-INSERT INTO `rule_group_mapping` VALUES (6, '8c635fda-7f89-4d5c-b0f4-2116f1b65554', '1');
-INSERT INTO `rule_group_mapping` VALUES (7, '8c635fda-7f89-4d5c-b0f4-2116f1b65554', '3');
-INSERT INTO `rule_group_mapping` VALUES (8, '0b2ece35-a17e-4584-ac2d-0b11483d04fb', '1');
-INSERT INTO `rule_group_mapping` VALUES (9, '594e7673-c0db-40a4-9a0c-f70f0e58cc62', '1');
-INSERT INTO `rule_group_mapping` VALUES (10, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '1');
-INSERT INTO `rule_group_mapping` VALUES (11, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '1');
-INSERT INTO `rule_group_mapping` VALUES (12, 'e054787c-5826-4242-8450-b0daa926ea40', '1');
-INSERT INTO `rule_group_mapping` VALUES (13, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '1');
-INSERT INTO `rule_group_mapping` VALUES (14, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '2');
-INSERT INTO `rule_group_mapping` VALUES (15, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '1');
-INSERT INTO `rule_group_mapping` VALUES (16, 'ff153eea-2628-440b-b054-186d6f5a7708', '1');
-INSERT INTO `rule_group_mapping` VALUES (17, '88a77028-0e2a-4201-a713-ded3a94864f9', '1');
-INSERT INTO `rule_group_mapping` VALUES (18, '88a77028-0e2a-4201-a713-ded3a94864f9', '2');
-INSERT INTO `rule_group_mapping` VALUES (19, '7d323895-f07b-4845-8b3d-01c78180f270', '1');
-INSERT INTO `rule_group_mapping` VALUES (20, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', '1');
-INSERT INTO `rule_group_mapping` VALUES (21, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', '2');
-INSERT INTO `rule_group_mapping` VALUES (22, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', '1');
-INSERT INTO `rule_group_mapping` VALUES (23, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', '3');
-INSERT INTO `rule_group_mapping` VALUES (24, '429f8396-e04b-49d9-8b38-80647ac87e66', '1');
-INSERT INTO `rule_group_mapping` VALUES (25, '429f8396-e04b-49d9-8b38-80647ac87e66', '3');
-INSERT INTO `rule_group_mapping` VALUES (26, 'ba1edc8f-0944-4ebb-a953-f655aa710e84', '1');
-INSERT INTO `rule_group_mapping` VALUES (27, '1299a29b-e19d-4186-93fd-a18ed1b2584a', '1');
-INSERT INTO `rule_group_mapping` VALUES (28, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '1');
-INSERT INTO `rule_group_mapping` VALUES (29, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '2');
-INSERT INTO `rule_group_mapping` VALUES (30, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', '1');
-INSERT INTO `rule_group_mapping` VALUES (31, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', '2');
-INSERT INTO `rule_group_mapping` VALUES (32, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '1');
-INSERT INTO `rule_group_mapping` VALUES (33, '2533542d-5422-4bd5-8849-6a69ec05a874', '1');
-INSERT INTO `rule_group_mapping` VALUES (34, '083d24e2-881f-488b-b120-8f2cd961707f', '1');
-INSERT INTO `rule_group_mapping` VALUES (35, '9d94781e-922d-48c3-90a1-393dc79f2442', '1');
-INSERT INTO `rule_group_mapping` VALUES (36, '9d94781e-922d-48c3-90a1-393dc79f2442', '2');
-INSERT INTO `rule_group_mapping` VALUES (37, '9d94781e-922d-48c3-90a1-393dc79f2442', '3');
-INSERT INTO `rule_group_mapping` VALUES (38, '028b8362-08f2-404c-8e15-935426bb8545', '1');
-INSERT INTO `rule_group_mapping` VALUES (39, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '1');
-INSERT INTO `rule_group_mapping` VALUES (40, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '2');
-INSERT INTO `rule_group_mapping` VALUES (41, 'beda16d0-93fd-4366-9ebf-f5ce1360cd60', '1');
-INSERT INTO `rule_group_mapping` VALUES (42, '2adbae64-6403-4dfb-92ab-637354da49f8', '1');
+INSERT INTO rule_group_mapping VALUES (1, 'd690be79-2e8c-4054-bbe6-496bd29e91fe', '1');
+INSERT INTO rule_group_mapping VALUES (2, '6fd132c0-b4df-4685-b132-5441d1aef2f8', '1');
+INSERT INTO rule_group_mapping VALUES (3, 'c95fde94-53a5-4658-98a4-56a0c6d951d4', '1');
+INSERT INTO rule_group_mapping VALUES (4, 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', '1');
+INSERT INTO rule_group_mapping VALUES (5, 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', '3');
+INSERT INTO rule_group_mapping VALUES (6, '8c635fda-7f89-4d5c-b0f4-2116f1b65554', '1');
+INSERT INTO rule_group_mapping VALUES (7, '8c635fda-7f89-4d5c-b0f4-2116f1b65554', '3');
+INSERT INTO rule_group_mapping VALUES (8, '0b2ece35-a17e-4584-ac2d-0b11483d04fb', '1');
+INSERT INTO rule_group_mapping VALUES (9, '594e7673-c0db-40a4-9a0c-f70f0e58cc62', '1');
+INSERT INTO rule_group_mapping VALUES (10, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '1');
+INSERT INTO rule_group_mapping VALUES (11, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '1');
+INSERT INTO rule_group_mapping VALUES (12, 'e054787c-5826-4242-8450-b0daa926ea40', '1');
+INSERT INTO rule_group_mapping VALUES (13, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '1');
+INSERT INTO rule_group_mapping VALUES (14, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '2');
+INSERT INTO rule_group_mapping VALUES (15, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '1');
+INSERT INTO rule_group_mapping VALUES (16, 'ff153eea-2628-440b-b054-186d6f5a7708', '1');
+INSERT INTO rule_group_mapping VALUES (17, '88a77028-0e2a-4201-a713-ded3a94864f9', '1');
+INSERT INTO rule_group_mapping VALUES (18, '88a77028-0e2a-4201-a713-ded3a94864f9', '2');
+INSERT INTO rule_group_mapping VALUES (19, '7d323895-f07b-4845-8b3d-01c78180f270', '1');
+INSERT INTO rule_group_mapping VALUES (20, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', '1');
+INSERT INTO rule_group_mapping VALUES (21, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', '2');
+INSERT INTO rule_group_mapping VALUES (22, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', '1');
+INSERT INTO rule_group_mapping VALUES (23, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', '3');
+INSERT INTO rule_group_mapping VALUES (24, '429f8396-e04b-49d9-8b38-80647ac87e66', '1');
+INSERT INTO rule_group_mapping VALUES (25, '429f8396-e04b-49d9-8b38-80647ac87e66', '3');
+INSERT INTO rule_group_mapping VALUES (26, 'ba1edc8f-0944-4ebb-a953-f655aa710e84', '1');
+INSERT INTO rule_group_mapping VALUES (27, '1299a29b-e19d-4186-93fd-a18ed1b2584a', '1');
+INSERT INTO rule_group_mapping VALUES (28, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '1');
+INSERT INTO rule_group_mapping VALUES (29, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '2');
+INSERT INTO rule_group_mapping VALUES (30, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', '1');
+INSERT INTO rule_group_mapping VALUES (31, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', '2');
+INSERT INTO rule_group_mapping VALUES (32, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '1');
+INSERT INTO rule_group_mapping VALUES (33, '2533542d-5422-4bd5-8849-6a69ec05a874', '1');
+INSERT INTO rule_group_mapping VALUES (34, '083d24e2-881f-488b-b120-8f2cd961707f', '1');
+INSERT INTO rule_group_mapping VALUES (35, '9d94781e-922d-48c3-90a1-393dc79f2442', '1');
+INSERT INTO rule_group_mapping VALUES (36, '9d94781e-922d-48c3-90a1-393dc79f2442', '2');
+INSERT INTO rule_group_mapping VALUES (37, '9d94781e-922d-48c3-90a1-393dc79f2442', '3');
+INSERT INTO rule_group_mapping VALUES (38, '028b8362-08f2-404c-8e15-935426bb8545', '1');
+INSERT INTO rule_group_mapping VALUES (39, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '1');
+INSERT INTO rule_group_mapping VALUES (40, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '2');
+INSERT INTO rule_group_mapping VALUES (41, 'beda16d0-93fd-4366-9ebf-f5ce1360cd60', '1');
+INSERT INTO rule_group_mapping VALUES (42, '2adbae64-6403-4dfb-92ab-637354da49f8', '1');
 
 
-INSERT INTO `rule_type` VALUES ('245bc538-2c33-430a-a61c-37000d058263', 'ff153eea-2628-440b-b054-186d6f5a7708', 'aliyun.redis');
-INSERT INTO `rule_type` VALUES ('26b965d0-a16e-4d4a-b727-1816f07ce49a', 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', 'aliyun.polardb');
-INSERT INTO `rule_type` VALUES ('4155c0ce-6f20-43a2-9a1f-678ed0e2ee0f', '083d24e2-881f-488b-b120-8f2cd961707f', 'aliyun.security-group');
-INSERT INTO `rule_type` VALUES ('4b3dd93c-6f3a-4bdb-afd7-6039d826b541', '3e5d47ac-86b6-40d1-a191-1b2ff2496118', 'aliyun.ecs');
-INSERT INTO `rule_type` VALUES ('50e1f0a2-2c98-4af3-b458-847771cdf80c', 'e054787c-5826-4242-8450-b0daa926ea40', 'aliyun.rds');
-INSERT INTO `rule_type` VALUES ('545f8a99-b613-4d6e-85da-1f48cc076cbf', 'beda16d0-93fd-4366-9ebf-f5ce1360cd60', 'aliyun.rds');
-INSERT INTO `rule_type` VALUES ('63d01a83-df8c-4b3c-a244-12031698568f', '339cf3fc-f9d9-457e-ac72-40d37c402bdf', 'aliyun.slb');
-INSERT INTO `rule_type` VALUES ('66f5bfd5-48f4-4454-9df0-3e6d856aa36f', '44343a84-39e2-4fbc-b8c5-d3ac06186501', 'aliyun.mongodb');
-INSERT INTO `rule_type` VALUES ('75bd5124-f247-4cdc-a0d5-fdd9a573b1f3', '6fd132c0-b4df-4685-b132-5441d1aef2f8', 'aliyun.ecs');
-INSERT INTO `rule_type` VALUES ('883d6aa5-a59d-4844-98fa-5a53d1acb6ef', 'd690be79-2e8c-4054-bbe6-496bd29e91fe', 'aliyun.rds');
-INSERT INTO `rule_type` VALUES ('922e73cd-a782-4238-9381-277c0e54f9d7', '2adbae64-6403-4dfb-92ab-637354da49f8', 'aliyun.polardb');
-INSERT INTO `rule_type` VALUES ('a1bbf517-80f6-4a6d-b043-3e2654b9efbb', '0b2ece35-a17e-4584-ac2d-0b11483d04fb', 'aliyun.eip');
-INSERT INTO `rule_type` VALUES ('a71f9bc1-6c08-4618-bad8-5da9d4452968', '70c1e701-b87a-4e4d-8648-3db7ecc2c066', 'aliyun.ram');
-INSERT INTO `rule_type` VALUES ('b79afedc-1880-4aac-8bbf-f4d05eaea1d3', 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', 'aliyun.security-group');
-INSERT INTO `rule_type` VALUES ('bbd20d15-6e27-4a53-b67b-0890c0d0c452', '594e7673-c0db-40a4-9a0c-f70f0e58cc62', 'aliyun.slb');
-INSERT INTO `rule_type` VALUES ('bd0f8305-661a-40f3-a4e0-ee457e6da76e', 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', 'aliyun.oss');
+INSERT INTO rule_type VALUES ('245bc538-2c33-430a-a61c-37000d058263', 'ff153eea-2628-440b-b054-186d6f5a7708', 'aliyun.redis');
+INSERT INTO rule_type VALUES ('26b965d0-a16e-4d4a-b727-1816f07ce49a', 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', 'aliyun.polardb');
+INSERT INTO rule_type VALUES ('4155c0ce-6f20-43a2-9a1f-678ed0e2ee0f', '083d24e2-881f-488b-b120-8f2cd961707f', 'aliyun.security-group');
+INSERT INTO rule_type VALUES ('4b3dd93c-6f3a-4bdb-afd7-6039d826b541', '3e5d47ac-86b6-40d1-a191-1b2ff2496118', 'aliyun.ecs');
+INSERT INTO rule_type VALUES ('50e1f0a2-2c98-4af3-b458-847771cdf80c', 'e054787c-5826-4242-8450-b0daa926ea40', 'aliyun.rds');
+INSERT INTO rule_type VALUES ('545f8a99-b613-4d6e-85da-1f48cc076cbf', 'beda16d0-93fd-4366-9ebf-f5ce1360cd60', 'aliyun.rds');
+INSERT INTO rule_type VALUES ('63d01a83-df8c-4b3c-a244-12031698568f', '339cf3fc-f9d9-457e-ac72-40d37c402bdf', 'aliyun.slb');
+INSERT INTO rule_type VALUES ('66f5bfd5-48f4-4454-9df0-3e6d856aa36f', '44343a84-39e2-4fbc-b8c5-d3ac06186501', 'aliyun.mongodb');
+INSERT INTO rule_type VALUES ('75bd5124-f247-4cdc-a0d5-fdd9a573b1f3', '6fd132c0-b4df-4685-b132-5441d1aef2f8', 'aliyun.ecs');
+INSERT INTO rule_type VALUES ('883d6aa5-a59d-4844-98fa-5a53d1acb6ef', 'd690be79-2e8c-4054-bbe6-496bd29e91fe', 'aliyun.rds');
+INSERT INTO rule_type VALUES ('922e73cd-a782-4238-9381-277c0e54f9d7', '2adbae64-6403-4dfb-92ab-637354da49f8', 'aliyun.polardb');
+INSERT INTO rule_type VALUES ('a1bbf517-80f6-4a6d-b043-3e2654b9efbb', '0b2ece35-a17e-4584-ac2d-0b11483d04fb', 'aliyun.eip');
+INSERT INTO rule_type VALUES ('a71f9bc1-6c08-4618-bad8-5da9d4452968', '70c1e701-b87a-4e4d-8648-3db7ecc2c066', 'aliyun.ram');
+INSERT INTO rule_type VALUES ('b79afedc-1880-4aac-8bbf-f4d05eaea1d3', 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', 'aliyun.security-group');
+INSERT INTO rule_type VALUES ('bbd20d15-6e27-4a53-b67b-0890c0d0c452', '594e7673-c0db-40a4-9a0c-f70f0e58cc62', 'aliyun.slb');
+INSERT INTO rule_type VALUES ('bd0f8305-661a-40f3-a4e0-ee457e6da76e', 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', 'aliyun.oss');
 
 
-INSERT INTO `rule_type` VALUES ('bfc2ce96-e36f-4280-bdeb-9b88204aff0a', '2533542d-5422-4bd5-8849-6a69ec05a874', 'aliyun.disk');
-INSERT INTO `rule_type` VALUES ('c36099af-2a2f-496f-8bf7-4435e3edd64e', '88a77028-0e2a-4201-a713-ded3a94864f9', 'aliyun.slb');
-INSERT INTO `rule_type` VALUES ('c9a126eb-41e8-4e8c-b2dd-57b9c4df9a34', '29763f5e-ef4c-431d-b44f-39cd1b5b5363', 'aliyun.redis');
-INSERT INTO `rule_type` VALUES ('cd140b9d-0d2b-4535-a13e-3887f80dc56a', 'ae65e90c-124c-4a81-8081-746d47f44e8f', 'aliyun.rds');
-INSERT INTO `rule_type` VALUES ('e39bb334-d7ae-4fc5-9caa-e91ac5e594e0', '429f8396-e04b-49d9-8b38-80647ac87e66', 'aliyun.oss');
-INSERT INTO `rule_type` VALUES ('e4f77952-ef02-4d6d-8771-502ef1343811', '9d94781e-922d-48c3-90a1-393dc79f2442', 'aliyun.oss');
-INSERT INTO `rule_type` VALUES ('eb725846-fe34-4d48-9e13-5c727c268dfd', '028b8362-08f2-404c-8e15-935426bb8545', 'aliyun.rds');
-INSERT INTO `rule_type` VALUES ('ebcac89f-9f95-4bbf-8843-3591232150d6', 'ba1edc8f-0944-4ebb-a953-f655aa710e84', 'aliyun.cdn');
-INSERT INTO `rule_type` VALUES ('f08d6448-024f-4d03-bf4d-705c8c973704', 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', 'aliyun.oss');
-INSERT INTO `rule_type` VALUES ('f3686b01-3bf7-4e5b-b55d-14b607323bf0', '7d323895-f07b-4845-8b3d-01c78180f270', 'aliyun.mongodb');
-INSERT INTO `rule_type` VALUES ('f5d5b91f-1530-42d2-b007-603184247f24', '8c635fda-7f89-4d5c-b0f4-2116f1b65554', 'aliyun.oss');
-INSERT INTO `rule_type` VALUES ('f6f58432-7418-49c6-bb79-f764694e53ce', '1299a29b-e19d-4186-93fd-a18ed1b2584a', 'aliyun.slb');
-INSERT INTO `rule_type` VALUES ('fd0d0f27-ec6e-40ba-b30a-11043b209bbc', 'c95fde94-53a5-4658-98a4-56a0c6d951d4', 'aliyun.rds');
-INSERT INTO `rule_type` VALUES ('fd8eeea3-cabf-491f-9411-6d11407f45b3', 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', 'aliyun.slb');
+INSERT INTO rule_type VALUES ('bfc2ce96-e36f-4280-bdeb-9b88204aff0a', '2533542d-5422-4bd5-8849-6a69ec05a874', 'aliyun.disk');
+INSERT INTO rule_type VALUES ('c36099af-2a2f-496f-8bf7-4435e3edd64e', '88a77028-0e2a-4201-a713-ded3a94864f9', 'aliyun.slb');
+INSERT INTO rule_type VALUES ('c9a126eb-41e8-4e8c-b2dd-57b9c4df9a34', '29763f5e-ef4c-431d-b44f-39cd1b5b5363', 'aliyun.redis');
+INSERT INTO rule_type VALUES ('cd140b9d-0d2b-4535-a13e-3887f80dc56a', 'ae65e90c-124c-4a81-8081-746d47f44e8f', 'aliyun.rds');
+INSERT INTO rule_type VALUES ('e39bb334-d7ae-4fc5-9caa-e91ac5e594e0', '429f8396-e04b-49d9-8b38-80647ac87e66', 'aliyun.oss');
+INSERT INTO rule_type VALUES ('e4f77952-ef02-4d6d-8771-502ef1343811', '9d94781e-922d-48c3-90a1-393dc79f2442', 'aliyun.oss');
+INSERT INTO rule_type VALUES ('eb725846-fe34-4d48-9e13-5c727c268dfd', '028b8362-08f2-404c-8e15-935426bb8545', 'aliyun.rds');
+INSERT INTO rule_type VALUES ('ebcac89f-9f95-4bbf-8843-3591232150d6', 'ba1edc8f-0944-4ebb-a953-f655aa710e84', 'aliyun.cdn');
+INSERT INTO rule_type VALUES ('f08d6448-024f-4d03-bf4d-705c8c973704', 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', 'aliyun.oss');
+INSERT INTO rule_type VALUES ('f3686b01-3bf7-4e5b-b55d-14b607323bf0', '7d323895-f07b-4845-8b3d-01c78180f270', 'aliyun.mongodb');
+INSERT INTO rule_type VALUES ('f5d5b91f-1530-42d2-b007-603184247f24', '8c635fda-7f89-4d5c-b0f4-2116f1b65554', 'aliyun.oss');
+INSERT INTO rule_type VALUES ('f6f58432-7418-49c6-bb79-f764694e53ce', '1299a29b-e19d-4186-93fd-a18ed1b2584a', 'aliyun.slb');
+INSERT INTO rule_type VALUES ('fd0d0f27-ec6e-40ba-b30a-11043b209bbc', 'c95fde94-53a5-4658-98a4-56a0c6d951d4', 'aliyun.rds');
+INSERT INTO rule_type VALUES ('fd8eeea3-cabf-491f-9411-6d11407f45b3', 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', 'aliyun.slb');
 

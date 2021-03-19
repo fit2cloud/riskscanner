@@ -1,5 +1,5 @@
 <template>
-  <el-tag :type="type" :effect="effect" size="mini">{{content}}</el-tag>
+  <el-tag :type="type" :effect="effect" size="mini">{{ content }}</el-tag>
 </template>
 
 <script>

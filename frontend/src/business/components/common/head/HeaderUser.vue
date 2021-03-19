@@ -1,14 +1,14 @@
 <template>
   <el-dropdown size="medium" @command="handleCommand" class="align-right">
     <span class="dropdown-link">
-        {{currentUser.name}}<i class="el-icon-caret-bottom el-icon--right"/>
+        {{ currentUser.name }}<i class="el-icon-caret-bottom el-icon--right"/>
     </span>
     <template v-slot:dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item command="personal">{{$t('commons.personal_information')}}</el-dropdown-item>
-        <el-dropdown-item command="about">{{$t('commons.about_us')}} <i class="el-icon-info"/></el-dropdown-item>
+        <el-dropdown-item command="personal">{{ $t('commons.personal_information') }}</el-dropdown-item>
+        <el-dropdown-item command="about">{{ $t('commons.about_us') }} <i class="el-icon-info"/></el-dropdown-item>
         <el-dropdown-item command="ApiHelp">{{ $t('commons.api_help_documentation') }}</el-dropdown-item>
-        <el-dropdown-item command="logout">{{$t('commons.exit_system')}}</el-dropdown-item>
+        <el-dropdown-item command="logout">{{ $t('commons.exit_system') }}</el-dropdown-item>
       </el-dropdown-menu>
     </template>
 
@@ -33,7 +33,6 @@
       handleCommand(command) {
         switch (command) {
           case "personal":
-            // TODO 优化路由跳转，避免重复添加路由
             this.$router.push('/setting/personsetting').catch(error => error);
             break;
           case "logout":
@@ -41,11 +40,6 @@
               if (response.data.success) {
                 localStorage.clear();
                 window.location.href = "/login";
-              } else {
-                if (response.data.message === 'sso') {
-                  localStorage.clear();
-                  window.location.href = "/sso/logout"
-                }
               }
             }).catch(error => {
               localStorage.clear();

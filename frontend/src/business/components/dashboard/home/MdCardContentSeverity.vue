@@ -27,7 +27,7 @@
         <div class="grid-content bg-purple">
           <div class="dashboard-head-value">
             <el-link class="md-primary"
-                     @click="goResource('severity', 'HighRisk')">{{!!severityList.HighRisk?severityList.HighRisk.returnSum:0}}</el-link>
+                     @click="goResource('severity', 'HighRisk')">{{ !!severityList.HighRisk?severityList.HighRisk.returnSum:0 }}</el-link>
           </div>
         </div>
       </el-col>
@@ -35,7 +35,7 @@
         <div class="grid-content bg-purple">
           <div class="dashboard-head-value">
             <el-link class="md-primary"
-                     @click="goResource('severity', 'MediumRisk')">{{!!severityList.MediumRisk?severityList.MediumRisk.returnSum:0}}</el-link>
+                     @click="goResource('severity', 'MediumRisk')">{{ !!severityList.MediumRisk?severityList.MediumRisk.returnSum:0 }}</el-link>
           </div>
         </div>
       </el-col>
@@ -43,7 +43,7 @@
         <div class="grid-content bg-purple">
           <div class="dashboard-head-value">
           <el-link class="md-primary"
-                   @click="goResource('severity', 'LowRisk')">{{!!severityList.LowRisk?severityList.LowRisk.returnSum:0}}</el-link>
+                   @click="goResource('severity', 'LowRisk')">{{ !!severityList.LowRisk?severityList.LowRisk.returnSum:0 }}</el-link>
           </div>
         </div>
       </el-col>
@@ -51,7 +51,7 @@
         <div class="grid-content bg-purple">
           <div class="dashboard-head-value">
             <el-link class="md-primary"
-                     @click="goResource('severity', 'Normal')">{{!!severityList.Normal?severityList.Normal.returnSum:0}}</el-link>
+                     @click="goResource('severity', 'Normal')">{{ !!severityList.Normal?severityList.Normal.returnSum:0 }}</el-link>
           </div>
         </div>
       </el-col>

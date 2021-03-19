@@ -16,8 +16,8 @@
             <template v-slot:default="props">
 
               <el-divider><i class="el-icon-folder-opened"></i></el-divider>
-              <el-form v-if="props.row.resource != '[]'">
-                  <result-read-only :row="typeof(props.row.resource) == 'string'?JSON.parse(props.row.resource):props.row.resource"></result-read-only>
+              <el-form v-if="props.row.resource !== '[]'">
+                  <result-read-only :row="typeof(props.row.resource) === 'string'?JSON.parse(props.row.resource):props.row.resource"></result-read-only>
                   <el-divider><i class="el-icon-document-checked"></i></el-divider>
               </el-form>
             </template>
@@ -25,16 +25,16 @@
           <!-- 展开 end -->
           <el-table-column type="index" min-width="5%"/>
           <el-table-column v-slot:default="scope" :label="$t('resource.F2C_ID')" min-width="28%">
-              {{scope.row.f2cId}}
+              {{ scope.row.f2cId }}
           </el-table-column>
           <el-table-column v-slot:default="scope" :label="$t('rule.resource_type')" min-width="20%">
-              {{scope.row.resourceType}}
+              {{ scope.row.resourceType }}
           </el-table-column>
           <el-table-column :label="$t('account.cloud_account')" min-width="15%" show-overflow-tooltip>
             <template v-slot:default="scope">
               <span>
                 <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                 &nbsp;&nbsp; {{scope.row.pluginName}}
+                 &nbsp;&nbsp; {{ scope.row.pluginName }}
               </span>
             </template>
           </el-table-column>
@@ -107,8 +107,8 @@
           {text: this.$t('account.aliyun'), value: 'fit2cloud-aliyun-plugin'},
           {text: this.$t('account.tencent'), value: 'fit2cloud-qcloud-plugin'},
           {text: this.$t('account.huawei'), value: 'fit2cloud-huawei-plugin'},
-          {text: this.$t('account.aws'), value: 'fit2cloud-aws-plugin'},
-          {text: this.$t('account.azure'), value: 'fit2cloud-azure-plugin'}
+          // {text: this.$t('account.aws'), value: 'fit2cloud-aws-plugin'},
+          // {text: this.$t('account.azure'), value: 'fit2cloud-azure-plugin'}
         ],
         string2Key: "",
         string2PrettyFormat: "",

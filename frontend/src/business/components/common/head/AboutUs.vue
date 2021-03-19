@@ -9,7 +9,7 @@
           <img class="logo" src="../../../../assets/favicon-彩色.png"/>
         </el-link>
         <el-link class="url" :href="websiteUrl" target="_blank">
-          <span>{{websiteUrl}}</span>
+          <span>{{ websiteUrl }}</span>
         </el-link>
       </el-col>
     </el-row>
@@ -22,7 +22,7 @@
           </el-link>
         </div>
         <el-link class="url" :href="githubUrl" target="_blank">
-          <span>{{githubUrl}}</span>
+          <span>{{ githubUrl }}</span>
         </el-link>
       </el-col>
     </el-row>
@@ -30,7 +30,7 @@
     <el-row>
       <el-col class="version">
         <span>版本:</span> &nbsp;
-        <span>{{version}}</span>
+        <span>{{ version }}</span>
       </el-col>
     </el-row>
 

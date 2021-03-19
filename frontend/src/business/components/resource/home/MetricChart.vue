@@ -117,7 +117,7 @@ export default {
         ]
       };
     },
-    freeRegulations({content = {}}) {
+    freeRegulations({content = { }}) {
       const {totalRegulation, riskyRegulation} = content
       if (!(totalRegulation && totalRegulation)) {
         return 0

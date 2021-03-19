@@ -9,18 +9,18 @@
             <template v-slot:default="scope">
               <el-link type="primary" @click="viewRule(scope.row)">
                 <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                {{scope.row.AccountName}}
+                {{ scope.row.AccountName }}
               </el-link>
             </template>
           </el-table-column>
           <el-table-column :label="$t('history.scan_score')" min-width="20%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              {{scope.row.scanScore}}
+              {{ scope.row.scanScore }}
             </template>
           </el-table-column>
           <el-table-column :label="$t('history.resource_result')" min-width="30%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              <span> {{scope.row.returnSum?scope.row.returnSum:0}}/{{scope.row.resourcesSum?scope.row.resourcesSum:0}}</span>
+              <span> {{ scope.row.returnSum?scope.row.returnSum:0 }}/{{ scope.row.resourcesSum?scope.row.resourcesSum:0 }}</span>
               <span> &nbsp;&nbsp;<i :class="scope.row.assets" ></i></span>
             </template>
           </el-table-column>
@@ -51,7 +51,7 @@
                   :label="item.name"
                   :value="item.id">
                   <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                  &nbsp;&nbsp; {{$t(item.name)}}
+                  &nbsp;&nbsp; {{ $t(item.name) }}
                 </el-option>
               </el-select>
             </el-form-item>

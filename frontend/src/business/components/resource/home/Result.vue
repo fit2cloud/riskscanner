@@ -2,14 +2,14 @@
       <main-container v-loading="result.loading">
 
         <el-card class="table-card el-row-card" v-if="source">
-            <h2 style="font-size: 18px;">{{$t('account.cloud_account')}}</h2>
+            <h2 style="font-size: 18px;">{{ $t('account.cloud_account') }}</h2>
             <el-row>
               <el-col :span="8">
                 <div class="grid-content">
                   <!-- 第四行 -->
                   <el-row>
                   <el-col :span="8">
-                    <span style="color: #909090;">{{$t('account.scan_score_')}}</span>
+                    <span style="color: #909090;">{{ $t('account.scan_score_') }}</span>
                   </el-col>
                   <el-col :span="4">
                     <span v-if="source.resultStatus != 'APPROVED' && source.resultStatus != 'PROCESSING'">
@@ -31,31 +31,31 @@
                 <!-- 第一行 -->
                 <el-row>
                   <el-col :span="4">
-                    <span style="color: #909090;">{{$t('account.name')}}</span>
+                    <span style="color: #909090;">{{ $t('account.name') }}</span>
                   </el-col>
                   <el-col :span="8">
-                    <span>{{source.name}}</span>
+                    <span>{{ source.name }}</span>
                   </el-col>
                   <el-col :span="4">
-                    <span style="color: #909090;">{{$t('account.cloud_platform')}}</span>
+                    <span style="color: #909090;">{{ $t('account.cloud_platform') }}</span>
                   </el-col>
                   <el-col :span="8">
                 <span>
                   <img v-if="source.pluginIcon" :src="require(`@/assets/img/platform/${source.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                   &nbsp;&nbsp; {{source.pluginName}}
+                   &nbsp;&nbsp; {{ source.pluginName }}
                 </span>
                   </el-col>
                 </el-row>
                 <!-- 第二行 -->
                 <el-row>
                   <el-col :span="4">
-                    <span style="color: #909090;">{{$t('resource.i18n_not_compliance')}}</span>
+                    <span style="color: #909090;">{{ $t('resource.i18n_not_compliance') }}</span>
                   </el-col>
                   <el-col :span="8">
-                    <span>{{ source.returnSum}} / {{ source.resourcesSum }}</span>
+                    <span>{{ source.returnSum }} / {{ source.resourcesSum }}</span>
                   </el-col>
                   <el-col :span="4">
-                    <span style="color: #909090;">{{$t('resource.status')}}</span>
+                    <span style="color: #909090;">{{ $t('resource.status') }}</span>
                   </el-col>
                   <el-col :span="8">
                     <span>
@@ -69,7 +69,7 @@
                         <i class="el-icon-success"></i> {{ $t('resource.no_risk') }}
                       </span>
                       <span style="color: red;" v-else-if="source.resultStatus === 'ERROR'">
-                        <i class="el-icon-warning"></i> {{$t('resource.discover_risk')}}
+                        <i class="el-icon-warning"></i> {{ $t('resource.discover_risk') }}
                       </span>
                       <span style="color: #dda450;" v-else-if="source.resultStatus === 'WARNING'">
                         <i class="el-icon-warning"></i> {{ $t('resource.discover_risk') }}
@@ -86,13 +86,13 @@
                 <!-- 第三行 -->
                 <el-row>
                   <el-col :span="4">
-                    <span style="color: #909090;">{{$t('account.create_time')}}</span>
+                    <span style="color: #909090;">{{ $t('account.create_time') }}</span>
                   </el-col>
                   <el-col :span="8">
                     <span><i class="el-icon-time"></i> {{ source.createTime | timestampFormatDate }}</span>
                   </el-col>
                   <el-col :span="4">
-                    <span style="color: #909090;">{{$t('commons.operating')}}</span>
+                    <span style="color: #909090;">{{ $t('commons.operating') }}</span>
                   </el-col>
                   <el-col :span="8">
                     <span>
@@ -133,23 +133,23 @@
                   </template>
                   <template v-for="type in resourceTypes" >
                     <span :key="type.value" v-if="scope.row.resourceTypes">
-                      <span :key="type.value" v-if="scope.row.resourceTypes.indexOf(type.value) > -1"> [{{type.value}}]</span>
+                      <span :key="type.value" v-if="scope.row.resourceTypes.indexOf(type.value) > -1"> [{{ type.value }}]</span>
                     </span>
                   </template>
                 </span>
             </el-table-column>
             <el-table-column v-slot:default="scope" :label="$t('rule.rule_name')" min-width="20%" show-overflow-tooltip>
               <el-link type="primary" class="md-primary text-click" @click="showTaskDetail(scope.row)">
-                {{scope.row.taskName}}
+                {{ scope.row.taskName }}
               </el-link>
             </el-table-column>
             <el-table-column v-slot:default="scope" :label="$t('account.creator')" min-width="7%" show-overflow-tooltip>
-              {{scope.row.applyUser}}
+              {{ scope.row.applyUser }}
             </el-table-column>
             <el-table-column v-slot:default="scope" :label="$t('rule.severity')" min-width="7%" prop="severity" sortable show-overflow-tooltip>
-              <span v-if="scope.row.severity == 'HighRisk'" style="color: #f84846;"> {{$t('rule.HighRisk')}}</span>
-              <span v-else-if="scope.row.severity == 'MediumRisk'" style="color: #fe9636;"> {{$t('rule.MediumRisk')}}</span>
-              <span v-else-if="scope.row.severity == 'LowRisk'" style="color: #4dabef;"> {{$t('rule.LowRisk')}}</span>
+              <span v-if="scope.row.severity == 'HighRisk'" style="color: #f84846;"> {{ $t('rule.HighRisk') }}</span>
+              <span v-else-if="scope.row.severity == 'MediumRisk'" style="color: #fe9636;"> {{ $t('rule.MediumRisk') }}</span>
+              <span v-else-if="scope.row.severity == 'LowRisk'" style="color: #4dabef;"> {{ $t('rule.LowRisk') }}</span>
               <span v-else> N/A</span>
             </el-table-column>
             <el-table-column v-slot:default="scope" :label="$t('resource.status')" min-width="10%" prop="status" sortable show-overflow-tooltip>
@@ -175,15 +175,15 @@
             <el-table-column v-slot:default="scope" :label="$t('resource.i18n_not_compliance')" prop="returnSum" sortable show-overflow-tooltip min-width="7%">
               <span v-if="scope.row.returnSum == null && scope.row.resourcesSum == null"> N/A</span>
               <span v-if="(scope.row.returnSum != null) && (scope.row.returnSum == 0)">
-                {{scope.row.returnSum}}/{{scope.row.resourcesSum}}
+                {{ scope.row.returnSum }}/{{ scope.row.resourcesSum }}
               </span>
               <span v-if="(scope.row.returnSum != null) && (scope.row.returnSum > 0)">
-                <el-link type="primary" class="text-click" @click="goResource(scope.row)">{{scope.row.returnSum}}/{{scope.row.resourcesSum}}</el-link>
+                <el-link type="primary" class="text-click" @click="goResource(scope.row)">{{ scope.row.returnSum }}/{{ scope.row.resourcesSum }}</el-link>
               </span>
             </el-table-column>
             <el-table-column v-slot:default="scope" :label="$t('resource.status_on_off')" prop="returnSum" sortable show-overflow-tooltip min-width="7%">
-              <span v-if="scope.row.returnSum == 0" style="color: #46ad59;">{{$t('resource.i18n_compliance_true')}}</span>
-              <span v-else-if="(scope.row.returnSum != null) && (scope.row.returnSum > 0)" style="color: #f84846;">{{$t('resource.i18n_compliance_false')}}</span>
+              <span v-if="scope.row.returnSum == 0" style="color: #46ad59;">{{ $t('resource.i18n_compliance_true') }}</span>
+              <span v-else-if="(scope.row.returnSum != null) && (scope.row.returnSum > 0)" style="color: #f84846;">{{ $t('resource.i18n_compliance_false') }}</span>
               <span v-else-if="scope.row.returnSum == null && scope.row.resourcesSum == null"> N/A</span>
             </el-table-column>
             <el-table-column prop="createTime" min-width="14%" :label="$t('account.update_time')" sortable show-overflow-tooltip>
@@ -217,24 +217,24 @@
         <el-drawer v-if="detailVisible" :close-on-click-modal="false" class="rtl" :visible.sync="detailVisible" size="60%" :show-close="false" :before-close="handleClose" :direction="direction"
                    :destroy-on-close="true">
           <div slot="title" class="dialog-title">
-            <span>{{$t('resource.i18n_detail')}}</span>
+            <span>{{ $t('resource.i18n_detail') }}</span>
             <i class="el-icon-close el-icon-close-detail" @click="detailVisible=false"></i>
           </div>
           <el-form :model="detailForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="detailForm">
             <el-form-item class="el-form-item-dev">
               <el-tabs type="border-card" @tab-click="showCodemirror">
                 <el-tab-pane>
-                  <span slot="label"><i class="el-icon-reading"></i> {{$t('rule.rule')}}</span>
+                  <span slot="label"><i class="el-icon-reading"></i> {{ $t('rule.rule') }}</span>
                   <el-form label-position="left" inline class="demo-table-expand" >
                     <el-form-item :label="$t('account.cloud_platform')" v-if="detailForm.pluginIcon">
                         <span>
                           <img :src="require(`@/assets/img/platform/${detailForm.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                           &nbsp;&nbsp; {{detailForm.pluginName}}
+                           &nbsp;&nbsp; {{ detailForm.pluginName }}
                         </span>
                     </el-form-item>
                     <el-form-item :label="$t('rule.rule_name')">
                       <el-tooltip class="item" effect="dark" :content="detailForm.taskName" placement="top-start">
-                        <span v-if="detailForm.taskName" class="view-text">{{detailForm.taskName.substring(0, 15) + "..."}}</span>
+                        <span v-if="detailForm.taskName" class="view-text">{{ detailForm.taskName.substring(0, 15) + "..." }}</span>
                       </el-tooltip>
                     </el-form-item>
                     <el-form-item :label="$t('resource.i18n_task_type')" v-if="detailForm.ruleTags">
@@ -243,14 +243,14 @@
                           <span :key="tag.tagKey" v-if="detailForm.ruleTags.indexOf(tag.tagKey) > -1"> {{ tag.tagName }}</span>
                         </template>
                         <template v-for="type in resourceTypes" >
-                          <span :key="type.value" v-if="detailForm.resourceTypes.indexOf(type.value) > -1"> [{{type.value}}]</span>
+                          <span :key="type.value" v-if="detailForm.resourceTypes.indexOf(type.value) > -1"> [{{ type.value }}]</span>
                         </template>
                       </span>
                     </el-form-item>
                     <el-form-item :label="$t('rule.severity')">
-                      <span v-if="detailForm.severity == 'HighRisk'" style="color: #f84846;"> {{$t('rule.HighRisk')}}</span>
-                      <span v-else-if="detailForm.severity == 'MediumRisk'" style="color: #fe9636;"> {{$t('rule.MediumRisk')}}</span>
-                      <span v-else-if="detailForm.severity == 'LowRisk'" style="color: #4dabef;"> {{$t('rule.LowRisk')}}</span>
+                      <span v-if="detailForm.severity == 'HighRisk'" style="color: #f84846;"> {{ $t('rule.HighRisk') }}</span>
+                      <span v-else-if="detailForm.severity == 'MediumRisk'" style="color: #fe9636;"> {{ $t('rule.MediumRisk') }}</span>
+                      <span v-else-if="detailForm.severity == 'LowRisk'" style="color: #4dabef;"> {{ $t('rule.LowRisk') }}</span>
                       <span v-else> N/A</span>
                     </el-form-item>
                     <el-form-item :label="$t('resource.status')">
@@ -274,7 +274,7 @@
                       </el-button>
                     </el-form-item>
                     <el-form-item :label="$t('account.creator')">
-                      <span>{{detailForm.applyUser}}</span>
+                      <span>{{ detailForm.applyUser }}</span>
                     </el-form-item>
                     <el-form-item :label="$t('account.create_time')">
                       <span>{{ detailForm.createTime | timestampFormatDate }}</span>
@@ -282,7 +282,7 @@
                   </el-form>
                 </el-tab-pane>
                 <el-tab-pane>
-                  <span slot="label"><i class="el-icon-info"></i> {{$t('rule.rule_detail')}}</span>
+                  <span slot="label"><i class="el-icon-info"></i> {{ $t('rule.rule_detail') }}</span>
                   <codemirror ref="cmEditor" v-model="detailForm.customData" class="code-mirror" :options="cmOptions" />
                 </el-tab-pane>
               </el-tabs>
@@ -360,8 +360,8 @@
           {text: this.$t('account.aliyun'), value: 'fit2cloud-aliyun-plugin'},
           {text: this.$t('account.tencent'), value: 'fit2cloud-qcloud-plugin'},
           {text: this.$t('account.huawei'), value: 'fit2cloud-huawei-plugin'},
-          {text: this.$t('account.aws'), value: 'fit2cloud-aws-plugin'},
-          {text: this.$t('account.azure'), value: 'fit2cloud-azure-plugin'}
+          // {text: this.$t('account.aws'), value: 'fit2cloud-aws-plugin'},
+          // {text: this.$t('account.azure'), value: 'fit2cloud-azure-plugin'}
         ],
         logVisible: false,
         detailVisible: false,

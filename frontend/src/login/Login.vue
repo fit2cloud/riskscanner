@@ -164,7 +164,7 @@
     max-width: 1440px;
     height: 560px;
     margin: calc((100vh - 560px) / 2) auto 0;
-    background-color: #FFFFFF;
+    background-color: #fff;
   }
 
   .logo {
@@ -253,7 +253,7 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Neue Haas Grotesk Text Pro", "Arial Nova", "Segoe UI", "Helvetica Neue", ".PingFang SC", "PingFang SC", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "Hiragino Sans GB", sans-serif;
     font-size: 14px;
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
     line-height: 26px;
     color: #2B415C;
     -webkit-font-smoothing: antialiased;

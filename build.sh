@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "构建镜像 ..."
 mvn clean package -X -U -Dmaven.test.skip=true
 

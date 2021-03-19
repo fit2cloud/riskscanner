@@ -71,6 +71,9 @@
 <!--        <table tableName="rule" domainObjectName="Rule">-->
 <!--            <columnOverride column="script" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
 <!--        </table>-->
+<!--        <table tableName="message_task"/>-->
+<!--        <table tableName="message_order"/>-->
+<!--        <table tableName="message_order_item"/>-->
 <!--        <table tableName="rule_tag" domainObjectName="RuleTag"/>-->
 <!--        <table tableName="rule_tag_mapping" domainObjectName="RuleTagMapping"/>-->
 <!--        <table tableName="rule_type" domainObjectName="RuleType"/>-->

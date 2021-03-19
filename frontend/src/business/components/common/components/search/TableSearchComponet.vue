@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="search-label">{{$t(component.label)}}</div>
+    <div class="search-label">{{ $t(component.label) }}</div>
 
     <el-select class="search-operator" v-model="component.operator.value" :placeholder="$t('commons.please_select')"
                size="small"

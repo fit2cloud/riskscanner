@@ -42,7 +42,7 @@
       }
     },
     created() {
-      this.string2PrettyFormat = typeof(this.row.regions) == 'string'?JSON.parse(this.row.regions):this.row.regions;
+      this.string2PrettyFormat = typeof(this.row.regions) === 'string'?JSON.parse(this.row.regions):this.row.regions;
     },
     methods: {
       showRegions() {
