@@ -62,14 +62,14 @@
             value = String(value);
           }
           if (typeof (value) === 'object') {
-            if (value != null && JSON.stringify(value) != '[]' && JSON.stringify(value) != '{}') {
+            if (value !== null && JSON.stringify(value) !== '[]' && JSON.stringify(value) !== '{}') {
               flag = false;
             }
-            if (JSON.stringify(value) == '[]' || JSON.stringify(value) == '{}') {
+            if (JSON.stringify(value) === '[]' || JSON.stringify(value) === '{}') {
               value = "";
             }
           }
-          if (item.indexOf('$$') === -1 && item != 'show') {
+          if (item.indexOf('$$') === -1 && item !== 'show') {
             let map = {key: item, value: value, flag: flag};
             this.elements.push(map);
           }

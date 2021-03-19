@@ -33,7 +33,7 @@
 <style scoped>
 
   .aside-container {
-    border: 1px solid #E6E6E6;
+    border: 1px solid #e6e6e6;
     padding: 10px;
     border-radius: 2px;
     box-sizing: border-box;

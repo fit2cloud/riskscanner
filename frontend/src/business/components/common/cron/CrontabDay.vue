@@ -139,7 +139,7 @@ export default {
 			//判断week值与day不能同时为“?”
 			if (this.cron.week == '?' && this.radioValue == '2') {
 				this.radioValue = '1';
-			} else if (this.cron.week !== '?' && this.radioValue != '2') {
+			} else if (this.cron.week !== '?' && this.radioValue !== '2') {
 				this.radioValue = '2';
 			}
 		},

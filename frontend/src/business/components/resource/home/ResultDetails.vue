@@ -16,8 +16,8 @@
             <template v-slot:default="props">
 
               <el-divider><i class="el-icon-folder-opened"></i></el-divider>
-              <el-form v-if="props.row.resource != '[]'">
-                  <result-read-only :row="typeof(props.row.resource) == 'string'?JSON.parse(props.row.resource):props.row.resource"></result-read-only>
+              <el-form v-if="props.row.resource !== '[]'">
+                  <result-read-only :row="typeof(props.row.resource) === 'string'?JSON.parse(props.row.resource):props.row.resource"></result-read-only>
                   <el-divider><i class="el-icon-document-checked"></i></el-divider>
               </el-form>
             </template>
@@ -107,8 +107,8 @@
           {text: this.$t('account.aliyun'), value: 'fit2cloud-aliyun-plugin'},
           {text: this.$t('account.tencent'), value: 'fit2cloud-qcloud-plugin'},
           {text: this.$t('account.huawei'), value: 'fit2cloud-huawei-plugin'},
-          {text: this.$t('account.aws'), value: 'fit2cloud-aws-plugin'},
-          {text: this.$t('account.azure'), value: 'fit2cloud-azure-plugin'}
+          // {text: this.$t('account.aws'), value: 'fit2cloud-aws-plugin'},
+          // {text: this.$t('account.azure'), value: 'fit2cloud-azure-plugin'}
         ],
         string2Key: "",
         string2PrettyFormat: "",

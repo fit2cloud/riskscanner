@@ -23,7 +23,7 @@ export default {
       this.init();
     },
     init() {
-      let params = this.accountId != "all"?{group: "regionsList", accountId: this.accountId, limit: 5}:{group: "regionsList", limit: 5};
+      let params = this.accountId !== "all"?{group: "regionsList", accountId: this.accountId, limit: 5}:{group: "regionsList", limit: 5};
       this.$post("/dashboard/distribution", params, response => {
         let legendData = [];
         let seriesData = [];

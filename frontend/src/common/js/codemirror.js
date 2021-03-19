@@ -44,7 +44,7 @@
   if (presto_version) { presto_version = Number(presto_version[1]); }
   if (presto_version && presto_version >= 15) { presto = false; webkit = true; }
   // Some browsers use the wrong event properties to signal cmd/ctrl on OS X
-  var flipCtrlCmd = mac && (qtwebkit || presto && (presto_version == null || presto_version < 12.11));
+  var flipCtrlCmd = mac && (qtwebkit || presto && (presto_version === null || presto_version < 12.11));
   var captureRightClick = gecko || (ie && ie_version >= 9);
 
   function classTest(cls) { return new RegExp("(^|\\s)" + cls + "(?:$|\\s)\\s*") }
@@ -72,7 +72,7 @@
     var e = document.createElement(tag);
     if (className) { e.className = className; }
     if (style) { e.style.cssText = style; }
-    if (typeof content == "string") { e.appendChild(document.createTextNode(content)); }
+    if (typeof content === "string") { e.appendChild(document.createTextNode(content)); }
     else if (content) { for (var i = 0; i < content.length; ++i) { e.appendChild(content[i]); } }
     return e
   }
@@ -101,13 +101,13 @@
   }; }
 
   function contains(parent, child) {
-    if (child.nodeType == 3) // Android browser always returns false when child is a textnode
+    if (child.nodeType === 3) // Android browser always returns false when child is a textnode
       { child = child.parentNode; }
     if (parent.contains)
       { return parent.contains(child) }
     do {
-      if (child.nodeType == 11) { child = child.host; }
-      if (child == parent) { return true }
+      if (child.nodeType === 11) { child = child.host; }
+      if (child === parent) { return true }
     } while (child = child.parentNode)
   }
 
@@ -159,9 +159,9 @@
   // Counts the column offset in a string, taking tabs into account.
   // Used mostly to find indentation.
   function countColumn(string, end, tabSize, startIndex, startValue) {
-    if (end == null) {
+    if (end === null) {
       end = string.search(/[^\s\u00a0]/);
-      if (end == -1) { end = string.length; }
+      if (end === -1) { end = string.length; }
     }
     for (var i = startIndex || 0, n = startValue || 0;;) {
       var nextTab = string.indexOf("\t", i);
@@ -199,7 +199,7 @@
 
   function indexOf(array, elt) {
     for (var i = 0; i < array.length; ++i)
-      { if (array[i] == elt) { return i } }
+      { if (array[i] === elt) { return i } }
     return -1
   }
 
@@ -218,9 +218,9 @@
   function findColumn(string, goal, tabSize) {
     for (var pos = 0, col = 0;;) {
       var nextTab = string.indexOf("\t", pos);
-      if (nextTab == -1) { nextTab = string.length; }
+      if (nextTab === -1) { nextTab = string.length; }
       var skipped = nextTab - pos;
-      if (nextTab == string.length || col + skipped >= goal)
+      if (nextTab === string.length || col + skipped >= goal)
         { return pos + Math.min(skipped, goal - col) }
       col += nextTab - pos;
       col += tabSize - (col % tabSize);
@@ -267,7 +267,7 @@
   var nonASCIISingleCaseWordChar = /[\u00df\u0587\u0590-\u05f4\u0600-\u06ff\u3040-\u309f\u30a0-\u30ff\u3400-\u4db5\u4e00-\u9fcc\uac00-\ud7af]/;
   function isWordCharBasic(ch) {
     return /\w/.test(ch) || ch > "\x80" &&
-      (ch.toUpperCase() != ch.toLowerCase() || nonASCIISingleCaseWordChar.test(ch))
+      (ch.toUpperCase() !== ch.toLowerCase() || nonASCIISingleCaseWordChar.test(ch))
   }
   function isWordChar(ch, helper) {
     if (!helper) { return isWordCharBasic(ch) }
@@ -302,9 +302,9 @@
     // whether `from` does.
     var dir = from > to ? -1 : 1;
     for (;;) {
-      if (from == to) { return from }
+      if (from === to) { return from }
       var midF = (from + to) / 2, mid = dir < 0 ? Math.ceil(midF) : Math.floor(midF);
-      if (mid == from) { return pred(mid) ? from : to }
+      if (mid === from) { return pred(mid) ? from : to }
       if (pred(mid)) { to = mid; }
       else { from = mid + dir; }
     }
@@ -317,8 +317,8 @@
     var found = false;
     for (var i = 0; i < order.length; ++i) {
       var part = order[i];
-      if (part.from < to && part.to > from || from == to && part.to == from) {
-        f(Math.max(part.from, from), Math.min(part.to, to), part.level == 1 ? "rtl" : "ltr", i);
+      if (part.from < to && part.to > from || from === to && part.to === from) {
+        f(Math.max(part.from, from), Math.min(part.to, to), part.level === 1 ? "rtl" : "ltr", i);
         found = true;
       }
     }
@@ -332,16 +332,16 @@
     for (var i = 0; i < order.length; ++i) {
       var cur = order[i];
       if (cur.from < ch && cur.to > ch) { return i }
-      if (cur.to == ch) {
-        if (cur.from != cur.to && sticky == "before") { found = i; }
+      if (cur.to === ch) {
+        if (cur.from !== cur.to && sticky === "before") { found = i; }
         else { bidiOther = i; }
       }
-      if (cur.from == ch) {
-        if (cur.from != cur.to && sticky != "before") { found = i; }
+      if (cur.from === ch) {
+        if (cur.from !== cur.to && sticky !== "before") { found = i; }
         else { bidiOther = i; }
       }
     }
-    return found != null ? found : bidiOther
+    return found !== null ? found : bidiOther
   }
 
   // Bidirectional ordering algorithm
@@ -378,7 +378,7 @@
       else if (0x600 <= code && code <= 0x6f9) { return arabicTypes.charAt(code - 0x600) }
       else if (0x6ee <= code && code <= 0x8ac) { return "r" }
       else if (0x2000 <= code && code <= 0x200b) { return "w" }
-      else if (code == 0x200c) { return "b" }
+      else if (code === 0x200c) { return "b" }
       else { return "L" }
     }
 
@@ -391,9 +391,9 @@
     }
 
     return function(str, direction) {
-      var outerType = direction == "ltr" ? "L" : "R";
+      var outerType = direction === "ltr" ? "L" : "R";
 
-      if (str.length == 0 || direction == "ltr" && !bidiRE.test(str)) { return false }
+      if (str.length === 0 || direction === "ltr" && !bidiRE.test(str)) { return false }
       var len = str.length, types = [];
       for (var i = 0; i < len; ++i)
         { types.push(charType(str.charCodeAt(i))); }
@@ -404,7 +404,7 @@
       // get the type of sor.
       for (var i$1 = 0, prev = outerType; i$1 < len; ++i$1) {
         var type = types[i$1];
-        if (type == "m") { types[i$1] = prev; }
+        if (type === "m") { types[i$1] = prev; }
         else { prev = type; }
       }
 
@@ -415,8 +415,8 @@
       // W3. Change all ALs to R.
       for (var i$2 = 0, cur = outerType; i$2 < len; ++i$2) {
         var type$1 = types[i$2];
-        if (type$1 == "1" && cur == "r") { types[i$2] = "n"; }
-        else if (isStrong.test(type$1)) { cur = type$1; if (type$1 == "r") { types[i$2] = "R"; } }
+        if (type$1 === "1" && cur === "r") { types[i$2] = "n"; }
+        else if (isStrong.test(type$1)) { cur = type$1; if (type$1 === "r") { types[i$2] = "R"; } }
       }
 
       // W4. A single European separator between two European numbers
@@ -424,9 +424,9 @@
       // two numbers of the same type changes to that type.
       for (var i$3 = 1, prev$1 = types[0]; i$3 < len - 1; ++i$3) {
         var type$2 = types[i$3];
-        if (type$2 == "+" && prev$1 == "1" && types[i$3+1] == "1") { types[i$3] = "1"; }
-        else if (type$2 == "," && prev$1 == types[i$3+1] &&
-                 (prev$1 == "1" || prev$1 == "n")) { types[i$3] = prev$1; }
+        if (type$2 === "+" && prev$1 === "1" && types[i$3+1] === "1") { types[i$3] = "1"; }
+        else if (type$2 === "," && prev$1 === types[i$3+1] &&
+                 (prev$1 === "1" || prev$1 === "n")) { types[i$3] = prev$1; }
         prev$1 = type$2;
       }
 
@@ -436,11 +436,11 @@
       // Neutral.
       for (var i$4 = 0; i$4 < len; ++i$4) {
         var type$3 = types[i$4];
-        if (type$3 == ",") { types[i$4] = "N"; }
-        else if (type$3 == "%") {
+        if (type$3 === ",") { types[i$4] = "N"; }
+        else if (type$3 === "%") {
           var end = (void 0);
-          for (end = i$4 + 1; end < len && types[end] == "%"; ++end) {}
-          var replace = (i$4 && types[i$4-1] == "!") || (end < len && types[end] == "1") ? "1" : "N";
+          for (end = i$4 + 1; end < len && types[end] === "%"; ++end) {}
+          var replace = (i$4 && types[i$4-1] === "!") || (end < len && types[end] === "1") ? "1" : "N";
           for (var j = i$4; j < end; ++j) { types[j] = replace; }
           i$4 = end - 1;
         }
@@ -451,7 +451,7 @@
       // found, then change the type of the European number to L.
       for (var i$5 = 0, cur$1 = outerType; i$5 < len; ++i$5) {
         var type$4 = types[i$5];
-        if (cur$1 == "L" && type$4 == "1") { types[i$5] = "L"; }
+        if (cur$1 === "L" && type$4 === "1") { types[i$5] = "L"; }
         else if (isStrong.test(type$4)) { cur$1 = type$4; }
       }
 
@@ -486,7 +486,7 @@
           order.push(new BidiSpan(0, start, i$7));
         } else {
           var pos = i$7, at = order.length, isRTL = direction == "rtl" ? 1 : 0;
-          for (++i$7; i$7 < len && types[i$7] != "L"; ++i$7) {}
+          for (++i$7; i$7 < len && types[i$7] !== "L"; ++i$7) {}
           for (var j$2 = pos; j$2 < i$7;) {
             if (countsAsNum.test(types[j$2])) {
               if (pos < j$2) { order.splice(at, 0, new BidiSpan(1, pos, j$2)); at += isRTL; }
@@ -609,7 +609,7 @@
     else { e.cancelBubble = true; }
   }
   function e_defaultPrevented(e) {
-    return e.defaultPrevented != null ? e.defaultPrevented : e.returnValue == false
+    return e.defaultPrevented !== null ? e.defaultPrevented : e.returnValue == false
   }
   function e_stop(e) {e_preventDefault(e); e_stopPropagation(e);}
 
@@ -639,7 +639,7 @@
     if (zwspSupported == null) {
       var test = elt("span", "\u200b");
       removeChildrenAndAdd(measure, elt("span", [test, document.createTextNode("x")]));
-      if (measure.firstChild.offsetHeight != 0)
+      if (measure.firstChild.offsetHeight !== 0)
         { zwspSupported = test.offsetWidth <= 1 && test.offsetHeight > 2 && !(ie && ie_version < 8); }
     }
     var node = zwspSupported ? elt("span", "\u200b") :
@@ -651,7 +651,7 @@
   // Feature-detect IE's crummy client rect reporting for bidi text
   var badBidiRects;
   function hasBadBidiRects(measure) {
-    if (badBidiRects != null) { return badBidiRects }
+    if (badBidiRects !== null) { return badBidiRects }
     var txt = removeChildrenAndAdd(measure, document.createTextNode("A\u062eA"));
     var r0 = range(txt, 0, 1).getBoundingClientRect();
     var r1 = range(txt, 1, 2).getBoundingClientRect();
@@ -662,14 +662,14 @@
 
   // See if "".split is the broken IE version, if so, provide an
   // alternative way to split lines.
-  var splitLinesAuto = "\n\nb".split(/\n/).length != 3 ? function (string) {
+  var splitLinesAuto = "\n\nb".split(/\n/).length !== 3 ? function (string) {
     var pos = 0, result = [], l = string.length;
     while (pos <= l) {
       var nl = string.indexOf("\n", pos);
       if (nl == -1) { nl = string.length; }
       var line = string.slice(pos, string.charAt(nl - 1) == "\r" ? nl - 1 : nl);
       var rt = line.indexOf("\r");
-      if (rt != -1) {
+      if (rt !== -1) {
         result.push(line.slice(0, rt));
         pos += rt + 1;
       } else {
@@ -681,14 +681,14 @@
   } : function (string) { return string.split(/\r\n?|\n/); };
 
   var hasSelection = window.getSelection ? function (te) {
-    try { return te.selectionStart != te.selectionEnd }
+    try { return te.selectionStart !== te.selectionEnd }
     catch(e) { return false }
   } : function (te) {
     var range;
     try {range = te.ownerDocument.selection.createRange();}
     catch(e) {}
-    if (!range || range.parentElement() != te) { return false }
-    return range.compareEndPoints("StartToEnd", range) != 0
+    if (!range || range.parentElement() !== te) { return false }
+    return range.compareEndPoints("StartToEnd", range) !== 0
   };
 
   var hasCopyEvent = (function () {
@@ -700,7 +700,7 @@
 
   var badZoomedRects = null;
   function hasBadZoomedRects(measure) {
-    if (badZoomedRects != null) { return badZoomedRects }
+    if (badZoomedRects !== null) { return badZoomedRects }
     var node = removeChildrenAndAdd(measure, elt("span", "x"));
     var normal = node.getBoundingClientRect();
     var fromRange = range(node, 0, 1).getBoundingClientRect();
@@ -1028,7 +1028,7 @@
 
   Context.prototype.lookAhead = function (n) {
     var line = this.doc.getLine(this.line + n);
-    if (line != null && n > this.maxLookAhead) { this.maxLookAhead = n; }
+    if (line !== null && n > this.maxLookAhead) { this.maxLookAhead = n; }
     return line
   };
 
@@ -1109,7 +1109,7 @@
   }
 
   function getLineStyles(cm, line, updateFrontier) {
-    if (!line.styles || line.styles[0] != cm.state.modeGen) {
+    if (!line.styles || line.styles[0] !== cm.state.modeGen) {
       var context = getContextBefore(cm, lineNo(line));
       var resetState = line.text.length > cm.options.maxHighlightLength && copyState(cm.doc.mode, context.state);
       var result = highlightLine(cm, line, context);
@@ -1228,7 +1228,7 @@
         var mName = inner[0].name;
         if (mName) { style = "m-" + (style ? mName + " " + style : mName); }
       }
-      if (!flattenSpans || curStyle != style) {
+      if (!flattenSpans || curStyle !== style) {
         while (curStart < stream.start) {
           curStart = Math.min(stream.start, curStart + 5000);
           f(curStart, curStyle);
@@ -1316,7 +1316,7 @@
   function removeMarkedSpan(spans, span) {
     var r;
     for (var i = 0; i < spans.length; ++i)
-      { if (spans[i] != span) { (r || (r = [])).push(spans[i]); } }
+      { if (spans[i] !== span) { (r || (r = [])).push(spans[i]); } }
     return r
   }
   // Add a span to a line.
@@ -1389,7 +1389,7 @@
       // Fix up .from in last (or move them into first in case of sameLine)
       for (var i$1 = 0; i$1 < last.length; ++i$1) {
         var span$1 = last[i$1];
-        if (span$1.to != null) { span$1.to += offset; }
+        if (span$1.to !== null) { span$1.to += offset; }
         if (span$1.from == null) {
           var found$1 = getMarkedSpanFor(first, span$1.marker);
           if (!found$1) {
@@ -1404,7 +1404,7 @@
     }
     // Make sure we didn't create any zero-length spans
     if (first) { first = clearEmptySpans(first); }
-    if (last && last != first) { last = clearEmptySpans(last); }
+    if (last && last !== first) { last = clearEmptySpans(last); }
 
     var newMarkers = [first];
     if (!sameLine) {
@@ -1426,7 +1426,7 @@
   function clearEmptySpans(spans) {
     for (var i = 0; i < spans.length; ++i) {
       var span = spans[i];
-      if (span.from != null && span.from == span.to && span.marker.clearWhenEmpty !== false)
+      if (span.from !== null && span.from == span.to && span.marker.clearWhenEmpty !== false)
         { spans.splice(i--, 1); }
     }
     if (!spans.length) { return null }
@@ -1487,7 +1487,7 @@
   // comparing ids when the spans cover exactly the same range.
   function compareCollapsedMarkers(a, b) {
     var lenDiff = a.lines.length - b.lines.length;
-    if (lenDiff != 0) { return lenDiff }
+    if (lenDiff !== 0) { return lenDiff }
     var aPos = a.find(), bPos = b.find();
     var fromCmp = cmp(aPos.from, bPos.from) || extraLeft(a) - extraLeft(b);
     if (fromCmp) { return -fromCmp }
@@ -1612,7 +1612,7 @@
     for (var sp = (void 0), i = 0; i < line.markedSpans.length; ++i) {
       sp = line.markedSpans[i];
       if (sp.marker.collapsed && !sp.marker.widgetNode && sp.from == span.to &&
-          (sp.to == null || sp.to != span.from) &&
+          (sp.to == null || sp.to !== span.from) &&
           (sp.marker.inclusiveLeft || span.marker.inclusiveRight) &&
           lineIsHiddenInner(doc, line, sp)) { return true }
     }
@@ -1694,11 +1694,11 @@
     line.text = text;
     if (line.stateAfter) { line.stateAfter = null; }
     if (line.styles) { line.styles = null; }
-    if (line.order != null) { line.order = null; }
+    if (line.order !== null) { line.order = null; }
     detachMarkedSpans(line);
     attachMarkedSpans(line, markedSpans);
     var estHeight = estimateHeight ? estimateHeight(line) : 1;
-    if (estHeight != line.height) { updateLineHeight(line, estHeight); }
+    if (estHeight !== line.height) { updateLineHeight(line, estHeight); }
   }
 
   // Detach a line from the document tree and its markers.
@@ -1744,7 +1744,7 @@
       if (hasBadBidiRects(cm.display.measure) && (order = getOrder(line, cm.doc.direction)))
         { builder.addToken = buildTokenBadBidi(builder.addToken, order); }
       builder.map = [];
-      var allowFrontierUpdate = lineView != cm.display.externalMeasured && lineNo(line);
+      var allowFrontierUpdate = lineView !== cm.display.externalMeasured && lineNo(line);
       insertLineContent(line, builder, getLineStyles(cm, line, allowFrontierUpdate));
       if (line.styleClasses) {
         if (line.styleClasses.bgClass)
@@ -1847,7 +1847,7 @@
       if (endStyle) { fullStyle += endStyle; }
       var token = elt("span", [content], fullStyle, css);
       if (attributes) {
-        for (var attr in attributes) { if (attributes.hasOwnProperty(attr) && attr != "style" && attr != "class")
+        for (var attr in attributes) { if (attributes.hasOwnProperty(attr) && attr !== "style" && attr !== "class")
           { token.setAttribute(attr, attributes[attr]); } }
       }
       return builder.content.appendChild(token)
@@ -1931,7 +1931,7 @@
           if (m.type == "bookmark" && sp.from == pos && m.widgetNode) {
             foundBookmarks.push(m);
           } else if (sp.from <= pos && (sp.to == null || sp.to > pos || m.collapsed && sp.to == pos && sp.from == pos)) {
-            if (sp.to != null && sp.to != pos && nextChange > sp.to) {
+            if (sp.to !== null && sp.to !== pos && nextChange > sp.to) {
               nextChange = sp.to;
               spanEndStyle = "";
             }
@@ -2147,7 +2147,7 @@
     if (lineView.text == lineView.node) { lineView.node = built.pre; }
     lineView.text.parentNode.replaceChild(built.pre, lineView.text);
     lineView.text = built.pre;
-    if (built.bgClass != lineView.bgClass || built.textClass != lineView.textClass) {
+    if (built.bgClass !== lineView.bgClass || built.textClass !== lineView.textClass) {
       lineView.bgClass = built.bgClass;
       lineView.textClass = built.textClass;
       updateLineClasses(cm, lineView);
@@ -2160,7 +2160,7 @@
     updateLineBackground(cm, lineView);
     if (lineView.line.wrapClass)
       { ensureLineWrapped(lineView).className = lineView.line.wrapClass; }
-    else if (lineView.node != lineView.text)
+    else if (lineView.node !== lineView.text)
       { lineView.node.className = ""; }
     var textClass = lineView.textClass ? lineView.textClass + " " + (lineView.line.textClass || "") : lineView.line.textClass;
     lineView.text.className = textClass || "";
@@ -2270,7 +2270,7 @@
   }
 
   function widgetHeight(widget) {
-    if (widget.height != null) { return widget.height }
+    if (widget.height !== null) { return widget.height }
     var cm = widget.doc.cm;
     if (!cm) { return 0 }
     if (!contains(document.body, widget.node)) {
@@ -2286,7 +2286,7 @@
 
   // Return true when the given mouse event happened in a widget
   function eventInWidget(display, e) {
-    for (var n = e_target(e); n != display.wrapper; n = n.parentNode) {
+    for (var n = e_target(e); n !== display.wrapper; n = n.parentNode) {
       if (!n || (n.nodeType == 1 && n.getAttribute("cm-ignore-events") == "true") ||
           (n.parentNode == display.sizer && n != display.mover))
         { return true }

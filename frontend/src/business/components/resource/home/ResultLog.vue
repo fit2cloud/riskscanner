@@ -87,7 +87,6 @@
         let showLogTaskId = this.row.showLogTaskId;
         let url = "/task/log/taskId/";
         this.$get(url + showLogTaskId, response => {
-          console.log(response.data, this.row.taskItemLogDTOs)
           for (let obj of response.data) {
             for (let item of this.row.taskItemLogDTOs) {
               if (obj.taskItem.id === item.taskItem.id) {

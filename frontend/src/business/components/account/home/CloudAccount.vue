@@ -84,7 +84,7 @@
             <el-form-item v-if="tmp.inputType === 'password'" :label="tmp.label" style="margin-bottom: 29px">
               <el-input :type="tmp.inputType" v-model="tmp.input" autocomplete="new-password" show-password :placeholder="tmp.description"/>
             </el-form-item>
-            <el-form-item v-if="tmp.inputType != 'password' && tmp.inputType != 'boolean'" :label="tmp.label">
+            <el-form-item v-if="tmp.inputType !== 'password' && tmp.inputType !== 'boolean'" :label="tmp.label">
               <el-input :type="tmp.inputType" v-model="tmp.input" autocomplete="off" :placeholder="tmp.description"/>
             </el-form-item>
           </div>
@@ -133,7 +133,7 @@
             <el-form-item v-if="tmp.inputType === 'password'" :label="tmp.label" style="margin-bottom: 29px">
               <el-input :type="tmp.inputType" v-model="tmp.input" @input="change($event)" autocomplete="new-password" show-password :placeholder="tmp.description"/>
             </el-form-item>
-            <el-form-item v-if="tmp.inputType != 'password' && tmp.inputType != 'boolean'" :label="tmp.label">
+            <el-form-item v-if="tmp.inputType !== 'password' && tmp.inputType !== 'boolean'" :label="tmp.label">
               <el-input :type="tmp.inputType" v-model="tmp.input" @input="change($event)" autocomplete="off" :placeholder="tmp.description"/>
             </el-form-item>
           </div>
@@ -285,7 +285,7 @@
       },
       //校验云账号
       validate() {
-        if (this.selectIds.size == 0) {
+        if (this.selectIds.size === 0) {
           this.$warning(this.$t('account.please_choose_account'));
           return;
         }
@@ -398,10 +398,10 @@
         });
         let url = "/plugin/";
         this.result = await this.$get(url + pluginId, response => {
-          let fromJson = typeof(response.data) == 'string'?JSON.parse(response.data):response.data;
+          let fromJson = typeof(response.data) === 'string'?JSON.parse(response.data):response.data;
           this.tmpList = fromJson.data;
           if (type === 'edit') {
-            let credentials = typeof(this.item.credential) == 'string'?JSON.parse(this.item.credential):this.item.credential;
+            let credentials = typeof(this.item.credential) === 'string'?JSON.parse(this.item.credential):this.item.credential;
             for (let tmp of this.tmpList) {
               if (credentials[tmp.name] === undefined) {
                 tmp.input = tmp.defaultValue?tmp.defaultValue:"";
@@ -472,7 +472,7 @@
         }
       },
       scan (){
-        if (this.selectIds.size == 0) {
+        if (this.selectIds.size === 0) {
           this.$warning(this.$t('account.please_choose_account'));
           return;
         }

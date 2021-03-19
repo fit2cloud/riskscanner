@@ -26,7 +26,7 @@
     </node-tree>
 
     <!--Create account-->
-    <el-drawer class="rtl" :title="$t('account.create')" :visible.sync="createVisible" size="70%" :before-close="handleClose" :direction="direction"
+    <el-drawer class="rtl" :title="$t('account.create')" :visible.sync="createVisible" size="50%" :before-close="handleClose" :direction="direction"
                :destroy-on-close="true">
       <el-form :model="form" label-position="right" label-width="150px" size="small" :rules="rule" ref="createAccountForm">
         <el-form-item :label="$t('account.name')" ref="name" prop="name">
@@ -218,10 +218,10 @@
       async changePlugin (pluginId, type){
         let url = "/plugin/";
         this.result = await this.$get(url + pluginId, response => {
-          let fromJson = typeof(response.data) == 'string'?JSON.parse(response.data):response.data;
+          let fromJson = typeof(response.data) === 'string'?JSON.parse(response.data):response.data;
           this.tmpList = fromJson.data;
           if (type === 'edit') {
-            let credentials = typeof(this.item.credential) == 'string'?JSON.parse(this.item.credential):this.item.credential;
+            let credentials = typeof(this.item.credential) === 'string'?JSON.parse(this.item.credential):this.item.credential;
             for (let tmp of this.tmpList) {
               if (credentials[tmp.name] === undefined) {
                 tmp.input = tmp.defaultValue?tmp.defaultValue:"";

@@ -8,18 +8,16 @@ import java.io.*;
 
 /**
  * @author maguohao
- * @date 2020-04-30 14:40
  */
 public class CommandUtils {
 
     /**
      * @param command
      * @param workDir 工作路径
-     * @return
      * @throws Exception
      */
     public static String commonExecCmdWithResult(String command, String workDir) throws Exception {
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuilder = new StringBuilder();
         Process exec;
         if (StringUtils.isNotBlank(workDir)) {
             exec = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", command}, null, new File(workDir));
@@ -35,18 +33,17 @@ public class CommandUtils {
             if (exec.exitValue() != 0) {
                 //错误执行返回信息
                 while ((line = errorReader.readLine()) != null) {
-                    stringBuffer.append(line + "\n");
+                    stringBuilder.append(line + "\n");
                 }
             } else {
                 while ((line = reader.readLine()) != null) {
-                    stringBuffer.append(line + "\n");
+                    stringBuilder.append(line + "\n");
                 }
             }
         } catch (InterruptedException e) {
             throw e;
-
         }
-        return stringBuffer.toString();
+        return stringBuilder.toString();
     }
 
     public static String saveAsFile(String content, String id) throws Exception {
@@ -64,10 +61,12 @@ public class CommandUtils {
             ex.printStackTrace();
         } finally {
             try {
+                assert fwriter != null;
                 fwriter.flush();
                 fwriter.close();
-            } catch (IOException ex) {
-                return ex.getMessage();
+            } catch (IOException e) {
+                throw e;
+            } finally {
             }
         }
         return dirPath;

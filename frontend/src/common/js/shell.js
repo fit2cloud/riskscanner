@@ -1,6 +1,6 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: https://codemirror.net/LICENSE
-
+/* eslint-disable */
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
     mod(require("../../lib/codemirror"));
@@ -18,7 +18,7 @@ CodeMirror.defineMode('shell', function() {
     for(var i = 0; i < dict.length; i++) {
       words[dict[i]] = style;
     }
-  };
+  }
 
   var commonAtoms = ["true", "false"];
   var commonKeywords = ["if", "then", "do", "else", "elif", "while", "until", "for", "in", "esac", "fi",
@@ -83,14 +83,14 @@ CodeMirror.defineMode('shell', function() {
   }
 
   function tokenString(quote, style) {
-    var close = quote == "(" ? ")" : quote == "{" ? "}" : quote
+    const close = quote == "(" ? ")" : quote == "{" ? "}" : quote;
     return function(stream, state) {
       var next, escaped = false;
-      while ((next = stream.next()) != null) {
+      while ((next = stream.next()) !== null) {
         if (next === close && !escaped) {
           state.tokens.shift();
           break;
-        } else if (next === '$' && !escaped && quote !== "'" && stream.peek() != close) {
+        } else if (next === '$' && !escaped && quote !== "'" && stream.peek() !== close) {
           escaped = true;
           stream.backUp(1);
           state.tokens.unshift(tokenDollar);
@@ -107,7 +107,7 @@ CodeMirror.defineMode('shell', function() {
       }
       return style;
     };
-  };
+  }
 
   function tokenStringStart(quote, style) {
     return function(stream, state) {
@@ -131,7 +131,7 @@ CodeMirror.defineMode('shell', function() {
 
   function tokenize(stream, state) {
     return (state.tokens[0] || tokenBase) (stream, state);
-  };
+  }
 
   return {
     startState: function() {return {tokens:[]};},

@@ -1,6 +1,6 @@
 const ReportStyle = `.body{
   font-size: 14px;
-  color: #7B0274;
+  color: #7b0274;
 }
 .container {
   height: 100vh;
@@ -33,7 +33,7 @@ const ReportStyle = `.body{
   right: 0;
   height: 50%;
   width: 3px;
-  background-color: #EBEEF5;
+  background-color: #ebeef5;
 }
 span {
     margin-right: 5px;

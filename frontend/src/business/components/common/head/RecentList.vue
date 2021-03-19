@@ -65,7 +65,7 @@
     margin-top: -5px;
     line-height: 36px;
     color: #777777;
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
   }
 
   .recent-text span {

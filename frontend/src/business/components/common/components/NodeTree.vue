@@ -32,7 +32,7 @@
 
         <span v-if="!disabled" class="node-operate child">
           <el-tooltip
-            v-if="data.id != 'root'"
+            v-if="data.id !== 'root'"
             class="item"
             effect="dark"
             :open-delay="200"
@@ -49,7 +49,7 @@
             <i @click.stop="append(node, data)" class="el-icon-circle-plus-outline"></i>
           </el-tooltip>
           <el-tooltip
-            v-if="data.id != 'root'"
+            v-if="data.id !== 'root'"
             class="item" effect="dark"
             :open-delay="200"
             :content="$t('commons.delete')"
@@ -105,7 +105,7 @@ export default {
   },
   computed: {
     disabled() {
-      return this.type != 'edit';
+      return this.type !== 'edit';
     }
   },
   methods: {
@@ -227,7 +227,7 @@ export default {
       } else {
         param.level = 1;
         param.type = 'add';
-        if (parentData.id != 'root') {
+        if (parentData.id !== 'root') {
           // 非根节点
           param.parentId = parentData.id;
           param.level = parentData.level + 1;
@@ -255,7 +255,7 @@ export default {
       }
       let nodeIds = [];
       this.getChildNodeId(draggingNode.data, nodeIds);
-      if (dropNode.data.level == 1 && dropType != "inner") {
+      if (dropNode.data.level === 1 && dropType !== "inner") {
         // nodeTree 为需要修改的子节点
         param.nodeTree = draggingNode.data;
       } else {
@@ -286,7 +286,7 @@ export default {
       }
     },
     findTreeByNodeId(rootNode, nodeId) {
-      if (rootNode.id == nodeId) {
+      if (rootNode.id === nodeId) {
         return rootNode;
       }
       if (rootNode.children) {
@@ -307,10 +307,10 @@ export default {
       }
     },
     getParentNodes(rootNode, pNodes) {
-      if (rootNode.parent && rootNode.parent.id != 0) {
+      if (rootNode.parent && rootNode.parent.id !== 0) {
         this.getParentNodes(rootNode.parent, pNodes);
       }
-      if (rootNode.data.name && rootNode.data.name != "") {
+      if (rootNode.data.name && rootNode.data.name !== "") {
         pNodes.push(rootNode.data);
       }
     },
