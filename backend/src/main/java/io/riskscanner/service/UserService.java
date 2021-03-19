@@ -58,7 +58,7 @@ public class UserService {
     @Resource
     private ExtUserMapper extUserMapper;
 
-    public UserDTO insert(UserRequest user) {
+    public UserDTO insert(UserRequest user) throws Exception {
         checkUserParam(user);
         //
         String id = user.getId();
@@ -166,7 +166,7 @@ public class UserService {
         }
     }
 
-    public UserDTO getUserDTO(String userId) {
+    public UserDTO getUserDTO(String userId) throws Exception {
 
         User user = userMapper.selectByPrimaryKey(userId);
         if (user == null) {
@@ -183,7 +183,7 @@ public class UserService {
         return userDTO;
     }
 
-    public UserDTO getLoginUser(String userId, List<String> list) {
+    public UserDTO getLoginUser(String userId, List<String> list) throws Exception {
         UserExample example = new UserExample();
         example.createCriteria().andIdEqualTo(userId).andSourceIn(list);
         if (userMapper.countByExample(example) == 0) {
@@ -192,7 +192,7 @@ public class UserService {
         return getUserDTO(userId);
     }
 
-    public UserDTO getUserDTOByEmail(String email, String... source) {
+    public UserDTO getUserDTOByEmail(String email, String... source) throws Exception {
         UserExample example = new UserExample();
         UserExample.Criteria criteria = example.createCriteria();
         criteria.andEmailEqualTo(email);
@@ -210,7 +210,7 @@ public class UserService {
         return getUserDTO(users.get(0).getId());
     }
 
-    public UserRoleDTO getUserRole(String userId) {
+    public UserRoleDTO getUserRole(String userId) throws Exception {
         UserRoleDTO userRoleDTO = new UserRoleDTO();
         //
         UserRoleExample userRoleExample = new UserRoleExample();
@@ -287,7 +287,7 @@ public class UserService {
         userMapper.updateByPrimaryKeySelective(user);
     }
 
-    public UserDTO getUserInfo(String userId) {
+    public UserDTO getUserInfo(String userId) throws Exception {
         return getUserDTO(userId);
     }
 

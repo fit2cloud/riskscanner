@@ -33,7 +33,6 @@
       handleCommand(command) {
         switch (command) {
           case "personal":
-            // TODO 优化路由跳转，避免重复添加路由
             this.$router.push('/setting/personsetting').catch(error => error);
             break;
           case "logout":
@@ -41,11 +40,6 @@
               if (response.data.success) {
                 localStorage.clear();
                 window.location.href = "/login";
-              } else {
-                if (response.data.message === 'sso') {
-                  localStorage.clear();
-                  window.location.href = "/sso/logout"
-                }
               }
             }).catch(error => {
               localStorage.clear();

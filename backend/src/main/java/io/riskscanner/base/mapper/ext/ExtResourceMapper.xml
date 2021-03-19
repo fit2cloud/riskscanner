@@ -239,7 +239,7 @@
                 AND t.project like CONCAT('%',#{name},'%')
             </if>
         </where>
-        ORDER BY t.id
+        ORDER BY FIELD(status, 'risky','risk_free'), t.id
     </select>
 
     <select id="getReportTaskList" resultType="io.riskscanner.base.domain.Task" parameterType="java.lang.String">

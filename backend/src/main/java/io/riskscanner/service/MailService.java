@@ -151,12 +151,13 @@ public class MailService {
 
     private String getNotNullValue(String key) {
         SystemParameter systemParameter = systemParameterMapper.selectByPrimaryKey(key);
+        String str = " not set";
         if (systemParameter == null) {
-            throw new RuntimeException(key + " not set");
+            throw new RuntimeException(key + str);
         }
         String value = systemParameter.getParamValue();
         if (StringUtils.isBlank(value)) {
-            throw new RuntimeException(key + " not set");
+            throw new RuntimeException(key + str);
         }
         return value;
     }

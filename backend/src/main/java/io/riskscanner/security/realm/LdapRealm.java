@@ -8,6 +8,7 @@ import io.riskscanner.commons.utils.SessionUtils;
 import io.riskscanner.dto.UserDTO;
 import io.riskscanner.i18n.Translator;
 import io.riskscanner.service.UserService;
+import lombok.SneakyThrows;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -46,13 +47,14 @@ public class LdapRealm extends AuthorizingRealm {
     /**
      * 权限认证
      */
+    @SneakyThrows
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String userId = (String) principals.getPrimaryPrincipal();
         return getAuthorizationInfo(userId, userService);
     }
 
-    public static AuthorizationInfo getAuthorizationInfo(String userId, UserService userService) {
+    public static AuthorizationInfo getAuthorizationInfo(String userId, UserService userService) throws Exception {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         // roles 内容填充
         UserDTO userDTO = userService.getUserDTO(userId);
@@ -64,6 +66,7 @@ public class LdapRealm extends AuthorizingRealm {
     /**
      * 登录认证
      */
+    @SneakyThrows
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
@@ -74,7 +77,7 @@ public class LdapRealm extends AuthorizingRealm {
         return loginLdapMode(userId, password);
     }
 
-    private AuthenticationInfo loginLdapMode(String userId, String password) {
+    private AuthenticationInfo loginLdapMode(String userId, String password) throws Exception {
         // userId 或 email 有一个相同就返回User
         String email = (String) SecurityUtils.getSubject().getSession().getAttribute("email");
         UserDTO user = userService.getLoginUser(userId, Arrays.asList(UserSource.LDAP.name(), UserSource.LOCAL.name()));
