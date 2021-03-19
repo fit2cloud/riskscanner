@@ -8,6 +8,7 @@ import io.riskscanner.commons.utils.SessionUtils;
 import io.riskscanner.dto.UserDTO;
 import io.riskscanner.i18n.Translator;
 import io.riskscanner.service.UserService;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -51,13 +52,14 @@ public class ShiroDBRealm extends AuthorizingRealm {
     /**
      * 权限认证
      */
+    @SneakyThrows
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String userId = (String) principals.getPrimaryPrincipal();
         return getAuthorizationInfo(userId, userService);
     }
 
-    public static AuthorizationInfo getAuthorizationInfo(String userId, UserService userService) {
+    public static AuthorizationInfo getAuthorizationInfo(String userId, UserService userService) throws Exception {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         // roles 内容填充
         UserDTO userDTO = userService.getUserDTO(userId);
@@ -69,6 +71,7 @@ public class ShiroDBRealm extends AuthorizingRealm {
     /**
      * 登录认证
      */
+    @SneakyThrows
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
@@ -96,7 +99,7 @@ public class ShiroDBRealm extends AuthorizingRealm {
 
     }
 
-    private UserDTO getUserWithOutAuthenticate(String userId) {
+    private UserDTO getUserWithOutAuthenticate(String userId) throws Exception {
         UserDTO user = userService.getUserDTO(userId);
         String msg;
         if (user == null) {
@@ -110,7 +113,7 @@ public class ShiroDBRealm extends AuthorizingRealm {
         return user;
     }
 
-    private AuthenticationInfo loginLocalMode(String userId, String password) {
+    private AuthenticationInfo loginLocalMode(String userId, String password) throws Exception {
         UserDTO user = userService.getLoginUser(userId, Collections.singletonList(UserSource.LOCAL.name()));
         String msg;
         if (user == null) {

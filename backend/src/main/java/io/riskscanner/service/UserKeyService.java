@@ -36,7 +36,7 @@ public class UserKeyService {
         return userKeyMapper.selectByExample(userKeysExample);
     }
 
-    public UserKey generateUserKey(String userId) {
+    public UserKey generateUserKey(String userId) throws Exception {
         if (userService.getUserDTO(userId) == null) {
             RSException.throwException(Translator.get("user_not_exist") + userId);
         }

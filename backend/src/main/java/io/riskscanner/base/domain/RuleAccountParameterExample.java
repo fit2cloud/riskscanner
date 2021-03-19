@@ -1,5 +1,7 @@
 package io.riskscanner.base.domain;
 
+import io.riskscanner.commons.constants.ParamConstants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,21 +177,21 @@ public class RuleAccountParameterExample {
 
         protected void addCriterion(String condition) {
             if (condition == null) {
-                throw new RuntimeException("Value for condition cannot be null");
+                throw new RuntimeException(ParamConstants.CanNotBeNull);
             }
             criteria.add(new Criterion(condition));
         }
 
         protected void addCriterion(String condition, Object value, String property) {
             if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
+                throw new RuntimeException(ParamConstants.ValueFor + property + ParamConstants.CanNotNull);
             }
             criteria.add(new Criterion(condition, value));
         }
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
             if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
+                throw new RuntimeException(ParamConstants.BetweenValuesFor + property + ParamConstants.CanNotNull);
             }
             criteria.add(new Criterion(condition, value1, value2));
         }

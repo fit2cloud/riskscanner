@@ -54,7 +54,8 @@ public class CodingUtil {
 
             return new String(str);
         } catch (Exception e) {
-            throw new RuntimeException("MD5 encrypt error:", e);
+            String str = "MD5 encrypt error:";
+            throw new RuntimeException(str, e);
         }
     }
 
@@ -72,7 +73,7 @@ public class CodingUtil {
                 b = Base64.decodeBase64(src);
                 result = new String(b, UTF_8);
             } catch (Exception e) {
-                throw new RuntimeException("BASE64 decoding error:", e);
+                throw new RuntimeException(e.getMessage());
             }
         }
         return result;
@@ -90,7 +91,8 @@ public class CodingUtil {
             try {
                 result = Base64.encodeBase64String(src.getBytes(UTF_8));
             } catch (Exception e) {
-                throw new RuntimeException("BASE64 encoding error:", e);
+                String str = "BASE64 encoding error:";
+                throw new RuntimeException(str, e);
             }
         }
         return result;
@@ -106,7 +108,8 @@ public class CodingUtil {
      */
     public static String aesEncrypt(String src, String secretKey, String iv) {
         if (StringUtils.isBlank(secretKey)) {
-            throw new RuntimeException("secretKey is empty");
+            String str = "secretKey is empty";
+            throw new RuntimeException(str);
         }
 
         try {
@@ -119,7 +122,8 @@ public class CodingUtil {
             byte[] encrypted = cipher.doFinal(src.getBytes(UTF_8));
             return Base64.encodeBase64String(encrypted);
         } catch (Exception e) {
-            throw new RuntimeException("AES encrypt error:", e);
+            String str = "AES encrypt error:";
+            throw new RuntimeException(str, e);
         }
 
     }
@@ -134,7 +138,8 @@ public class CodingUtil {
      */
     public static String aesDecrypt(String src, String secretKey, String iv) {
         if (StringUtils.isBlank(secretKey)) {
-            throw new RuntimeException("secretKey is empty");
+            String str = "secretKey is empty";
+            throw new RuntimeException(str);
         }
         try {
             byte[] raw = secretKey.getBytes(UTF_8);
@@ -149,7 +154,8 @@ public class CodingUtil {
             // 解密的原字符串为非加密字符串，则直接返回原字符串
             return src;
         } catch (Exception e) {
-            throw new RuntimeException("decrypt error，please check parameters", e);
+            String str = "decrypt error，please check parameters";
+            throw new RuntimeException(str, e);
         }
     }
 
@@ -160,7 +166,8 @@ public class CodingUtil {
             SecretKey secretKey = keyGen.generateKey();
             return Base64.encodeBase64String(secretKey.getEncoded());
         } catch (Exception e) {
-            throw new RuntimeException("generate secretKey error", e);
+            String str = "generate secretKey error";
+            throw new RuntimeException(str, e);
         }
 
     }

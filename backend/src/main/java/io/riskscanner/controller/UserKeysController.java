@@ -44,7 +44,7 @@ public class UserKeysController {
 
     @ApiOperation(value = "生成API Keys")
     @GetMapping("generate")
-    public void generateUserKey() {
+    public void generateUserKey() throws Exception {
         String userId = SessionUtils.getUser().getId();
         userKeyService.generateUserKey(userId);
     }

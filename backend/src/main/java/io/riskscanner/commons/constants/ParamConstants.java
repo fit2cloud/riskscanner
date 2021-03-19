@@ -161,4 +161,9 @@ public interface ParamConstants {
             return this.value;
         }
     }
+
+    public static String CanNotBeNull = "Value for condition cannot be null";
+    public static String ValueFor = "Value for ";
+    public static String CanNotNull = " cannot be null";
+    public static String BetweenValuesFor = "Between values for ";
 }

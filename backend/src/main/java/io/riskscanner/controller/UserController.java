@@ -38,7 +38,7 @@ public class UserController {
     @ApiOperation(value = "添加用户")
     @PostMapping("/special/add")
     @RequiresRoles(RoleConstants.ADMIN)
-    public UserDTO insertUser(@RequestBody UserRequest user) {
+    public UserDTO insertUser(@RequestBody UserRequest user) throws Exception {
         return userService.insert(user);
     }
 
@@ -53,7 +53,7 @@ public class UserController {
     @ApiOperation(value = "用户角色")
     @GetMapping("/special/user/role/{userId}")
     @RequiresRoles(RoleConstants.ADMIN)
-    public UserRoleDTO getUserRole(@PathVariable("userId") String userId) {
+    public UserRoleDTO getUserRole(@PathVariable("userId") String userId) throws Exception {
         return userService.getUserRole(userId);
     }
 
@@ -144,7 +144,7 @@ public class UserController {
 
     @ApiIgnore
     @PostMapping("/update/current")
-    public UserDTO updateCurrentUser(@RequestBody User user) {
+    public UserDTO updateCurrentUser(@RequestBody User user) throws Exception {
         userService.updateUser(user);
         UserDTO userDTO = userService.getUserDTO(user.getId());
         SessionUtils.putUser(SessionUser.fromUser(userDTO));
@@ -153,7 +153,7 @@ public class UserController {
 
     @ApiOperation(value = "用户信息")
     @GetMapping("/info/{userId}")
-    public UserDTO getUserInfo(@PathVariable(value = "userId") String userId) {
+    public UserDTO getUserInfo(@PathVariable(value = "userId") String userId) throws Exception {
         return userService.getUserInfo(userId);
     }
 

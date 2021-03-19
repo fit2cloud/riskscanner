@@ -32,6 +32,9 @@ export default {
     axios.defaults.withCredentials = true;
 
     axios.interceptors.response.use(response => {
+      console.log(22222222, response)
+      console.log(22222333, response.headers["authentication-status"])
+      console.log(22222444, response.headers["authentication-status"] === "invalid")
       if (response.headers["authentication-status"] === "invalid") {
         login();
       }
@@ -66,6 +69,7 @@ export default {
       result.loading = false;
       window.console.error(error.response || error.message);
       if (error.response && error.response.data) {
+        console.log(1111111111111, error.response)
         if (error.response.headers["authentication-status"] !== "invalid") {
           Message.error({message: error.response.data.message || error.response.data, showClose: true});
         }

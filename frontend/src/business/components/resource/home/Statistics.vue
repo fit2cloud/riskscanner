@@ -590,5 +590,9 @@
 
   .border-card {
   }
+
+  .rtl >>> .el-drawer{
+    overflow: scroll;
+  }
   /deep/ :focus{outline:0;}
 </style>

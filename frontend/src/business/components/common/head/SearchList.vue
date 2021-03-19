@@ -107,6 +107,15 @@ export default {
         localStorage.setItem(ACCOUNT_ID, accountId);
         let account = this.searchArray.filter(p => p.id === accountId);
         if(account) localStorage.setItem(ACCOUNT_NAME, account[0].name);
+
+        //如果在详情页面切换云账号，直接返回扫描结果页面并刷新
+        let path = this.$route.path;
+        if (path.indexOf("/resource/resultdetails") >= 0) {
+          this.$router.push({
+            path: '/resource/result',
+          }).catch(error => error);
+        }
+
         window.location.reload();
         this.changeAccountName(accountId);
       });

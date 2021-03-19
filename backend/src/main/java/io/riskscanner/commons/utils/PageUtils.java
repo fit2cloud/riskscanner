@@ -11,7 +11,7 @@ public class PageUtils {
             pager.setItemCount(page.getTotal());
             return pager;
         } catch (Exception e) {
-            throw new RuntimeException("Error saving current page number data！");
+            throw new RuntimeException(e.getMessage());
         }
     }
 }
