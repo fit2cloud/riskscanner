@@ -13,7 +13,7 @@
           <el-row type="flex" justify="center" align="middle">
             <i class="circle success"/>
             <div class="metric-box">
-              <div class="value">{{ content.totalRegulation - content.riskyRegulation }}</div>
+              <div class="value">{{ freeRegulations }}</div>
               <div class="name">{{ $t('resource.risk_free_regulations') }}</div>
             </div>
             <div style="width: 40px"></div>
@@ -40,7 +40,7 @@
           </div>
           <div class="metric-icon-box">
             <i class="el-icon-document-copy total"></i>
-            <div class="value">{{ this.content.resourcesSum?this.content.resourcesSum:0 }}</div>
+            <div class="value">{{ this.content.resourcesSum ? this.content.resourcesSum : 0 }}</div>
             <div class="name">{{ $t('resource.cumulative_audit_resources') }}</div>
           </div>
         </el-row>
@@ -59,13 +59,11 @@ export default {
     content: Object
   },
   data() {
-    return {
-    }
+    return {}
   },
   created() {
   },
-  methods: {
-  },
+  methods: {},
   computed: {
     options() {
       return {
@@ -119,12 +117,21 @@ export default {
         ]
       };
     },
-
+    freeRegulations({content = {}}) {
+      const {totalRegulation, riskyRegulation} = content
+      if (!(totalRegulation && totalRegulation)) {
+        return 0
+      }
+      return totalRegulation - riskyRegulation
+    },
     fail() {
-      return ((this.content.returnSum?this.content.returnSum:0) / (this.content.resourcesSum != 0?this.content.resourcesSum:1) * 100).toFixed(0) + "%";
+      if (!(this.content.returnSum && this.content.resourcesSum)) {
+        return "0%"
+      }
+      return ((this.content.returnSum ? this.content.returnSum : 0) / (this.content.resourcesSum !== 0 ? this.content.resourcesSum : 1) * 100).toFixed(0) + "%";
     },
     assertions() {
-      return (this.content.returnSum?this.content.returnSum:0) + ' / ' + (this.content.resourcesSum?this.content.resourcesSum:0);
+      return (this.content.returnSum ? this.content.returnSum : 0) + ' / ' + (this.content.resourcesSum ? this.content.resourcesSum : 0);
     }
   },
 }
