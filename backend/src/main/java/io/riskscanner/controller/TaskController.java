@@ -68,7 +68,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "getCronDesc/{taskId}")
-    public void getCronDesc(@PathVariable String taskId) {
+    public void getCronDesc(@PathVariable String taskId) throws Exception {
         orderService.getCronDesc(taskId);
     }
 

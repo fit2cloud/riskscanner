@@ -351,17 +351,17 @@ export default {
 }
 
 .node-title {
-  width: 0px;
+  width: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
   flex: 1 1 auto;
-  padding: 0px 5px;
+  padding: 0 5px;
   overflow: hidden;
 }
 
 .node-operate > i {
   color: #409eff;
-  margin: 0px 5px;
+  margin: 0 5px;
 }
 
 .name-input {

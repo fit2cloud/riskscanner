@@ -1,14 +1,14 @@
 <template>
   <el-dropdown size="medium" @command="handleCommand" class="align-right">
     <span class="dropdown-link">
-        {{currentUser.name}}<i class="el-icon-caret-bottom el-icon--right"/>
+        {{ currentUser.name }}<i class="el-icon-caret-bottom el-icon--right"/>
     </span>
     <template v-slot:dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item command="personal">{{$t('commons.personal_information')}}</el-dropdown-item>
-        <el-dropdown-item command="about">{{$t('commons.about_us')}} <i class="el-icon-info"/></el-dropdown-item>
+        <el-dropdown-item command="personal">{{ $t('commons.personal_information') }}</el-dropdown-item>
+        <el-dropdown-item command="about">{{ $t('commons.about_us') }} <i class="el-icon-info"/></el-dropdown-item>
         <el-dropdown-item command="ApiHelp">{{ $t('commons.api_help_documentation') }}</el-dropdown-item>
-        <el-dropdown-item command="logout">{{$t('commons.exit_system')}}</el-dropdown-item>
+        <el-dropdown-item command="logout">{{ $t('commons.exit_system') }}</el-dropdown-item>
       </el-dropdown-menu>
     </template>
 

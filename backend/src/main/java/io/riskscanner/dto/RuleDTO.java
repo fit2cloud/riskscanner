@@ -116,7 +116,7 @@ public class RuleDTO extends Rule {
         isSaveParam = saveParam;
     }
 
-    public RuleDTO fromRules(Rule rule) {
+    public RuleDTO fromRules(Rule rule) throws Exception {
         RuleDTO ruleDTO = new RuleDTO();
         BeanUtils.copyBean(ruleDTO, rule);
         List<RuleTag> sfRulesTagList = CommonBeanFactory.getBean(ExtRuleMapper.class).getTagsOfRule(rule.getId());

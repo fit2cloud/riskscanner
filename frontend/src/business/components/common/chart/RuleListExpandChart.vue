@@ -12,7 +12,7 @@ let opt = {
   index: 0
 };
 let color = ['#11cfae', '#009ef0', '#627dec', '#0051a4', '#893fdc', '#89ffff', '#0099ff'];
-
+/* eslint-disable */
 export default {
   name: "RuleListPieChart",
   components: {RsChart},

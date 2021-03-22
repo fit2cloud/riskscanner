@@ -4,12 +4,12 @@
       <el-form-item :key="element.key" v-for="element in elements" :label="element.key + ' : '">
         <span v-if="!element.flag" show-overflow-tooltip>
           <el-tooltip class="item" effect="dark" :content="JSON.stringify(element.value)" placement="top">
-            <el-link type="primary" @click="showJson(element)">{{'Details'}}</el-link>
+            <el-link type="primary" @click="showJson(element)">{{ 'Details' }}</el-link>
           </el-tooltip>
         </span>
         <el-tooltip v-if="element.flag && !!element.value" class="item" effect="light" :content="element.value" placement="top">
           <span class="table-expand-span-value">
-              {{element.value}}
+              {{ element.value }}
           </span>
         </el-tooltip>
         <span v-if="element.flag && !element.value"> N/A</span>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-
+/* eslint-disable */
   export default {
     name: "ResultReadOnly",
     props: {

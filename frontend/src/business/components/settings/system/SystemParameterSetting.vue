@@ -14,7 +14,7 @@
 <script>
 import EmailSetting from "./EmailSetting";
 import LdapSetting from "./LdapSetting";
-
+/* eslint-disable */
 export default {
   name: "SystemParameterSetting",
   components: {

@@ -57,7 +57,7 @@ public class RuleController {
 
     @ApiOperation(value = "规则标签")
     @GetMapping(value = "ruleTags")
-    public List<RuleTagDTO> getRuleTags() {
+    public List<RuleTagDTO> getRuleTags() throws Exception {
         return ruleService.getRuleTags();
     }
 
@@ -88,7 +88,7 @@ public class RuleController {
 
     @ApiOperation(value = "测试运行规则")
     @PostMapping(value = "dryRun")
-    public Object dryRun(@RequestBody RuleDTO ruleDTO) {
+    public Object dryRun(@RequestBody RuleDTO ruleDTO) throws Exception {
         return ruleService.dryRun(ruleDTO);
     }
 
@@ -100,13 +100,13 @@ public class RuleController {
 
     @ApiOperation(value = "规则详情")
     @GetMapping(value = "get/{ruleId}")
-    public RuleDTO getRule(@PathVariable String ruleId) {
+    public RuleDTO getRule(@PathVariable String ruleId) throws Exception {
         return ruleService.getRuleById(ruleId);
     }
 
     @ApiIgnore
     @GetMapping(value = "getRuleByTaskId/{taskId}")
-    public RuleDTO getRuleByTaskId(@PathVariable String taskId) {
+    public RuleDTO getRuleByTaskId(@PathVariable String taskId) throws Exception {
         return ruleService.getRuleByTaskId(taskId);
     }
 
@@ -154,7 +154,7 @@ public class RuleController {
 
     @ApiIgnore
     @GetMapping("reScan/{taskId}/{accountId}")
-    public void reScan(@PathVariable String taskId, @PathVariable String accountId) {
+    public void reScan(@PathVariable String taskId, @PathVariable String accountId) throws Exception {
         ruleService.reScan(taskId, accountId);
     }
 

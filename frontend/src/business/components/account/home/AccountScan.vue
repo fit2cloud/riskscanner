@@ -20,20 +20,20 @@
             <template v-slot:default="scope">
               <span>
                 <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                 &nbsp;&nbsp; {{scope.row.name}}
+                 &nbsp;&nbsp; {{ scope.row.name }}
               </span>
             </template>
           </el-table-column>
           <el-table-column :label="$t('account.regions')" min-width="15%" show-overflow-tooltip>
             <template v-slot:default="scope">
               <el-select v-model="scope.row.regions" multiple collapse-tags filterable :placeholder="$t('account.please_choose_region')" :clearable="true" style="width: 100%;">
-                <el-checkbox v-model="scope.row.checkAll" @change="selectOnChangeAll(scope.row.checkAll, scope.row)">{{$t('account.i18n_sync_all')}}</el-checkbox>
+                <el-checkbox v-model="scope.row.checkAll" @change="selectOnChangeAll(scope.row.checkAll, scope.row)">{{ $t('account.i18n_sync_all') }}</el-checkbox>
                 <el-option
                   v-for="item in regions"
                   :key="item.regionId"
                   :label="item.regionName"
                   :value="item.regionId">
-                  &nbsp;&nbsp; {{item.regionName}}
+                  &nbsp;&nbsp; {{ item.regionName }}
                 </el-option>
               </el-select>
             </template>
@@ -51,7 +51,7 @@
           </el-table-column>
           <el-table-column :label="$t('rule.resource_type')" min-width="10%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              <span v-for="(resourceType, index) in scope.row.types" :key="index">[{{resourceType}}] </span>
+              <span v-for="(resourceType, index) in scope.row.types" :key="index">[{{ resourceType }}] </span>
             </template>
           </el-table-column>
           <el-table-column :label="$t('account.save_param')" min-width="10%" show-overflow-tooltip>
@@ -74,13 +74,13 @@
         <el-form :model="form" label-position="right" label-width="60px" size="small" :rules="rule" ref="form">
           <el-form-item :label="$t('account.regions')">
             <el-select v-model="form.quickSettingRegions" multiple filterable collapse-tags :placeholder="$t('account.please_choose_region')" :clearable="true" style="width: 100%;">
-              <el-checkbox v-model="checkAll" @change="selectOnChangeAll(checkAll, null)">{{$t('account.i18n_sync_all')}}</el-checkbox>
+              <el-checkbox v-model="checkAll" @change="selectOnChangeAll(checkAll, null)">{{ $t('account.i18n_sync_all') }}</el-checkbox>
               <el-option
                 v-for="item in regions"
                 :key="item.regionId"
                 :label="item.regionName"
                 :value="item.regionId">
-                &nbsp;&nbsp; {{$t(item.regionName)}}
+                &nbsp;&nbsp; {{ $t(item.regionName) }}
               </el-option>
             </el-select>
           </el-form-item>

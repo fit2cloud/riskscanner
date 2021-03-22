@@ -42,11 +42,11 @@ public class MybatisInterceptor implements Interceptor {
             boolean isDecrypted = false;
             for (Object val : (ArrayList<?>) returnValue) {
                 Object a = undo(val);
-                if (a != val) {
+                if (a == val) {
+                    break;
+                } else {
                     isDecrypted = true;
                     list.add(a);
-                } else {
-                    break;
                 }
             }
             if (isDecrypted) {

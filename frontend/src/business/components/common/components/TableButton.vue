@@ -1,6 +1,6 @@
 <template>
   <el-button :disabled="disabled" @click="exec()" plain :type="type" :icon="icon" :size="size">
-    {{content}}
+    {{ content }}
   </el-button>
 </template>
 

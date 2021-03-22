@@ -49,11 +49,11 @@ public class DBEncryptInterceptor {
             boolean isDecrypted = false;
             for (Object val : (ArrayList<?>) returnValue) {
                 Object a = decrypt(val);
-                if (a != val) {
+                if (a == val) {
+                    break;
+                } else {
                     isDecrypted = true;
                     list.add(a);
-                } else {
-                    break;
                 }
             }
             if (isDecrypted) {

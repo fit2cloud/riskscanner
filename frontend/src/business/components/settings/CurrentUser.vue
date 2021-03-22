@@ -3,7 +3,7 @@
     <div class="icon-title">
       <span>{{ currentUser.name.substring(0, 1) }}</span>
     </div>
-    <span class="username">{{currentUser.name}}</span>
+    <span class="username">{{ currentUser.name }}</span>
   </el-row>
 </template>
 

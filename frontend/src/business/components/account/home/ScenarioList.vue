@@ -8,7 +8,7 @@
 
 <script>
   import CardContentRule from "./CardContentRule";
-
+  /* eslint-disable */
   export default {
     name: "ScenarioList",
     components: {
@@ -48,6 +48,6 @@
 
 <style scoped>
   /deep/ .el-drawer__header {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 </style>

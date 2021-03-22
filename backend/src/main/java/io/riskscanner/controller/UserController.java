@@ -38,7 +38,7 @@ public class UserController {
     @ApiOperation(value = "添加用户")
     @PostMapping("/special/add")
     @RequiresRoles(RoleConstants.ADMIN)
-    public UserDTO insertUser(@RequestBody UserRequest user) {
+    public UserDTO insertUser(@RequestBody UserRequest user) throws Exception {
         return userService.insert(user);
     }
 
@@ -168,7 +168,7 @@ public class UserController {
      */
     @ApiOperation(value = "修改用户密码")
     @PostMapping("/update/password")
-    public int updateCurrentUserPassword(@RequestBody EditPassWordRequest request) {
+    public int updateCurrentUserPassword(@RequestBody EditPassWordRequest request) throws Exception {
         return userService.updateCurrentUserPassword(request);
     }
 
@@ -177,7 +177,7 @@ public class UserController {
      */
     @ApiIgnore
     @PostMapping("/special/password")
-    public int updateUserPassword(@RequestBody EditPassWordRequest request) {
+    public int updateUserPassword(@RequestBody EditPassWordRequest request) throws Exception {
         return userService.updateUserPassword(request);
     }
 

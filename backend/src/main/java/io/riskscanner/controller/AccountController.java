@@ -83,7 +83,7 @@ public class AccountController {
 
     @ApiOperation(value = "更新云账号")
     @PostMapping("update")
-    public AccountWithBLOBs editAccount(@RequestBody UpdateCloudAccountRequest request) {
+    public AccountWithBLOBs editAccount(@RequestBody UpdateCloudAccountRequest request) throws Exception {
         return accountService.editAccount(request);
     }
 

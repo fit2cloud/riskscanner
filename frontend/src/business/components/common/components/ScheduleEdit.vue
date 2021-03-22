@@ -10,12 +10,12 @@
                 prop="cronValue">
                 <el-input :disabled="isReadOnly" v-model="form.cronValue" class="inp"
                           :placeholder="$t('schedule.please_input_cron_expression')"/>
-                <!--          <el-button type="primary" @click="showCronDialog">{{$t('schedule.generate_expression')}}</el-button>-->
-                <el-button :disabled="isReadOnly" type="primary" @click="saveCron">{{$t('commons.save')}}</el-button>
+                <!--          <el-button type="primary" @click="showCronDialog">{{ $t('schedule.generate_expression') }}</el-button>-->
+                <el-button :disabled="isReadOnly" type="primary" @click="saveCron">{{ $t('commons.save') }}</el-button>
               </el-form-item>
               <el-form-item>
                 <el-link :disabled="isReadOnly" type="primary" @click="showCronDialog">
-                  {{$t('schedule.generate_expression')}}
+                  {{ $t('schedule.generate_expression') }}
                 </el-link>
               </el-form-item>
               <crontab-result :ex="form.cronValue" ref="crontabResult"/>
@@ -100,7 +100,7 @@
                   </template>
                 </el-table-column>
               </el-table>
-                <el-button  type="primary" @click="saveNotice">{{$t('commons.save')}}</el-button>
+                <el-button  type="primary" @click="saveNotice">{{ $t('commons.save') }}</el-button>
             </template>
           </el-tab-pane>
         </el-tabs>

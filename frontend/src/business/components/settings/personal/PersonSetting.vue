@@ -4,7 +4,7 @@
       <template v-slot:header>
         <div>
           <el-row type="flex" just ify="space-between" align="middle">
-            <span class="title">{{$t('commons.personal_info')}}</span>
+            <span class="title">{{ $t('commons.personal_info') }}</span>
           </el-row>
         </div>
       </template>
@@ -82,7 +82,7 @@
   import DialogFooter from "../../common/components/DialogFooter";
   import {getCurrentUser, listenGoBack, removeGoBackListener} from "../../../../common/js/utils";
   import TableOperatorButton from "../../common/components/TableOperatorButton";
-
+  /* eslint-disable */
   export default {
     name: "PersonSetting",
     components: {DialogFooter, TableOperatorButton},

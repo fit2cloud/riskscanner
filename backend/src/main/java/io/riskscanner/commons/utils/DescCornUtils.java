@@ -13,11 +13,11 @@ public class DescCornUtils {
     static final String EVERY_ = "/";
     static final String AND_ = ",";
 
-    public static String descCorn(String cronExp) {
+    public static String descCorn(String cronExp) throws Exception {
         String[] tmpCorns = cronExp.split(" ");
         StringBuffer sBuffer = new StringBuffer();
         if (tmpCorns.length > 7) {
-            throw new RuntimeException("请补全表达式,必须标准的cron表达式才能解析");
+            throw new Exception("请补全表达式,必须标准的cron表达式才能解析");
         }
         if (tmpCorns.length == 7) {
             // 解析年
@@ -51,7 +51,7 @@ public class DescCornUtils {
      * @param sBuffer
      * @param unit
      */
-    private static void desc(String s, StringBuffer sBuffer, String unit) {
+    private static void desc(String s, StringBuffer sBuffer, String unit) throws Exception {
         if (s.equals("1/1")) {
             s = "*";
         }
@@ -79,7 +79,7 @@ public class DescCornUtils {
         if (s.contains(TO_)) {
             String[] arr = s.split(TO_);
             if (arr.length != 2) {
-                throw new RuntimeException("表达式错误" + s);
+                throw new Exception("表达式错误" + s);
             }
             sBuffer.append("从第" + arr[0] + unit + "到第" + arr[1] + unit + "每" + unit);
             sBuffer.append("的");
@@ -89,7 +89,7 @@ public class DescCornUtils {
         if (s.contains(EVERY_)) {
             String[] arr = s.split(EVERY_);
             if (arr.length != 2) {
-                throw new RuntimeException("表达式错误" + s);
+                throw new Exception("表达式错误" + s);
             }
             if (arr[0].equals(arr[1]) || arr[0].equals("0")) {
                 sBuffer.append("每" + arr[1] + unit);
@@ -106,7 +106,7 @@ public class DescCornUtils {
      * @param s
      * @param sBuffer
      */
-    private static void descSecond(String s, StringBuffer sBuffer) {
+    private static void descSecond(String s, StringBuffer sBuffer) throws Exception {
         String unit = "秒";
         desc(s, sBuffer, unit);
     }
@@ -116,7 +116,7 @@ public class DescCornUtils {
      * @param s
      * @param sBuffer
      */
-    private static void descMintue(String s, StringBuffer sBuffer) {
+    private static void descMintue(String s, StringBuffer sBuffer) throws Exception {
         desc(s, sBuffer, "分钟");
     }
 
@@ -125,7 +125,7 @@ public class DescCornUtils {
      * @param s
      * @param sBuffer
      */
-    private static void descHour(String s, StringBuffer sBuffer) {
+    private static void descHour(String s, StringBuffer sBuffer) throws Exception {
         desc(s, sBuffer, "小时");
     }
 
@@ -134,7 +134,7 @@ public class DescCornUtils {
      * @param s
      * @param sBuffer
      */
-    private static void descDay(String s, StringBuffer sBuffer) {
+    private static void descDay(String s, StringBuffer sBuffer) throws Exception {
         desc(s, sBuffer, "天");
     }
 
@@ -143,7 +143,7 @@ public class DescCornUtils {
      * @param s
      * @param sBuffer
      */
-    private static void descWeek(String s, StringBuffer sBuffer) {
+    private static void descWeek(String s, StringBuffer sBuffer) throws Exception {
         desc(turnWeek(s), sBuffer, "周");
     }
 
@@ -157,7 +157,7 @@ public class DescCornUtils {
      * @param s
      * @param sBuffer
      */
-    private static void descMonth(String s, StringBuffer sBuffer) {
+    private static void descMonth(String s, StringBuffer sBuffer) throws Exception {
         desc(s, sBuffer, "月");
     }
 
@@ -166,7 +166,7 @@ public class DescCornUtils {
      * @param s
      * @param sBuffer
      */
-    private static void descYear(String s, StringBuffer sBuffer) {
+    private static void descYear(String s, StringBuffer sBuffer) throws Exception {
         desc(s, sBuffer, "年");
     }
 

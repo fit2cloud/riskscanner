@@ -245,7 +245,7 @@
   .divider {
     border: 1px solid #f6f3f8;
     height: 480px;
-    margin: 165px 0px;
+    margin: 165px 0;
   }
 </style>
 

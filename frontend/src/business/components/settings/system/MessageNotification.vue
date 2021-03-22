@@ -17,7 +17,7 @@ import {getCurrentUser} from "@/common/js/utils";
 import ResourceNotification from "@/business/components/settings/system/ResourceNotification";
 import Container from "@/business/components/common/components/Container";
 import MainContainer from "@/business/components/common/components/MainContainer";
-
+/* eslint-disable */
 export default {
   name: "MessageNotification",
   components: {

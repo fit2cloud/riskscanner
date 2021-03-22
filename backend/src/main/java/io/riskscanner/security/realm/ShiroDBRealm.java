@@ -8,6 +8,7 @@ import io.riskscanner.commons.utils.SessionUtils;
 import io.riskscanner.dto.UserDTO;
 import io.riskscanner.i18n.Translator;
 import io.riskscanner.service.UserService;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -69,6 +70,7 @@ public class ShiroDBRealm extends AuthorizingRealm {
     /**
      * 登录认证
      */
+    @SneakyThrows
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
@@ -110,7 +112,7 @@ public class ShiroDBRealm extends AuthorizingRealm {
         return user;
     }
 
-    private AuthenticationInfo loginLocalMode(String userId, String password) {
+    private AuthenticationInfo loginLocalMode(String userId, String password) throws Exception {
         UserDTO user = userService.getLoginUser(userId, Collections.singletonList(UserSource.LOCAL.name()));
         String msg;
         if (user == null) {

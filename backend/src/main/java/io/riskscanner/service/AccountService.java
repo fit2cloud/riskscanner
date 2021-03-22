@@ -141,7 +141,7 @@ public class AccountService {
         return accountMapper.selectByPrimaryKey(id);
     }
 
-    public AccountWithBLOBs editAccount(UpdateCloudAccountRequest request) {
+    public AccountWithBLOBs editAccount(UpdateCloudAccountRequest request) throws Exception {
         try {
             //参数校验
             if (StringUtils.isEmpty(request.getCredential())
@@ -182,6 +182,8 @@ public class AccountService {
 
         } catch (RSException | ClientException e) {
             RSException.throwException(e.getMessage());
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
         return null;
     }

@@ -3,7 +3,7 @@
     <div class="title-bar" :style="{'height': titleBarHeight + 'px'}">
       <slot name="title">
         <span :style="{'line-height': titleBarHeight - 10 + 'px'}" class="title-left">
-          {{title}}
+          {{ title }}
         </span>
         <span :style="{'line-height': titleBarHeight - 10 + 'px'}" class="title-right">
           <i class="el-icon-plus" @click="addFuc"/>

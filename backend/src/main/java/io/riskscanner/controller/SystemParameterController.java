@@ -51,7 +51,7 @@ public class SystemParameterController {
     @ApiOperation(value = "保存LADP设置")
     @PostMapping("/save/ldap")
     @RequiresRoles(value = {RoleConstants.ADMIN})
-    public void saveLdap(@RequestBody List<SystemParameter> systemParameter) {
+    public void saveLdap(@RequestBody List<SystemParameter> systemParameter) throws Exception {
         SystemParameterService.saveLdap(systemParameter);
     }
 

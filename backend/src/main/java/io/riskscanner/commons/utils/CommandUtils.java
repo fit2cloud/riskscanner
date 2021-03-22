@@ -67,6 +67,7 @@ public class CommandUtils {
             } catch (IOException e) {
                 throw e;
             } finally {
+                // empty!
             }
         }
         return dirPath;

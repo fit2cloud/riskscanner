@@ -2,19 +2,19 @@
 	<el-form size='small'>
 		<el-form-item>
 			<el-radio v-model='radioValue' :label="1">
-        {{$t('schedule.cron.weeks')}}，{{$t('schedule.cron.weeks_allowed_wildcards')}}
+        {{ $t('schedule.cron.weeks') }}，{{ $t('schedule.cron.weeks_allowed_wildcards') }}
 			</el-radio>
 		</el-form-item>
 
 		<el-form-item>
 			<el-radio v-model='radioValue' :label="2">
-        {{$t('schedule.cron.not_specify')}}
+        {{ $t('schedule.cron.not_specify') }}
 			</el-radio>
 		</el-form-item>
 
 		<el-form-item>
 			<el-radio v-model='radioValue' :label="3">
-        {{$t('schedule.cron.period')}} {{$t('schedule.cron.from')}}{{$t('schedule.cron.week')}}
+        {{ $t('schedule.cron.period') }} {{ $t('schedule.cron.from') }}{{ $t('schedule.cron.week') }}
 				<el-input-number v-model='cycle01' :min="1" :max="7" /> -
 				<el-input-number v-model='cycle02' :min="1" :max="7" />
 			</el-radio>
@@ -22,24 +22,24 @@
 
 		<el-form-item>
 			<el-radio v-model='radioValue' :label="4">
-				{{$t('schedule.cron.num')}}
-				<el-input-number v-model='average01' :min="1" :max="4" /> {{$t('schedule.cron.week_of_weeks')}}
+				{{ $t('schedule.cron.num') }}
+				<el-input-number v-model='average01' :min="1" :max="4" /> {{ $t('schedule.cron.week_of_weeks') }}
 				<el-input-number v-model='average02' :min="1" :max="7" />
 			</el-radio>
 		</el-form-item>
 
 		<el-form-item>
 			<el-radio v-model='radioValue' :label="5">
-        {{$t('schedule.cron.last_week_of_the_month')}}
+        {{ $t('schedule.cron.last_week_of_the_month') }}
 				<el-input-number v-model='weekday' :min="1" :max="7" />
 			</el-radio>
 		</el-form-item>
 
 		<el-form-item>
 			<el-radio v-model='radioValue' :label="6">
-        {{$t('schedule.cron.specify')}}
+        {{ $t('schedule.cron.specify') }}
         <el-select clearable v-model="checkboxList" :placeholder="$t('schedule.cron.multi_select')" multiple style="width:100%">
-					<el-option v-for="(item,index) of weekList" :key="index" :value="index+1">{{item}}</el-option>
+					<el-option v-for="(item,index) of weekList" :key="index" :value="index+1">{{ item }}</el-option>
 				</el-select>
 			</el-radio>
 		</el-form-item>

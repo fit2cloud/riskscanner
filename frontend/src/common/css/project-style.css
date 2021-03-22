@@ -1,6 +1,6 @@
 .code-mirror{
-  font-size : 13px;
-  line-height : 150%;
+  font-size: 13px;
+  line-height: 150%;
 }
 
 .el-table .warning-row {
@@ -22,5 +22,5 @@
 }
 
 .color-red {
-  color: red
+  color: red;
 }

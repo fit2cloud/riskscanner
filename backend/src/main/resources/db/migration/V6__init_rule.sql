@@ -1,98 +1,98 @@
 CREATE TABLE IF NOT EXISTS rule
 (
     id                         varchar(50)         NOT NULL,
-    name                       varchar(50)         DEFAULT NULL UNIQUE COMMENT '规则名称',
-    status                     tinyint(1)          DEFAULT 1 COMMENT '规则状态(启用1，停用0)',
-    severity                   varchar(32)         DEFAULT NULL COMMENT '风险等级',
-    description                varchar(255)        DEFAULT NULL COMMENT '描述',
-    script                     mediumtext          DEFAULT NULL COMMENT '脚本',
-    parameter                  varchar(1024)       DEFAULT NULL COMMENT '参数',
-    plugin_id                  varchar(64)         DEFAULT NULL COMMENT '插件 ID',
-    plugin_name                varchar(64)         DEFAULT NULL COMMENT '云平台名称',
-    plugin_icon                varchar(128)        DEFAULT NULL COMMENT '云平台图标',
-    last_modified              bigint(14)          DEFAULT NULL COMMENT '上次更新时间',
-    flag                       tinyint(1)          NOT NULL DEFAULT 0 COMMENT '是否内置',
-    scan_type                  varchar(32)         DEFAULT NULL COMMENT '扫描类型',
-    PRIMARY KEY (id),
-    KEY IDX_NAME (name)
+    name                       varchar(50)         DEFAULT NULL UNIQUE,
+    status                     tinyint(1)          DEFAULT 1,
+    severity                   varchar(32)         DEFAULT NULL,
+    description                varchar(255)        DEFAULT NULL,
+    script                     mediumtext          DEFAULT NULL,
+    parameter                  varchar(1024)       DEFAULT NULL,
+    plugin_id                  varchar(64)         DEFAULT NULL,
+    plugin_name                varchar(64)         DEFAULT NULL,
+    plugin_icon                varchar(128)        DEFAULT NULL,
+    last_modified              bigint(14)          DEFAULT NULL,
+    flag                       tinyint(1)          NOT NULL DEFAULT 0,
+    scan_type                  varchar(32)         DEFAULT NULL,
+    PRIMARY KEY ( id ),
+    KEY IDX_NAME ( name )
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
 
 CREATE TABLE IF NOT EXISTS rule_tag
 (
-    tag_key                    varchar(50)         NOT NULL DEFAULT '' UNIQUE COMMENT '标签标识',
-    tag_name                   varchar(100)        NOT NULL DEFAULT '' UNIQUE COMMENT '标签名',
-    _index                     int(11)             NOT NULL AUTO_INCREMENT COMMENT '索引',
-    flag                       tinyint(1)          NOT NULL DEFAULT 0 COMMENT '是否内置',
-    PRIMARY KEY (tag_key),
-    KEY IDX_KEY_NAME (tag_name),
-    KEY IDX_INDEX (_index)
+    tag_key                    varchar(50)         NOT NULL DEFAULT '' UNIQUE,
+    tag_name                   varchar(100)        NOT NULL DEFAULT '' UNIQUE,
+    _index                     int(11)             NOT NULL AUTO_INCREMENT,
+    flag                       tinyint(1)          NOT NULL DEFAULT 0,
+    PRIMARY KEY ( tag_key ),
+    KEY IDX_KEY_NAME ( tag_name ),
+    KEY IDX_INDEX ( _index )
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 
 CREATE TABLE IF NOT EXISTS rule_tag_mapping (
     id                         int(10)             NOT NULL AUTO_INCREMENT,
-    rule_id                    varchar(50)         NOT NULL DEFAULT '' COMMENT '规则ID',
-    tag_key                    varchar(50)         NOT NULL DEFAULT '' COMMENT '标签标识',
-    PRIMARY KEY (id),
-    KEY IDX_RULE_ID (rule_id),
-    KEY IDX_TAG_KEY (tag_key)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+    rule_id                    varchar(50)         NOT NULL DEFAULT '',
+    tag_key                    varchar(50)         NOT NULL DEFAULT '',
+    PRIMARY KEY ( id ),
+    KEY IDX_RULE_ID ( rule_id ),
+    KEY IDX_TAG_KEY ( tag_key )
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
 
 CREATE TABLE IF NOT EXISTS rule_type
 (
     id                         varchar(50)         NOT NULL,
-    rule_id                    varchar(50)         NOT NULL DEFAULT '' COMMENT '规则ID',
-    resource_type              varchar(50)         NOT NULL DEFAULT '' COMMENT '资源类型',
+    rule_id                    varchar(50)         NOT NULL DEFAULT '',
+    resource_type              varchar(50)         NOT NULL DEFAULT '',
     PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
 
 CREATE TABLE IF NOT EXISTS rule_account_parameter
 (
     id                         int(11)             NOT NULL AUTO_INCREMENT,
-    account_id                 varchar(50)         DEFAULT NULL COMMENT '云账号ID',
-    rule_id                    varchar(50)         DEFAULT NULL COMMENT '规则ID',
-    parameter                  varchar(1024)       DEFAULT NULL COMMENT '参数',
-    regions                    longtext            DEFAULT NULL COMMENT '区域',
+    account_id                 varchar(50)         DEFAULT NULL,
+    rule_id                    varchar(50)         DEFAULT NULL,
+    parameter                  varchar(1024)       DEFAULT NULL,
+    regions                    longtext            DEFAULT NULL,
     PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS rule_group (
     id                         int(10)             NOT NULL AUTO_INCREMENT,
-    name                       varchar(50)         DEFAULT NULL COMMENT '规则组名称',
-    description                varchar(256)        DEFAULT NULL COMMENT '规则组描述',
-    level                      varchar(64)         DEFAULT NULL COMMENT '风险级别',
-    plugin_id                  varchar(64)         DEFAULT NULL COMMENT '插件ID',
-    flag                       tinyint(1)          NOT NULL DEFAULT 0 COMMENT '是否内置',
+    name                       varchar(50)         DEFAULT NULL,
+    description                varchar(256)        DEFAULT NULL,
+    level                      varchar(64)         DEFAULT NULL,
+    plugin_id                  varchar(64)         DEFAULT NULL,
+    flag                       tinyint(1)          NOT NULL DEFAULT 0,
     PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS rule_group_mapping (
     id                         int(10)             NOT NULL AUTO_INCREMENT,
-    rule_id                    varchar(50)         DEFAULT NULL COMMENT '规则ID',
-    group_id                   varchar(50)         DEFAULT NULL COMMENT '规则组ID',
+    rule_id                    varchar(50)         DEFAULT NULL,
+    group_id                   varchar(50)         DEFAULT NULL,
     PRIMARY KEY (id),
     KEY IDX_RULE_ID (rule_id),
     KEY IDX_GROUP_ID (group_id)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS rule_inspection_report (
     id                         int(10)             NOT NULL AUTO_INCREMENT,
-    project                    varchar(256)        DEFAULT NULL COMMENT '检查项目',
-    item_sort_first_level      varchar(50)         DEFAULT NULL COMMENT '检查项一级分类',
-    item_sort_second_level     varchar(50)         DEFAULT NULL COMMENT '检查项二级分类',
-    improvement                varchar(512)        DEFAULT NULL COMMENT '改进建议',
+    project                    varchar(256)        DEFAULT NULL,
+    item_sort_first_level      varchar(50)         DEFAULT NULL,
+    item_sort_second_level     varchar(50)         DEFAULT NULL,
+    improvement                varchar(512)        DEFAULT NULL,
     PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS rule_inspection_report_mapping (
     id                         int(10)             NOT NULL AUTO_INCREMENT,
-    rule_id                    varchar(50)         DEFAULT NULL COMMENT '规则ID',
-    report_id                  varchar(50)         DEFAULT NULL COMMENT '等保合规检查报告ID',
+    rule_id                    varchar(50)         DEFAULT NULL,
+    report_id                  varchar(50)         DEFAULT NULL,
     PRIMARY KEY (id),
     KEY IDX_RULE_ID (rule_id),
     KEY IDX_REPORT_ID (report_id)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
 
 INSERT INTO rule_tag (tag_key, tag_name, _index, flag) VALUES ('safety', '安全', 1, 1);

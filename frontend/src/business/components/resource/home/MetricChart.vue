@@ -51,7 +51,7 @@
 
 <script>
 import RsChart from "@/business/components/common/chart/RsChart";
-
+/* eslint-disable */
 export default {
   name: "MetricChart",
   components: {RsChart},
@@ -117,7 +117,7 @@ export default {
         ]
       };
     },
-    freeRegulations({content = {}}) {
+    freeRegulations({content = { }}) {
       const {totalRegulation, riskyRegulation} = content
       if (!(totalRegulation && totalRegulation)) {
         return 0

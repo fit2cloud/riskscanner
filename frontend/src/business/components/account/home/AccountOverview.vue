@@ -27,6 +27,8 @@
   import Container from "../.././common/components/Container";
   import AsideContainer from "../.././common/components/AsideContainer";
   import MainContainer from "../.././common/components/MainContainer";
+
+  /* eslint-disable */
   export default {
     name: "AccountOverview",
     components: {

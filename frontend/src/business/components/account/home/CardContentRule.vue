@@ -10,27 +10,27 @@
             <template v-slot:default="scope">
               <el-link type="primary" @click="viewRule(scope.row)">
                 <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                {{scope.row.name}}
+                {{ scope.row.name }}
               </el-link>
             </template>
           </el-table-column>
           <el-table-column :label="$t('rule.rule_tag')" min-width="10%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              {{scope.row.tagName}}
+              {{ scope.row.tagName }}
             </template>
           </el-table-column>
           <el-table-column :label="$t('dashboard.i18n_compliance_ratio')" min-width="20%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              {{!!scope.row.ratio?scope.row.ratio:'0.00%'}}
+              {{ !!scope.row.ratio?scope.row.ratio:'0.00%' }}
             </template>
           </el-table-column>
           <el-table-column prop="severity" :label="$t('dashboard.i18n_severity_resource_number')" min-width="30%" show-overflow-tooltip sortable>
             <template v-slot:default="scope">
-              <span v-if="scope.row.severity == 'HighRisk'" style="color: #f84846;"> {{$t('rule.HighRisk')}}</span>
-              <span v-else-if="scope.row.severity == 'MediumRisk'" style="color: #fe9636;"> {{$t('rule.MediumRisk')}}</span>
-              <span v-else-if="scope.row.severity == 'LowRisk'" style="color: #4dabef;"> {{$t('rule.LowRisk')}}</span>
+              <span v-if="scope.row.severity == 'HighRisk'" style="color: #f84846;"> {{ $t('rule.HighRisk') }}</span>
+              <span v-else-if="scope.row.severity == 'MediumRisk'" style="color: #fe9636;"> {{ $t('rule.MediumRisk') }}</span>
+              <span v-else-if="scope.row.severity == 'LowRisk'" style="color: #4dabef;"> {{ $t('rule.LowRisk') }}</span>
               <span v-else> N/A</span>
-              <span> | ({{scope.row.ruSum?scope.row.ruSum:0}}/{{scope.row.reSum?scope.row.reSum:0}})</span>
+              <span> | ({{ scope.row.ruSum?scope.row.ruSum:0 }}/{{ scope.row.reSum?scope.row.reSum:0 }})</span>
               <span> &nbsp;&nbsp;<i :class="scope.row.assets" ></i></span>
             </template>
           </el-table-column>
@@ -45,17 +45,17 @@
           <el-table-column type="index" min-width="5%"/>
           <el-table-column :label="$t('rule.rule_set')" min-width="20%" show-overflow-tooltip>
             <template v-slot:default="scope">
-                {{scope.row.name}}
+                {{ scope.row.name }}
             </template>
           </el-table-column>
           <el-table-column :label="$t('commons.description')" min-width="45%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              {{scope.row.description}}
+              {{ scope.row.description }}
             </template>
           </el-table-column>
           <el-table-column prop="returnSum" :label="$t('history.resource_result')" min-width="30%" show-overflow-tooltip sortable>
             <template v-slot:default="scope">
-              <span> {{scope.row.returnSum?scope.row.returnSum:0}}/{{scope.row.resourcesSum?scope.row.resourcesSum:0}}</span>
+              <span> {{ scope.row.returnSum?scope.row.returnSum:0 }}/{{ scope.row.resourcesSum?scope.row.resourcesSum:0 }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -74,12 +74,12 @@
             <template v-slot:default="scope">
               <el-tooltip class="item" effect="dark" :content="$t('resource.risk_of_non_compliance')" placement="top">
                 <span v-if="scope.row.status === 'risky'" style="color: red;">
-                    {{$t('resource.' + scope.row.status)}} <i class="el-icon-warning"></i>
+                    {{ $t('resource.' + scope.row.status) }} <i class="el-icon-warning"></i>
                 </span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" :content="$t('resource.requirements_of_the_regulations')" placement="top">
                 <span v-if="scope.row.status === 'risk_free'" style="color: #00bb00;">
-                    {{$t('resource.' + scope.row.status)}} <i class="el-icon-warning"></i>
+                    {{ $t('resource.' + scope.row.status) }} <i class="el-icon-warning"></i>
                 </span>
               </el-tooltip>
             </template>
@@ -87,7 +87,7 @@
           <el-table-column v-slot:default="scope" :label="$t('resource.suggestions_for_improvement')" min-width="10%">
             <el-tooltip v-if="scope.row.status === 'risky'" class="item" effect="dark" :content="scope.row.improvement" placement="top">
               <el-link type="primary">
-                {{$t('resource.suggestions_for_improvement')}} <i class="el-icon-question"></i>
+                {{ $t('resource.suggestions_for_improvement') }} <i class="el-icon-question"></i>
               </el-link>
             </el-tooltip>
             <span v-if="scope.row.status === 'risk_free'">
@@ -96,7 +96,7 @@
           </el-table-column>
           <el-table-column prop="returnSum" :label="$t('history.resource_result')" min-width="17%" show-overflow-tooltip sortable>
             <template v-slot:default="scope">
-              <span> {{scope.row.returnSum?scope.row.returnSum:0}}/{{scope.row.resourcesSum?scope.row.resourcesSum:0}}</span>
+              <span> {{ scope.row.returnSum?scope.row.returnSum:0 }}/{{ scope.row.resourcesSum?scope.row.resourcesSum:0 }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -110,22 +110,22 @@
           <el-table-column type="index" min-width="5%"/>
           <el-table-column :label="$t('rule.tag_key')" min-width="15%" show-overflow-tooltip>
             <template v-slot:default="scope">
-                {{scope.row.tagKey}}
+                {{ scope.row.tagKey }}
             </template>
           </el-table-column>
           <el-table-column :label="$t('rule.tag_name')" min-width="15%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              {{scope.row.tagName}}
+              {{ scope.row.tagName }}
             </template>
           </el-table-column>
           <el-table-column :label="$t('rule._index')" min-width="15%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              {{scope.row.index}}
+              {{ scope.row.index }}
             </template>
           </el-table-column>
           <el-table-column prop="returnSum" :label="$t('history.resource_result')" min-width="30%" show-overflow-tooltip sortable>
             <template v-slot:default="scope">
-              <span> {{scope.row.returnSum?scope.row.returnSum:0}}/{{scope.row.resourcesSum?scope.row.resourcesSum:0}}</span>
+              <span> {{ scope.row.returnSum?scope.row.returnSum:0 }}/{{ scope.row.resourcesSum?scope.row.resourcesSum:0 }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -139,17 +139,17 @@
           <el-table-column type="index" min-width="20%"/>
           <el-table-column :label="$t('account.region_name')" min-width="35%" show-overflow-tooltip>
             <template v-slot:default="scope">
-                {{scope.row.regionName}}
+                {{ scope.row.regionName }}
             </template>
           </el-table-column>
           <el-table-column :label="$t('account.region_id')" min-width="35%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              {{scope.row.regionId}}
+              {{ scope.row.regionId }}
             </template>
           </el-table-column>
           <el-table-column prop="returnSum" :label="$t('history.resource_result')" min-width="30%" show-overflow-tooltip sortable>
             <template v-slot:default="scope">
-              <span> {{scope.row.returnSum?scope.row.returnSum:0}}/{{scope.row.resourcesSum?scope.row.resourcesSum:0}}</span>
+              <span> {{ scope.row.returnSum?scope.row.returnSum:0 }}/{{ scope.row.resourcesSum?scope.row.resourcesSum:0 }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -162,16 +162,16 @@
                   @filter-change="filter" @select-all="select" @select="select">
           <el-table-column type="index" min-width="5%"/>
           <el-table-column v-slot:default="scope" :label="$t('resource.F2C_ID')" min-width="20%">
-            {{scope.row.f2c_id}}
+            {{ scope.row.f2c_id }}
           </el-table-column>
           <el-table-column v-slot:default="scope" :label="$t('rule.resource_type')" min-width="35%">
-            {{scope.row.resourceType}}
+            {{ scope.row.resourceType }}
           </el-table-column>
           <el-table-column :label="$t('account.cloud_account')" min-width="10%" show-overflow-tooltip>
             <template v-slot:default="scope">
               <span>
                 <img :src="require(`@/assets/img/platform/${scope.row.plugin_icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                 &nbsp;&nbsp; {{scope.row.plugin_name}}
+                 &nbsp;&nbsp; {{ scope.row.plugin_name }}
               </span>
             </template>
           </el-table-column>
@@ -205,7 +205,7 @@
               :label="item.name"
               :value="item.id">
               <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-              &nbsp;&nbsp; {{$t(item.name)}}
+              &nbsp;&nbsp; {{ $t(item.name) }}
             </el-option>
           </el-select>
         </el-form-item>

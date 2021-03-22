@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <template v-slot:header>
-      <span class="title">{{$t('commons.calendar_heatmap')}}</span>
+      <span class="title">{{ $t('commons.calendar_heatmap') }}</span>
     </template>
     <calendar-heatmap :end-date="endDate" :values="values" :locale="locale"
                       :tooltip-unit="unit"

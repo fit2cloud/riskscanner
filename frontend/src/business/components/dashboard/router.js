@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 export default {
   path: "/dashboard",
   name: "dashboard",

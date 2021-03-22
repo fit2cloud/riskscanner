@@ -106,6 +106,8 @@ public class ScheduleService {
             } catch (RSException | ClassNotFoundException | SchedulerException e) {
                 LogUtil.error("初始化任务失败", e);
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
@@ -123,7 +125,7 @@ public class ScheduleService {
     public void removeJob(String resourceId) {
     }
 
-    public void addOrUpdateCronJob(Schedule request, JobKey jobKey, TriggerKey triggerKey, Class clazz) {
+    public void addOrUpdateCronJob(Schedule request, JobKey jobKey, TriggerKey triggerKey, Class clazz) throws Exception {
         Boolean enable = request.getEnable();
         String cronExpression = request.getValue();
         if (enable != null && enable && StringUtils.isNotBlank(cronExpression)) {
@@ -132,6 +134,8 @@ public class ScheduleService {
             } catch (SchedulerException e) {
                 LogUtil.error(e.getMessage(), e);
                 RSException.throwException("定时任务开启异常");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         } else {
             try {

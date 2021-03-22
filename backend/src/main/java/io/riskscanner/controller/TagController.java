@@ -18,7 +18,7 @@ public class TagController {
 
     @ApiOperation(value = "规则标签列表")
     @GetMapping(value = "rule/list")
-    public Object listRuleTags() {
+    public Object listRuleTags() throws Exception {
         return ruleService.getRuleTags();
     }
 

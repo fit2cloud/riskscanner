@@ -26,7 +26,7 @@ body {
   white-space: nowrap;
 }
 
-.clearfix:before,.clearfix:after{
+.clearfix:before,.clearfix:after {
   content: "";
   display: table;
   clear: both;

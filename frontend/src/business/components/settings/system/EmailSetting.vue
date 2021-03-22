@@ -37,14 +37,13 @@
         </el-col>
       </el-row>
 
-      <!---->
-      <div style="border: 0px;margin-bottom: 20px;margin-top: 20px">
+      <div style="border: 0;margin-bottom: 20px;margin-top: 20px">
         <el-checkbox v-model="formInline.SSL" :label="$t('system_parameter_setting.SSL')"></el-checkbox>
       </div>
-      <div style="border: 0px;margin-bottom: 20px">
+      <div style="border: 0;margin-bottom: 20px">
         <el-checkbox v-model="formInline.TLS" :label="$t('system_parameter_setting.TLS')"></el-checkbox>
       </div>
-      <div style="border: 0px;margin-bottom: 20px">
+      <div style="border: 0;margin-bottom: 20px">
         <el-checkbox v-model="formInline.SMTP" :label="$t('system_parameter_setting.SMTP')"></el-checkbox>
       </div>
       <template v-slot:footer>
@@ -64,7 +63,7 @@
 </template>
 
 <script>
-
+/* eslint-disable */
 export default {
   name: "EmailSetting",
   data() {

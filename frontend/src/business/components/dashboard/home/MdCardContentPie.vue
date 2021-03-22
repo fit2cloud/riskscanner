@@ -6,7 +6,7 @@
 <script>
 
   import DashboardPieChart from "@/business/components/common/chart/DashboardPieChart";
-
+  /* eslint-disable */
   export default {
     name: "MdCardContentPie",
     components: {
