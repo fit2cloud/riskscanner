@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   path: "/rule",
   name: "rule",

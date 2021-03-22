@@ -1,9 +1,9 @@
 <template>
 
     <div class="dialog-footer">
-      <el-button @click="cancel">{{$t('commons.cancel')}}</el-button>
-      <el-button @click="dryRun">{{$t('rule.dry_run')}}</el-button>
-      <el-button :disabled="rule" type="primary" @click="confirm" @keydown.enter.native.prevent>{{$t('commons.confirm')}}</el-button>
+      <el-button @click="cancel">{{ $t('commons.cancel') }}</el-button>
+      <el-button @click="dryRun">{{ $t('rule.dry_run') }}</el-button>
+      <el-button :disabled="rule" type="primary" @click="confirm" @keydown.enter.native.prevent>{{ $t('commons.confirm') }}</el-button>
     </div>
 
 </template>

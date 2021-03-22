@@ -31,13 +31,13 @@
                     :data="typeof(props.row.parameter) == 'string'?JSON.parse(props.row.parameter):props.row.parameter"
                     style="width: 100%">
                     <el-table-column v-slot:default="scope" label="Key" min-width="20%">
-                      {{scope.row.key}}
+                      {{ scope.row.key }}
                     </el-table-column>
                     <el-table-column v-slot:default="scope" :label="$t('rule.middleware_name')" min-width="30%">
-                      {{scope.row.name}}
+                      {{ scope.row.name }}
                     </el-table-column>
                     <el-table-column v-slot:default="scope" :label="$t('rule.middleware_parameter_default')" min-width="30%">
-                      {{scope.row.defaultValue}}
+                      {{ scope.row.defaultValue }}
                     </el-table-column>
                     <el-table-column v-slot:default="scope" :label="$t('rule.required')" min-width="20%">
                       <el-switch v-model="scope.row.required" active-color="#13ce66" disabled="disabled" inactive-color="#ff4949"></el-switch>
@@ -51,14 +51,14 @@
           <el-table-column prop="name" :label="$t('rule.rule_name')" min-width="18%" show-overflow-tooltip></el-table-column>
           <el-table-column :label="$t('rule.resource_type')" min-width="9%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              <span v-for="(resourceType, index) in scope.row.types" :key="index">[{{resourceType}}] </span>
+              <span v-for="(resourceType, index) in scope.row.types" :key="index">[{{ resourceType }}] </span>
             </template>
           </el-table-column>
           <el-table-column :label="$t('account.cloud_platform')" min-width="7%" show-overflow-tooltip>
             <template v-slot:default="scope">
               <span>
                 <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                 &nbsp;&nbsp; {{scope.row.pluginName}}
+                 &nbsp;&nbsp; {{ scope.row.pluginName }}
               </span>
             </template>
           </el-table-column>
@@ -105,7 +105,7 @@
                 :label="item.name"
                 :value="item.id">
                 <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                &nbsp;&nbsp; {{$t(item.name)}}
+                &nbsp;&nbsp; {{ $t(item.name) }}
               </el-option>
             </el-select>
           </el-form-item>
@@ -153,7 +153,7 @@
             <codemirror ref="cmEditor" v-model="createRuleForm.script" class="code-mirror" :options="cmOptions" />
           </el-form-item>
           <el-form-item :label="$t('rule.middleware_parameter')" :rules="{required: true, message: $t('rule.middleware_parameter'), trigger: 'change'}">
-            <el-button type="primary" plain @click="addParam(createRuleForm)">{{$t('rule.middleware_parameter_add')}}</el-button>
+            <el-button type="primary" plain @click="addParam(createRuleForm)">{{ $t('rule.middleware_parameter_add') }}</el-button>
           </el-form-item>
           <el-form-item>
             <el-table
@@ -202,7 +202,7 @@
                 :label="item.name"
                 :value="item.id">
                 <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                &nbsp;&nbsp; {{$t(item.name)}}
+                &nbsp;&nbsp; {{ $t(item.name) }}
               </el-option>
             </el-select>
           </el-form-item>
@@ -250,7 +250,7 @@
             <codemirror ref="cmEditor" v-model="updateRuleForm.script" class="code-mirror" :options="cmOptions" />
           </el-form-item>
           <el-form-item :label="$t('rule.middleware_parameter')" :rules="{required: true, message: $t('rule.middleware_parameter'), trigger: 'change'}">
-            <el-button type="primary" plain @click="addParam(updateRuleForm)">{{$t('rule.middleware_parameter_add')}}</el-button>
+            <el-button type="primary" plain @click="addParam(updateRuleForm)">{{ $t('rule.middleware_parameter_add') }}</el-button>
           </el-form-item>
           <el-form-item>
             <el-table
@@ -299,7 +299,7 @@
                 :label="item.name"
                 :value="item.id">
                 <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                &nbsp;&nbsp; {{$t(item.name)}}
+                &nbsp;&nbsp; {{ $t(item.name) }}
               </el-option>
             </el-select>
           </el-form-item>
@@ -347,7 +347,7 @@
             <codemirror ref="cmEditor" v-model="copyRuleForm.script" class="code-mirror" :options="cmOptions" />
           </el-form-item>
           <el-form-item :label="$t('rule.middleware_parameter')" :rules="{required: true, message: $t('rule.middleware_parameter'), trigger: 'change'}">
-            <el-button type="primary" plain @click="addParam(copyRuleForm)">{{$t('rule.middleware_parameter_add')}}</el-button>
+            <el-button type="primary" plain @click="addParam(copyRuleForm)">{{ $t('rule.middleware_parameter_add') }}</el-button>
           </el-form-item>
           <el-form-item>
             <el-table
@@ -565,7 +565,7 @@
         if (this.condition.combine) {
           this.condition.combine.ruleTag = {operator: 'in', value: key};
         } else {
-          this.condition.combine = {ruleTag: {operator: 'in', value: key}};
+          this.condition.combine = {ruleTag: {operator: 'in', value: key }};
         }
         this.search();
       },

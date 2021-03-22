@@ -16,7 +16,7 @@ public class ApiKeySessionHandler {
 
     public static String random = UUID.randomUUID().toString() + UUID.randomUUID().toString();
 
-    public static String generateId(String authInfo) {
+    public static String generateId(String authInfo) throws Exception {
         return SessionGenerator.generateId(authInfo);
     }
 
@@ -38,7 +38,7 @@ public class ApiKeySessionHandler {
         public SessionGenerator() {
         }
 
-        public static String generateId(String authInfo) {
+        public static String generateId(String authInfo) throws Exception {
             return EncryptUtils.aesEncrypt(parse2Str(authInfo)).toString();
         }
 

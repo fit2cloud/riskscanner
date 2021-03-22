@@ -4,7 +4,7 @@
     <li role="menuitem" aria-haspopup="true" class="el-submenu" tabindex="0">
       <div class="el-submenu__title" @click="helpDoc" id="help"
            style="border-bottom-color: transparent; color: rgb(255, 255, 255); background-color: rgb(0, 74, 113);">
-        {{$t('commons.help_documentation')}}
+        {{ $t('commons.help_documentation') }}
       </div>
     </li>
   </ul>

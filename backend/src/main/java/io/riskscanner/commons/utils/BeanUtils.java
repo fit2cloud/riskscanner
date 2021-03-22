@@ -9,21 +9,21 @@ import java.util.Map;
 
 public class BeanUtils {
 
-    public static <T> T copyBean(T target, Object source) {
+    public static <T> T copyBean(T target, Object source) throws Exception {
         try {
             org.springframework.beans.BeanUtils.copyProperties(source, target);
             return target;
         } catch (Exception e) {
-            throw new RuntimeException("Failed to copy object: ", e);
+            throw new Exception("Failed to copy object: ", e);
         }
     }
 
-    public static <T> T copyBean(T target, Object source, String... ignoreProperties) {
+    public static <T> T copyBean(T target, Object source, String... ignoreProperties) throws Exception {
         try {
             org.springframework.beans.BeanUtils.copyProperties(source, target, ignoreProperties);
             return target;
         } catch (Exception e) {
-            throw new RuntimeException("Failed to copy object: ", e);
+            throw new Exception("Failed to copy object: ", e);
         }
     }
 

@@ -55,7 +55,7 @@ public class ResourceController {
 
     @ApiOperation(value = "资源详情")
     @GetMapping("{id}")
-    public ResourceDetailDTO getResource(@PathVariable String id) {
+    public ResourceDetailDTO getResource(@PathVariable String id) throws Exception {
         return resourceService.getResource(id);
     }
 

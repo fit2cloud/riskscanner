@@ -3,7 +3,7 @@
   <div>
     <el-row class="table-title" type="flex" justify="space-between" align="middle">
       <slot name="title">
-        {{title}}
+        {{ title }}
       </slot>
     </el-row>
     <el-row type="flex" justify="space-between" align="middle">

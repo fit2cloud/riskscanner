@@ -50,9 +50,6 @@ public class I18nController {
                 f2cCookie.setMaxAge(0);
                 response.addCookie(f2cCookie);
             }
-            //本地测试用
-            if ("local".equals(runMode))
-                if (request != null) request.getSession(true).setAttribute(I18nConstants.LANG_COOKIE_NAME, lang);
         }
     }
 }

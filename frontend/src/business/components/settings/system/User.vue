@@ -78,7 +78,7 @@
                 :key="item.id"
                 :label="$t('role.' + item.id)"
                 :value="item.id">
-                {{$t('role.' + item.id)}}
+                {{ $t('role.' + item.id) }}
               </el-option>
             </el-select>
           </el-form-item>
@@ -158,7 +158,7 @@
   import TableOperatorButton from "../../common/components/TableOperatorButton";
   import {listenGoBack, removeGoBackListener} from "@/common/js/utils";
   import RolesTag from "../../common/components/RolesTag";
-
+  /* eslint-disable */
   export default {
     name: "User",
     components: {

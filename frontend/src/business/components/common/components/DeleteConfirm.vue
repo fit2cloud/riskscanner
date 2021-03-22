@@ -6,8 +6,8 @@
 
     <el-row>
       <el-col>
-        <span>{{$t('commons.delete_confirm')}}</span>
-        <span class="delete-tip"> DELETE-{{record.name}}</span>
+        <span>{{ $t('commons.delete_confirm') }}</span>
+        <span class="delete-tip"> DELETE-{{ record.name }}</span>
         <br/>
       </el-col>
     </el-row>
@@ -18,8 +18,8 @@
     </el-row>
 
     <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">{{$t('commons.cancel')}}</el-button>
-      <el-button type="primary" @click="confirm">{{$t('commons.confirm')}}</el-button>
+      <el-button @click="dialogVisible = false">{{ $t('commons.cancel') }}</el-button>
+      <el-button type="primary" @click="confirm">{{ $t('commons.confirm') }}</el-button>
     </span>
 
   </el-dialog>

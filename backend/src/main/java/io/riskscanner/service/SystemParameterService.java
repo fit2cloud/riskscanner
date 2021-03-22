@@ -6,6 +6,7 @@ import io.riskscanner.base.mapper.SystemParameterMapper;
 import io.riskscanner.commons.constants.ParamConstants;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.EncryptUtils;
+import io.riskscanner.commons.utils.LogUtil;
 import io.riskscanner.i18n.Translator;
 import io.riskscanner.ldap.domain.LdapInfo;
 import org.apache.commons.collections.CollectionUtils;
@@ -46,7 +47,12 @@ public class SystemParameterService {
             SystemParameterExample example = new SystemParameterExample();
             if (parameter.getParamKey().equals(ParamConstants.MAIL.PASSWORD.getKey()) &&
                     !StringUtils.isBlank(parameter.getParamValue())) {
-                String string = EncryptUtils.aesEncrypt(parameter.getParamValue()).toString();
+                String string = null;
+                try {
+                    string = EncryptUtils.aesEncrypt(parameter.getParamValue()).toString();
+                } catch (Exception e) {
+                    LogUtil.error(e.getMessage());
+                }
                 parameter.setParamValue(string);
             }
             example.createCriteria().andParamKeyEqualTo(parameter.getParamKey());
@@ -135,7 +141,7 @@ public class SystemParameterService {
         return paramList;
     }
 
-    public void saveLdap(List<SystemParameter> parameters) {
+    public void saveLdap(List<SystemParameter> parameters) throws Exception {
         SystemParameterExample example = new SystemParameterExample();
         for (SystemParameter param : parameters) {
             if (param.getParamKey().equals(ParamConstants.LDAP.PASSWORD.getValue())) {

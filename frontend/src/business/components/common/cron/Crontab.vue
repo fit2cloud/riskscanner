@@ -64,36 +64,36 @@
 
     <div class="popup-main">
       <div class="popup-result-container">
-        <p class="title">{{$t('schedule.cron.time_expression')}}</p>
+        <p class="title">{{ $t('schedule.cron.time_expression') }}</p>
         <table>
           <thead>
-          <th v-for="item of tabTitles" width="40" :key="item">{{item}}</th>
-          <th>{{$t('schedule.cron.complete_expression')}}</th>
+          <th v-for="item of tabTitles" width="40" :key="item">{{ item }}</th>
+          <th>{{ $t('schedule.cron.complete_expression') }}</th>
           </thead>
           <tbody>
           <td>
-            <span>{{contabValueObj.second}}</span>
+            <span>{{ contabValueObj.second }}</span>
           </td>
           <td>
-            <span>{{contabValueObj.min}}</span>
+            <span>{{ contabValueObj.min }}</span>
           </td>
           <td>
-            <span>{{contabValueObj.hour}}</span>
+            <span>{{ contabValueObj.hour }}</span>
           </td>
           <td>
-            <span>{{contabValueObj.day}}</span>
+            <span>{{ contabValueObj.day }}</span>
           </td>
           <td>
-            <span>{{contabValueObj.mouth}}</span>
+            <span>{{ contabValueObj.mouth }}</span>
           </td>
           <td>
-            <span>{{contabValueObj.week}}</span>
+            <span>{{ contabValueObj.week }}</span>
           </td>
           <td>
-            <span>{{contabValueObj.year}}</span>
+            <span>{{ contabValueObj.year }}</span>
           </td>
           <td>
-            <span>{{contabValueString}}</span>
+            <span>{{ contabValueString }}</span>
           </td>
           </tbody>
         </table>
@@ -101,9 +101,9 @@
       <crontab-result :ex="contabValueString" ref="crontabResult"/>
 
       <div class="pop_btn">
-        <el-button size="small" type="primary" @click="submitFill">{{$t('commons.confirm')}}</el-button>
-        <el-button size="small" type="warning" @click="clearCron">{{$t('resource.reset')}}</el-button>
-        <el-button size="small" @click="hidePopup">{{$t('commons.cancel')}}</el-button>
+        <el-button size="small" type="primary" @click="submitFill">{{ $t('commons.confirm') }}</el-button>
+        <el-button size="small" type="warning" @click="clearCron">{{ $t('resource.reset') }}</el-button>
+        <el-button size="small" @click="hidePopup">{{ $t('commons.cancel') }}</el-button>
       </div>
     </div>
   </div>

@@ -9,6 +9,7 @@
 import RsChart from "@/business/components/common/chart/RsChart";
 
 let objData = [];
+/* eslint-disable */
 export default {
   name: "DashboardPieChart",
   components: {RsChart},

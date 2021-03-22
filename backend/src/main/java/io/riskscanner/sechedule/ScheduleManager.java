@@ -54,7 +54,7 @@ public class ScheduleManager {
      * @param cron
      * @param jobDataMap
      */
-    public void addCronJob(JobKey jobKey, TriggerKey triggerKey, Class jobClass, String cron, JobDataMap jobDataMap) {
+    public void addCronJob(JobKey jobKey, TriggerKey triggerKey, Class jobClass, String cron, JobDataMap jobDataMap) throws Exception {
         try {
 
             LogUtil.info("addCronJob: " + triggerKey.getName() + "," + triggerKey.getGroup());
@@ -79,11 +79,11 @@ public class ScheduleManager {
 
         } catch (Exception e) {
             LogUtil.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new Exception(e);
         }
     }
 
-    public void addCronJob(JobKey jobKey, TriggerKey triggerKey, Class jobClass, String cron) {
+    public void addCronJob(JobKey jobKey, TriggerKey triggerKey, Class jobClass, String cron) throws Exception {
         addCronJob(jobKey, triggerKey, jobClass, cron, null);
     }
 
@@ -94,7 +94,7 @@ public class ScheduleManager {
      * @param cron
      * @throws SchedulerException
      */
-    public void modifyCronJobTime(TriggerKey triggerKey, String cron) throws SchedulerException {
+    public void modifyCronJobTime(TriggerKey triggerKey, String cron) throws Exception {
 
         LogUtil.info("modifyCronJobTime: " + triggerKey.getName() + "," + triggerKey.getGroup());
 
@@ -131,7 +131,7 @@ public class ScheduleManager {
                 /** 方式二 ：先删除，然后在创建一个新的Job */
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new Exception(e);
         }
     }
 
@@ -142,7 +142,7 @@ public class ScheduleManager {
      * @param repeatIntervalTime
      * @throws SchedulerException
      */
-    public void modifySimpleJobTime(TriggerKey triggerKey, int repeatIntervalTime) throws SchedulerException {
+    public void modifySimpleJobTime(TriggerKey triggerKey, int repeatIntervalTime) throws Exception {
 
         try {
 
@@ -183,7 +183,7 @@ public class ScheduleManager {
 
         } catch (Exception e) {
             LogUtil.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new Exception(e);
         }
     }
 
@@ -193,7 +193,7 @@ public class ScheduleManager {
      * @Title:
      * @Description: 根据job和trigger删除任务
      */
-    public void removeJob(JobKey jobKey, TriggerKey triggerKey) {
+    public void removeJob(JobKey jobKey, TriggerKey triggerKey) throws Exception {
 
         try {
 
@@ -207,29 +207,29 @@ public class ScheduleManager {
 
         } catch (Exception e) {
             LogUtil.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new Exception(e);
         }
     }
 
 
-    public static void startJobs(Scheduler sched) {
+    public static void startJobs(Scheduler sched) throws Exception {
         try {
             sched.start();
         } catch (Exception e) {
             LogUtil.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new Exception(e);
         }
     }
 
 
-    public void shutdownJobs(Scheduler sched) {
+    public void shutdownJobs(Scheduler sched) throws Exception {
         try {
             if (!sched.isShutdown()) {
                 sched.shutdown();
             }
         } catch (Exception e) {
             LogUtil.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new Exception(e);
         }
     }
 
@@ -244,7 +244,7 @@ public class ScheduleManager {
      * @throws SchedulerException
      */
     public void addOrUpdateSimpleJob(JobKey jobKey, TriggerKey triggerKey, Class clz,
-                                     int intervalTime, JobDataMap jobDataMap) throws SchedulerException {
+                                     int intervalTime, JobDataMap jobDataMap) throws Exception {
 
         if (scheduler.checkExists(triggerKey)) {
             modifySimpleJobTime(triggerKey, intervalTime);
@@ -254,7 +254,7 @@ public class ScheduleManager {
 
     }
 
-    public void addOrUpdateSimpleJob(JobKey jobKey, TriggerKey triggerKey, Class clz, int intervalTime) throws SchedulerException {
+    public void addOrUpdateSimpleJob(JobKey jobKey, TriggerKey triggerKey, Class clz, int intervalTime) throws Exception {
         addOrUpdateSimpleJob(jobKey, triggerKey, clz, intervalTime, null);
     }
 
@@ -269,7 +269,7 @@ public class ScheduleManager {
      * @param jobDataMap
      * @throws SchedulerException
      */
-    public void addOrUpdateCronJob(JobKey jobKey, TriggerKey triggerKey, Class jobClass, String cron, JobDataMap jobDataMap) throws SchedulerException {
+    public void addOrUpdateCronJob(JobKey jobKey, TriggerKey triggerKey, Class jobClass, String cron, JobDataMap jobDataMap) throws Exception {
 
         LogUtil.info("AddOrUpdateCronJob: " + jobKey.getName() + "," + triggerKey.getGroup());
 
@@ -280,7 +280,7 @@ public class ScheduleManager {
         }
     }
 
-    public void addOrUpdateCronJob(JobKey jobKey, TriggerKey triggerKey, Class jobClass, String cron) throws SchedulerException {
+    public void addOrUpdateCronJob(JobKey jobKey, TriggerKey triggerKey, Class jobClass, String cron) throws Exception {
         addOrUpdateCronJob(jobKey, triggerKey, jobClass, cron, null);
     }
 

@@ -38,7 +38,7 @@ public class UserKeysController {
 
     @ApiOperation(value = "校验API Keys")
     @GetMapping("validate")
-    public String validate(ServletRequest request) {
+    public String validate(ServletRequest request) throws Exception {
         return ApiKeyHandler.getUser(WebUtils.toHttp(request));
     }
 

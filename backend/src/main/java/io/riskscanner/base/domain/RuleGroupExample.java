@@ -2,6 +2,7 @@ package io.riskscanner.base.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RuleGroupExample {
     /**
@@ -174,23 +175,18 @@ public class RuleGroupExample {
         }
 
         protected void addCriterion(String condition) {
-            if (condition == null) {
-                throw new NullPointerException("Value for condition cannot be null");
-            }
+            condition = Objects.requireNonNull(condition, "Condition must not be null!");
             criteria.add(new Criterion(condition));
         }
 
         protected void addCriterion(String condition, Object value, String property) {
-            if (value == null) {
-                throw new NullPointerException("Value for " + property + " cannot be null");
-            }
+            value = Objects.requireNonNull(value, "Value must not be null!");
             criteria.add(new Criterion(condition, value));
         }
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new NullPointerException("Between values for " + property + " cannot be null");
-            }
+            value1 = Objects.requireNonNull(value1, "Value must not be null!");
+            value2 = Objects.requireNonNull(value2, "Value must not be null!");
             criteria.add(new Criterion(condition, value1, value2));
         }
 

@@ -205,7 +205,7 @@ public class PlatformUtils {
      * @return
      * @throws ClientException
      */
-    public static final JSONArray _getRegions(AccountWithBLOBs account, boolean flag) throws ClientException {
+    public static final JSONArray _getRegions(AccountWithBLOBs account, boolean flag) {
         try {
             JSONArray jsonArray = new JSONArray();
             if (!flag) {

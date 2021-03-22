@@ -3,11 +3,11 @@
     <template v-slot:header>
       <el-row>
         <el-col :span="20">
-          <span class="title">{{$t('account.regions')}}</span>
+          <span class="title">{{ $t('account.regions') }}</span>
         </el-col>
         <el-col :span="4">
           <span class="title-unfold" @click="expand" style="max-height: 20px;">
-            {{$t('dashboard.expand_all')}}
+            {{ $t('dashboard.expand_all') }}
             <i class="el-icon-full-screen"></i>
           </span>
         </el-col>
@@ -22,7 +22,7 @@
       :before-close="handleClose">
       <regions-list-expand/>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{$t('commons.cancel')}}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t('commons.cancel') }}</el-button>
       </span>
     </el-dialog>
   </el-card>
@@ -32,7 +32,7 @@
 <script>
   import RegionsPieChart from "@/business/components/common/chart/RegionsPieChart";
   import RegionsListExpand from "./RegionsListExpand";
-
+  /* eslint-disable */
   export default {
     name: "RegionsList",
     components: {

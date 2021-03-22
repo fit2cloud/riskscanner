@@ -15,27 +15,27 @@
         <template v-slot:default="scope">
           <el-link type="primary" @click="goRule(scope.row)">
             <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-            {{scope.row.name}}
+            {{ scope.row.name }}
           </el-link>
         </template>
       </el-table-column>
       <el-table-column :label="$t('rule.rule_tag')" width="150" show-overflow-tooltip>
         <template v-slot:default="scope">
-          {{scope.row.tagName}}
+          {{ scope.row.tagName }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('dashboard.i18n_compliance_ratio')" width="150" show-overflow-tooltip>
         <template v-slot:default="scope">
-          {{!!scope.row.ratio?scope.row.ratio:'0.00%'}}
+          {{ !!scope.row.ratio?scope.row.ratio:'0.00%' }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('dashboard.i18n_severity_resource_number')" width="250" show-overflow-tooltip>
         <template v-slot:default="scope">
-          <span v-if="scope.row.severity == 'HighRisk'" style="color: #f84846;"> {{$t('rule.HighRisk')}}</span>
-          <span v-else-if="scope.row.severity == 'MediumRisk'" style="color: #fe9636;"> {{$t('rule.MediumRisk')}}</span>
-          <span v-else-if="scope.row.severity == 'LowRisk'" style="color: #4dabef;"> {{$t('rule.LowRisk')}}</span>
+          <span v-if="scope.row.severity == 'HighRisk'" style="color: #f84846;"> {{ $t('rule.HighRisk') }}</span>
+          <span v-else-if="scope.row.severity == 'MediumRisk'" style="color: #fe9636;"> {{ $t('rule.MediumRisk') }}</span>
+          <span v-else-if="scope.row.severity == 'LowRisk'" style="color: #4dabef;"> {{ $t('rule.LowRisk') }}</span>
           <span v-else> N/A</span>
-          <span> | ({{scope.row.ruSum?scope.row.ruSum:0}}/{{scope.row.reSum?scope.row.reSum:0}})</span>
+          <span> | ({{ scope.row.ruSum?scope.row.ruSum:0 }}/{{ scope.row.reSum?scope.row.reSum:0 }})</span>
           <span> &nbsp;&nbsp;<i :class="scope.row.assets" ></i></span>
         </template>
       </el-table-column>
@@ -78,6 +78,7 @@
     {key: "storage", value: "el-icon-wallet"},
     {key: "others", value: "el-icon-s-unfold"},
   ];
+  /* eslint-disable */
   export default {
     name: "MdCardContentRule",
     components: {

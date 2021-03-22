@@ -36,26 +36,26 @@ const ReportStyle = `.body{
   background-color: #ebeef5;
 }
 span {
-    margin-right: 5px;
-    display: inline-block;
-  }
+  margin-right: 5px;
+  display: inline-block;
+}
 
-  .el-col span:first-child {
-    font-weight: bold;
-    width: 100px;
-  }
+.el-col span:first-child {
+  font-weight: bold;
+  width: 100px;
+}
 
-  .el-row {
-    height: 60px;
-  }
+.el-row {
+  height: 60px;
+}
 
-  .select-time span {
-    display: inline-block;
-  }
+.select-time span {
+  display: inline-block;
+}
 
-  .el-date-editor {
-    width: 150px;
-  }
+.el-date-editor {
+  width: 150px;
+}
 `
 
 export default ReportStyle;

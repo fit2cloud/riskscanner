@@ -11,6 +11,7 @@ import RsChart from "@/business/components/common/chart/RsChart";
 let ruleGroup = [];
 let groupName = ['rule'];
 let color = ['#11cfae', '#009ef0', '#627dec', '#0051a4', '#893fdc', '#89ffff', '#0099ff'];
+/* eslint-disable */
 export default {
   name: "RuleGroupPieChart",
   components: {RsChart},

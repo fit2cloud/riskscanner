@@ -1,6 +1,6 @@
 <template>
   <el-menu-item :index="this.index">
-    <el-button type="text" class="create-button">{{this.title}}</el-button>
+    <el-button type="text" class="create-button">{{ this.title }}</el-button>
   </el-menu-item>
 </template>
 

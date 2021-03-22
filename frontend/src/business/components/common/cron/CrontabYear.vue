@@ -2,19 +2,19 @@
 	<el-form size="small">
 		<el-form-item>
 			<el-radio :label="1" v-model='radioValue'>
-        {{$t('schedule.cron.not_fill')}}，{{$t('schedule.cron.allowed_wildcards')}}
+        {{ $t('schedule.cron.not_fill') }}，{{ $t('schedule.cron.allowed_wildcards') }}
       </el-radio>
 		</el-form-item>
 
 		<el-form-item>
 			<el-radio :label="2" v-model='radioValue'>
-        {{$t('schedule.cron.every')}}{{$t('schedule.cron.years')}}
+        {{ $t('schedule.cron.every') }}{{ $t('schedule.cron.years') }}
 			</el-radio>
 		</el-form-item>
 
 		<el-form-item>
 			<el-radio :label="3" v-model='radioValue'>
-        {{$t('schedule.cron.period')}} {{$t('schedule.cron.from')}}
+        {{ $t('schedule.cron.period') }} {{ $t('schedule.cron.from') }}
         <el-input-number v-model='cycle01' :min='fullYear' /> -
 				<el-input-number v-model='cycle02' :min='fullYear' />
 			</el-radio>
@@ -22,9 +22,9 @@
 
 		<el-form-item>
 			<el-radio :label="4" v-model='radioValue'>
-        {{$t('schedule.cron.from')}}
-        <el-input-number v-model='average01' :min='fullYear' /> {{$t('schedule.cron.years')}}{{$t('schedule.cron.start')}}，{{$t('schedule.cron.every')}}
-				<el-input-number v-model='average02' :min='fullYear' /> {{$t('schedule.cron.years')}}{{$t('schedule.cron.execute_once')}}
+        {{ $t('schedule.cron.from') }}
+        <el-input-number v-model='average01' :min='fullYear' /> {{ $t('schedule.cron.years') }}{{ $t('schedule.cron.start') }}，{{ $t('schedule.cron.every') }}
+				<el-input-number v-model='average02' :min='fullYear' /> {{ $t('schedule.cron.years') }}{{ $t('schedule.cron.execute_once') }}
 			</el-radio>
 
 		</el-form-item>

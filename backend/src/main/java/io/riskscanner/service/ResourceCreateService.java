@@ -15,7 +15,6 @@ import io.riskscanner.i18n.Translator;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -53,8 +52,6 @@ public class ResourceCreateService {
     @Resource
     private OrderService orderService;
     @Resource
-    private Environment env;
-    @Resource
     private ExtScanHistoryMapper extScanHistoryMapper;
 
     @QuartzScheduled(cron = "${cron.expression.local}")
@@ -70,7 +67,12 @@ public class ResourceCreateService {
         if (CollectionUtils.isNotEmpty(taskList)) {
             taskList.forEach(task -> {
                 LogUtil.info("handling task: {}", toJSONString(task));
-                final Task taskToBeProceed = BeanUtils.copyBean(new Task(), task);
+                final Task taskToBeProceed;
+                try {
+                    taskToBeProceed = BeanUtils.copyBean(new Task(), task);
+                } catch (Exception e) {
+                    throw new RuntimeException(e.getMessage());
+                }
                 if (processingGroupIdMap.get(taskToBeProceed.getId()) != null) {
                     return;
                 }
@@ -138,7 +140,7 @@ public class ResourceCreateService {
     private boolean handleTaskItem(TaskItemWithBLOBs taskItem, Task task) {
         orderService.updateTaskItemStatus(taskItem.getId(), TaskConstants.TASK_STATUS.PROCESSING);
         try {
-            Thread.sleep(1000);//手动休眠1秒，云平台调用太快容易出达到最大连接数而超时
+            Thread.sleep(1000);
             for (int i = 0; i < taskItem.getCount(); i++) {
                 createResource(taskItem, task);
             }
@@ -156,6 +158,11 @@ public class ResourceCreateService {
         String operation = Translator.get("i18n_create_resource");
         String resultStr = "";
         try {
+            TaskItemResourceExample example = new TaskItemResourceExample();
+            example.createCriteria().andTaskIdEqualTo(task.getId()).andTaskItemIdEqualTo(taskItem.getId());
+            List<TaskItemResourceWithBLOBs> list = taskItemResourceMapper.selectByExampleWithBLOBs(example);
+            if (list.isEmpty()) return;
+
             String dirPath = TaskConstants.RESULT_FILE_PATH_PREFIX + task.getId() + "/" + taskItem.getRegionId();
             Map<String, String> map = PlatformUtils.getAccount(accountMapper.selectByPrimaryKey(taskItem.getAccountId()), taskItem.getRegionId());
             String command = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.run.getCommand(), dirPath, "policy.yml", map);
@@ -169,9 +176,7 @@ public class ResourceCreateService {
             if (resultStr.contains("ERROR"))
                 throw new Exception(Translator.get("i18n_create_resource_failed") + ": " + resultStr);
 
-            TaskItemResourceExample example = new TaskItemResourceExample();
-            example.createCriteria().andTaskIdEqualTo(task.getId()).andTaskItemIdEqualTo(taskItem.getId());
-            List<TaskItemResourceWithBLOBs> list = taskItemResourceMapper.selectByExampleWithBLOBs(example);
+
             for (TaskItemResourceWithBLOBs taskItemResource : list) {
 
                 String resourceType = taskItemResource.getResourceType();
@@ -219,7 +224,6 @@ public class ResourceCreateService {
             throw e;
         }
     }
-
 
     public Map<String, Object> getParameters(String taskId) {
         Map<String, Object> map = new HashMap<>();

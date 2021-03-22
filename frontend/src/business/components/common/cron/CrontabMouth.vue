@@ -2,31 +2,31 @@
 	<el-form size='small'>
 		<el-form-item>
 			<el-radio v-model='radioValue' :label="1">
-        {{$t('schedule.cron.month')}}，{{$t('schedule.cron.allowed_wildcards')}}
+        {{ $t('schedule.cron.month') }}，{{ $t('schedule.cron.allowed_wildcards') }}
 			</el-radio>
 		</el-form-item>
 
 		<el-form-item>
 			<el-radio v-model='radioValue' :label="2">
-        {{$t('schedule.cron.period')}} {{$t('schedule.cron.from')}}
+        {{ $t('schedule.cron.period') }} {{ $t('schedule.cron.from') }}
 				<el-input-number v-model='cycle01' :min="1" :max="12" /> -
-				<el-input-number v-model='cycle02' :min="1" :max="12" /> {{$t('schedule.cron.month')}}
+				<el-input-number v-model='cycle02' :min="1" :max="12" /> {{ $t('schedule.cron.month') }}
 			</el-radio>
 		</el-form-item>
 
 		<el-form-item>
 			<el-radio v-model='radioValue' :label="3">
-        {{$t('schedule.cron.from')}}
-				<el-input-number v-model='average01' :min="1" :max="12" /> {{$t('schedule.cron.month')}}{{$t('schedule.cron.start')}}，{{$t('schedule.cron.every')}}
-				<el-input-number v-model='average02' :min="1" :max="12" /> {{$t('schedule.cron.month')}}{{$t('schedule.cron.execute_once')}}
+        {{ $t('schedule.cron.from') }}
+				<el-input-number v-model='average01' :min="1" :max="12" /> {{ $t('schedule.cron.month') }}{{ $t('schedule.cron.start') }}，{{ $t('schedule.cron.every') }}
+				<el-input-number v-model='average02' :min="1" :max="12" /> {{ $t('schedule.cron.month') }}{{ $t('schedule.cron.execute_once') }}
 			</el-radio>
 		</el-form-item>
 
 		<el-form-item>
 			<el-radio v-model='radioValue' :label="4">
-        {{$t('schedule.cron.specify')}}
+        {{ $t('schedule.cron.specify') }}
 				<el-select clearable v-model="checkboxList" :placeholder="$t('schedule.cron.multi_select')" multiple style="width:100%">
-					<el-option v-for="item in 12" :key="item" :value="item">{{item}}</el-option>
+					<el-option v-for="item in 12" :key="item" :value="item">{{ item }}</el-option>
 				</el-select>
 			</el-radio>
 		</el-form-item>

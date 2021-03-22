@@ -4,7 +4,7 @@
     <aside-container>
       <current-user/>
       <el-divider/>
-      <h1>{{$t('commons.setting')}}</h1>
+      <h1>{{ $t('commons.setting') }}</h1>
       <setting-menu/>
     </aside-container>
 

@@ -1,6 +1,6 @@
 <template>
   <span class="adv-search-bar">
-    <el-link type="primary" @click="open">{{$t('commons.adv_search.title')}}</el-link>
+    <el-link type="primary" @click="open">{{ $t('commons.adv_search.title') }}</el-link>
     <el-dialog :title="$t('commons.adv_search.combine')" :visible.sync="visible" custom-class="adv-dialog"
                :append-to-body="true">
       <div>
@@ -11,8 +11,8 @@
       </div>
       <template v-slot:footer>
         <div class="dialog-footer">
-          <el-button @click="reset">{{$t('commons.adv_search.reset')}}</el-button>
-          <el-button type="primary" @click="search">{{$t('commons.adv_search.search')}}</el-button>
+          <el-button @click="reset">{{ $t('commons.adv_search.reset') }}</el-button>
+          <el-button type="primary" @click="search">{{ $t('commons.adv_search.search') }}</el-button>
         </div>
       </template>
     </el-dialog>

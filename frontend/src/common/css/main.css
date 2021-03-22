@@ -26,7 +26,7 @@ body {
   white-space: nowrap;
 }
 
-.clearfix:before,.clearfix:after{
+.clearfix:before,.clearfix:after {
   content: "";
   display: table;
   clear: both;
@@ -75,6 +75,7 @@ body {
 .table-edit-input .el-textarea__inner {
   border-style: hidden;
 }
+
 .table-edit-input.is-disabled .el-textarea__inner {
   background-color: white;
   color: #606266;

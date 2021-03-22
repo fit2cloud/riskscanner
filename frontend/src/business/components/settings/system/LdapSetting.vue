@@ -61,7 +61,7 @@
 <script>
 import DialogFooter from "../../common/components/DialogFooter";
 import {listenGoBack, removeGoBackListener} from "../../../../common/js/utils";
-
+/* eslint-disable */
 export default {
   name: "LdapSetting",
   components: {

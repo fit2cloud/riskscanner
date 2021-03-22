@@ -5,7 +5,7 @@
     <el-submenu index="2" popper-class="submenu">
       <template v-slot:title>
         <span class="account-name" :title="currentAccount">
-          {{ $t('account.cloud_account') }}: {{currentAccount}}
+          {{ $t('account.cloud_account') }}: {{ currentAccount }}
         </span>
       </template>
       <search-list :current-account.sync="currentAccount"/>

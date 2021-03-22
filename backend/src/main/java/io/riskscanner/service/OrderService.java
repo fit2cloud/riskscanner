@@ -68,7 +68,7 @@ public class OrderService {
     @Resource
     private ScanTaskHistoryMapper scanTaskHistoryMapper;
 
-    public Task createTask(QuartzTaskDTO quartzTaskDTO, String status) {
+    public Task createTask(QuartzTaskDTO quartzTaskDTO, String status) throws Exception {
         Task task = createTaskOrder(quartzTaskDTO, status);
         String taskId = task.getId();
 
@@ -191,7 +191,7 @@ public class OrderService {
         taskItemMapper.deleteByExample(taskItemExample);
     }
 
-    private Task createTaskOrder(QuartzTaskDTO quartzTaskDTO, String status) {
+    private Task createTaskOrder(QuartzTaskDTO quartzTaskDTO, String status) throws Exception {
         Task task = new Task();
         task.setTaskName(quartzTaskDTO.getTaskName() != null ?quartzTaskDTO.getTaskName():quartzTaskDTO.getName());
         task.setRuleId(quartzTaskDTO.getId());
@@ -518,7 +518,7 @@ public class OrderService {
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, rollbackFor = {RuntimeException.class, Exception.class})
-    public void getCronDesc(String taskId) {
+    public void getCronDesc(String taskId) throws Exception {
         Task task = taskMapper.selectByPrimaryKey(taskId);
         if (task == null) {
             RSException.throwException(Translator.get("i18n_ex_task_not_found") + taskId);

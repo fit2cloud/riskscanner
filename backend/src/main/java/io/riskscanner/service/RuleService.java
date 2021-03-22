@@ -248,7 +248,7 @@ public class RuleService {
         }
     }
 
-    public Object dryRun(RuleDTO ruleDTO) {
+    public Object dryRun(RuleDTO ruleDTO) throws Exception {
         QuartzTaskDTO quartzTaskDTO = new QuartzTaskDTO();
         BeanUtils.copyBean(quartzTaskDTO, ruleDTO);
         //validate && dryrun
@@ -277,7 +277,7 @@ public class RuleService {
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, rollbackFor = {RuntimeException.class, Exception.class})
-    public RuleDTO getRuleById(String id) {
+    public RuleDTO getRuleById(String id) throws Exception {
         RuleDTO ruleDTO = new RuleDTO();
         Rule rule = ruleMapper.selectByPrimaryKey(id);
         BeanUtils.copyBean(ruleDTO, rule);
@@ -309,7 +309,7 @@ public class RuleService {
         return ruleDTO;
     }
 
-    public RuleDTO getRuleByTaskId(String taskId) {
+    public RuleDTO getRuleByTaskId(String taskId) throws Exception {
         TaskItemExample taskItemExample = new TaskItemExample();
         taskItemExample.createCriteria().andTaskIdEqualTo(taskId);
         String id = taskItemMapper.selectByExample(taskItemExample).get(0).getRuleId();
@@ -360,7 +360,7 @@ public class RuleService {
         return true;
     }
 
-    public List<RuleTagDTO> getRuleTags() {
+    public List<RuleTagDTO> getRuleTags() throws Exception {
         RuleTagExample tagExample = new RuleTagExample();
         tagExample.setOrderByClause("_index");
         List<RuleTagDTO> ruleTagDTOList = new LinkedList<>();
@@ -456,7 +456,7 @@ public class RuleService {
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, rollbackFor = {RuntimeException.class, Exception.class})
-    public void reScan(String taskId, String accountId) {
+    public void reScan(String taskId, String accountId) throws Exception {
         TaskItemExample example = new TaskItemExample();
         example.createCriteria().andTaskIdEqualTo(taskId);
         List<TaskItem> taskItems = taskItemMapper.selectByExample(example);

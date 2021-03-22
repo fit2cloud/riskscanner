@@ -75,7 +75,7 @@ import DialogFooter from "../../common/components/DialogFooter";
 import {getCurrentUser} from "../../../../common/js/utils";
 import TableOperatorButton from "../../common/components/TableOperatorButton";
 import TableHeader from "../../common/components/TableHeader";
-
+/* eslint-disable */
 export default {
   name: "ApiKeys",
   components: {DialogFooter, TableOperatorButton, TableHeader},

@@ -25,16 +25,16 @@
           <!-- 展开 end -->
           <el-table-column type="index" min-width="5%"/>
           <el-table-column v-slot:default="scope" :label="$t('resource.F2C_ID')" min-width="28%">
-              {{scope.row.f2cId}}
+              {{ scope.row.f2cId }}
           </el-table-column>
           <el-table-column v-slot:default="scope" :label="$t('rule.resource_type')" min-width="20%">
-              {{scope.row.resourceType}}
+              {{ scope.row.resourceType }}
           </el-table-column>
           <el-table-column :label="$t('account.cloud_account')" min-width="15%" show-overflow-tooltip>
             <template v-slot:default="scope">
               <span>
                 <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                 &nbsp;&nbsp; {{scope.row.pluginName}}
+                 &nbsp;&nbsp; {{ scope.row.pluginName }}
               </span>
             </template>
           </el-table-column>
@@ -69,7 +69,7 @@
   import CenterChart from "../../common/components/CenterChart";
   import ResultReadOnly from "./ResultReadOnly";
   import {_filter, _sort} from "@/common/js/utils";
-
+  /* eslint-disable */
   export default {
     name: "ResultDetails",
     components: {

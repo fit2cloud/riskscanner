@@ -13,7 +13,7 @@
 </template>
 
 <script>
-
+  /* eslint-disable */
   export default {
     name: "AccountStatus",
     inject:['search'],

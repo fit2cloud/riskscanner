@@ -1,6 +1,7 @@
 package io.riskscanner.security;
 
 import io.riskscanner.commons.utils.LogUtil;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ApiKeyFilter extends AnonymousFilter {
 
+    @SneakyThrows
     @Override
     protected boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) {
         try {

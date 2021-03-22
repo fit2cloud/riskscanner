@@ -22,7 +22,7 @@
             <template v-slot:default="scope">
               <span>
                 <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                 &nbsp;&nbsp; {{scope.row.pluginName}}
+                 &nbsp;&nbsp; {{ scope.row.pluginName }}
               </span>
             </template>
           </el-table-column>
@@ -76,7 +76,7 @@
                 :label="item.name"
                 :value="item.id">
                 <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                &nbsp;&nbsp; {{$t(item.name)}}
+                &nbsp;&nbsp; {{ $t(item.name) }}
               </el-option>
             </el-select>
           </el-form-item>
@@ -89,7 +89,7 @@
             </el-form-item>
           </div>
           <el-form-item v-if="script">
-            <el-link type="danger" @click="innerDrawer = true">{{$t('account.iam_strategy')}}</el-link>
+            <el-link type="danger" @click="innerDrawer = true">{{ $t('account.iam_strategy') }}</el-link>
             <div>
               <el-drawer
                 size="45%"
@@ -125,7 +125,7 @@
                 :label="item.name"
                 :value="item.id">
                 <img :src="require(`@/assets/img/platform/${item.icon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                &nbsp;&nbsp; {{$t(item.name)}}
+                &nbsp;&nbsp; {{ $t(item.name) }}
               </el-option>
             </el-select>
           </el-form-item>
@@ -138,7 +138,7 @@
             </el-form-item>
           </div>
           <el-form-item v-if="script">
-            <el-link type="danger" @click="innerDrawer = true">{{$t('account.iam_strategy')}}</el-link>
+            <el-link type="danger" @click="innerDrawer = true">{{ $t('account.iam_strategy') }}</el-link>
             <div>
               <el-drawer
                 size="45%"

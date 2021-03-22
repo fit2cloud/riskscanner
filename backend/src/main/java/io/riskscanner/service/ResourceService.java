@@ -248,7 +248,7 @@ public class ResourceService {
         }
     }
 
-    public ResourceDetailDTO getResource(String id) {
+    public ResourceDetailDTO getResource(String id) throws Exception {
         ResourceDetailDTO dto = new ResourceDetailDTO();
         ResourceWithBLOBs resource = resourceMapper.selectByPrimaryKey(id);
         resource.setMetadata(toJSONString(resource.getMetadata()));

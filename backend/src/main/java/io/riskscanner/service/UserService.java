@@ -58,7 +58,7 @@ public class UserService {
     @Resource
     private ExtUserMapper extUserMapper;
 
-    public UserDTO insert(UserRequest user) {
+    public UserDTO insert(UserRequest user) throws Exception {
         checkUserParam(user);
         //
         String id = user.getId();
@@ -133,7 +133,7 @@ public class UserService {
         }
     }
 
-    public void createUser(User userRequest) {
+    public void createUser(User userRequest) throws Exception {
         User user = new User();
         BeanUtils.copyProperties(userRequest, user);
         user.setCreateTime(System.currentTimeMillis());
@@ -362,7 +362,7 @@ public class UserService {
         return extUserRoleMapper.getOrgMemberList(request);
     }
 
-    public boolean checkUserPassword(String userId, String password) {
+    public boolean checkUserPassword(String userId, String password) throws Exception {
         if (StringUtils.isBlank(userId)) {
             RSException.throwException(Translator.get("user_name_is_null"));
         }
@@ -392,7 +392,7 @@ public class UserService {
     }
 
     /*修改当前用户用户密码*/
-    private User updateCurrentUserPwd(EditPassWordRequest request) {
+    private User updateCurrentUserPwd(EditPassWordRequest request) throws Exception {
         String oldPassword = CodingUtil.md5(request.getPassword(), "utf-8");
         String newPassword = request.getNewpassword();
         UserExample userExample = new UserExample();
@@ -408,13 +408,13 @@ public class UserService {
         }
     }
 
-    public int updateCurrentUserPassword(EditPassWordRequest request) {
+    public int updateCurrentUserPassword(EditPassWordRequest request) throws Exception {
         User user = updateCurrentUserPwd(request);
         return extUserMapper.updatePassword(user);
     }
 
     /*管理员修改用户密码*/
-    private User updateUserPwd(EditPassWordRequest request) {
+    private User updateUserPwd(EditPassWordRequest request) throws Exception {
         User user = userMapper.selectByPrimaryKey(request.getId());
         String newped = request.getNewpassword();
         user.setPassword(CodingUtil.md5(newped));
@@ -423,7 +423,7 @@ public class UserService {
         return user;
     }
 
-    public int updateUserPassword(EditPassWordRequest request) {
+    public int updateUserPassword(EditPassWordRequest request) throws Exception {
         User user = updateUserPwd(request);
         return extUserMapper.updatePassword(user);
     }

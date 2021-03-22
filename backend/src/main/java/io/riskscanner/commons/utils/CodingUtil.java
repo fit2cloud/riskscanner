@@ -25,7 +25,7 @@ public class CodingUtil {
      * @param src 要加密的串
      * @return 加密后的字符串
      */
-    public static String md5(String src) {
+    public static String md5(String src) throws Exception {
         return md5(src, UTF_8);
     }
 
@@ -36,7 +36,7 @@ public class CodingUtil {
      * @param charset 加密字符集
      * @return 加密后的字符串
      */
-    public static String md5(String src, String charset) {
+    public static String md5(String src, String charset) throws Exception {
         try {
             byte[] strTemp = StringUtils.isEmpty(charset) ? src.getBytes() : src.getBytes(charset);
             MessageDigest mdTemp = MessageDigest.getInstance("MD5");
@@ -54,7 +54,7 @@ public class CodingUtil {
 
             return new String(str);
         } catch (Exception e) {
-            throw new RuntimeException("MD5 encrypt error:", e);
+            throw new Exception("MD5 encrypt error:", e);
         }
     }
 
@@ -64,7 +64,7 @@ public class CodingUtil {
      * @param src 待解密的字符串
      * @return 解密后的字符串
      */
-    public static String base64Decoding(String src) {
+    public static String base64Decoding(String src) throws Exception {
         byte[] b;
         String result = null;
         if (src != null) {
@@ -72,7 +72,7 @@ public class CodingUtil {
                 b = Base64.decodeBase64(src);
                 result = new String(b, UTF_8);
             } catch (Exception e) {
-                throw new RuntimeException("BASE64 decoding error:", e);
+                throw new Exception("BASE64 decoding error:", e);
             }
         }
         return result;
@@ -104,9 +104,9 @@ public class CodingUtil {
      * @param iv        向量
      * @return 加密后字符串
      */
-    public static String aesEncrypt(String src, String secretKey, String iv) {
+    public static String aesEncrypt(String src, String secretKey, String iv) throws Exception {
         if (StringUtils.isBlank(secretKey)) {
-            throw new RuntimeException("secretKey is empty");
+            throw new Exception("secretKey is empty");
         }
 
         try {
@@ -119,7 +119,7 @@ public class CodingUtil {
             byte[] encrypted = cipher.doFinal(src.getBytes(UTF_8));
             return Base64.encodeBase64String(encrypted);
         } catch (Exception e) {
-            throw new RuntimeException("AES encrypt error:", e);
+            throw new Exception("AES encrypt error:", e);
         }
 
     }

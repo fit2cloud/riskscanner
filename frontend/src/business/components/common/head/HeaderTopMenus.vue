@@ -9,19 +9,19 @@
            router>
 
     <el-menu-item index="/dashboard" v-permission="['admin']">
-      {{$t('dashboard.dashboard')}}
+      {{ $t('dashboard.dashboard') }}
     </el-menu-item>
     <el-menu-item index="/rule" v-permission="['admin']">
-      {{$t('rule.rule')}}
+      {{ $t('rule.rule') }}
     </el-menu-item>
     <el-menu-item index="/resource" onselectstart="return false" v-permission="['admin']">
-      {{$t('resource.resource_result')}}
+      {{ $t('resource.resource_result') }}
     </el-menu-item>
     <el-menu-item index="/account" onselectstart="return false" v-permission="['admin']">
-      {{$t('account.cloud_account')}}
+      {{ $t('account.cloud_account') }}
     </el-menu-item>
     <el-menu-item index="/setting" onselectstart="return false">
-      {{$t('commons.system_setting')}}
+      {{ $t('commons.system_setting') }}
     </el-menu-item>
   </el-menu>
 </template>
