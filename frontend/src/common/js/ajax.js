@@ -32,9 +32,6 @@ export default {
     axios.defaults.withCredentials = true;
 
     axios.interceptors.response.use(response => {
-      console.log(22222222, response)
-      console.log(22222333, response.headers["authentication-status"])
-      console.log(22222444, response.headers["authentication-status"] === "invalid")
       if (response.headers["authentication-status"] === "invalid") {
         login();
       }
