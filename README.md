@@ -37,9 +37,11 @@ RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，�
 curl -sSL https://github.com/RiskScanner/riskscanner/releases/latest/download/quick_start.sh | sh
 ```
 
-## 帮助文档
+## 帮助文档和演示视频
 
 >[帮助文档](https://docs.riskscanner.io/)
+
+>[演示视频](https://www.bilibili.com/video/BV12p4y1b7Ud)
 
 ## 微信群
 

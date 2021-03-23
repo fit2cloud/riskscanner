@@ -11,7 +11,7 @@ public class EndpointNode implements Serializable {
 
     private String type;
 
-    String endpoint;
+    private String endpoint;
 
     public String getRegion() {
         return region;
