@@ -1,9 +1,9 @@
 package io.riskscanner.dto;
 
 
-import io.riskscanner.base.rs.SelectTag;
 import io.riskscanner.base.domain.Rule;
 import io.riskscanner.base.domain.TaskItem;
+import io.riskscanner.base.rs.SelectTag;
 
 import java.util.LinkedList;
 import java.util.List;

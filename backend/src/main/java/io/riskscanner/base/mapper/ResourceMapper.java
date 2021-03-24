@@ -3,8 +3,9 @@ package io.riskscanner.base.mapper;
 import io.riskscanner.base.domain.Resource;
 import io.riskscanner.base.domain.ResourceExample;
 import io.riskscanner.base.domain.ResourceWithBLOBs;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ResourceMapper {
     /**

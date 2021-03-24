@@ -1,6 +1,5 @@
 package io.riskscanner.listener;
 
-import io.riskscanner.commons.exception.PluginException;
 import io.riskscanner.service.TaskService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

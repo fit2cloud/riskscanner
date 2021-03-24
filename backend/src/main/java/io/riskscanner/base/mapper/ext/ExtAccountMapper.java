@@ -1,7 +1,6 @@
 package io.riskscanner.base.mapper.ext;
 
 import io.riskscanner.controller.request.account.CloudAccountRequest;
-import io.riskscanner.controller.request.rule.CreateRuleRequest;
 import io.riskscanner.dto.AccountDTO;
 import io.riskscanner.dto.QuartzTaskDTO;
 import io.riskscanner.dto.RuleDTO;

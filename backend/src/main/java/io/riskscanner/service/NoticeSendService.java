@@ -1,8 +1,8 @@
 package io.riskscanner.service;
 
-import io.riskscanner.message.MessageDetail;
 import io.riskscanner.commons.constants.NoticeConstants;
 import io.riskscanner.message.MailNoticeSender;
+import io.riskscanner.message.MessageDetail;
 import io.riskscanner.message.NoticeModel;
 import io.riskscanner.message.NoticeSender;
 import org.apache.commons.lang3.StringUtils;

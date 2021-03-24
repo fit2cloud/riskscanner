@@ -2,8 +2,9 @@ package io.riskscanner.base.mapper;
 
 import io.riskscanner.base.domain.Task;
 import io.riskscanner.base.domain.TaskExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TaskMapper {
     /**

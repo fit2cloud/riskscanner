@@ -1,8 +1,6 @@
 package io.riskscanner.sechedule;
 
-import com.aliyuncs.exceptions.ClientException;
 import com.fit2cloud.quartz.anno.QuartzScheduled;
-import io.riskscanner.commons.exception.PluginException;
 import io.riskscanner.commons.utils.LogUtil;
 import io.riskscanner.service.AccountService;
 import io.riskscanner.service.RuleService;

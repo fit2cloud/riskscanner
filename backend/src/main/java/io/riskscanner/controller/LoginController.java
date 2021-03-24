@@ -1,13 +1,10 @@
 package io.riskscanner.controller;
 
-import io.riskscanner.commons.constants.ResourceOperation;
-import io.riskscanner.commons.constants.ResourceTypeConstants;
 import io.riskscanner.commons.constants.SsoMode;
 import io.riskscanner.commons.constants.UserSource;
 import io.riskscanner.commons.user.SessionUser;
 import io.riskscanner.commons.utils.SessionUtils;
 import io.riskscanner.controller.request.LoginRequest;
-import io.riskscanner.service.OperationLogService;
 import io.riskscanner.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
-import java.util.Objects;
 
 @ApiIgnore
 @RestController

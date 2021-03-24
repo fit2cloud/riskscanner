@@ -1,10 +1,8 @@
 package io.riskscanner.controller.request.rule;
 
 
-import io.riskscanner.base.domain.Rule;
 import io.riskscanner.base.domain.RuleTag;
 
-import java.util.List;
 import java.util.Map;
 
 /**

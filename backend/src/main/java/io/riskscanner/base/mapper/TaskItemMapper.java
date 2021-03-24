@@ -3,8 +3,9 @@ package io.riskscanner.base.mapper;
 import io.riskscanner.base.domain.TaskItem;
 import io.riskscanner.base.domain.TaskItemExample;
 import io.riskscanner.base.domain.TaskItemWithBLOBs;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TaskItemMapper {
     /**

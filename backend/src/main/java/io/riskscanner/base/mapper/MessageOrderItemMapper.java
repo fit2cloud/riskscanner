@@ -2,8 +2,9 @@ package io.riskscanner.base.mapper;
 
 import io.riskscanner.base.domain.MessageOrderItem;
 import io.riskscanner.base.domain.MessageOrderItemExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface MessageOrderItemMapper {
     /**

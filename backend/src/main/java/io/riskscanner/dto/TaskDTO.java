@@ -2,9 +2,6 @@ package io.riskscanner.dto;
 
 
 import io.riskscanner.base.domain.Task;
-import io.riskscanner.base.domain.TaskItem;
-
-import java.util.List;
 
 /**
  * @author maguohao

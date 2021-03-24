@@ -1,9 +1,9 @@
 package io.riskscanner.dto;
 
-import io.riskscanner.base.rs.SelectTag;
 import io.riskscanner.base.domain.Rule;
 import io.riskscanner.base.domain.RuleTag;
 import io.riskscanner.base.mapper.ext.ExtRuleMapper;
+import io.riskscanner.base.rs.SelectTag;
 import io.riskscanner.commons.utils.BeanUtils;
 import io.riskscanner.commons.utils.CommonBeanFactory;
 

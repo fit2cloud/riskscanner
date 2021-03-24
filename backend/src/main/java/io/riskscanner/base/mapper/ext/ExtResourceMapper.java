@@ -1,7 +1,6 @@
 package io.riskscanner.base.mapper.ext;
 
 
-import io.riskscanner.base.domain.Account;
 import io.riskscanner.controller.request.resource.ResourceRequest;
 import io.riskscanner.dto.ReportDTO;
 import io.riskscanner.dto.ResourceDTO;

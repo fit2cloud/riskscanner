@@ -175,19 +175,23 @@ public class TaskExample {
         }
 
         protected void addCriterion(String condition) {
-            condition = Objects.requireNonNull(condition, "Condition must not be null!");
-            criteria.add(new Criterion(condition));
+            String column = condition;
+            column = Objects.requireNonNull(column, "Condition must not be null!");
+            criteria.add(new Criterion(column));
         }
 
         protected void addCriterion(String condition, Object value, String property) {
-            value = Objects.requireNonNull(value, "Value must not be null!");
-            criteria.add(new Criterion(condition, value));
+            Object column = value;
+            column = Objects.requireNonNull(column, "Value must not be null!");
+            criteria.add(new Criterion(condition, column));
         }
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
-            value1 = Objects.requireNonNull(value1, "Value must not be null!");
-            value2 = Objects.requireNonNull(value2, "Value must not be null!");
-            criteria.add(new Criterion(condition, value1, value2));
+            Object column1 = value1;
+            Object column2 = value2;
+            column1 = Objects.requireNonNull(column1, "Value must not be null!");
+            column2 = Objects.requireNonNull(column2, "Value must not be null!");
+            criteria.add(new Criterion(condition, column1, column2));
         }
 
         public Criteria andIdIsNull() {

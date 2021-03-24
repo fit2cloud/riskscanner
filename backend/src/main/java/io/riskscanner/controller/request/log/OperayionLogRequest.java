@@ -3,8 +3,6 @@ package io.riskscanner.controller.request.log;
 import io.riskscanner.commons.utils.FuzzyQuery;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Map;
-
 /**
  * maguohao
  */

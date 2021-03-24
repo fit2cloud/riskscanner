@@ -1,8 +1,8 @@
 package io.riskscanner.dto;
 
 
-import io.riskscanner.base.rs.SelectTag;
 import io.riskscanner.base.domain.Rule;
+import io.riskscanner.base.rs.SelectTag;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
