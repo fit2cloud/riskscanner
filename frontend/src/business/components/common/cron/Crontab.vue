@@ -118,7 +118,7 @@
   import CrontabWeek from "./CrontabWeek.vue";
   import CrontabYear from "./CrontabYear.vue";
   import CrontabResult from "./CrontabResult.vue";
-
+  /* eslint-disable */
   export default {
     name: "Crontab",
     data() {

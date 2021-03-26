@@ -1,3 +1,4 @@
+/* eslint-disable */
 const options = function (value, array) {
   if (!value) return '';
   if (array) {

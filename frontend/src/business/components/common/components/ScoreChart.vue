@@ -4,7 +4,7 @@
 
 <script>
   import RsChart from "@/business/components/common/chart/RsChart";
-
+  /* eslint-disable */
   export default {
     name: "ScoreChart",
     components: {RsChart},
@@ -187,15 +187,15 @@
               formatter: function(params) {
                 var value = params.toFixed(2)
 
-                if (value == 0.00) {
+                if (value === 0.00) {
                   return '危'
-                } else if (value == 0.25) {
+                } else if (value === 0.25) {
                   return '差'
-                } else if (value == 0.50) {
+                } else if (value === 0.50) {
                   return '中'
-                } else if (value == 0.75) {
+                } else if (value === 0.75) {
                   return '良'
-                } else if (value == 1.00) {
+                } else if (value === 1.00) {
                   return '优'
                 } else {
                   return ''

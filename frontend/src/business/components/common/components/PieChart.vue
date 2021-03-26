@@ -10,7 +10,7 @@
 <script>
 
 import RsChart from "@/business/components/common/chart/RsChart";
-
+/* eslint-disable */
 export default {
   name: "PieChart",
   components: {RsChart},

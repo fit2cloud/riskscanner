@@ -1,3 +1,4 @@
+/* eslint-disable */
 const aUniqueVerticalStringNotFoundInData = '___UNIQUE_VERTICAL___';
 const aUniqueCommaStringNotFoundInData = '___UNIQUE_COMMA___';
 const segmentSeparateChar = '|';

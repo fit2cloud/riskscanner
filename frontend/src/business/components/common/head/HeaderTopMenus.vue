@@ -31,7 +31,7 @@
     name: "TopMenus",
     data() {
       return {
-        activeIndex: '/'
+        activeIndex: "/"
       }
     },
     watch: {

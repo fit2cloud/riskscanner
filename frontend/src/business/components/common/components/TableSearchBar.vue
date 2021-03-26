@@ -13,6 +13,7 @@
 </template>
 
 <script>
+/* eslint-disable */
     export default {
       name: "TableSearchBar",
       props: {

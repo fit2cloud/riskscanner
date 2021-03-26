@@ -8,7 +8,7 @@
 
 <script>
   import TableOperatorButton from "./TableOperatorButton";
-
+  /* eslint-disable */
   export default {
     name: "TableOperators",
     components: {TableOperatorButton},

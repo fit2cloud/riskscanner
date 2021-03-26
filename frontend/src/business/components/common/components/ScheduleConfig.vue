@@ -28,7 +28,7 @@ import CrontabResult from "../cron/CrontabResult";
 function defaultCustomValidate() {
   return {pass: true};
 }
-
+/* eslint-disable */
 export default {
   name: "ScheduleConfig",
   components: {CrontabResult, ScheduleEdit},

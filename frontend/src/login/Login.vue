@@ -51,7 +51,7 @@
   import {saveLocalStorage} from '../common/js/utils';
   import {DEFAULT_LANGUAGE} from "../common/js/constants";
 
-
+  /* eslint-disable */
   export default {
     name: "Login",
     data() {

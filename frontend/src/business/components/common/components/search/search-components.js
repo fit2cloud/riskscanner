@@ -3,6 +3,7 @@ import TableSearchDateTimePicker from "./TableSearchDateTimePicker";
 import TableSearchDatePicker from "./TableSearchDatePicker";
 import TableSearchSelect from "./TableSearchSelect";
 
+/* eslint-disable */
 export default {
   TableSearchInput, TableSearchDatePicker, TableSearchDateTimePicker, TableSearchSelect
 }
@@ -56,8 +57,8 @@ export const OPERATORS = {
 
 export const NAME = {
   key: "name", // 返回结果Map的key
-  name: 'TableSearchInput', // Vue控件名称
-  label: 'commons.name', // 显示名称
+  name: "TableSearchInput", // Vue控件名称
+  label: "commons.name", // 显示名称
   operator: { // 运算符设置
     value: OPERATORS.LIKE.value, // 如果未设置value初始值，则value初始值为options[0]
     options: [OPERATORS.LIKE, OPERATORS.NOT_LIKE] // 运算符候选项
@@ -66,8 +67,8 @@ export const NAME = {
 
 export const DESCRIPTION = {
   key: "description", // 返回结果Map的key
-  name: 'TableSearchInput', // Vue控件名称
-  label: 'commons.description', // 显示名称
+  name: "TableSearchInput", // Vue控件名称
+  label: "commons.description", // 显示名称
   operator: { // 运算符设置
     value: OPERATORS.LIKE.value, // 如果未设置value初始值，则value初始值为options[0]
     options: [OPERATORS.LIKE, OPERATORS.NOT_LIKE] // 运算符候选项
@@ -76,8 +77,8 @@ export const DESCRIPTION = {
 
 export const UPDATE_TIME = {
   key: "updateTime",
-  name: 'TableSearchDateTimePicker',
-  label: 'commons.update_time',
+  name: "TableSearchDateTimePicker",
+  label: "commons.update_time",
   operator: {
     options: [OPERATORS.BETWEEN, OPERATORS.GT, OPERATORS.GE, OPERATORS.LT, OPERATORS.LE, OPERATORS.EQ]
   },
@@ -160,8 +161,8 @@ export const CREATOR = {
 
 export const TAG_KEY = {
   key: "tagKey", // 返回结果Map的key
-  name: 'TableSearchInput', // Vue控件名称
-  label: 'rule.tag_key', // 显示名称
+  name: "TableSearchInput", // Vue控件名称
+  label: "rule.tag_key", // 显示名称
   operator: { // 运算符设置
     value: OPERATORS.LIKE.value, // 如果未设置value初始值，则value初始值为options[0]
     options: [OPERATORS.LIKE, OPERATORS.NOT_LIKE] // 运算符候选项
@@ -170,8 +171,8 @@ export const TAG_KEY = {
 
 export const TAG_NAME = {
   key: "tagName", // 返回结果Map的key
-  name: 'TableSearchInput', // Vue控件名称
-  label: 'rule.tag_name', // 显示名称
+  name: "TableSearchInput", // Vue控件名称
+  label: "rule.tag_name", // 显示名称
   operator: { // 运算符设置
     value: OPERATORS.LIKE.value, // 如果未设置value初始值，则value初始值为options[0]
     options: [OPERATORS.LIKE, OPERATORS.NOT_LIKE] // 运算符候选项
@@ -196,8 +197,8 @@ export const TAG_FLAG = {
 
 export const TAG_INDEX = {
   key: "index", // 返回结果Map的key
-  name: 'TableSearchInput', // Vue控件名称
-  label: 'rule._index', // 显示名称
+  name: "TableSearchInput", // Vue控件名称
+  label: "rule._index", // 显示名称
   operator: { // 运算符设置
     value: OPERATORS.LIKE.value, // 如果未设置value初始值，则value初始值为options[0]
     options: [OPERATORS.LIKE] // 运算符候选项
@@ -206,8 +207,8 @@ export const TAG_INDEX = {
 
 export const RULE_NAME = {
   key: "name", // 返回结果Map的key
-  name: 'TableSearchInput', // Vue控件名称
-  label: 'rule.rule_name', // 显示名称
+  name: "TableSearchInput", // Vue控件名称
+  label: "rule.rule_name", // 显示名称
   operator: { // 运算符设置
     value: OPERATORS.LIKE.value, // 如果未设置value初始值，则value初始值为options[0]
     options: [OPERATORS.LIKE, OPERATORS.NOT_LIKE] // 运算符候选项

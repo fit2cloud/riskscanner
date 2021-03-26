@@ -3,6 +3,7 @@
 </template>
 
 <script>
+/* eslint-disable */
     export default {
       name: "CodeEdit",
       components: { editor: require('vue2-ace-editor')},

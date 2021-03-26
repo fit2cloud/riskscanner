@@ -9,7 +9,7 @@ import Resource from "@/business/components/resource/router";
 import Dashboard from "@/business/components/dashboard/router";
 
 Vue.use(VueRouter);
-
+/* eslint-disable */
 const router = new VueRouter({
   routes: [
     {path: "/", redirect: '/setting/personsetting'},

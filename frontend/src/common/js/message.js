@@ -1,9 +1,9 @@
-import {Message} from 'element-ui';
-
+import {Message} from "element-ui";
+/* eslint-disable */
 export default {
   install(Vue) {
     if (!Message) {
-      window.console.error('You have to install Message of ElementUI');
+      window.console.error("You have to install Message of ElementUI");
       return
     }
 

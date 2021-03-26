@@ -112,10 +112,10 @@ export function _filter(filters, condition) {
 //表格数据排序
 export function _sort(column, condition) {
   column.prop = humpToLine(column.prop);
-  if (column.order === 'descending') {
-    column.order = 'desc';
+  if (column.order === "descending") {
+    column.order = "desc";
   } else {
-    column.order = 'asc';
+    column.order = "asc";
   }
   if (!condition.orders) {
     condition.orders = [];
@@ -137,7 +137,7 @@ export function downloadFile(name, content) {
   if ("download" in document.createElement("a")) {
     // 非IE下载
     //  chrome/firefox
-    let aTag = document.createElement('a');
+    let aTag = document.createElement("a");
     aTag.download = name;
     aTag.href = URL.createObjectURL(blob);
     aTag.click();
@@ -152,12 +152,12 @@ export function listenGoBack( callback) {
   //监听浏览器返回操作，关闭该对话框
   if (window.history && window.history.pushState) {
     history.pushState(null, null, document.URL);
-    window.addEventListener('popstate', callback);
+    window.addEventListener("popstate", callback);
   }
 }
 
 export function removeGoBackListener(callback) {
-  window.removeEventListener('popstate', callback);
+  window.removeEventListener("popstate", callback);
 }
 
 export function getUUID() {

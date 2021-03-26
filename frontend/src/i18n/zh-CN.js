@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   commons: {
     help_documentation: '帮助文档',

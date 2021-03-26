@@ -1,29 +1,29 @@
-import {Message, MessageBox} from 'element-ui';
+import {Message, MessageBox} from "element-ui";
 import axios from "axios";
-import i18n from '../../i18n/i18n'
+import i18n from "../../i18n/i18n"
 
 
 export default {
   install(Vue) {
 
     // 登入请求不重定向
-    let unRedirectUrls = new Set(['signin','ldap/signin','/signin', '/ldap/signin']);
+    let unRedirectUrls = new Set(["signin","ldap/signin","/signin", "/ldap/signin"]);
 
     if (!axios) {
-      window.console.error('You have to install axios');
+      window.console.error("You have to install axios");
       return
     }
 
     if (!Message) {
-      window.console.error('You have to install Message of ElementUI');
+      window.console.error("You have to install Message of ElementUI");
       return
     }
 
     let login = function () {
-      MessageBox.alert(i18n.t('commons.tips'), i18n.t('commons.prompt'), {
+      MessageBox.alert(i18n.t("commons.tips"), i18n.t("commons.prompt"), {
         callback: () => {
           axios.get("/signout");
-          localStorage.setItem('Admin-Token', "{}");
+          localStorage.setItem("Admin-Token", "{}");
           window.location.href = "/login"
         }
       });
@@ -128,9 +128,9 @@ export default {
     };
 
     Vue.prototype.$fileDownload = function (url) {
-      axios.get(url, {responseType: 'blob'})
+      axios.get(url, {responseType: "blob"})
         .then(response => {
-          let fileName = window.decodeURI(response.headers['content-disposition'].split('=')[1]);
+          let fileName = window.decodeURI(response.headers["content-disposition"].split("=")[1]);
           let link = document.createElement("a");
           link.href = window.URL.createObjectURL(new Blob([response.data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"}));
           link.download = fileName;
@@ -148,13 +148,13 @@ export default {
           formData.append("files", f);
         })
       }
-      formData.append('request', new Blob([JSON.stringify(param)], {type: "application/json"}));
+      formData.append("request", new Blob([JSON.stringify(param)], {type: "application/json"}));
       let axiosRequestConfig = {
-        method: 'POST',
+        method: "POST",
         url: url,
         data: formData,
         headers: {
-          'Content-Type': undefined
+          "Content-Type": undefined
         }
       };
       return Vue.prototype.$request(axiosRequestConfig, success, failure);

@@ -42,7 +42,8 @@
   color: #9b859d;
 }
 
-.cm-s-bespin span.cm-property, .cm-s-bespin span.cm-attribute {
+.cm-s-bespin span.cm-property,
+.cm-s-bespin span.cm-attribute {
   color: #54be0d;
 }
 

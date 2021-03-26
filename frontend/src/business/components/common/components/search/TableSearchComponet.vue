@@ -15,6 +15,7 @@
 </template>
 
 <script>
+/* eslint-disable */
   export default {
     name: "TableSearchComponent",
     props: ['component'],

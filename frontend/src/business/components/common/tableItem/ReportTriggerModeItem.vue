@@ -9,7 +9,7 @@
 <script>
     export default {
       name: "ReportTriggerModeItem",
-      props: ['triggerMode']
+      props: ["triggerMode"]
     }
 </script>
 

@@ -29,7 +29,7 @@
   import TableSearchBar from './TableSearchBar';
   import TableButton from './TableButton';
   import TableAdvSearchBar from "./search/TableAdvSearchBar";
-
+  /* eslint-disable */
   export default {
     name: "TableHeader",
     components: {TableAdvSearchBar, TableSearchBar, TableButton},

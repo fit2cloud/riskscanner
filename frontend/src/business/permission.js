@@ -1,18 +1,19 @@
-import router from './components/common/router/router'
-import { TokenKey } from '@/common/js/constants';
+import router from "./components/common/router/router";
+import { TokenKey } from "@/common/js/constants";
 import { hasRolePermissions, hasRoles } from "@/common/js/utils";
 
-const whiteList = ['/login']; // no redirect whitelist
+/* eslint-disable */
+const whiteList = ["/login"]; // no redirect whitelist
 
 export const permission = {
   inserted(el, binding) {
-    checkRolePermission(el, binding, 'permission');
+    checkRolePermission(el, binding, "permission");
   }
 };
 
 export const roles = {
   inserted(el, binding) {
-    checkRolePermission(el, binding, 'roles');
+    checkRolePermission(el, binding, "roles");
   }
 };
 
@@ -21,9 +22,9 @@ function checkRolePermission(el, binding, type) {
   if (value && value instanceof Array && value.length > 0) {
     const permissionRoles = value;
     let hasPermission = false;
-    if (type === 'roles') {
+    if (type === "roles") {
       hasPermission = hasRoles(...permissionRoles);
-    } else if (type === 'permission') {
+    } else if (type === "permission") {
       hasPermission = hasRolePermissions(...permissionRoles);
     }
     if (!hasPermission) {
@@ -38,8 +39,8 @@ router.beforeEach(async (to, from, next) => {
   const user = JSON.parse(localStorage.getItem(TokenKey));
 
   if (user) {
-    if (to.path === '/login') {
-      next({path: '/'});
+    if (to.path === "/login") {
+      next({path: "/"});
     } else {
       // const roles = user.roles.filter(r => r.id);
       next()

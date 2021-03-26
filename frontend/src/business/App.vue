@@ -28,7 +28,7 @@
   import {saveLocalStorage} from "../common/js/utils";
 
   export default {
-    name: 'app',
+    name: "app",
     data() {
       return {
         auth: false

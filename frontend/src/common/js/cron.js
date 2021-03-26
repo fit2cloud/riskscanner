@@ -4,6 +4,7 @@
  * @param cronExpression The expression to validate
  * @return True is expression is valid
  */
+/* eslint-disable */
 export function cronValidate(cronExpression ){
 
   if (!cronExpression) {

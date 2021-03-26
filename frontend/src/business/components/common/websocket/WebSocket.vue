@@ -5,6 +5,7 @@
 </template>
 
 <script>
+/* eslint-disable */
   export default {
     name: "WebSocket",
     data() {

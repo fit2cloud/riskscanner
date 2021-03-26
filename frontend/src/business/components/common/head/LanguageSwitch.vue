@@ -20,7 +20,7 @@
 <script>
   import {DEFAULT_LANGUAGE, EN_US, TokenKey, ZH_CN, ZH_TW} from '../../../../common/js/constants';
   import {getCurrentUser} from "../../../../common/js/utils";
-
+  /* eslint-disable */
   export default {
     name: "LanguageSwitch",
     data() {

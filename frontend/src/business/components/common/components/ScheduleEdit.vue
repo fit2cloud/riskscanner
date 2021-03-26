@@ -119,7 +119,7 @@ import {listenGoBack, removeGoBackListener} from "@/common/js/utils";
 function defaultCustomValidate() {
   return {pass: true};
 }
-
+/* eslint-disable */
   export default {
     name: "ScheduleEdit",
     components: {CrontabResult, Crontab},

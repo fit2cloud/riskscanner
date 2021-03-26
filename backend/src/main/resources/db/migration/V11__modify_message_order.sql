@@ -1,0 +1,1 @@
+ALTER TABLE message_order DROP message_task_id;

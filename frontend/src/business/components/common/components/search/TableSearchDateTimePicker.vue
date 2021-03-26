@@ -16,7 +16,7 @@
 <script>
   import TableSearchComponent from "./TableSearchComponet";
   import {OPERATORS} from "./search-components"
-
+  /* eslint-disable */
   export default {
     name: "TableSearchDateTimePicker",
     components: {TableSearchComponent},

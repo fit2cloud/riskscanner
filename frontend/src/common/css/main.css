@@ -26,13 +26,15 @@ body {
   white-space: nowrap;
 }
 
-.clearfix:before,.clearfix:after {
+.clearfix::before,
+.clearfix::after {
   content: "";
   display: table;
   clear: both;
 }
 
-.ck-rounded-corners .ck.ck-balloon-panel,.ck.ck-balloon-panel.ck-rounded-corners {
+.ck-rounded-corners .ck.ck-balloon-panel,
+.ck.ck-balloon-panel.ck-rounded-corners {
   z-index: 10055 !important;
 }
 
@@ -58,11 +60,11 @@ body {
   border-color: white;
 }
 
-.adjust-table:after {
+.adjust-table::after {
   background-color: white;
 }
 
-.adjust-table th:hover:after {
+.adjust-table th:hover::after {
   content: '';
   position: absolute;
   top: 25%;
