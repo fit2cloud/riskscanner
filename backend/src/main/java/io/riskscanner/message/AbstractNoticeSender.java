@@ -8,6 +8,11 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.dialect.SpringStandardDialect;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.StringTemplateResolver;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -19,6 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class AbstractNoticeSender implements NoticeSender {
+
     @Resource
     private UserService userService;
 
@@ -93,13 +99,13 @@ public abstract class AbstractNoticeSender implements NoticeSender {
         if (MapUtils.isNotEmpty(context)) {
             for (String k : context.keySet()) {
                 if (context.get(k) != null) {
-                    template = RegExUtils.replaceAll(template, "\\$\\{" + k + "}", context.get(k).toString());
+                    template = RegExUtils.replaceAll(template, "\\#\\{" + k + "}", context.get(k).toString());
                 } else {
-                    template = RegExUtils.replaceAll(template, "\\$\\{" + k + "}", "未设置");
+                    template = RegExUtils.replaceAll(template, "\\#\\{" + k + "}", "未设置");
                 }
             }
         }
-        return template;
+        return TemplateUtils.merge(template, context);
     }
 
     protected List<String> getUserPhones(List<String> userIds) {

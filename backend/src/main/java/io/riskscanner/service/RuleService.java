@@ -83,6 +83,8 @@ public class RuleService {
     private ExtRuleGroupMapper extRuleGroupMapper;
     @Resource
     private TaskItemMapper taskItemMapper;
+    @Resource
+    private NoticeService noticeService;
 
     public List<RuleDTO> getRules(CreateRuleRequest ruleRequest) {
         return extRuleMapper.listAllWithTag(ruleRequest);
@@ -242,7 +244,7 @@ public class RuleService {
             QuartzTaskDTO quartzTaskDTO = new QuartzTaskDTO();
             BeanUtils.copyBean(quartzTaskDTO, ruleDTO);
             quartzTaskDTO.setType("manual");
-            return taskService.saveManualTask(quartzTaskDTO);
+            return taskService.saveManualTask(quartzTaskDTO, null);
         } catch (Exception e) {
             throw new RSException(e.getMessage());
         }
@@ -464,11 +466,13 @@ public class RuleService {
         RuleDTO rule = getRuleById(taskItems.get(0).getRuleId());
         if (!rule.getStatus()) RSException.throwException(Translator.get("i18n_disabled_rules_not_scanning"));
         Integer scanId = orderService.insertScanHistory(account);
-        this.dealTask(rule, account, scanId);
+        this.dealTask(rule, account, scanId, null);
     }
 
     private void scan(AccountWithBLOBs account) {
         Integer scanId = orderService.insertScanHistory(account);
+
+        String messageOrderId = noticeService.createMessageOrder(account);
 
         QuartzTaskDTO dto = new QuartzTaskDTO();
         dto.setAccountId(account.getId());
@@ -476,11 +480,11 @@ public class RuleService {
         dto.setStatus(true);
         List<RuleDTO> ruleDTOS = accountService.getRules(dto);
         for (RuleDTO rule : ruleDTOS) {
-            this.dealTask(rule, account, scanId);
+            this.dealTask(rule, account, scanId, messageOrderId);
         }
     }
 
-    private void dealTask (RuleDTO rule, AccountWithBLOBs account, Integer scanId) {
+    private void dealTask (RuleDTO rule, AccountWithBLOBs account, Integer scanId, String messageOrderId) {
         try {
             if (rule.getStatus()) {
                 QuartzTaskDTO quartzTaskDTO = new QuartzTaskDTO();
@@ -502,7 +506,7 @@ public class RuleService {
                 quartzTaskDTO.setType("manual");
                 quartzTaskDTO.setAccountId(account.getId());
                 quartzTaskDTO.setTaskName(rule.getName());
-                Task task = taskService.saveManualTask(quartzTaskDTO);
+                Task task = taskService.saveManualTask(quartzTaskDTO, messageOrderId);
                 orderService.insertTaskHistory(task, scanId);
             } else {
                 LogUtil.warn(rule.getName() + ": " + Translator.get("i18n_disabled_rules_not_scanning"));
@@ -568,7 +572,7 @@ public class RuleService {
                                 quartzTaskDTO.setType("manual");
                                 quartzTaskDTO.setAccountId(account.getId());
                                 quartzTaskDTO.setTaskName(rule.getName());
-                                Task task = taskService.saveManualTask(quartzTaskDTO);
+                                Task task = taskService.saveManualTask(quartzTaskDTO, null);
                                 orderService.insertTaskHistory(task, scanId);
                             } catch (java.lang.Exception e) {
                                 LogUtil.error(e);

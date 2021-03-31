@@ -59,11 +59,11 @@ public class TaskService {
     @Resource
     private ResourceItemMapper resourceItemMapper;
 
-    public Task saveManualTask(QuartzTaskDTO quartzTaskDTO) {
+    public Task saveManualTask(QuartzTaskDTO quartzTaskDTO, String messageOrderId) {
         try {
 
             this.validateYaml(quartzTaskDTO);
-            return orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.APPROVED.name());
+            return orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.APPROVED.name(), messageOrderId);
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
             throw new RSException(e.getMessage());
@@ -233,7 +233,7 @@ public class TaskService {
     public boolean saveQuartzTask(QuartzTaskDTO quartzTaskDTO) throws Exception {
         try {
             this.validateYaml(quartzTaskDTO);
-            Task task = orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.RUNNING.name());
+            Task task = orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.RUNNING.name(), null);
             Trigger trigger = addQuartzTask(task);
             task.setLastFireTime(trigger.getNextFireTime().getTime());
             if (trigger.getPreviousFireTime() != null) task.setPrevFireTime(trigger.getPreviousFireTime().getTime());

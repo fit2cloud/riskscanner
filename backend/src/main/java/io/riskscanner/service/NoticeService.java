@@ -73,7 +73,7 @@ public class NoticeService {
         }
     }
 
-    public List<MessageDetail> searchMessageByResourceId(String resourceId) {
+    public List<MessageDetail> searchMessageByResourceId() {
         MessageTaskExample example = new MessageTaskExample();
         List<MessageTask> messageTaskLists = messageTaskMapper.selectByExampleWithBLOBs(example);
         List<MessageDetail> scheduleMessageTask = new ArrayList<>();
@@ -138,14 +138,13 @@ public class NoticeService {
         return messageTaskMapper.deleteByExample(example);
     }
 
-    public String createMessageOrder (MessageTask messageTask, Account account) {
+    public String createMessageOrder (Account account) {
         MessageOrder messageOrder = new MessageOrder();
         String uuid = UUIDUtil.newUUID();
         messageOrder.setId(uuid);
         messageOrder.setAccountId(account.getId());
         messageOrder.setAccountName(account.getName());
         messageOrder.setCreateTime(System.currentTimeMillis());
-        messageOrder.setMessageTaskId(messageTask.getId());
         messageOrder.setStatus(NoticeConstants.MessageOrderStatus.PROCESSING);
         messageOrderMapper.insertSelective(messageOrder);
         return uuid;

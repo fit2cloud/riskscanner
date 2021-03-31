@@ -93,7 +93,7 @@ public class TaskController {
     @PostMapping("manual/create")
     public Task saveManualTask(@RequestBody QuartzTaskDTO quartzTaskDTO) {
         quartzTaskDTO.setType("manual");
-        return taskService.saveManualTask(quartzTaskDTO);
+        return taskService.saveManualTask(quartzTaskDTO, null);
     }
 
     @PostMapping("manual/delete")

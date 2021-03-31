@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS message_task (
     is_set              tinyint(1)        DEFAULT NULL,
     create_time         bigint(13)        DEFAULT NULL,
     PRIMARY KEY ( id )
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS message_order (
     id                        varchar(64)         NOT NULL,

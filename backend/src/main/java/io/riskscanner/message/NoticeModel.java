@@ -1,8 +1,11 @@
 package io.riskscanner.message;
 
+import lombok.Builder;
+
 import java.util.List;
 import java.util.Map;
 
+@Builder
 public class NoticeModel {
     /**
      * 保存 资源id

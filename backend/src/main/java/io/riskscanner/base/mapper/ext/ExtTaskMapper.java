@@ -1,5 +1,6 @@
 package io.riskscanner.base.mapper.ext;
 
+import io.riskscanner.base.domain.MessageOrder;
 import io.riskscanner.base.domain.Task;
 import io.riskscanner.controller.request.task.TaskSearchRequest;
 import io.riskscanner.dto.TaskDTO;
@@ -18,4 +19,10 @@ public interface ExtTaskMapper {
     int getResourceSum(String taskId);
 
     int getReturnSum(String taskId);
+
+    List<Task> getTopTasksForEmail(MessageOrder messageOrder);
+
+    int getReturnSumForEmail(MessageOrder messageOrder);
+
+    int getResourcesSumForEmail(MessageOrder messageOrder);
 }

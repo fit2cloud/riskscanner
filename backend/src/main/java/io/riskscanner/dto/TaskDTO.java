@@ -12,6 +12,7 @@ public class TaskDTO extends Task {
     private Integer count;
     private String ruleId;
     private String taskItemCreateTime;
+    private String accountName;
 
     public String getCustomData() {
         return customData;
@@ -51,5 +52,13 @@ public class TaskDTO extends Task {
 
     public void setTaskItemCreateTime(String taskItemCreateTime) {
         this.taskItemCreateTime = taskItemCreateTime;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 }

@@ -199,7 +199,6 @@ export default {
       jira_issuetype: '问题类型',
       input_api_account: '请输入账号',
       input_api_password: '请输入口令',
-      input_jira_url: '请输入Jira地址，例：https://metersphere.atlassian.net/',
       input_jira_issuetype: '请输入问题类型',
       use_tip: '使用指引：',
       use_tip_tapd: 'Tapd Basic Auth 账号信息在"公司管理-安全与集成-开放平台"中查询',
@@ -293,7 +292,7 @@ export default {
       trigger_action: '触发操作',
       email_notification: '邮件通知',
       end_scan: '扫描结束',
-      notes: '配置邮件模板;',
+      notes: '邮件配置，只有云账号一键扫描可以收到安全合规扫描通知!',
       task_notification: '安全合规规则扫描资源通知',
       create_new_notification: '创建新通知',
       mail_template_example: '邮件模版',
@@ -536,7 +535,7 @@ export default {
     result_statistics_chart: "扫描结果统计图",
     result_list: '扫描结果列表',
     result_details_list: '扫描结果详情列表',
-    i18n_not_compliance: '不合规统计',
+    i18n_not_compliance: '统计',
     i18n_task_number: '扫描编号',
     i18n_task_type: '规则类型',
     status: '扫描结果状态',
@@ -679,5 +678,6 @@ export default {
     region_id: '区域标识',
     region_name: '区域名称',
     iam_strategy: '需要的IAM策略',
+    invalid_cloud_account: '您选择的账号中存在无效云账号，无效云账号不允许扫描，请重新选择!',
   }
 };

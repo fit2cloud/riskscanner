@@ -82,29 +82,75 @@ export default {
         '<head>\n' +
         '    <meta charset="UTF-8">\n' +
         '    <title>RiskScanner</title>\n' +
+        '    <style type="text/css">\n' +
+        '        .email-table table {\n' +
+        '          font-size: 12px;\n' +
+        '          table-layout: fixed;\n' +
+        '          empty-cells: show;\n' +
+        '          border-collapse: collapse;\n' +
+        '          margin: 0 0;\n' +
+        '          border: 1px solid #cad9ea;\n' +
+        '          color: #666;\n' +
+        '        }\n' +
+        '        .email-table td {\n' +
+        '          height: 30px;\n' +
+        '          word-wrap: break-word;\n' +
+        '        }\n' +
+        '        .email-table h1, h2, h3 {\n' +
+        '          font-size: 12px;\n' +
+        '          margin: 0;\n' +
+        '          padding: 0;\n' +
+        '        }\n' +
+        '        .email-table th {\n' +
+        '          background-repeat: repeat-x;\n' +
+        '          height: 30px;\n' +
+        '        }\n' +
+        '        .email-table td, .email-table th {\n' +
+        '          border: 1px solid #cad9ea;\n' +
+        '          padding: 0 1em 0;\n' +
+        '        }\n' +
+        '        .email-table tr.alter {\n' +
+        '          background-color: #f5fafe;\n' +
+        '        }\n' +
+        '    </style>\n' +
         '</head>\n' +
         '<body>\n' +
-        '<div>\n' +
+        '  <div>\n' +
         '    <div style="text-align: left">\n' +
-        '        <p>尊敬的用户：</p>\n' +
-        '        <p style="margin-left: 60px">您好, 您的安全合规扫描结果如下:\n' +
+        '        <p>尊敬的用户, 您好, 您的安全合规扫描结果如下:</p>\n' +
         '    </div>\n' +
-        '    <div style="margin-left: 100px">\n' +
-        '        <table width="90%">\n' +
-        '            <thead>' +
-        '            <tr class="alter">' +
-        '               <th>资源标识</th>' +
-        '               <th>资源类型</th>' +
-        '               <th>云账号</th>' +
-        '               <th>区域</th>' +
-        '               <th>规则名称</th>' +
-        '               <th>风险等级</th>' +
-        '            </tr>' +
-        '            </thead>' +
-        '        </table">\n' +
+        '    <div style="text-align: left;">\n' +
+        '        <p style="margin-left: 10px;">不合规资源总数/资源总数 : #{returnSum}/#{resourcesSum}</p>\n' +
         '    </div>\n' +
-        '\n' +
-        '</div>\n' +
+        '    <div class="email-table">\n' +
+        '        <table class="alter">\n' +
+        '            <thead style="background: #87CEFA;">\n' +
+        '                <tr class="alter">\n' +
+        '                   <th>规则</th>\n' +
+        '                   <th>云平台</th>\n' +
+        '                   <th>云账号</th>\n' +
+        '                   <th>不合规资源数量</th>\n' +
+        '                   <th>资源总数</th>\n' +
+        '                   <th>风险等级</th>\n' +
+        '                   <th>创建人</th>\n' +
+        '                </tr>\n' +
+        '            </thead>\n' +
+        '            <tbody>\n' +
+        '                <tr th:each="resource:${resources}">\n' +
+        '                   <td th:text="${resource.description}"/>\n' +
+        '                   <td th:text="${resource.pluginName}"/>\n' +
+        '                   <td th:text="${resource.accountName}"/>\n' +
+        '                   <td th:text="${resource.returnSum}"/>\n' +
+        '                   <td th:text="${resource.resourcesSum}"/>\n' +
+        '                   <td th:text="${resource.severity}"/>\n' +
+        '                   <td th:text="${resource.applyUser}"/>\n' +
+        '                </tr>\n' +
+        '            </tbody>\n' +
+        '        </table>\n' +
+        '    </div>\n' +
+        '    <h5 style="color: red;">注：更多详情请登录 RiskScanner 平台查看。</h5>\n' +
+        '  \n' +
+        '  </div>\n' +
         '</body>\n' +
         '</html>',
       resourceTask: [{
@@ -147,6 +193,7 @@ export default {
       Task.event = [];
       Task.userIds = [];
       Task.type = '';
+      Task.template = this.content;
       Task.isSet = true;
       Task.identification = '';
       Task.taskType = "RESOURCE_TASK";

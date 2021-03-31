@@ -199,7 +199,6 @@ export default {
       jira_issuetype: '問題類型',
       input_api_account: '請輸入賬號',
       input_api_password: '請輸入口令',
-      input_jira_url: '請輸入Jira地址，例：https://metersphere.atlassian.net/',
       input_jira_issuetype: '請輸入問題類型',
       use_tip: '使用指引：',
       use_tip_tapd: 'Tapd Basic Auth 賬號信息在"公司管理-安全與集成-開放平台"中查詢',
@@ -293,7 +292,7 @@ export default {
       trigger_action: '觸發操作',
       email_notification: '郵件通知',
       end_scan: '掃描結束',
-      notes: '配置郵件模板;',
+      notes: '郵件配置，只有云賬號一鍵掃描可以收到安全合規掃描通知!',
       task_notification: '安全合規規則掃描資源通知',
       create_new_notification: '創建新通知',
       mail_template_example: '郵件模版',
@@ -536,7 +535,7 @@ export default {
     result_statistics_chart: "掃描結果統計圖",
     result_list: '掃描結果列表',
     result_details_list: '掃描結果詳情列表',
-    i18n_not_compliance: '不合規統計',
+    i18n_not_compliance: '統計',
     i18n_task_number: '掃描編號',
     i18n_task_type: '規則類型',
     status: '掃描結果狀態',
@@ -679,5 +678,6 @@ export default {
     region_id: '區域標識',
     region_name: '區域名稱',
     iam_strategy: '需要的IAM策略',
+    invalid_cloud_account: '您選擇的賬號中存在無效雲賬號，無效雲賬號不允許掃描，請重新選擇!',
   }
 };

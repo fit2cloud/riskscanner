@@ -8,11 +8,6 @@ public interface NoticeConstants {
         String DEFECT_TASK = "DEFECT_TASK";
     }
 
-    interface Mode {
-        String API = "API";
-        String SCHEDULE = "SCHEDULE";
-    }
-
     interface Type {
         String EMAIL = "EMAIL";
         String NAIL_ROBOT = "NAIL_ROBOT";
@@ -35,5 +30,6 @@ public interface NoticeConstants {
     interface MessageOrderStatus {
         String PROCESSING = "PROCESSING";
         String FINISHED = "FINISHED";
+        String ERROR = "ERROR";
     }
 }

@@ -476,6 +476,16 @@
           this.$warning(this.$t('account.please_choose_account'));
           return;
         }
+        for (let accountId of this.selectIds) {
+          for (let item of this.tableData) {
+            if (accountId === item.id) {
+              if (item.status === "INVALID") {
+                this.$warning(this.$t('account.invalid_cloud_account'));
+                return;
+              }
+            }
+          }
+        }
         this.scanGroup();
       },
       scanGroup () {

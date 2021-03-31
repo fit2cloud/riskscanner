@@ -71,9 +71,11 @@ public class OrderService {
     private ScanHistoryMapper scanHistoryMapper;
     @Resource
     private ScanTaskHistoryMapper scanTaskHistoryMapper;
+    @Resource
+    private NoticeService noticeService;
 
-    public Task createTask(QuartzTaskDTO quartzTaskDTO, String status) throws Exception {
-        Task task = createTaskOrder(quartzTaskDTO, status);
+    public Task createTask(QuartzTaskDTO quartzTaskDTO, String status, String messageOrderId) throws Exception {
+        Task task = createTaskOrder(quartzTaskDTO, status, messageOrderId);
         String taskId = task.getId();
 
         String script = quartzTaskDTO.getScript();
@@ -195,7 +197,7 @@ public class OrderService {
         taskItemMapper.deleteByExample(taskItemExample);
     }
 
-    private Task createTaskOrder(QuartzTaskDTO quartzTaskDTO, String status) throws Exception {
+    private Task createTaskOrder(QuartzTaskDTO quartzTaskDTO, String status, String messageOrderId) throws Exception {
         Task task = new Task();
         task.setTaskName(quartzTaskDTO.getTaskName() != null ?quartzTaskDTO.getTaskName():quartzTaskDTO.getName());
         task.setRuleId(quartzTaskDTO.getId());
@@ -228,6 +230,10 @@ public class OrderService {
             task.setId(taskId);
             task.setCreateTime(System.currentTimeMillis());
             taskMapper.insertSelective(task);
+        }
+
+        if (StringUtils.isNotEmpty(messageOrderId)) {
+            noticeService.createMessageOrderItem(messageOrderId, task);
         }
 
         return task;

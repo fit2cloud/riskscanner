@@ -27,7 +27,7 @@ public class NoticeController {
 
     @GetMapping("/search/message/{resourceId}")
     public List<MessageDetail> searchMessageSchedule(@PathVariable String resourceId) {
-        return noticeService.searchMessageByResourceId(resourceId);
+        return noticeService.searchMessageByResourceId();
     }
 
     @GetMapping("/delete/message/{identification}")

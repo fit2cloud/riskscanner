@@ -123,7 +123,7 @@
                     :row-class-name="tableRowClassName"
                     @sort-change="sort"
                     @filter-change="filter">
-            <el-table-column type="index" min-width="3%"/>
+            <el-table-column type="index" min-width="2%"/>
             <el-table-column v-slot:default="scope" :label="$t('resource.i18n_task_type')" min-width="15%" show-overflow-tooltip>
                 <span>
                   <template v-for="tag in tagSelect">
@@ -143,10 +143,10 @@
                 {{ scope.row.taskName }}
               </el-link>
             </el-table-column>
-            <el-table-column v-slot:default="scope" :label="$t('account.creator')" min-width="7%" show-overflow-tooltip>
+            <el-table-column v-slot:default="scope" :label="$t('account.creator')" min-width="6%" show-overflow-tooltip>
               {{ scope.row.applyUser }}
             </el-table-column>
-            <el-table-column v-slot:default="scope" :label="$t('rule.severity')" min-width="7%" prop="severity" sortable show-overflow-tooltip>
+            <el-table-column v-slot:default="scope" :label="$t('rule.severity')" min-width="8%" prop="severity" sortable show-overflow-tooltip>
               <span v-if="scope.row.severity == 'HighRisk'" style="color: #f84846;"> {{ $t('rule.HighRisk') }}</span>
               <span v-else-if="scope.row.severity == 'MediumRisk'" style="color: #fe9636;"> {{ $t('rule.MediumRisk') }}</span>
               <span v-else-if="scope.row.severity == 'LowRisk'" style="color: #4dabef;"> {{ $t('rule.LowRisk') }}</span>
@@ -172,7 +172,7 @@
                 <i class="el-icon-warning"></i> {{ $t('resource.i18n_has_warn') }}
               </el-button>
             </el-table-column>
-            <el-table-column v-slot:default="scope" :label="$t('resource.i18n_not_compliance')" prop="returnSum" sortable show-overflow-tooltip min-width="7%">
+            <el-table-column v-slot:default="scope" :label="$t('resource.i18n_not_compliance')" prop="returnSum" sortable show-overflow-tooltip min-width="6%">
               <span v-if="scope.row.returnSum == null && scope.row.resourcesSum == null"> N/A</span>
               <span v-if="(scope.row.returnSum != null) && (scope.row.returnSum == 0)">
                 {{ scope.row.returnSum }}/{{ scope.row.resourcesSum }}
@@ -181,7 +181,7 @@
                 <el-link type="primary" class="text-click" @click="goResource(scope.row)">{{ scope.row.returnSum }}/{{ scope.row.resourcesSum }}</el-link>
               </span>
             </el-table-column>
-            <el-table-column v-slot:default="scope" :label="$t('resource.status_on_off')" prop="returnSum" sortable show-overflow-tooltip min-width="7%">
+            <el-table-column v-slot:default="scope" :label="$t('resource.status_on_off')" prop="returnSum" sortable show-overflow-tooltip min-width="8%">
               <span v-if="scope.row.returnSum == 0" style="color: #46ad59;">{{ $t('resource.i18n_compliance_true') }}</span>
               <span v-else-if="(scope.row.returnSum != null) && (scope.row.returnSum > 0)" style="color: #f84846;">{{ $t('resource.i18n_compliance_false') }}</span>
               <span v-else-if="scope.row.returnSum == null && scope.row.resourcesSum == null"> N/A</span>
@@ -191,7 +191,7 @@
                 <span><i class="el-icon-time"></i> {{ scope.row.createTime | timestampFormatDate }}</span>
               </template>
             </el-table-column>
-            <el-table-column min-width="10%" :label="$t('commons.operating')" show-overflow-tooltip>
+            <el-table-column min-width="11%" :label="$t('commons.operating')" show-overflow-tooltip>
               <template v-slot:default="scope">
                 <table-operators :buttons="rule_buttons" :row="scope.row"/>
               </template>
@@ -234,7 +234,7 @@
                     </el-form-item>
                     <el-form-item :label="$t('rule.rule_name')">
                       <el-tooltip class="item" effect="dark" :content="detailForm.taskName" placement="top-start">
-                        <span v-if="detailForm.taskName" class="view-text">{{ detailForm.taskName.substring(0, 15) + "..." }}</span>
+                        <span v-if="detailForm.taskName" class="view-text">{{ detailForm.taskName }}</span>
                       </el-tooltip>
                     </el-form-item>
                     <el-form-item :label="$t('resource.i18n_task_type')" v-if="detailForm.ruleTags">
@@ -280,6 +280,9 @@
                       <span>{{ detailForm.createTime | timestampFormatDate }}</span>
                     </el-form-item>
                   </el-form>
+                  <div style="color: red;margin-left: 10px;">
+                    注: {{detailForm.description}}
+                  </div>
                 </el-tab-pane>
                 <el-tab-pane>
                   <span slot="label"><i class="el-icon-info"></i> {{ $t('rule.rule_detail') }}</span>
@@ -347,6 +350,10 @@
           }
         ],
         rule_buttons: [
+          {
+            tip: this.$t('resource.i18n_detail'), icon: "el-icon-document", type: "info",
+            exec: this.showTaskDetail
+          },
           {
             tip: this.$t('resource.result_details_list'), icon: "el-icon-edit-outline", type: "success",
             exec: this.goResource
@@ -537,7 +544,7 @@
         this.$get("/task/detail/" + item.id, response => {
           if (response.success) {
             this.detailForm = response.data;
-            this.initSelect();
+            // this.initSelect();
             this.detailVisible = true;
           }
         });

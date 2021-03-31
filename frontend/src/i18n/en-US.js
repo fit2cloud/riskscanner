@@ -199,7 +199,6 @@ export default {
       jira_issuetype:'Issue Type',
       input_api_account:'Please enter an account',
       input_api_password:'Please enter a password',
-      input_jira_url:'Please enter the address of Jira, for example: https://metersphere.atlassian.net/',
       input_jira_issuetype:'Please enter the issue type',
       use_tip:'Use guide:',
       use_tip_tapd:'Tapd Basic Auth account information is queried in "Company Management-Security and Integration-Open Platform"',
@@ -293,7 +292,7 @@ export default {
       trigger_action:'Trigger action',
       email_notification:'Email notification',
       end_scan:'Scan end',
-      notes:'Configure mail template;',
+      notes:'Email configuration, only one-click scanning of cloud accounts can receive security compliance scanning notifications!',
       task_notification:'Security compliance rule scanning resource notification',
       create_new_notification:'Create a new notification',
       mail_template_example:'Mail template',
@@ -536,7 +535,7 @@ export default {
     result_statistics_chart: "Scanning result statistics chart",
     result_list:'Scanning result list',
     result_details_list:'Scanning result details list',
-    i18n_not_compliance:'Non-compliance statistics',
+    i18n_not_compliance:'Statistics',
     i18n_task_number:'Scan number',
     i18n_task_type:'Rule Type',
     status:'Scan result status',
@@ -679,5 +678,6 @@ export default {
     region_id:'Region ID',
     region_name:'Region name',
     iam_strategy:'IAM strategy required',
+    invalid_cloud_account:'There is an invalid cloud account in the account you selected. The invalid cloud account is not allowed to be scanned, please select again!',
   }
 };

@@ -31,19 +31,8 @@ public class NoticeSendService {
         return noticeSender;
     }
 
-    public void send(String taskType, NoticeModel noticeModel) {
-        List<MessageDetail> messageDetails;
-        switch (taskType) {
-            case NoticeConstants.Mode.API:
-                messageDetails = noticeService.searchMessageByType(NoticeConstants.TaskType.RESOURCE_TASK);
-                break;
-            case NoticeConstants.Mode.SCHEDULE:
-                messageDetails = noticeService.searchMessageByResourceId(noticeModel.getResourceId());
-                break;
-            default:
-                messageDetails = noticeService.searchMessageByType(taskType);
-                break;
-        }
+    public void send(NoticeModel noticeModel) {
+        List<MessageDetail> messageDetails = noticeService.searchMessageByType(NoticeConstants.TaskType.RESOURCE_TASK);
         messageDetails.forEach(messageDetail -> {
             if (StringUtils.equals(messageDetail.getEvent(), noticeModel.getEvent())) {
                 this.getNoticeSender(messageDetail).send(messageDetail, noticeModel);
