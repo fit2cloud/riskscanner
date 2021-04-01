@@ -292,7 +292,7 @@ export default {
       trigger_action: '触发操作',
       email_notification: '邮件通知',
       end_scan: '扫描结束',
-      notes: '邮件配置，只有云账号一键扫描可以收到安全合规扫描通知!',
+      notes: '邮件配置，只有云账号一键扫描可以收到安全合规扫描通知！',
       task_notification: '安全合规规则扫描资源通知',
       create_new_notification: '创建新通知',
       mail_template_example: '邮件模版',
@@ -342,7 +342,7 @@ export default {
   schedule: {
     input_email: '请输入邮箱账号',
     event: '事件',
-    receiving_mode: '邮箱',
+    receiving_mode: '接收方式',
     receiver: '接收人',
     operation: '操作',
     task_notification: '任务通知',

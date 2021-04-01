@@ -292,7 +292,7 @@ export default {
       trigger_action: '觸發操作',
       email_notification: '郵件通知',
       end_scan: '掃描結束',
-      notes: '郵件配置，只有云賬號一鍵掃描可以收到安全合規掃描通知!',
+      notes: '郵件配置，只有云賬號一鍵掃描可以收到安全合規掃描通知！',
       task_notification: '安全合規規則掃描資源通知',
       create_new_notification: '創建新通知',
       mail_template_example: '郵件模版',
@@ -342,7 +342,7 @@ export default {
   schedule: {
     input_email: '請輸入郵箱賬號',
     event: '事件',
-    receiving_mode: '郵箱',
+    receiving_mode: '接收方式',
     receiver: '接收人',
     operation: '操作',
     task_notification: '任務通知',

@@ -6,14 +6,14 @@
         <el-button icon="el-icon-circle-plus-outline" plain size="mini" @click="handleAddTaskModel">
           {{ $t('system_parameter_setting.message.create_new_notification') }}
         </el-button>
-        <el-popover placement="right-end" title="示例" width="400" trigger="click" :content="content">
+        <el-popover placement="right-end" title="示例" width="400" trigger="click">
+          <rs-code-edit :read-only="true" height="400px" :data.sync="content" :modes="modes" :mode="'html'"/>
           <el-button icon="el-icon-warning" plain size="mini" slot="reference">
             {{ $t('system_parameter_setting.message.mail_template_example') }}
           </el-button>
         </el-popover>
       </el-col>
     </el-row>
-
 
     <el-row>
       <el-col :span="24">
@@ -64,11 +64,13 @@
 </template>
 
 <script>
+import RsCodeEdit from "@/business/components/common/components/RsCodeEdit";
 
 /* eslint-disable */
 export default {
   name: "ResourceNotification",
   components: {
+    RsCodeEdit
   },
   props: {
     receiverOptions: {
@@ -77,6 +79,7 @@ export default {
   },
   data() {
     return {
+      modes: ['text', 'html'],
       content: '<!DOCTYPE html>\n' +
         '<html lang="en">\n' +
         '<head>\n' +

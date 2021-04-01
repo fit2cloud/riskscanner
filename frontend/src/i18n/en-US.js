@@ -342,7 +342,7 @@ export default {
   schedule: {
     input_email:'Please enter your email account',
     event:'Event',
-    receiving_mode:'Mailbox',
+    receiving_mode:'Receiving method',
     receiver:'Receiver',
     operation:'Operation',
     task_notification:'Task notification',
