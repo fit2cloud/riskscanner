@@ -8,6 +8,7 @@ import com.aliyuncs.exceptions.ClientException;
 import io.riskscanner.base.domain.*;
 import io.riskscanner.base.mapper.AccountMapper;
 import io.riskscanner.base.mapper.PluginMapper;
+import io.riskscanner.base.mapper.ProxyMapper;
 import io.riskscanner.base.mapper.RuleAccountParameterMapper;
 import io.riskscanner.base.mapper.ext.ExtAccountMapper;
 import io.riskscanner.commons.constants.CloudAccountConstants;
@@ -52,6 +53,8 @@ public class AccountService {
     private CommonThreadPool commonThreadPool;
     @Resource
     private RuleAccountParameterMapper ruleAccountParameterMapper;
+    @Resource
+    private ProxyMapper proxyMapper;
 
     public List<AccountDTO> getCloudAccountList(CloudAccountRequest request) {
         return extAccountMapper.getCloudAccountList(request);
@@ -89,7 +92,9 @@ public class AccountService {
 
     private boolean validateAccount(AccountWithBLOBs account) {
         try {
-            return PlatformUtils.validateCredential(account);
+            Proxy proxy = new Proxy();
+            if (account.getProxyId() != null) proxy = proxyMapper.selectByPrimaryKey(account.getProxyId());
+            return PlatformUtils.validateCredential(account, proxy);
         } catch (Exception e) {
             LogUtil.error(String.format("RSException in verifying cloud account, cloud account: [%s], plugin: [%s], error information:%s", account.getName(), account.getPluginName(), e.getMessage()), e);
             return false;
@@ -203,7 +208,9 @@ public class AccountService {
             AccountWithBLOBs account = accountMapper.selectByPrimaryKey(id);
             String regions = account.getRegions();
             if (regions.isEmpty()) {
-                return PlatformUtils._getRegions(account, flag);
+                Proxy proxy = new Proxy();
+                if (account.getProxyId() != null) proxy = proxyMapper.selectByPrimaryKey(account.getProxyId());
+                return PlatformUtils._getRegions(account, proxy, flag);
             } else {
                 return regions;
             }
@@ -229,12 +236,15 @@ public class AccountService {
 
     public void updateRegions(AccountWithBLOBs account) throws ClientException {
         try {
-            JSONArray jsonArray = PlatformUtils._getRegions(account, validate(account.getId()));
+            Proxy proxy = new Proxy();
+            if (account.getProxyId() != null) proxy = proxyMapper.selectByPrimaryKey(account.getProxyId());
+            JSONArray jsonArray = PlatformUtils._getRegions(account, proxy, validate(account.getId()));
             if (!jsonArray.isEmpty()) {
                 account.setRegions(jsonArray.toJSONString());
                 accountMapper.updateByPrimaryKeySelective(account);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LogUtil.error(e.getMessage());
         }
     }

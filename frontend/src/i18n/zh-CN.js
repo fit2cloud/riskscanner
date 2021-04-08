@@ -159,6 +159,10 @@ export default {
     },
     more: '更多',
     cannot_be_empty: '不能为空',
+    proxy: '代理设置',
+    proxy_port: 'Proxy 端口',
+    proxy_name: 'Proxy 用户名',
+    proxy_password: 'Proxy 密码',
   },
   workspace: {
     create: '创建工作空间',
@@ -679,5 +683,18 @@ export default {
     region_name: '区域名称',
     iam_strategy: '需要的IAM策略',
     invalid_cloud_account: '您选择的账号中存在无效云账号，无效云账号不允许扫描，请重新选择!',
-  }
+  },
+  proxy: {
+    create: '创建代理',
+    modify: '修改代理',
+    proxy_ip: '请输入 Proxy IP',
+    proxy_port: '请输入 Proxy 端口',
+    proxy_name: '请输入 Proxy 用户名',
+    proxy_password: '请输入 Proxy 密码',
+    special_characters_are_not_supported: '不支持特殊字符',
+    delete_confirm: '这个代理确定要删除吗?',
+    search_by_proxy_ip: '根据 Proxy IP 搜索',
+    is_proxy: '是否启用代理',
+    add_proxy: '新增代理',
+  },
 };

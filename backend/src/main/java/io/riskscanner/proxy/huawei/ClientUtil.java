@@ -1,4 +1,4 @@
-package io.riskscanner.base.rs;
+package io.riskscanner.proxy.huawei;
 
 import com.huaweicloud.sdk.ces.v1.CesClient;
 import com.huaweicloud.sdk.core.ClientBuilder;
@@ -11,7 +11,10 @@ import com.huaweicloud.sdk.iam.v3.IamClient;
 import com.huaweicloud.sdk.iam.v3.model.ProjectResult;
 import com.huaweicloud.sdk.ims.v2.ImsClient;
 import com.huaweicloud.sdk.vpc.v2.VpcClient;
+import io.riskscanner.base.domain.Proxy;
+import io.riskscanner.base.rs.*;
 import io.riskscanner.commons.exception.RSException;
+import io.riskscanner.proxy.azure.Request;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -48,11 +51,19 @@ public class ClientUtil {
 
     private static HttpConfig httpConfig;
 
-    private static HttpConfig getHttpConfig(){
+    private static HttpConfig getHttpConfig(Proxy proxy){
         if (null == httpConfig){
-            httpConfig = HttpConfig.getDefaultHttpConfig()
-                    .withIgnoreSSLVerification(true)
-                    .withTimeout(3000);
+            if (proxy != null) {
+                httpConfig = HttpConfig.getDefaultHttpConfig()
+                        .withProxyHost("http://" + proxy.getProxyIp())
+                        .withProxyPort(Integer.valueOf(proxy.getProxyPort()))
+                        .withProxyUsername(proxy.getProxyName())
+                        .withProxyPassword(proxy.getProxyPassword());
+            } else {
+                httpConfig = HttpConfig.getDefaultHttpConfig()
+                        .withIgnoreSSLVerification(true)
+                        .withTimeout(3000);
+            }
         }
         return httpConfig;
     }
@@ -62,7 +73,7 @@ public class ClientUtil {
         ConfigEntity config = isPubclic ? EndpointUtil.getPublicCloudConfig() : EndpointUtil.getPrivateCloudConfig();
         return config.getIamPoint();
     }
-    public static IamClient getIamClient(IamRequest iamRequest) throws RSException{
+    public static IamClient getIamClient(IamRequest iamRequest, Proxy proxy) throws RSException{
 
         String endPoint = cloudIamPoint(iamRequest.getHuaweiCloudCredential().getPublic());
         GlobalCredentials globalCredentials = new GlobalCredentials()
@@ -72,7 +83,7 @@ public class ClientUtil {
         IamClient iamClient = IamClient.newBuilder()
                 .withEndpoint(endPoint)
                 .withCredential(globalCredentials)
-                .withHttpConfig(getHttpConfig()).build();
+                .withHttpConfig(getHttpConfig(proxy)).build();
         return iamClient;
     }
     public static IamClient getIamClient(String credential) throws RSException{
@@ -80,7 +91,7 @@ public class ClientUtil {
             Request request = new Request();
             request.setCredential(credential);
             IamRequest iamRequest = RequestUtil.request2IamRequest(request);
-            return getIamClient(iamRequest);
+            return getIamClient(iamRequest, null);
         } catch (Exception e) {
             return null;
         }
@@ -99,7 +110,7 @@ public class ClientUtil {
         }
 
         if (StringUtils.isNotEmpty(busiRequest.getBusiType())) {
-            IamClient iamClient = getIamClient(busiRequest);
+            IamClient iamClient = getIamClient(busiRequest, null);
             if (regionIdNull){
                 ProjectResult project = ProjectUtil.project(iamClient, busiRequest.getHuaweiCloudCredential().getProjectId());
                 busiRequest.setRegionId(project.getName());
@@ -125,7 +136,7 @@ public class ClientUtil {
             ClientBuilder clientBuilder = clientBuilder(busiType);
             Object build = clientBuilder.withCredential(basicCredentials)
                     .withEndpoint(ecsPoint)
-                    .withHttpConfig(getHttpConfig())
+                    .withHttpConfig(getHttpConfig(null))
                     .build();
             return (T) build;
         }

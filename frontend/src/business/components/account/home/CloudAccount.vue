@@ -88,6 +88,20 @@
               <el-input :type="tmp.inputType" v-model="tmp.input" autocomplete="off" :placeholder="tmp.description"/>
             </el-form-item>
           </div>
+          <el-form-item v-if="form.isProxy" :label="$t('commons.proxy')" :rules="{required: true, message: $t('commons.proxy') + this.$t('commons.cannot_be_empty'), trigger: 'change'}">
+            <el-select style="width: 100%;" v-model="form.proxyId" :placeholder="$t('commons.proxy')">
+              <el-option
+                v-for="item in proxys"
+                :key="item.id"
+                :label="item.proxyIp"
+                :value="item.id">
+                &nbsp;&nbsp; {{ item.proxyIp + ':' + item.proxyPort }}
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="$t('proxy.is_proxy')" :rules="{required: true, message: $t('commons.proxy') + this.$t('commons.cannot_be_empty'), trigger: 'change'}">
+            <el-switch v-model="form.isProxy"></el-switch>
+          </el-form-item>
           <el-form-item v-if="script">
             <el-link type="danger" @click="innerDrawer = true">{{ $t('account.iam_strategy') }}</el-link>
             <div>
@@ -103,9 +117,37 @@
               </el-drawer>
             </div>
           </el-form-item>
+          <div>
+            <el-drawer
+              size="45%"
+              :title="$t('proxy.add_proxy')"
+              :append-to-body="true"
+              :before-close="innerDrawerProxyClose"
+              :visible.sync="innerDrawerProxy">
+              <el-form :model="proxyForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="createProxyForm">
+                <el-form-item label="Proxy IP" prop="proxyIp">
+                  <el-input v-model="proxyForm.proxyIp" autocomplete="off" :placeholder="$t('proxy.proxy_ip')"/>
+                </el-form-item>
+                <el-form-item :label="$t('commons.proxy_port')" prop="proxyPort">
+                  <el-input type="number" v-model="proxyForm.proxyPort" autocomplete="off" :placeholder="$t('proxy.proxy_port')"/>
+                </el-form-item>
+                <el-form-item :label="$t('commons.proxy_name')" prop="proxyName">
+                  <el-input v-model="proxyForm.proxyName" autocomplete="off" :placeholder="$t('proxy.proxy_name')"/>
+                </el-form-item>
+                <el-form-item :label="$t('commons.proxy_password')" prop="proxyPassword" style="margin-bottom: 29px">
+                  <el-input v-model="proxyForm.proxyPassword" autocomplete="new-password" show-password
+                            :placeholder="$t('proxy.proxy_password')"/>
+                </el-form-item>
+              </el-form>
+              <dialog-footer
+                @cancel="innerDrawerProxy = false"
+                @confirm="createProxy('createProxyForm')"/>
+            </el-drawer>
+          </div>
         </el-form>
-        <dialog-footer
+        <proxy-dialog-footer
           @cancel="createVisible = false"
+          @add="innerDrawerProxy = true"
           @confirm="saveAccount(form, 'add')"/>
       </el-drawer>
       <!--Create account-->
@@ -137,6 +179,20 @@
               <el-input :type="tmp.inputType" v-model="tmp.input" @input="change($event)" autocomplete="off" :placeholder="tmp.description"/>
             </el-form-item>
           </div>
+          <el-form-item v-if="form.isProxy" :label="$t('commons.proxy')" :rules="{required: true, message: $t('commons.proxy') + this.$t('commons.cannot_be_empty'), trigger: 'change'}">
+            <el-select style="width: 100%;" v-model="form.proxyId" :placeholder="$t('commons.proxy')">
+              <el-option
+                v-for="item in proxys"
+                :key="item.id"
+                :label="item.proxyIp"
+                :value="item.id">
+                &nbsp;&nbsp; {{ item.proxyIp + ':' + item.proxyPort }}
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="$t('proxy.is_proxy')" :rules="{required: true, message: $t('commons.proxy') + this.$t('commons.cannot_be_empty'), trigger: 'change'}">
+            <el-switch v-model="form.isProxy"></el-switch>
+          </el-form-item>
           <el-form-item v-if="script">
             <el-link type="danger" @click="innerDrawer = true">{{ $t('account.iam_strategy') }}</el-link>
             <div>
@@ -151,10 +207,38 @@
                 </el-form-item>
               </el-drawer>
             </div>
+            <div>
+              <el-drawer
+                size="45%"
+                :title="$t('proxy.add_proxy')"
+                :append-to-body="true"
+                :before-close="innerDrawerProxyClose"
+                :visible.sync="innerDrawerProxy">
+                <el-form :model="proxyForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="updateProxyForm">
+                  <el-form-item label="Proxy IP" prop="proxyIp">
+                    <el-input v-model="proxyForm.proxyIp" autocomplete="off" :placeholder="$t('proxy.proxy_ip')"/>
+                  </el-form-item>
+                  <el-form-item :label="$t('commons.proxy_port')" prop="proxyPort">
+                    <el-input type="number" v-model="proxyForm.proxyPort" autocomplete="off" :placeholder="$t('proxy.proxy_port')"/>
+                  </el-form-item>
+                  <el-form-item :label="$t('commons.proxy_name')" prop="proxyName">
+                    <el-input v-model="proxyForm.proxyName" autocomplete="off" :placeholder="$t('proxy.proxy_name')"/>
+                  </el-form-item>
+                  <el-form-item :label="$t('commons.proxy_password')" prop="proxyPassword" style="margin-bottom: 29px">
+                    <el-input v-model="proxyForm.proxyPassword" autocomplete="new-password" show-password
+                              :placeholder="$t('proxy.proxy_password')"/>
+                  </el-form-item>
+                </el-form>
+                <dialog-footer
+                  @cancel="innerDrawerProxy = false"
+                  @confirm="createProxy('updateProxyForm')"/>
+              </el-drawer>
+            </div>
           </el-form-item>
         </el-form>
-        <dialog-footer
+        <proxy-dialog-footer
           @cancel="updateVisible = false"
+          @add="innerDrawerProxy = true"
           @confirm="saveAccount(form, 'update')"/>
       </el-drawer>
       <!--Update account-->
@@ -182,7 +266,8 @@
   import TableOperators from "../../common/components/TableOperators";
   import {_filter, _sort} from "@/common/js/utils";
   import {ACCOUNT_CONFIGS} from "../../common/components/search/search-components";
-  import DialogFooter from "../../common/components/DialogFooter";
+  import ProxyDialogFooter from "../head/ProxyDialogFooter";
+  import DialogFooter from "@/business/components/common/components/DialogFooter";
   import {ACCOUNT_NAME} from "../../../../common/js/constants";
 
   /* eslint-disable */
@@ -196,7 +281,8 @@
       TableHeader,
       TablePagination,
       TableOperator,
-      DialogFooter
+      DialogFooter,
+      ProxyDialogFooter
     },
     provide() {
       return {
@@ -220,10 +306,13 @@
         updateVisible: false,
         scanVisible: false,
         innerDrawer: false,
+        innerDrawerProxy: false,
         plugins: [],
+        proxys: [],
         tmpList: [],
         item: {},
         form: {},
+        proxyForm: {},
         regions: "",
         script: '',
         direction: 'rtl',
@@ -279,9 +368,13 @@
         this.tmpList = [];
         this.createVisible = true;
         this.activePlugin();
+        this.activeProxy();
       },
       innerDrawerClose() {
         this.innerDrawer = false;
+      },
+      innerDrawerProxyClose() {
+        this.innerDrawerProxy = false;
       },
       //校验云账号
       validate() {
@@ -331,8 +424,12 @@
       handleEdit(tmp) {
         this.form = tmp;
         this.item.credential = tmp.credential;
+        if (!this.form.proxyId) {
+          this.form.proxyId = "";
+        }
         this.updateVisible = true;
         this.activePlugin();
+        this.activeProxy();
         this.changePlugin(tmp.pluginId, 'edit');
       },
       handleClose() {
@@ -374,6 +471,13 @@
         this.result = this.$get(url, response => {
           let data = response.data;
           this.plugins =  data;
+        });
+      },
+      //查询代理
+      activeProxy() {
+        let url = "/proxy/list/all";
+        this.result = this.$get(url, response => {
+          this.proxys = response.data;
         });
       },
       init() {
@@ -433,6 +537,7 @@
             data["credential"] = JSON.stringify(key);
             data["name"] = item.name;
             data["pluginId"] = item.pluginId;
+            if (item.isProxy) data["proxyId"] = item.proxyId;
 
             if (type === 'add') {
               this.result = this.$post("/account/add", data,response => {
@@ -520,7 +625,32 @@
             }
           }
         });
-      }
+      },
+      createProxy(createProxyForm) {
+        this.$refs[createProxyForm].validate(valid => {
+          if (valid) {
+            this.result = this.$post('/proxy/add', this.proxyForm, () => {
+              this.$success(this.$t('commons.save_success'));
+              this.innerDrawerProxy = false;
+              this.activeProxy();
+            });
+          } else {
+            return false;
+          }
+        })
+      },
+      updateProxy(updateProxyForm) {
+        this.$refs[updateProxyForm].validate(valid => {
+          if (valid) {
+            this.result = this.$post('/proxy/update', this.proxyForm, () => {
+              this.$success(this.$t('commons.modify_success'));
+              this.innerDrawerProxy = false;
+            });
+          } else {
+            return false;
+          }
+        })
+      },
     },
     created() {
       this.init();

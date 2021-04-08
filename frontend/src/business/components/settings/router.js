@@ -23,6 +23,11 @@ export default {
       meta: {system: true, title: "system_parameter_setting.message.setting"}
     },
     {
+      path: "proxy",
+      component: () => import(/* webpackChunkName: "setting" */ "@/business/components/settings/system/Proxy"),
+      meta: {system: true, title: "commons.proxy"}
+    },
+    {
       path: "personsetting",
       component: () => import(/* webpackChunkName: "setting" */ "@/business/components/settings/personal/PersonSetting"),
       meta: {person: true, title: "commons.personal_setting"}

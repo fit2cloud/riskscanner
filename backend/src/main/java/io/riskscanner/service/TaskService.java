@@ -58,6 +58,8 @@ public class TaskService {
     private OrderService orderService;
     @Resource
     private ResourceItemMapper resourceItemMapper;
+    @Resource
+    private ProxyMapper proxyMapper;
 
     public Task saveManualTask(QuartzTaskDTO quartzTaskDTO, String messageOrderId) {
         try {
@@ -173,7 +175,9 @@ public class TaskService {
             AccountExample example = new AccountExample();
             example.createCriteria().andPluginIdEqualTo(quartzTaskDTO.getPluginId()).andStatusEqualTo("VALID");
             AccountWithBLOBs account = accountMapper.selectByExampleWithBLOBs(example).get(0);
-            JSONObject regionObj = (JSONObject) PlatformUtils._getRegions(account, accountService.validate(account.getId())).get(0);
+            Proxy proxy = new Proxy();
+            if (account.getProxyId() != null) proxy = proxyMapper.selectByPrimaryKey(account.getProxyId());
+            JSONObject regionObj = (JSONObject) PlatformUtils._getRegions(account, proxy, accountService.validate(account.getId())).get(0);
             Map<String, String> map = PlatformUtils.getAccount(account, regionObj.get("regionId").toString());
             dirPath = CommandUtils.saveAsFile(finalScript, uuid);
             String command = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.validate.getCommand(), dirPath, "policy.yml", map);

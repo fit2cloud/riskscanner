@@ -22,12 +22,23 @@ import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.cvm.v20170312.CvmClient;
 import com.tencentcloudapi.cvm.v20170312.models.RegionInfo;
 import io.riskscanner.base.domain.AccountWithBLOBs;
+import io.riskscanner.base.domain.Proxy;
 import io.riskscanner.base.rs.*;
 import io.riskscanner.commons.constants.CommandEnum;
 import io.riskscanner.commons.constants.RegionsConstants;
 import io.riskscanner.commons.exception.PluginException;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.i18n.Translator;
+import io.riskscanner.proxy.aliyun.AliyunCredential;
+import io.riskscanner.proxy.aliyun.AliyunRequest;
+import io.riskscanner.proxy.aws.AWSCredential;
+import io.riskscanner.proxy.aws.AWSRequest;
+import io.riskscanner.proxy.azure.AzureBaseRequest;
+import io.riskscanner.proxy.azure.AzureClient;
+import io.riskscanner.proxy.azure.AzureCredential;
+import io.riskscanner.proxy.huawei.ClientUtil;
+import io.riskscanner.proxy.huawei.HuaweiCloudCredential;
+import io.riskscanner.proxy.tencent.QCloudBaseRequest;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -205,7 +216,7 @@ public class PlatformUtils {
      * @return
      * @throws ClientException
      */
-    public static final JSONArray _getRegions(AccountWithBLOBs account, boolean flag) {
+    public static final JSONArray _getRegions(AccountWithBLOBs account, Proxy proxy, boolean flag) {
         try {
             JSONArray jsonArray = new JSONArray();
             if (!flag) {
@@ -235,7 +246,7 @@ public class PlatformUtils {
                     try {
                         AzureBaseRequest req = new AzureBaseRequest();
                         req.setCredential(account.getCredential());
-                        AzureClient azureClient = req.getAzureClient();
+                        AzureClient azureClient = req.getAzureClient(proxy);
                         //此region 不是chinanorth这种我们诠释的region，而是azure本身的中国区、国际区等概念
                         azureClient.getCloudRegions().forEach(region -> {
                             JSONObject jsonObject = new JSONObject();
@@ -250,7 +261,7 @@ public class PlatformUtils {
                 case aliyun:
                     AliyunRequest req = new AliyunRequest();
                     req.setCredential(account.getCredential());
-                    IAcsClient aliyunClient = req.getAliyunClient();
+                    IAcsClient aliyunClient = req.getAliyunClient(proxy);
                     DescribeRegionsRequest describeRegionsRequest = new DescribeRegionsRequest();
                     describeRegionsRequest.setAcceptFormat(FormatType.JSON);
                     try {
@@ -270,8 +281,8 @@ public class PlatformUtils {
                     try {
                         BusiRequest busiRequest = new BusiRequest();
                         busiRequest.setCredential(account.getCredential());
-                        List<Map<String, String>> regions = getRegions(busiRequest);
-                        IamClient iamClient = ClientUtil.getIamClient(busiRequest);
+                        List<Map<String, String>> regions = getRegions(busiRequest, proxy);
+                        IamClient iamClient = ClientUtil.getIamClient(busiRequest, proxy);
                         KeystoneListProjectsRequest request = new KeystoneListProjectsRequest();
                         request.setDomainId(busiRequest.getHuaweiCloudCredential().getDomainId());
                         List<ProjectResult> projects = iamClient.keystoneListProjects(request).getProjects();
@@ -297,7 +308,7 @@ public class PlatformUtils {
                     try {
                         QCloudBaseRequest request = new QCloudBaseRequest();
                         request.setCredential(account.getCredential());
-                        CvmClient cvmClient = request.getCvmClient();
+                        CvmClient cvmClient = request.getCvmClient(proxy);
                         com.tencentcloudapi.cvm.v20170312.models.DescribeRegionsRequest regionsRequest = new com.tencentcloudapi.cvm.v20170312.models.DescribeRegionsRequest();
                         com.tencentcloudapi.cvm.v20170312.models.DescribeRegionsResponse resp = cvmClient.DescribeRegions(regionsRequest);
                         RegionInfo[] regionInfos = resp.getRegionSet();
@@ -320,13 +331,13 @@ public class PlatformUtils {
         }
     }
 
-    public static boolean validateCredential (AccountWithBLOBs account) {
+    public static boolean validateCredential (AccountWithBLOBs account, Proxy proxy) {
         switch (account.getPluginId()) {
             case aws:
                 try {
                     AWSRequest awsReq = new AWSRequest();
                     awsReq.setCredential(account.getCredential());
-                    AmazonEC2Client client = awsReq.getAmazonEC2Client();
+                    AmazonEC2Client client = awsReq.getAmazonEC2Client(proxy);
                     String region = null;
                     if (!region.isEmpty() && region.trim().length() > 0) {
                         client.setRegion(RegionUtils.getRegion(region));
@@ -359,7 +370,7 @@ public class PlatformUtils {
                 try {
                     AzureBaseRequest req = new AzureBaseRequest();
                     req.setCredential(account.getCredential());
-                    AzureClient azureClient = req.getAzureClient();
+                    AzureClient azureClient = req.getAzureClient(proxy);
                     return azureClient.getCurrentSubscription() != null;
                 } catch (Exception e) {
                     LogUtil.error("Account verification failed : " + e.getMessage());
@@ -369,7 +380,7 @@ public class PlatformUtils {
                 try {
                     AliyunRequest aliyunRequest = new AliyunRequest();
                     aliyunRequest.setCredential(account.getCredential());
-                    IAcsClient aliyunClient = aliyunRequest.getAliyunClient();
+                    IAcsClient aliyunClient = aliyunRequest.getAliyunClient(proxy);
                     DescribeRegionsRequest describeRegionsRequest = new DescribeRegionsRequest();
                     describeRegionsRequest.setAcceptFormat(FormatType.JSON);
                     DescribeRegionsResponse describeRegionsResponse = aliyunClient.getAcsResponse(describeRegionsRequest);
@@ -395,7 +406,7 @@ public class PlatformUtils {
                 com.tencentcloudapi.cvm.v20170312.models.DescribeRegionsRequest request = new com.tencentcloudapi.cvm.v20170312.models.DescribeRegionsRequest();
                 QCloudBaseRequest req = new QCloudBaseRequest();
                 req.setCredential(account.getCredential());
-                CvmClient client = req.getCvmClient();
+                CvmClient client = req.getCvmClient(proxy);
                 try {
                     client.DescribeRegions(request);
                     return true;
@@ -409,9 +420,9 @@ public class PlatformUtils {
         return false;
     }
 
-    private static List<Map<String, String>> getRegions(BusiRequest busiRequest) throws PluginException {
+    private static List<Map<String, String>> getRegions(BusiRequest busiRequest, Proxy proxy) throws PluginException {
         try {
-            IamClient iamClient = ClientUtil.getIamClient(busiRequest);
+            IamClient iamClient = ClientUtil.getIamClient(busiRequest, proxy);
             List<ProjectResult> projectResults = ProjectUtil.listProjects(iamClient, AuthUtil.validate(iamClient, busiRequest.getHuaweiCloudCredential().getAk()).getUserId());
             List<Region> regions = RegionUtil.allRegions(iamClient);
             if (CollectionUtils.isEmpty(projectResults)){

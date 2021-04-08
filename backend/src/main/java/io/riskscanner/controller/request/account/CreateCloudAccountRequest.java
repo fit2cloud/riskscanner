@@ -15,6 +15,8 @@ public class CreateCloudAccountRequest {
     private String pluginIcon;
     @ApiModelProperty(value = "凭据", required = true)
     private String credential;
+    @ApiModelProperty(value = "代理", required = true)
+    private int proxyId;
 
     public String getName() {
         return name;
@@ -48,4 +50,11 @@ public class CreateCloudAccountRequest {
         this.credential = credential;
     }
 
+    public int getProxyId() {
+        return proxyId;
+    }
+
+    public void setProxyId(int proxyId) {
+        this.proxyId = proxyId;
+    }
 }

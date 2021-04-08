@@ -1,6 +1,8 @@
 package io.riskscanner.base.rs;
 
 import com.google.gson.Gson;
+import io.riskscanner.proxy.azure.Request;
+import io.riskscanner.proxy.huawei.HuaweiCloudCredential;
 
 /**
  * @Author maguohao

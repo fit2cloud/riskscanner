@@ -1,4 +1,4 @@
-package io.riskscanner.base.rs;
+package io.riskscanner.proxy.azure;
 
 public class AzureCredential {
 

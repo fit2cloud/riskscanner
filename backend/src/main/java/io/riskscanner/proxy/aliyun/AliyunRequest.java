@@ -1,4 +1,4 @@
-package io.riskscanner.base.rs;
+package io.riskscanner.proxy.aliyun;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
@@ -7,10 +7,11 @@ import com.aliyuncs.http.HttpClientType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.google.gson.Gson;
+import io.riskscanner.base.domain.Proxy;
+import io.riskscanner.proxy.azure.Request;
 
 public class AliyunRequest extends Request {
     private AliyunCredential aliyunCredential;
-    private HttpClientConfig httpClientConfig;
 
     public AliyunRequest() {
         super("", "");
@@ -49,7 +50,8 @@ public class AliyunRequest extends Request {
         return null;
     }
 
-    public IAcsClient getAliyunClient() {
+    public IAcsClient getAliyunClient(Proxy proxy) {
+        HttpClientConfig httpClientConfig = new HttpClientConfig();
         if (getAccessKey() != null && getAccessKey().trim().length() > 0 && getSecretKey() != null && getSecretKey().trim().length() > 0) {
             String defaultRegionId = "cn-hangzhou";
             if (getRegionId() != null && getRegionId().trim().length() > 0) {
@@ -66,7 +68,7 @@ public class AliyunRequest extends Request {
             httpClientConfig.setIgnoreSSLCerts(true);
             httpClientConfig.setCompatibleMode(false);
             httpClientConfig.setClientType(HttpClientType.ApacheHttpClient);
-            AliyunProxySetting proxySetting = ProxyUtils.getProxySetting();
+            AliyunProxySetting proxySetting = ProxyUtils.getProxySetting(proxy);
             if(proxySetting != null){
                 httpClientConfig.setHttpProxy(proxySetting.getHttpAddr());
                 httpClientConfig.setHttpsProxy(proxySetting.getHttpsAddr());

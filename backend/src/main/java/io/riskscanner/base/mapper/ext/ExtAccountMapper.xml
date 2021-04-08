@@ -4,6 +4,11 @@
     <resultMap id="BaseResultMap" type="io.riskscanner.dto.AccountDTO"
                extends="io.riskscanner.base.mapper.AccountMapper.BaseResultMap">
         <result column="userName" property="userName"/>
+        <result column="isProxy" property="isProxy"/>
+        <result column="proxy_ip" jdbcType="VARCHAR" property="proxyIp" />
+        <result column="proxy_port" jdbcType="VARCHAR" property="proxyPort" />
+        <result column="proxy_name" jdbcType="VARCHAR" property="proxyName" />
+        <result column="proxy_password" jdbcType="VARCHAR" property="proxyPassword" />
     </resultMap>
 
     <sql id="condition">
@@ -89,10 +94,16 @@
     <select id="getCloudAccountList" resultMap="BaseResultMap">
         select
         t.*,
-        user.name as userName
+        p.proxy_ip,
+        p.proxy_port,
+        p.proxy_name,
+        p.proxy_password,
+        user.name as userName,
+        IF(p.proxy_ip, true, false) as isProxy
         from cloud_account as t
         left join plugin on t.plugin_id = plugin.id
         left join user on t.creator = user.id
+        left join proxy p on t.proxy_id = p.id
         <where>
             <if test="request.combine != null">
                 <include refid="combine">

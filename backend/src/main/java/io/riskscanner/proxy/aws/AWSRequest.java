@@ -1,10 +1,13 @@
-package io.riskscanner.base.rs;
+package io.riskscanner.proxy.aws;
 
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.RegionUtils;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.google.gson.Gson;
+import io.riskscanner.base.domain.Proxy;
+import io.riskscanner.proxy.azure.Request;
 
 public class AWSRequest extends Request {
 	private AWSCredential awsCredential;
@@ -42,9 +45,15 @@ public class AWSRequest extends Request {
 		return awsCredential;
 	}
 	
-	public AmazonEC2Client getAmazonEC2Client() {
+	public AmazonEC2Client getAmazonEC2Client(Proxy proxy) {
 		if(getAccessKey() != null && getAccessKey().trim().length() > 0 && getSecretKey() != null && getSecretKey().trim().length() > 0) {
-			AmazonEC2Client client = new AmazonEC2Client(new BasicAWSCredentials(getAccessKey(), getSecretKey()));
+			AmazonEC2Client client = null;
+			ClientConfiguration clientConfiguration = getClientConfiguration(proxy);
+			if(clientConfiguration != null) {
+				client = new AmazonEC2Client(new BasicAWSCredentials(getAccessKey(), getSecretKey()), clientConfiguration);
+			}else {
+				client = new AmazonEC2Client(new BasicAWSCredentials(getAccessKey(), getSecretKey()));
+			}
 			if(getRegionId() != null && getRegionId().trim().length() > 0) {
 				Region r = RegionUtils.getRegion(getRegionId());
 				if(r != null) {
@@ -54,6 +63,19 @@ public class AWSRequest extends Request {
 			return client;
 		}
 		return null;
+	}
+
+	private ClientConfiguration getClientConfiguration(Proxy proxy) {
+		ClientConfiguration clientConfiguration = null;
+		AWSProxySetting proxySetting = ProxyUtils.getProxySetting(proxy);
+		if(proxySetting != null) {
+			clientConfiguration = new ClientConfiguration();
+			clientConfiguration.setProxyHost(proxySetting.getHost());
+			clientConfiguration.setProxyPort(proxySetting.getPort());
+			clientConfiguration.setProxyUsername(proxySetting.getUserName());
+			clientConfiguration.setProxyPassword(proxySetting.getPassword());
+		}
+		return clientConfiguration;
 	}
 
 }

@@ -12,4 +12,5 @@ public enum ResourceTypeConstants {
     TASK,
     SYSTEM,
     QUOTA,
+    PROXY
 }

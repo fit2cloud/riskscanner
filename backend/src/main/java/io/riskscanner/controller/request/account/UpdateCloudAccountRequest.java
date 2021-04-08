@@ -19,6 +19,9 @@ public class UpdateCloudAccountRequest {
     @ApiModelProperty(value = "凭据", required = true)
     private String credential;
 
+    @ApiModelProperty(value = "代理", required = false)
+    private int proxyId;
+
     public String getId() {
         return id;
     }
@@ -49,5 +52,13 @@ public class UpdateCloudAccountRequest {
 
     public void setCredential(String credential) {
         this.credential = credential;
+    }
+
+    public int getProxyId() {
+        return proxyId;
+    }
+
+    public void setProxyId(int proxyId) {
+        this.proxyId = proxyId;
     }
 }
