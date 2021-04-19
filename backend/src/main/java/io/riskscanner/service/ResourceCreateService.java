@@ -53,6 +53,8 @@ public class ResourceCreateService {
     private OrderService orderService;
     @Resource
     private ExtScanHistoryMapper extScanHistoryMapper;
+    @Resource
+    private ProxyMapper proxyMapper;
 
     @QuartzScheduled(cron = "${cron.expression.local}")
     public void handleTasks() {
@@ -164,7 +166,8 @@ public class ResourceCreateService {
             if (list.isEmpty()) return;
 
             String dirPath = TaskConstants.RESULT_FILE_PATH_PREFIX + task.getId() + "/" + taskItem.getRegionId();
-            Map<String, String> map = PlatformUtils.getAccount(accountMapper.selectByPrimaryKey(taskItem.getAccountId()), taskItem.getRegionId());
+            AccountWithBLOBs accountWithBLOBs = accountMapper.selectByPrimaryKey(taskItem.getAccountId());
+            Map<String, String> map = PlatformUtils.getAccount(accountWithBLOBs, taskItem.getRegionId(), proxyMapper.selectByPrimaryKey(accountWithBLOBs.getProxyId()));
             String command = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.run.getCommand(), dirPath, "policy.yml", map);
             LogUtil.info(task.getId() + " {}[command]: " + command);
             CommandUtils.saveAsFile(taskItem.getDetails(), task.getId() + "/" + taskItem.getRegionId());//重启服务后容器内文件在/tmp目录下会丢失

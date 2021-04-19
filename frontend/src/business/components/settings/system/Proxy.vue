@@ -9,6 +9,7 @@
 
       <el-table border class="adjust-table" :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
         <el-table-column type="index" min-width="5%"/>
+        <el-table-column prop="proxyType" :label="$t('commons.proxy_type')" min-width="10%"/>
         <el-table-column prop="proxyIp" label="Proxy IP" min-width="15%"/>
         <el-table-column prop="proxyPort" :label="$t('commons.proxy_port')" min-width="10%"/>
         <el-table-column prop="proxyName" :label="$t('commons.proxy_name')" min-width="15%"/>
@@ -40,6 +41,17 @@
     <el-drawer class="rtl" :title="$t('proxy.create')" :visible.sync="createVisible" size="60%" :before-close="handleClose" :direction="direction"
                :destroy-on-close="true">
       <el-form :model="form" label-position="right" label-width="120px" size="small" :rules="rule" ref="createProxyForm">
+        <el-form-item :label="$t('commons.proxy_type')" :rules="{required: true, message: $t('commons.proxy_type') + this.$t('commons.cannot_be_empty'), trigger: 'change'}">
+          <el-select style="width: 100%;" v-model="form.proxyType" :placeholder="$t('commons.proxy_type')">
+            <el-option
+              v-for="item in proxyType"
+              :key="item.id"
+              :label="item.value"
+              :value="item.id">
+              &nbsp;&nbsp; {{ item.value }}
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="Proxy IP" prop="proxyIp">
           <el-input v-model="form.proxyIp" autocomplete="off" :placeholder="$t('proxy.proxy_ip')"/>
         </el-form-item>
@@ -63,6 +75,17 @@
     <el-drawer class="rtl" :title="$t('proxy.modify')" :visible.sync="updateVisible" size="60%" :before-close="handleClose" :direction="direction" :destroy-on-close="true"
                :validate-on-rule-change="true" v-loading="result.loading">
       <el-form :model="form" label-position="right" label-width="120px" size="small" :rules="rule" ref="updateProxyForm">
+        <el-form-item :label="$t('commons.proxy_type')" :rules="{required: true, message: $t('commons.proxy_type') + this.$t('commons.cannot_be_empty'), trigger: 'change'}">
+          <el-select style="width: 100%;" v-model="form.proxyType" :placeholder="$t('commons.proxy_type')">
+            <el-option
+              v-for="item in proxyType"
+              :key="item.id"
+              :label="item.value"
+              :value="item.id">
+              &nbsp;&nbsp; {{ item.value }}
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="Proxy IP" prop="proxyIp">
           <el-input v-model="form.proxyIp" autocomplete="off" :placeholder="$t('proxy.proxy_ip')"/>
         </el-form-item>
@@ -84,9 +107,6 @@
 
   </div>
 </template>
-
-
-
 
 <script>
   import CreateBox from "../CreateBox";
@@ -142,7 +162,11 @@
             {required: true, message: this.$t('proxy.proxy_password'), trigger: 'blur'},
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
           ],
-        }
+        },
+        proxyType: [
+          {id: 'Http', value: "Http"},
+          {id: 'Https', value: "Https"},
+        ],
       }
     },
     activated() {

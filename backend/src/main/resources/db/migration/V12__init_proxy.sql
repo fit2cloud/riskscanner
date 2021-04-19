@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS proxy
 (
     id                           int(11)             NOT NULL AUTO_INCREMENT,
+    proxy_type                   varchar(50)         DEFAULT NULL,
     proxy_ip                     varchar(50)         DEFAULT NULL,
     proxy_port                   varchar(50)         DEFAULT NULL,
     proxy_name                   varchar(50)         DEFAULT NULL,

@@ -4,14 +4,19 @@ import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.http.HttpClientConfig;
 import com.aliyuncs.http.HttpClientType;
+import com.aliyuncs.http.IHttpClient;
+import com.aliyuncs.http.clients.ApacheHttpClient;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.google.gson.Gson;
 import io.riskscanner.base.domain.Proxy;
 import io.riskscanner.proxy.azure.Request;
 
+import java.io.IOException;
+
 public class AliyunRequest extends Request {
     private AliyunCredential aliyunCredential;
+    private HttpClientConfig httpClientConfig = HttpClientConfig.getDefault();
 
     public AliyunRequest() {
         super("", "");
@@ -50,18 +55,12 @@ public class AliyunRequest extends Request {
         return null;
     }
 
-    public IAcsClient getAliyunClient(Proxy proxy) {
-        HttpClientConfig httpClientConfig = new HttpClientConfig();
+    public IAcsClient getAliyunClient(Proxy proxy) throws IOException {
         if (getAccessKey() != null && getAccessKey().trim().length() > 0 && getSecretKey() != null && getSecretKey().trim().length() > 0) {
             String defaultRegionId = "cn-hangzhou";
             if (getRegionId() != null && getRegionId().trim().length() > 0) {
                 defaultRegionId = getRegionId();
             }
-            IClientProfile profile = DefaultProfile.getProfile(defaultRegionId, getAccessKey(), getSecretKey());
-            if (profile.getHttpClientConfig() == null) {
-                profile.setHttpClientConfig(HttpClientConfig.getDefault());
-            }
-            httpClientConfig = profile.getHttpClientConfig();
             httpClientConfig.setReadTimeoutMillis(1800000L);//15m
             httpClientConfig.setWriteTimeoutMillis(300000L);//5m
             httpClientConfig.setConnectionTimeoutMillis(30000L);//30s
@@ -69,16 +68,15 @@ public class AliyunRequest extends Request {
             httpClientConfig.setCompatibleMode(false);
             httpClientConfig.setClientType(HttpClientType.ApacheHttpClient);
             AliyunProxySetting proxySetting = ProxyUtils.getProxySetting(proxy);
-            if(proxySetting != null){
-                httpClientConfig.setHttpProxy(proxySetting.getHttpAddr());
-                httpClientConfig.setHttpsProxy(proxySetting.getHttpsAddr());
-                httpClientConfig.setNoProxy(proxySetting.getNoProxy());
-            }
-
+            httpClientConfig.setHttpProxy(proxySetting != null?proxySetting.getHttpAddr():null);
+            httpClientConfig.setHttpsProxy(proxySetting != null?proxySetting.getHttpsAddr():null);
+            httpClientConfig.setNoProxy(proxySetting != null?proxySetting.getNoProxy():null);
+            DefaultProfile profile = DefaultProfile.getProfile(defaultRegionId, getAccessKey(), getSecretKey());
+            profile.setHttpClientConfig(httpClientConfig);
+            ApacheHttpClient.getInstance().close();
             DefaultAcsClient client = new DefaultAcsClient(profile);
-            client.setAutoRetry(false);
-            client.setMaxRetryNumber(0);
             return client;
+
         }
         return null;
     }

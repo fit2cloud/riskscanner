@@ -22,4 +22,12 @@ public class CloudAccountConstants {
         private Status() {
         }
     }
+
+    public static enum ProxyType {
+        Http,
+        Https;
+
+        private ProxyType() {
+        }
+    }
 }

@@ -42,6 +42,7 @@ import io.riskscanner.proxy.tencent.QCloudBaseRequest;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,11 +62,8 @@ public class PlatformUtils {
      * 支持的插件（云平台）
      *
      */
-//    public final static List<String> getPlugin() {
-//        return Arrays.asList(aws, azure, aliyun, huawei, tencent);
-//    }
     public final static List<String> getPlugin() {
-        return Arrays.asList(aliyun, huawei, tencent);
+        return Arrays.asList(aws, azure, aliyun, huawei, tencent);
     }
 
     /**
@@ -89,49 +87,105 @@ public class PlatformUtils {
     public final static String fixedCommand(String custodian, String behavior, String dirPath, String fileName, Map<String, String> params) {
         String type = params.get("type");
         String region = params.get("region");
+        String proxyIp = params.get("proxyIp");
+        String proxyPort = params.get("proxyPort");
+        String proxyName = params.get("proxyName");
+        String proxyPassword = params.get("proxyPassword");
         String pre = "";
         String _pok = " ";
         switch (type) {
             case aws:
                 String awsAccessKey = params.get("accessKey");
                 String awsSecretKey = params.get("secretKey");
-                pre = "AWS_ACCESS_KEY_ID=" + awsAccessKey + " " +
-                        "AWS_SECRET_ACCESS_KEY=" + awsSecretKey + " " +
-                        "AWS_DEFAULT_REGION=" + region + " ";
+                if (StringUtils.isNotEmpty(proxyIp)) {
+                    pre = "AWS_ACCESS_KEY_ID=" + awsAccessKey + " " +
+                            "AWS_SECRET_ACCESS_KEY=" + awsSecretKey + " " +
+                            "AWS_DEFAULT_REGION=" + region + " " +
+                            "PROXY_IP=" + proxyIp + " " +
+                            "PROXY_PORT=" + proxyPort + " " +
+                            "PROXY_NAME=" + proxyName + " " +
+                            "PROXY_PASSWORD=" + proxyPassword + " ";
+                } else {
+                    pre = "AWS_ACCESS_KEY_ID=" + awsAccessKey + " " +
+                            "AWS_SECRET_ACCESS_KEY=" + awsSecretKey + " " +
+                            "AWS_DEFAULT_REGION=" + region + " ";
+                }
                 break;
             case azure:
                 String tenant = params.get("tenant");
                 String subscriptionId = params.get("subscription");
                 String client = params.get("client");
                 String key = params.get("key");
-                pre = "AZURE_TENANT_ID=" + tenant + " " +
-                        "AZURE_SUBSCRIPTION_ID=" + subscriptionId + " " +
-                        "AZURE_CLIENT_ID=" + client + " " +
-                        "AZURE_CLIENT_SECRET=" + key + " ";
+                if (StringUtils.isNotEmpty(proxyIp)) {
+                    pre = "AZURE_TENANT_ID=" + tenant + " " +
+                            "AZURE_SUBSCRIPTION_ID=" + subscriptionId + " " +
+                            "AZURE_CLIENT_ID=" + client + " " +
+                            "AZURE_CLIENT_SECRET=" + key + " " +
+                            "PROXY_IP=" + proxyIp + " " +
+                            "PROXY_PORT=" + proxyPort + " " +
+                            "PROXY_NAME=" + proxyName + " " +
+                            "PROXY_PASSWORD=" + proxyPassword + " ";
+                } else {
+                    pre = "AZURE_TENANT_ID=" + tenant + " " +
+                            "AZURE_SUBSCRIPTION_ID=" + subscriptionId + " " +
+                            "AZURE_CLIENT_ID=" + client + " " +
+                            "AZURE_CLIENT_SECRET=" + key + " ";
+                }
                 _pok = " --region=" + region + " ";
                 break;
             case aliyun:
                 String aliAccessKey = params.get("accessKey");
                 String aliSecretKey = params.get("secretKey");
-                pre = "ALIYUN_ACCESSKEYID=" + aliAccessKey + " " +
-                        "ALIYUN_ACCESSSECRET=" + aliSecretKey + " " +
-                        "ALIYUN_DEFAULT_REGION=" + region + " ";
+                if (StringUtils.isNotEmpty(proxyIp)) {
+                    pre = "ALIYUN_ACCESSKEYID=" + aliAccessKey + " " +
+                            "ALIYUN_ACCESSSECRET=" + aliSecretKey + " " +
+                            "ALIYUN_DEFAULT_REGION=" + region + " " +
+                            "PROXY_IP=" + proxyIp + " " +
+                            "PROXY_PORT=" + proxyPort + " " +
+                            "PROXY_NAME=" + proxyName + " " +
+                            "PROXY_PASSWORD=" + proxyPassword + " ";
+                } else {
+                    pre = "ALIYUN_ACCESSKEYID=" + aliAccessKey + " " +
+                            "ALIYUN_ACCESSSECRET=" + aliSecretKey + " " +
+                            "ALIYUN_DEFAULT_REGION=" + region + " ";
+                }
                 break;
             case huawei:
                 String huaweiAccessKey = params.get("ak");
                 String huaweiSecretKey = params.get("sk");
                 String projectId = params.get("projectId");
-                pre = "HUAWEI_AK=" + huaweiAccessKey + " " +
-                        "HUAWEI_SK=" + huaweiSecretKey + " " +
-                        "HUAWEI_PROJECT=" + projectId + " " +
-                        "HUAWEI_DEFAULT_REGION=" + region + " ";
+                if (StringUtils.isNotEmpty(proxyIp)) {
+                    pre = "HUAWEI_AK=" + huaweiAccessKey + " " +
+                            "HUAWEI_SK=" + huaweiSecretKey + " " +
+                            "HUAWEI_PROJECT=" + projectId + " " +
+                            "HUAWEI_DEFAULT_REGION=" + region + " " +
+                            "PROXY_IP=" + proxyIp + " " +
+                            "PROXY_PORT=" + proxyPort + " " +
+                            "PROXY_NAME=" + proxyName + " " +
+                            "PROXY_PASSWORD=" + proxyPassword + " ";
+                } else {
+                    pre = "HUAWEI_AK=" + huaweiAccessKey + " " +
+                            "HUAWEI_SK=" + huaweiSecretKey + " " +
+                            "HUAWEI_PROJECT=" + projectId + " " +
+                            "HUAWEI_DEFAULT_REGION=" + region + " ";
+                }
                 break;
             case tencent:
                 String qSecretId = params.get("secretId");
                 String qSecretKey = params.get("secretKey");
-                pre = "TENCENT_SECRETID=" + qSecretId + " " +
-                        "TENCENT_SECRETKEY=" + qSecretKey + " " +
-                        "TENCENT_DEFAULT_REGION=" + region + " ";
+                if (StringUtils.isNotEmpty(proxyIp)) {
+                    pre = "TENCENT_SECRETID=" + qSecretId + " " +
+                            "TENCENT_SECRETKEY=" + qSecretKey + " " +
+                            "TENCENT_DEFAULT_REGION=" + region + " " +
+                            "PROXY_IP=" + proxyIp + " " +
+                            "PROXY_PORT=" + proxyPort + " " +
+                            "PROXY_NAME=" + proxyName + " " +
+                            "PROXY_PASSWORD=" + proxyPassword + " ";
+                } else {
+                    pre = "TENCENT_SECRETID=" + qSecretId + " " +
+                            "TENCENT_SECRETKEY=" + qSecretKey + " " +
+                            "TENCENT_DEFAULT_REGION=" + region + " ";
+                }
                 break;
         }
         switch (behavior) {
@@ -159,7 +213,7 @@ public class PlatformUtils {
      * @param region
      * @return
      */
-    public final static Map<String, String> getAccount(AccountWithBLOBs account, String region) {
+    public final static Map<String, String> getAccount(AccountWithBLOBs account, String region, Proxy proxy) {
         Map<String, String> map = new HashMap<>();
         switch (account.getPluginId()) {
             case aws:
@@ -205,6 +259,10 @@ public class PlatformUtils {
             default:
                 throw new IllegalStateException("Unexpected value: " + account.getPluginId());
         }
+        map.put("proxyIp", proxy != null?proxy.getProxyIp():"");
+        map.put("proxyPort", proxy != null?proxy.getProxyPort():"");
+        map.put("proxyName", proxy != null?proxy.getProxyName():"");
+        map.put("proxyPassword", proxy != null?proxy.getProxyPassword():"");
         return map;
     }
 
@@ -273,6 +331,8 @@ public class PlatformUtils {
                             jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.getRegionId(), aliyun))?tranforRegionId2RegionName(region.getRegionId(), aliyun):region.getLocalName());
                             jsonArray.add(jsonObject);
                         });
+                    } catch (Exception e) {
+                        LogUtil.error(e.getMessage());
                     } finally {
                         aliyunClient.shutdown();
                     }
@@ -331,7 +391,7 @@ public class PlatformUtils {
         }
     }
 
-    public static boolean validateCredential (AccountWithBLOBs account, Proxy proxy) {
+    public static boolean validateCredential (AccountWithBLOBs account, Proxy proxy) throws IOException {
         switch (account.getPluginId()) {
             case aws:
                 try {
@@ -339,13 +399,13 @@ public class PlatformUtils {
                     awsReq.setCredential(account.getCredential());
                     AmazonEC2Client client = awsReq.getAmazonEC2Client(proxy);
                     String region = null;
-                    if (!region.isEmpty() && region.trim().length() > 0) {
+                    if (region != null && region.trim().length() > 0) {
                         client.setRegion(RegionUtils.getRegion(region));
                     }
                     try {
                         client.describeRegions();
                     } catch (Exception e) {
-                        if (!region.isEmpty() && region.trim().length() > 0) {
+                        if (region != null && region.trim().length() > 0) {
                             if (e instanceof AmazonServiceException) {
                                 String errCode = ((AmazonServiceException) e).getErrorCode();
                                 if ("AuthFailure".equals(errCode)) {
@@ -377,24 +437,25 @@ public class PlatformUtils {
                     break;
                 }
             case aliyun:
+                AliyunRequest aliyunRequest = new AliyunRequest();
+                aliyunRequest.setCredential(account.getCredential());
+                IAcsClient aliyunClient = aliyunRequest.getAliyunClient(proxy);
                 try {
-                    AliyunRequest aliyunRequest = new AliyunRequest();
-                    aliyunRequest.setCredential(account.getCredential());
-                    IAcsClient aliyunClient = aliyunRequest.getAliyunClient(proxy);
                     DescribeRegionsRequest describeRegionsRequest = new DescribeRegionsRequest();
                     describeRegionsRequest.setAcceptFormat(FormatType.JSON);
                     DescribeRegionsResponse describeRegionsResponse = aliyunClient.getAcsResponse(describeRegionsRequest);
                     describeRegionsResponse.getRegions();
-                    aliyunClient.shutdown();
                     return true;
                 } catch (Exception e) {
                     LogUtil.error("Account verification failed : " + e.getMessage());
                     break;
+                } finally {
+                    aliyunClient.shutdown();
                 }
             case huawei:
                 try {
                     HuaweiCloudCredential huaweiCloudCredential = new Gson().fromJson(account.getCredential(), HuaweiCloudCredential.class);
-                    IamClient iamClient = ClientUtil.getIamClient(account.getCredential());
+                    IamClient iamClient = ClientUtil.getIamClient(account.getCredential(), proxy);
                     assert iamClient != null;
                     ShowCredential showCredential = AuthUtil.validate(iamClient, huaweiCloudCredential.getAk());
                     return null != showCredential;

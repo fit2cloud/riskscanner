@@ -2,7 +2,9 @@ package io.riskscanner.proxy.aliyun;
 
 
 import io.riskscanner.base.domain.Proxy;
+import io.riskscanner.commons.constants.CloudAccountConstants;
 import io.riskscanner.proxy.tencent.QCloudProxySetting;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,16 +19,19 @@ public class ProxyUtils {
         try {
             if (proxy == null) return null;
             AliyunProxySetting proxySetting = new AliyunProxySetting();
-            String httpHost = "http://" + proxy.getProxyIp() + ":" + proxy.getProxyPort();
             boolean validSettings = false;
-            if (httpHost != null && httpHost.trim().length() > 0) {
-                proxySetting.setHttpAddr(httpHost.trim());
-                validSettings = true;
-            }
-            String httpsHost = "https://" + proxy.getProxyIp() + ":" + proxy.getProxyPort();
-            if (httpsHost != null && httpsHost.trim().length() > 0) {
-                proxySetting.setHttpsAddr(httpsHost.trim());
-                validSettings = true;
+            if (StringUtils.equalsIgnoreCase(proxy.getProxyType(), CloudAccountConstants.ProxyType.Http.name())) {
+                String httpHost = "http://" + proxy.getProxyIp() + ":" + proxy.getProxyPort();
+                if (httpHost != null && httpHost.trim().length() > 0) {
+                    proxySetting.setHttpAddr(httpHost.trim());
+                    validSettings = true;
+                }
+            } else if (StringUtils.equalsIgnoreCase(proxy.getProxyType(), CloudAccountConstants.ProxyType.Https.name())) {
+                String httpsHost = "http://" + proxy.getProxyName() + ":" + proxy.getProxyPassword() + "@" + proxy.getProxyIp() + ":" + proxy.getProxyPort();
+                if (httpsHost != null && httpsHost.trim().length() > 0) {
+                    proxySetting.setHttpsAddr(httpsHost.trim());
+                    validSettings = true;
+                }
             }
             if(!validSettings){
                 return null;

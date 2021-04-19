@@ -52,18 +52,16 @@ public class ClientUtil {
     private static HttpConfig httpConfig;
 
     private static HttpConfig getHttpConfig(Proxy proxy){
-        if (null == httpConfig){
-            if (proxy != null) {
-                httpConfig = HttpConfig.getDefaultHttpConfig()
-                        .withProxyHost("http://" + proxy.getProxyIp())
-                        .withProxyPort(Integer.valueOf(proxy.getProxyPort()))
-                        .withProxyUsername(proxy.getProxyName())
-                        .withProxyPassword(proxy.getProxyPassword());
-            } else {
-                httpConfig = HttpConfig.getDefaultHttpConfig()
-                        .withIgnoreSSLVerification(true)
-                        .withTimeout(3000);
-            }
+        if (proxy != null) {
+            httpConfig = HttpConfig.getDefaultHttpConfig()
+                    .withProxyHost("http://" + proxy.getProxyIp())
+                    .withProxyPort(Integer.valueOf(proxy.getProxyPort()))
+                    .withProxyUsername(proxy.getProxyName())
+                    .withProxyPassword(proxy.getProxyPassword());
+        } else {
+            httpConfig = HttpConfig.getDefaultHttpConfig()
+                    .withIgnoreSSLVerification(true)
+                    .withTimeout(3000);
         }
         return httpConfig;
     }
@@ -86,12 +84,12 @@ public class ClientUtil {
                 .withHttpConfig(getHttpConfig(proxy)).build();
         return iamClient;
     }
-    public static IamClient getIamClient(String credential) throws RSException{
+    public static IamClient getIamClient(String credential, Proxy proxy) throws RSException{
         try {
             Request request = new Request();
             request.setCredential(credential);
             IamRequest iamRequest = RequestUtil.request2IamRequest(request);
-            return getIamClient(iamRequest, null);
+            return getIamClient(iamRequest, proxy);
         } catch (Exception e) {
             return null;
         }

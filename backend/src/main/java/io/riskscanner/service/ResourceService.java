@@ -76,6 +76,8 @@ public class ResourceService {
     private ExtScanHistoryMapper extScanHistoryMapper;
     @Resource
     private ScanTaskHistoryMapper scanTaskHistoryMapper;
+    @Resource
+    private ProxyMapper proxyMapper;
 
     public SourceDTO source (String accountId) {
         return extResourceMapper.source(accountId);
@@ -220,7 +222,8 @@ public class ResourceService {
             resultFile = resultFile.replace("{resource_type}", resourceWithBLOBs.getResourceType());
             dirPath = CommandUtils.saveAsFile(resultFile, uuid);
             LogUtil.info(resourceWithBLOBs.getResourceType() + " ::: count resource sum ::: start");
-            Map<String, String> map = PlatformUtils.getAccount(accountMapper.selectByPrimaryKey(resourceWithBLOBs.getAccountId()), resourceWithBLOBs.getRegionId());
+            AccountWithBLOBs accountWithBLOBs = accountMapper.selectByPrimaryKey(resourceWithBLOBs.getAccountId());
+            Map<String, String> map = PlatformUtils.getAccount(accountWithBLOBs, resourceWithBLOBs.getRegionId(), proxyMapper.selectByPrimaryKey(accountWithBLOBs.getProxyId()));
             String command = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.run.getCommand(), dirPath, "policy.yml", map);
             String resultStr = CommandUtils.commonExecCmdWithResult(command, dirPath);
             if (LogUtil.getLogger().isDebugEnabled()) {
@@ -331,11 +334,13 @@ public class ResourceService {
             AccountExample example = new AccountExample();
             example.createCriteria().andPluginNameEqualTo(resourceWithBLOBs.getPluginName()).andStatusEqualTo("VALID");
             String region = resourceWithBLOBs.getRegionId();
+
             TaskItemResourceExample taskItemResourceExample = new TaskItemResourceExample();
             taskItemResourceExample.createCriteria().andResourceIdEqualTo(resourceWithBLOBs.getId());
             TaskItemResource taskItemResource = taskItemResourceMapper.selectByExample(taskItemResourceExample).get(0);
             TaskItem taskItem = taskItemMapper.selectByPrimaryKey(taskItemResource.getTaskItemId());
-            Map<String, String> map = PlatformUtils.getAccount(accountMapper.selectByPrimaryKey(taskItem.getAccountId()), region);
+            AccountWithBLOBs accountWithBLOBs = accountMapper.selectByPrimaryKey(resourceWithBLOBs.getAccountId());
+            Map<String, String> map = PlatformUtils.getAccount(accountWithBLOBs, region, proxyMapper.selectByPrimaryKey(accountWithBLOBs.getProxyId()));
 
             orderService.saveTaskItemLog(taskItem.getId(), resourceWithBLOBs.getId(), Translator.get("i18n_operation_begin") + ": " + operation, StringUtils.EMPTY, true);
 
