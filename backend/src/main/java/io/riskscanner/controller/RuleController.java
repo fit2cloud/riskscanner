@@ -11,6 +11,7 @@ import io.riskscanner.commons.utils.Pager;
 import io.riskscanner.controller.request.rule.CreateRuleRequest;
 import io.riskscanner.controller.request.rule.RuleGroupRequest;
 import io.riskscanner.controller.request.rule.RuleTagRequest;
+import io.riskscanner.dto.GroupDTO;
 import io.riskscanner.dto.RuleDTO;
 import io.riskscanner.dto.RuleGroupDTO;
 import io.riskscanner.dto.RuleTagDTO;
@@ -160,8 +161,8 @@ public class RuleController {
 
     @ApiOperation(value = "批量扫描")
     @PostMapping("scan")
-    public void scan(@RequestPart(value = "selectIds") List<String> ids) {
-        ruleService.scan(ids);
+    public void scan(@RequestPart(value = "selectIds") List<String> ids, @RequestPart(value = "checkedGroups") List<String> checkedGroups) {
+        ruleService.scan(ids, checkedGroups);
     }
 
     @ApiOperation(value = "历史扫描")
@@ -186,5 +187,11 @@ public class RuleController {
     @GetMapping(value = "group/delete/{id}")
     public int deleteRuleGroup(@PathVariable Integer id) {
         return ruleService.deleteRuleGroupById(id);
+    }
+
+    @ApiIgnore
+    @PostMapping("groups")
+    public List<GroupDTO> groups(@RequestPart(value = "selectIds") List<String> ids) {
+        return ruleService.groups(ids);
     }
 }

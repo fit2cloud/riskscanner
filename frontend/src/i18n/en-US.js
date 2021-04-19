@@ -159,6 +159,11 @@ export default {
     },
     more:'More',
     cannot_be_empty:'Cannot be empty',
+    proxy: "Proxy Settings",
+    proxy_type: "Proxy Type",
+    proxy_port: "Proxy range",
+    proxy_name: "Proxy username",
+    proxy_password: "Proxy password",
   },
   workspace: {
     create:'Create a workspace',
@@ -679,5 +684,19 @@ export default {
     region_name:'Region name',
     iam_strategy:'IAM strategy required',
     invalid_cloud_account:'There is an invalid cloud account in the account you selected. The invalid cloud account is not allowed to be scanned, please select again!',
-  }
+  },
+  proxy: {
+    create:'Create an agent',
+    modify:'Modify agent',
+    proxy_type:'Please enter the Proxy type',
+    proxy_ip:'Please enter Proxy IP',
+    proxy_port:'Please enter the Proxy port',
+    proxy_name:'Please enter the Proxy username',
+    proxy_password:'Please enter the Proxy password',
+    special_characters_are_not_supported:'Special characters are not supported',
+    delete_confirm:'Are you sure you want to delete this agent?',
+    search_by_proxy_ip:'Search by Proxy IP',
+    is_proxy:'Whether to enable proxy',
+    add_proxy:'Add proxy',
+  },
 };

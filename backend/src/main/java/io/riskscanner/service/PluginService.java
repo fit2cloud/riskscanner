@@ -26,7 +26,9 @@ public class PluginService {
     private PluginMapper pluginMapper;
 
     public List<Plugin> getAllPlugin() {
-        return pluginMapper.selectByExample(null);
+        PluginExample example = new PluginExample();
+        example.setOrderByClause("update_time");
+        return pluginMapper.selectByExample(example);
     }
 
     public String getCredential(String pluginId) {

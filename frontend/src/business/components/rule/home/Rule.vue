@@ -153,6 +153,7 @@
             <codemirror ref="cmEditor" v-model="createRuleForm.script" class="code-mirror" :options="cmOptions" />
           </el-form-item>
           <el-form-item :label="$t('rule.middleware_parameter')" :rules="{required: true, message: $t('rule.middleware_parameter'), trigger: 'change'}">
+            <span style="color: red;margin-right: 20px;">{{ "${" + "{Key}" + "}" }}</span>
             <el-button type="primary" plain @click="addParam(createRuleForm)">{{ $t('rule.middleware_parameter_add') }}</el-button>
           </el-form-item>
           <el-form-item>
@@ -250,6 +251,7 @@
             <codemirror ref="cmEditor" v-model="updateRuleForm.script" class="code-mirror" :options="cmOptions" />
           </el-form-item>
           <el-form-item :label="$t('rule.middleware_parameter')" :rules="{required: true, message: $t('rule.middleware_parameter'), trigger: 'change'}">
+            <span style="color: red;margin-right: 20px;">{{ "${" + "{Key}" + "}" }}</span>
             <el-button type="primary" plain @click="addParam(updateRuleForm)">{{ $t('rule.middleware_parameter_add') }}</el-button>
           </el-form-item>
           <el-form-item>
@@ -347,6 +349,7 @@
             <codemirror ref="cmEditor" v-model="copyRuleForm.script" class="code-mirror" :options="cmOptions" />
           </el-form-item>
           <el-form-item :label="$t('rule.middleware_parameter')" :rules="{required: true, message: $t('rule.middleware_parameter'), trigger: 'change'}">
+            <span style="color: red;margin-right: 20px;">{{ "${" + "{Key}" + "}" }}</span>
             <el-button type="primary" plain @click="addParam(copyRuleForm)">{{ $t('rule.middleware_parameter_add') }}</el-button>
           </el-form-item>
           <el-form-item>

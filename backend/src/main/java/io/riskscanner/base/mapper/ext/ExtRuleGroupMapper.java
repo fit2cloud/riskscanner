@@ -1,6 +1,9 @@
 package io.riskscanner.base.mapper.ext;
 
+import io.riskscanner.base.domain.AccountWithBLOBs;
+import io.riskscanner.base.domain.RuleGroup;
 import io.riskscanner.controller.request.rule.RuleGroupRequest;
+import io.riskscanner.dto.RuleDTO;
 import io.riskscanner.dto.RuleGroupDTO;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,5 +12,9 @@ import java.util.List;
 public interface ExtRuleGroupMapper {
 
     List<RuleGroupDTO> list(@Param("request") RuleGroupRequest request);
+
+    List<RuleDTO> getRules(String accountId, String groupId);
+
+    List<String> getRuleGroup(String accountId);
 
 }

@@ -243,12 +243,29 @@
       </el-drawer>
       <!--Update account-->
 
-      <!-- 一键扫描选择扫描组 -->
+      <!-- 一键扫描选择规则组 -->
       <el-dialog :close-on-click-modal="false"
-                 :title="$t('account.scan')"
+                 :title="$t('account.scan_group_quick')"
                  :visible.sync="scanVisible"
-                 class="" >
-
+                 class="" width="70%">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">{{ $t('account.i18n_sync_all') }}</el-checkbox>
+        <el-card class="box-card el-box-card" v-for="(accountGroup, index) in accountGroups" :key="index">
+          <div slot="header" class="clearfix">
+            <span>
+              <img :src="require(`@/assets/img/platform/${accountGroup.accountWithBLOBs.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
+               &nbsp;&nbsp; {{ accountGroup.accountWithBLOBs.pluginName }} {{ $t('rule.rule_set') }} | {{accountGroup.accountWithBLOBs.name}}
+            </span>
+            <el-button style="float: right; padding: 3px 0" type="text"  @click="handleCheckAll(accountGroup.groups)">{{ $t('account.i18n_sync_all') }}</el-button>
+          </div>
+          <el-checkbox-group v-model="checkedGroups" @change="handleCheckedGroupsChange">
+            <el-checkbox v-for="(group,index) in accountGroup.groups" :label="group.id" :value="group.id" :key="index" border>
+              {{ group.name }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-card>
+        <dialog-footer
+          @cancel="scanVisible = false"
+          @confirm="scanGroup()"/>
       </el-dialog>
       <!-- 一键扫描选择扫描组 -->
 
@@ -355,6 +372,11 @@
           line: true,
           indentWithTabs: true,
         },
+        checkAll: false,
+        checkedGroups: [],
+        accountGroups: [],
+        isIndeterminate: true,
+        groupsSelect: [],
       }
     },
 
@@ -481,7 +503,7 @@
         });
       },
       init() {
-        this.selectIds.clear()
+        this.selectIds.clear();
         this.search();
       },
       sort(column) {
@@ -591,7 +613,11 @@
             }
           }
         }
-        this.scanGroup();
+        this.openScanGroup();
+      },
+      openScanGroup() {
+        this.scanVisible = true;
+        this.initGroups();
       },
       scanGroup () {
         this.$alert(this.$t('account.one_scan') + this.$t('account.cloud_account') + " ？", '', {
@@ -600,6 +626,9 @@
             if (action === 'confirm') {
               let formData = new FormData();
               formData.append('selectIds', new Blob([JSON.stringify(Array.from(this.selectIds))], {
+                type: "application/json"
+              }));
+              formData.append('checkedGroups', new Blob([JSON.stringify(Array.from(this.checkedGroups))], {
                 type: "application/json"
               }));
               this.result = this.$request({
@@ -650,6 +679,59 @@
             return false;
           }
         })
+      },
+      handleCheckAll(val) {
+        let arr = [];
+        if (val) {
+          for (let obj of val) {
+            arr.push(obj.id);
+          }
+        }
+        let concatArr = this.checkedGroups.concat(arr);
+        let arrNew = new Set(concatArr);
+        this.checkedGroups = !this.isContain(this.checkedGroups, arr) ? Array.from(arrNew) : this.checkedGroups.filter(n => !arr.toString().includes(n));
+        this.checkAll = this.checkedGroups.length === this.groupsSelect.length;
+        this.isIndeterminate = this.checkedGroups.length > 0 && this.checkedGroups.length < this.groupsSelect.length;
+      },
+      handleCheckAllChange() {
+        this.checkedGroups = this.checkedGroups.length === 0 ? this.groupsSelect : [];
+        this.isIndeterminate = false;
+      },
+      handleCheckedGroupsChange(value) {
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.groupsSelect.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.groupsSelect.length;
+      },
+      initGroups() {
+        let formData = new FormData();
+        formData.append('selectIds', new Blob([JSON.stringify(Array.from(this.selectIds))], {
+          type: "application/json"
+        }));
+        this.result = this.$request({
+          method: 'POST',
+          url: "/rule/groups",
+          data: formData,
+          headers: {
+            'Content-Type': undefined
+          }
+        }, (res) => {
+          this.accountGroups = res.data;
+          for (let item of this.accountGroups) {
+            for (let obj of item.groups) {
+              this.groupsSelect.push(obj.id);
+            }
+          }
+        });
+      },
+      isContain (arr1, arr2) {
+        for (var i = arr2.length - 1; i >= 0; i--) {
+          for (let obj of arr1) {
+            if(obj === arr2[i]){
+              return true;
+            }
+          }
+        }
+        return false;
       },
     },
     created() {
@@ -703,4 +785,7 @@
     height: 600px !important;
   }
   /deep/ :focus{outline:0;}
+  .el-box-card {
+    margin: 10px 0;
+  }
 </style>

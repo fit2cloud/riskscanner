@@ -159,6 +159,11 @@ export default {
     },
     more: '更多',
     cannot_be_empty: '不能為空',
+    proxy: '代理設置',
+    proxy_type: 'Proxy 類型',
+    proxy_port: 'Proxy 端口',
+    proxy_name: 'Proxy 用戶名',
+    proxy_password: 'Proxy 密碼',
   },
   workspace: {
     create: '創建工作空間',
@@ -679,5 +684,19 @@ export default {
     region_name: '區域名稱',
     iam_strategy: '需要的IAM策略',
     invalid_cloud_account: '您選擇的賬號中存在無效雲賬號，無效雲賬號不允許掃描，請重新選擇!',
-  }
+  },
+  proxy: {
+    create: '創建代理',
+    modify: '修改代理',
+    proxy_type: '請輸入 Proxy 類型',
+    proxy_ip: '請輸入 Proxy IP',
+    proxy_port: '請輸入 Proxy 端口',
+    proxy_name: '請輸入 Proxy 用戶名',
+    proxy_password: '請輸入 Proxy 密碼',
+    special_characters_are_not_supported: '不支持特殊字符',
+    delete_confirm: '這個代理確定要刪除嗎?',
+    search_by_proxy_ip: '根據 Proxy IP 搜索',
+    is_proxy: '是否啟用代理',
+    add_proxy: '新增代理',
+  },
 };

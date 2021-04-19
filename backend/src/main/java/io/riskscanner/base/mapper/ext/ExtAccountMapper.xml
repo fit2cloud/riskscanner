@@ -116,7 +116,7 @@
                 and t.name like CONCAT('%', #{request.name},'%')
             </if>
         </where>
-
+        order by t.update_time desc
     </select>
 
     <select id="ruleList" parameterType="io.riskscanner.dto.QuartzTaskDTO"

@@ -17,10 +17,7 @@ import io.riskscanner.commons.utils.*;
 import io.riskscanner.controller.request.rule.CreateRuleRequest;
 import io.riskscanner.controller.request.rule.RuleGroupRequest;
 import io.riskscanner.controller.request.rule.RuleTagRequest;
-import io.riskscanner.dto.QuartzTaskDTO;
-import io.riskscanner.dto.RuleDTO;
-import io.riskscanner.dto.RuleGroupDTO;
-import io.riskscanner.dto.RuleTagDTO;
+import io.riskscanner.dto.*;
 import io.riskscanner.i18n.Translator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -444,10 +441,17 @@ public class RuleService {
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, rollbackFor = {RuntimeException.class, Exception.class})
-    public void scan(List<String> ids) {
+    public void scan(List<String> ids, List<String> checkedGroups) {
         ids.forEach(id -> {
             AccountWithBLOBs account = accountMapper.selectByPrimaryKey(id);
-            this.scan(account);
+            List<String> ruleGroupList = extRuleGroupMapper.getRuleGroup(id);
+            for (String groupId : checkedGroups) {
+                for (String ruleGroup : ruleGroupList) {
+                    if (StringUtils.equalsIgnoreCase(ruleGroup, groupId)) {
+                        this.scanGroups(account, groupId);
+                    }
+                }
+            }
         });
     }
 
@@ -467,6 +471,17 @@ public class RuleService {
         if (!rule.getStatus()) RSException.throwException(Translator.get("i18n_disabled_rules_not_scanning"));
         Integer scanId = orderService.insertScanHistory(account);
         this.dealTask(rule, account, scanId, null);
+    }
+
+    private void scanGroups(AccountWithBLOBs account, String groupId) {
+        Integer scanId = orderService.insertScanHistory(account);
+
+        String messageOrderId = noticeService.createMessageOrder(account);
+
+        List<RuleDTO> ruleDTOS = extRuleGroupMapper.getRules(account.getId(), groupId);
+        for (RuleDTO rule : ruleDTOS) {
+            this.dealTask(rule, account, scanId, messageOrderId);
+        }
     }
 
     private void scan(AccountWithBLOBs account) {
@@ -598,5 +613,20 @@ public class RuleService {
 
     public int deleteRuleGroupById(Integer id) {
         return ruleGroupMapper.deleteByPrimaryKey(id);
+    }
+
+    public List<GroupDTO> groups(List<String> ids) {
+        List<GroupDTO> groupDTOS = new LinkedList<>();
+        for (String id : ids) {
+            AccountWithBLOBs account = accountMapper.selectByPrimaryKey(id);
+            RuleGroupRequest request = new RuleGroupRequest();
+            request.setPluginId(account.getPluginId());
+            GroupDTO groupDTO = new GroupDTO();
+            groupDTO.setAccountWithBLOBs(account);
+            groupDTO.setGroups(extRuleGroupMapper.list(request));
+            groupDTOS.add(groupDTO);
+        }
+
+        return groupDTOS;
     }
 }
