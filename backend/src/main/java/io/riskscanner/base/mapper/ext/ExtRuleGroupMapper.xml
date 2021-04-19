@@ -99,7 +99,7 @@
         order by t.id
     </select>
 
-    <select id="ruleList" resultMap="io.riskscanner.base.mapper.ext.ExtRuleMapper.BaseResultMap2">
+    <select id="getRules" resultMap="io.riskscanner.base.mapper.ext.ExtRuleMapper.BaseResultMap2">
         SELECT
         t.id,
         t.name,
@@ -122,7 +122,7 @@
         LEFT JOIN rule_account_parameter t1 ON t.id = t1.rule_id AND t1.account_id = #{accountId}
         LEFT JOIN rule_group_mapping t2 ON t.id = t2.rule_id
         LEFT JOIN rule_group t3 ON t2.group_id = t3.id
-        WHERE t3.id in #{checkedGroups}
+        WHERE t3.id = #{groupId}
         ORDER BY t.id desc
     </select>
 

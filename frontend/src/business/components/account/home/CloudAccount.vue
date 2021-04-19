@@ -258,8 +258,8 @@
             <el-button style="float: right; padding: 3px 0" type="text"  @click="handleCheckAll(accountGroup.groups)">{{ $t('account.i18n_sync_all') }}</el-button>
           </div>
           <el-checkbox-group v-model="checkedGroups" @change="handleCheckedGroupsChange">
-            <el-checkbox v-for="(group,index) in accountGroup.groups" :label="group.id" :value="group.id" :key="index" border>
-              {{ group.name }}
+            <el-checkbox v-for="(group,index) in accountGroup.groups" :label="group.id" :value="group.id" :key="index" border >
+                {{ group.name }}
             </el-checkbox>
           </el-checkbox-group>
         </el-card>
