@@ -685,6 +685,7 @@ export default {
     iam_strategy: '需要的IAM策略',
     invalid_cloud_account: '您选择的账号中存在无效云账号，无效云账号不允许扫描，请重新选择!',
     scan_group_quick: '规则组快速扫描',
+    please_choose_rule_group: '请选择规则组',
   },
   proxy: {
     create: '创建代理',

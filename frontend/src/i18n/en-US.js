@@ -684,6 +684,8 @@ export default {
     region_name:'Region name',
     iam_strategy:'IAM strategy required',
     invalid_cloud_account:'There is an invalid cloud account in the account you selected. The invalid cloud account is not allowed to be scanned, please select again!',
+    scan_group_quick:'Rule group quick scan',
+    please_choose_rule_group:'Please choose a rule group',
   },
   proxy: {
     create:'Create an agent',

@@ -62,10 +62,9 @@ public class AzureClient {
                             });
                             configurable.withProxyAuthenticator(new JavaNetAuthenticator());
                         }
-                        azureChina = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
-                    } else {
-                        azureChina = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
+
                     }
+                    azureChina = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
                     azureChina.resourceGroups().list();
                     map.put("regionId", "AzureChinaCloud");
                     map.put("regionName", "中国区");
@@ -92,10 +91,8 @@ public class AzureClient {
                             });
                             configurable.withProxyAuthenticator(new JavaNetAuthenticator());
                         }
-                        azureGlobal = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
-                    } else {
-                        azureGlobal = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
                     }
+                    azureGlobal = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
                     azureGlobal.resourceGroups().list();
                     map.put("regionId", "AzureCloud");
                     map.put("regionName", "国际区");
@@ -123,10 +120,8 @@ public class AzureClient {
                             });
                             configurable.withProxyAuthenticator(new JavaNetAuthenticator());
                         }
-                        azureUS = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
-                    } else {
-                        azureUS = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
                     }
+                    azureUS = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
                     azureUS.resourceGroups().list();
                     map.put("regionId", "AzureUSGov");
                     map.put("regionName", "美国区");
@@ -154,10 +149,8 @@ public class AzureClient {
                             });
                             configurable.withProxyAuthenticator(new JavaNetAuthenticator());
                         }
-                        azureGermany = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
-                    } else {
-                        azureGermany = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
                     }
+                    azureGermany = configurable.authenticate(credentials).withSubscription(azureCredential.getSubscription());
                     azureGermany.resourceGroups().list();
                     map.put("regionId", "AzureGermanyCloud");
                     map.put("regionName", "德国区");

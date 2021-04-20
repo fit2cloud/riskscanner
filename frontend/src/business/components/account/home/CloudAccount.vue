@@ -625,6 +625,10 @@
           callback: (action) => {
             if (action === 'confirm') {
               let formData = new FormData();
+              if (this.checkedGroups.length === 0) {
+                this.$warning(this.$t('account.please_choose_rule_group'));
+                return;
+              }
               formData.append('selectIds', new Blob([JSON.stringify(Array.from(this.selectIds))], {
                 type: "application/json"
               }));

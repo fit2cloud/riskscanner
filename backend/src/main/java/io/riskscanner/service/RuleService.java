@@ -474,13 +474,17 @@ public class RuleService {
     }
 
     private void scanGroups(AccountWithBLOBs account, String groupId) {
-        Integer scanId = orderService.insertScanHistory(account);
+        try {
+            Integer scanId = orderService.insertScanHistory(account);
 
-        String messageOrderId = noticeService.createMessageOrder(account);
+            String messageOrderId = noticeService.createMessageOrder(account);
 
-        List<RuleDTO> ruleDTOS = extRuleGroupMapper.getRules(account.getId(), groupId);
-        for (RuleDTO rule : ruleDTOS) {
-            this.dealTask(rule, account, scanId, messageOrderId);
+            List<RuleDTO> ruleDTOS = extRuleGroupMapper.getRules(account.getId(), groupId);
+            for (RuleDTO rule : ruleDTOS) {
+                this.dealTask(rule, account, scanId, messageOrderId);
+            }
+        } catch (Exception e) {
+            LogUtil.error(e.getMessage());
         }
     }
 
@@ -527,7 +531,7 @@ public class RuleService {
                 LogUtil.warn(rule.getName() + ": " + Translator.get("i18n_disabled_rules_not_scanning"));
                 RSException.throwException(rule.getName() + ": " + Translator.get("i18n_disabled_rules_not_scanning"));
             }
-        } catch (java.lang.Exception e) {
+        } catch (Exception e) {
             LogUtil.error(e);
             RSException.throwException(e.getMessage());
         }

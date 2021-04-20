@@ -66,6 +66,7 @@
 <!--        <table tableName="user"/>-->
 <!--        <table tableName="schedule"/>-->
 <!--        <table tableName="plugin"/>-->
+<!--        <table tableName="proxy"/>-->
 <!--        <table tableName="cloud_account" domainObjectName="Account"/>-->
 <!--        <table tableName="operation_log" domainObjectName="OperationLog"/>-->
 <!--        <table tableName="rule" domainObjectName="Rule">-->

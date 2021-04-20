@@ -684,6 +684,8 @@ export default {
     region_name: '區域名稱',
     iam_strategy: '需要的IAM策略',
     invalid_cloud_account: '您選擇的賬號中存在無效雲賬號，無效雲賬號不允許掃描，請重新選擇!',
+    scan_group_quick: '規則組快速掃描',
+    please_choose_rule_group: '請選擇規則組',
   },
   proxy: {
     create: '創建代理',
