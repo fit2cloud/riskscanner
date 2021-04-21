@@ -270,6 +270,8 @@ export default {
   },
   system_parameter_setting: {
     mailbox_service_settings: '邮件设置',
+    wei_service_settings: '企业微信设置',
+    ding_service_settings: '钉钉设置',
     ldap_setting: 'LDAP设置',
     test_connection: '测试连接',
     SMTP_host: 'SMTP主机',
@@ -282,6 +284,11 @@ export default {
     host: '主机号不能为空',
     port: '端口号不能为空',
     account: '账户不能为空',
+    test_user: '测试用户',
+    basic_wechat: '企业微信的基本概念',
+    message_limit_wechat: '企业微信消息频率限制',
+    basic_dingding: '钉钉的基本概念',
+    message_limit_dingding: '钉钉消息频率限制',
     message: {
       setting: '消息通知',
       title: '标题',

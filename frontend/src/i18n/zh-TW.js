@@ -282,6 +282,11 @@ export default {
     host: '主機號不能為空',
     port: '端口號不能為空',
     account: '賬戶不能為空',
+    test_user: '測試用戶',
+    basic_wechat: '企業微信的基本概念',
+    message_limit_wechat: '企業微信消息頻率限制',
+    basic_dingding: '釘釘的基本概念',
+    message_limit_dingding: '釘釘消息頻率限制',
     message: {
       setting: '消息通知',
       title: '標題',

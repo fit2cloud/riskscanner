@@ -282,6 +282,11 @@ export default {
     host:'The host number cannot be empty',
     port:'The port number cannot be empty',
     account:'Account cannot be empty',
+    test_user: "Test User",
+    basic_wechat:'Basic concepts of enterprise Wechat',
+    message_limit_wechat:'Enterprise WeChat message frequency limit',
+    basic_dingding:'Basic concept of Dingding',
+    message_limit_dingding:'Dingding message frequency limit',
     message: {
       setting:'Message notification',
       title:'Title',

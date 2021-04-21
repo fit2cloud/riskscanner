@@ -29,6 +29,8 @@ public interface ParamConstants {
 
     enum Classify implements ParamConstants {
         MAIL("smtp"),
+        WECHAT("wechat"),
+        DINGDING("dingding"),
         LDAP("ldap"),
         MESSAGE("message"),
         REGISTRY("registry");
@@ -102,6 +104,52 @@ public interface ParamConstants {
         private Integer value;
 
         private MAIL(String key, Integer value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public String getKey() {
+            return this.key;
+        }
+
+        public Integer getValue() {
+            return this.value;
+        }
+    }
+
+    enum WECHAT {
+        CROPID("wechat.cropId", 1),
+        AGENTID("wechat.agentId", 2),
+        SECRET("wechat.secret", 3),
+        TESTUSER("wechat.testUser", 4);
+
+        private String key;
+        private Integer value;
+
+        private WECHAT(String key, Integer value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public String getKey() {
+            return this.key;
+        }
+
+        public Integer getValue() {
+            return this.value;
+        }
+    }
+
+    enum DINGDING {
+        APPKEY("dingding.appKey", 1),
+        AGENTID("dingding.agentId", 2),
+        APPSECRET("dingding.appSecret", 3),
+        TESTUSER("dingding.testUser", 4);
+
+        private String key;
+        private Integer value;
+
+        private DINGDING(String key, Integer value) {
             this.key = key;
             this.value = value;
         }

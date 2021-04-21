@@ -171,8 +171,8 @@ export default {
       ],
       receiveTypeOptions: [
         {value: 'EMAIL', label: this.$t('system_parameter_setting.message.mail')},
-        // {value: 'NAIL_ROBOT', label: this.$t('system_parameter_setting.message.nail_robot')},
-        // {value: 'WECHAT_ROBOT', label: this.$t('system_parameter_setting.message.enterprise_wechat_robot')}
+        {value: 'NAIL_ROBOT', label: this.$t('system_parameter_setting.message.nail_robot')},
+        {value: 'WECHAT_ROBOT', label: this.$t('system_parameter_setting.message.enterprise_wechat_robot')}
       ],
     }
   },

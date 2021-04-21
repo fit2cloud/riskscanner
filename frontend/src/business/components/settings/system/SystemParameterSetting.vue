@@ -4,21 +4,26 @@
       <el-tab-pane :label="$t('system_parameter_setting.mailbox_service_settings')" name="email">
         <email-setting/>
       </el-tab-pane>
-<!--      <el-tab-pane :label="$t('system_parameter_setting.ldap_setting')" name="ldap">-->
-<!--        <ldap-setting/>-->
-<!--      </el-tab-pane>-->
+      <el-tab-pane :label="$t('system_parameter_setting.wei_service_settings')" name="wei">
+        <wechat-setting/>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('system_parameter_setting.ding_service_settings')" name="ding">
+        <ding-setting/>
+      </el-tab-pane>
     </el-tabs>
   </el-card>
 </template>
 
 <script>
 import EmailSetting from "./EmailSetting";
+import WechatSetting from "./WechatSetting";
+import DingSetting from "./DingSetting";
 import LdapSetting from "./LdapSetting";
 /* eslint-disable */
 export default {
   name: "SystemParameterSetting",
   components: {
-    EmailSetting, LdapSetting
+    EmailSetting, WechatSetting, DingSetting, LdapSetting
   },
   data() {
     return {

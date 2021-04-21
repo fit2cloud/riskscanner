@@ -19,61 +19,101 @@ import java.util.Map;
 @RequestMapping(value = "/system")
 public class SystemParameterController {
     @Resource
-    private SystemParameterService SystemParameterService;
+    private SystemParameterService systemParameterService;
 
     @ApiOperation(value = "编辑邮箱设置")
     @PostMapping("/edit/email")
     @RequiresRoles(value = {RoleConstants.ADMIN})
     public void editMail(@RequestBody List<SystemParameter> systemParameter) {
-        SystemParameterService.editMail(systemParameter);
+        systemParameterService.editMail(systemParameter);
+    }
+
+    @ApiOperation(value = "编辑企业微信设置")
+    @PostMapping("/edit/wechat")
+    @RequiresRoles(value = {RoleConstants.ADMIN})
+    public void editWechat(@RequestBody List<SystemParameter> systemParameter) {
+        systemParameterService.editWechat(systemParameter);
+    }
+
+    @ApiOperation(value = "编辑钉钉设置")
+    @PostMapping("/edit/dingding")
+    @RequiresRoles(value = {RoleConstants.ADMIN})
+    public void editDingding(@RequestBody List<SystemParameter> systemParameter) {
+        systemParameterService.editDingding(systemParameter);
     }
 
     @ApiOperation(value = "测试连接")
-    @PostMapping("/testConnection")
+    @PostMapping("/testConnection/{type}")
     @RequiresRoles(value = {RoleConstants.ADMIN})
-    public void testConnection(@RequestBody Map<String, String> hashMap) {
-        SystemParameterService.testConnection(hashMap);
+    public void testConnection(@PathVariable String type, @RequestBody Map<String, String> hashMap) throws Exception {
+        switch (type) {
+            case "email":
+                systemParameterService.testEmailConnection(hashMap);
+                break;
+            case "wechat":
+                systemParameterService.testWechatConnection(hashMap);
+                break;
+            case "dingding":
+                systemParameterService.testDingtalkConnection(hashMap);
+                break;
+            default:
+                break;
+        }
     }
 
     @ApiOperation(value = "版本信息")
     @GetMapping("/version")
     public String getVersion() {
-        return SystemParameterService.getVersion();
+        return systemParameterService.getVersion();
     }
 
     @ApiOperation(value = "邮件设置")
     @GetMapping("/mail/info")
     @RequiresRoles(value = {RoleConstants.ADMIN})
     public List<SystemParameter> mailInfo() {
-        return SystemParameterService.info(ParamConstants.Classify.MAIL.getValue());
+        return systemParameterService.info(ParamConstants.Classify.MAIL.getValue());
+    }
+
+    @ApiOperation(value = "企业微信设置")
+    @GetMapping("/wechat/info")
+    @RequiresRoles(value = {RoleConstants.ADMIN})
+    public List<SystemParameter> wechatInfo() {
+        return systemParameterService.wechatInfo(ParamConstants.Classify.WECHAT.getValue());
+    }
+
+    @ApiOperation(value = "钉钉设置")
+    @GetMapping("/dingding/info")
+    @RequiresRoles(value = {RoleConstants.ADMIN})
+    public List<SystemParameter> dingdingInfo() {
+        return systemParameterService.dingdingInfo(ParamConstants.Classify.DINGDING.getValue());
     }
 
     @ApiOperation(value = "保存LADP设置")
     @PostMapping("/save/ldap")
     @RequiresRoles(value = {RoleConstants.ADMIN})
     public void saveLdap(@RequestBody List<SystemParameter> systemParameter) throws Exception {
-        SystemParameterService.saveLdap(systemParameter);
+        systemParameterService.saveLdap(systemParameter);
     }
 
     @ApiOperation(value = "LDAP设置")
     @GetMapping("/ldap/info")
     @RequiresRoles(value = {RoleConstants.ADMIN})
     public LdapInfo getLdapInfo() {
-        return SystemParameterService.getLdapInfo(ParamConstants.Classify.LDAP.getValue());
+        return systemParameterService.getLdapInfo(ParamConstants.Classify.LDAP.getValue());
     }
 
     @ApiOperation(value = "消息通知")
     @GetMapping("/message/info")
     @RequiresRoles(value = {RoleConstants.ADMIN})
     public List<SystemParameter> messageInfo() {
-        return SystemParameterService.info(ParamConstants.Classify.MESSAGE.getValue());
+        return systemParameterService.info(ParamConstants.Classify.MESSAGE.getValue());
     }
 
     @ApiOperation(value = "编辑消息通知")
     @PostMapping("/edit/message")
     @RequiresRoles(value = {RoleConstants.ADMIN})
     public void editMessage(@RequestBody List<SystemParameter> systemParameter) {
-        SystemParameterService.editMessage(systemParameter);
+        systemParameterService.editMessage(systemParameter);
     }
 
 }
