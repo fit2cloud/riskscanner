@@ -693,6 +693,8 @@ export default {
     invalid_cloud_account: '您选择的账号中存在无效云账号，无效云账号不允许扫描，请重新选择!',
     scan_group_quick: '规则组快速扫描',
     please_choose_rule_group: '请选择规则组',
+    add_cloud_account: '新增云账号',
+    delete_this_cloud_account: '删除此云账号',
   },
   proxy: {
     create: '创建代理',

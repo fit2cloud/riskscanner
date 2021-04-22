@@ -270,6 +270,8 @@ export default {
   },
   system_parameter_setting: {
     mailbox_service_settings:'Mail Settings',
+    wei_service_settings:'Enterprise WeChat Settings',
+    ding_service_settings:'Ding Ding Settings',
     ldap_setting:'LDAP settings',
     test_connection:'Test connection',
     SMTP_host:'SMTP host',
@@ -691,6 +693,8 @@ export default {
     invalid_cloud_account:'There is an invalid cloud account in the account you selected. The invalid cloud account is not allowed to be scanned, please select again!',
     scan_group_quick:'Rule group quick scan',
     please_choose_rule_group:'Please choose a rule group',
+    add_cloud_account:'Add a cloud account',
+    delete_this_cloud_account:'Delete this cloud account',
   },
   proxy: {
     create:'Create an agent',

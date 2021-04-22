@@ -270,6 +270,8 @@ export default {
   },
   system_parameter_setting: {
     mailbox_service_settings: '郵件設置',
+    wei_service_settings: '企業微信設置',
+    ding_service_settings: '釘釘設置',
     ldap_setting: 'LDAP設置',
     test_connection: '測試連接',
     SMTP_host: 'SMTP主機',
@@ -691,6 +693,8 @@ export default {
     invalid_cloud_account: '您選擇的賬號中存在無效雲賬號，無效雲賬號不允許掃描，請重新選擇!',
     scan_group_quick: '規則組快速掃描',
     please_choose_rule_group: '請選擇規則組',
+    add_cloud_account: '新增雲賬號',
+    delete_this_cloud_account: '刪除此云賬號',
   },
   proxy: {
     create: '創建代理',
