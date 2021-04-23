@@ -45,7 +45,7 @@ public class NoticeCreateService {
     @Resource
     private ExtTaskMapper extTaskMapper;
 
-    @QuartzScheduled(cron = "${cron.expression.local}")
+    @QuartzScheduled(cron = "${cron.expression.notice}")
     public void handleTasks() {
 
         final MessageOrderExample messageOrderExample = new MessageOrderExample();
@@ -122,8 +122,11 @@ public class NoticeCreateService {
 
         } catch (Exception e) {
             messageOrder.setStatus(NoticeConstants.MessageOrderStatus.ERROR);
+            messageOrder.setSendTime(System.currentTimeMillis());
+            sendTask(messageOrder);
             messageOrderMapper.updateByPrimaryKeySelective(messageOrder);
             LogUtil.error("handleTask, taskId: " + messageOrderId, e);
+
         }
     }
 

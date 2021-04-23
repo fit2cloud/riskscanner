@@ -156,6 +156,11 @@ export default {
         '  </div>\n' +
         '</body>\n' +
         '</html>',
+      textContent:  '尊敬的用户, 您好, 您的安全合规扫描结果如下:\n' +
+                    '\n' +
+                    '不合规资源总数/资源总数 : #{returnSum}/#{resourcesSum}\n' +
+                    '\n' +
+                    '注：更多详情请登录 RiskScanner 平台查看。\n',
       resourceTask: [{
         taskType: "RESOURCE_TASK",
         event: "",
@@ -197,6 +202,7 @@ export default {
       Task.userIds = [];
       Task.type = '';
       Task.template = this.content;
+      Task.textTemplate = this.textContent;
       Task.isSet = true;
       Task.identification = '';
       Task.taskType = "RESOURCE_TASK";

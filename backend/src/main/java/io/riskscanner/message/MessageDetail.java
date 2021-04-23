@@ -1,11 +1,11 @@
 package io.riskscanner.message;
 
-import io.riskscanner.base.domain.MessageTask;
+import io.riskscanner.base.domain.MessageTaskWithBLOBs;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageDetail extends MessageTask {
+public class MessageDetail extends MessageTaskWithBLOBs {
 
     private List<String> userIds = new ArrayList<>();
 

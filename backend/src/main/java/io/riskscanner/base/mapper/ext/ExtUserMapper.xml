@@ -2,22 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="io.riskscanner.base.mapper.ext.ExtUserMapper">
 
-    <resultMap id="BaseResultMap" type="io.riskscanner.base.domain.User">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="email" jdbcType="VARCHAR" property="email"/>
-        <result column="password" jdbcType="VARCHAR" property="password"/>
-        <result column="status" jdbcType="VARCHAR" property="status"/>
-        <result column="create_time" jdbcType="BIGINT" property="createTime"/>
-        <result column="update_time" jdbcType="BIGINT" property="updateTime"/>
-        <result column="language" jdbcType="VARCHAR" property="language"/>
-        <result column="last_account_id" jdbcType="VARCHAR" property="lastAccountId"/>
-        <result column="phone" jdbcType="VARCHAR" property="phone"/>
-    </resultMap>
-
-    <select id="getUserList" resultMap="BaseResultMap">
+    <select id="getUserList" resultMap="io.riskscanner.base.mapper.UserMapper.BaseResultMap">
         select u.id, u.name, u.email, u.phone, u.language, u.status, u.source,
-        u.last_account_id, u.language, u.create_time, u.update_time
+        u.last_account_id, u.language, u.create_time, u.update_time, u.wechat_account
         from `user` u
         <where>
             <if test="userRequest.id != null">
@@ -52,7 +39,7 @@
 
     <select id="queryTypeByIds" parameterType="java.lang.String" resultType="io.riskscanner.base.domain.UserDetail">
         SELECT
-        email,phone
+        email,phone,wechat_account as wechatAccount
         from user
         WHERE id IN
         <foreach collection="list" item="id" index="index"

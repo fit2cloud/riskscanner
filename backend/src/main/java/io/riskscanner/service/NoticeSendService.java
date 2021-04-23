@@ -1,10 +1,7 @@
 package io.riskscanner.service;
 
 import io.riskscanner.commons.constants.NoticeConstants;
-import io.riskscanner.message.MailNoticeSender;
-import io.riskscanner.message.MessageDetail;
-import io.riskscanner.message.NoticeModel;
-import io.riskscanner.message.NoticeSender;
+import io.riskscanner.message.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +13,10 @@ public class NoticeSendService {
     @Resource
     private MailNoticeSender mailNoticeSender;
     @Resource
+    private WeComNoticeSender weComNoticeSender;
+    @Resource
+    private DingNoticeSender dingNoticeSender;
+    @Resource
     private NoticeService noticeService;
 
     private NoticeSender getNoticeSender(MessageDetail messageDetail) {
@@ -23,6 +24,12 @@ public class NoticeSendService {
         switch (messageDetail.getType()) {
             case NoticeConstants.Type.EMAIL:
                 noticeSender = mailNoticeSender;
+                break;
+            case NoticeConstants.Type.WECHAT_ROBOT:
+                noticeSender = weComNoticeSender;
+                break;
+            case NoticeConstants.Type.NAIL_ROBOT:
+                noticeSender = dingNoticeSender;
                 break;
             default:
                 break;

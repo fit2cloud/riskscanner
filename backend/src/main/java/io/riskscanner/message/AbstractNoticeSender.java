@@ -30,8 +30,8 @@ public abstract class AbstractNoticeSender implements NoticeSender {
 
     protected String getContext(MessageDetail messageDetail, NoticeModel noticeModel) {
         // 如果配置了模版就直接使用模版
-        if (StringUtils.isNotBlank(messageDetail.getTemplate())) {
-            return getContent(messageDetail.getTemplate(), noticeModel.getParamMap());
+        if (StringUtils.isNotBlank(messageDetail.getTextTemplate())) {
+            return getContent(messageDetail.getTextTemplate(), noticeModel.getParamMap());
         }
         // 处理 userIds 中包含的特殊值
         List<String> realUserIds = getRealUserIds(messageDetail.getUserIds(), noticeModel.getRelatedUsers(), messageDetail.getEvent());
@@ -112,6 +112,14 @@ public abstract class AbstractNoticeSender implements NoticeSender {
         List<UserDetail> list = userService.queryTypeByIds(userIds);
         List<String> phoneList = new ArrayList<>();
         list.forEach(u -> phoneList.add(u.getPhone()));
+        LogUtil.info("收件人地址: " + phoneList);
+        return phoneList.stream().distinct().collect(Collectors.toList());
+    }
+
+    protected List<String> getUserWechats(List<String> userIds) {
+        List<UserDetail> list = userService.queryTypeByIds(userIds);
+        List<String> phoneList = new ArrayList<>();
+        list.forEach(u -> phoneList.add(u.getWechatAccount()));
         LogUtil.info("收件人地址: " + phoneList);
         return phoneList.stream().distinct().collect(Collectors.toList());
     }

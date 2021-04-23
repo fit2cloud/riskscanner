@@ -61,8 +61,11 @@
         <el-form-item :label="$t('commons.email')" prop="email">
           <el-input v-model="form.email" autocomplete="off" :placeholder="$t('user.input_email')"/>
         </el-form-item>
-        <el-form-item :label="$t('commons.phone')" prop="phone">
+        <el-form-item :label="$t('commons.phone') + '/' + $t('system_parameter_setting.dingding_account')" prop="phone">
           <el-input v-model="form.phone" autocomplete="off" :placeholder="$t('user.input_phone')"/>
+        </el-form-item>
+        <el-form-item :label="$t('system_parameter_setting.wechat_account')" prop="wechatAccount">
+          <el-input v-model="form.wechatAccount" autocomplete="off" :placeholder="$t('user.input_wechat_account')"/>
         </el-form-item>
         <el-form-item :label="$t('commons.password')" prop="password" style="margin-bottom: 29px">
           <el-input v-model="form.password" autocomplete="new-password" show-password
@@ -103,8 +106,11 @@
         <el-form-item :label="$t('commons.email')" prop="email" ref="emailForm">
           <el-input v-model="form.email" autocomplete="off" :disabled="form.source === 'LDAP'"/>
         </el-form-item>
-        <el-form-item :label="$t('commons.phone')" prop="phone" ref="phoneForm">
+        <el-form-item :label="$t('commons.phone') + '/' + $t('system_parameter_setting.dingding_account')" prop="phone" ref="phoneForm">
           <el-input v-model="form.phone" autocomplete="off"/>
+        </el-form-item>
+        <el-form-item :label="$t('system_parameter_setting.wechat_account')" prop="wechatAccount">
+          <el-input v-model="form.wechatAccount" autocomplete="off" :placeholder="$t('user.input_wechat_account')"/>
         </el-form-item>
         <div v-for="(role, index) in form.roles" :key="index">
           <el-form-item :label="$t('commons.role')"

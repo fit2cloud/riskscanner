@@ -196,7 +196,7 @@ public class SystemParameterService {
         }
         Map<String, Object> paramsStr = new HashMap<>();
         Map<String, String> contentStr = new HashMap<>();
-        contentStr.put("content", "本消息由RiskScanner发送，仅为测试。");
+        contentStr.put("content", "本消息由 RiskScanner 发送，仅为测试。");
         paramsStr.put("msgtype", "text");
         paramsStr.put("agentid", l);
         paramsStr.put("text", contentStr);
@@ -245,7 +245,7 @@ public class SystemParameterService {
         OapiMessageCorpconversationAsyncsendV2Request.Msg msg = new OapiMessageCorpconversationAsyncsendV2Request.Msg();
         msg.setMsgtype("text");
         msg.setText(new OapiMessageCorpconversationAsyncsendV2Request.Text());
-        msg.getText().setContent("本消息由RiskScanner发送，仅为测试。");
+        msg.getText().setContent("本消息由 RiskScanner 发送，仅为测试。");
         request2.setMsg(msg);
         OapiMessageCorpconversationAsyncsendV2Response execute1 = client2.execute(request2, token);
         if (execute1.getErrcode() != 0) {

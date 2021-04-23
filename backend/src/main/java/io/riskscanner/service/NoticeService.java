@@ -31,7 +31,7 @@ public class NoticeService {
     public void saveMessageTask(MessageDetail messageDetail) {
         MessageTaskExample example = new MessageTaskExample();
         example.createCriteria().andIdentificationEqualTo(messageDetail.getIdentification());
-        List<MessageTask> messageTaskLists = messageTaskMapper.selectByExample(example);
+        List<MessageTaskWithBLOBs> messageTaskLists = messageTaskMapper.selectByExampleWithBLOBs(example);
         if (!messageTaskLists.isEmpty()) {
             delMessage(messageDetail.getIdentification());
         }
@@ -42,7 +42,7 @@ public class NoticeService {
         }
         for (String userId : messageDetail.getUserIds()) {
             checkUserIdExist(userId, messageDetail);
-            MessageTask messageTask = new MessageTask();
+            MessageTaskWithBLOBs messageTask = new MessageTaskWithBLOBs();
             messageTask.setEvent(messageDetail.getEvent());
             messageTask.setTaskType(messageDetail.getTaskType());
             messageTask.setUserId(userId);
@@ -55,9 +55,12 @@ public class NoticeService {
         }
     }
 
-    private void setTemplate(MessageDetail messageDetail, MessageTask messageTask) {
+    private void setTemplate(MessageDetail messageDetail, MessageTaskWithBLOBs messageTask) {
         if (StringUtils.isNotBlank(messageDetail.getTemplate())) {
             messageTask.setTemplate(messageDetail.getTemplate());
+        }
+        if (StringUtils.isNotBlank(messageDetail.getTextTemplate())) {
+            messageTask.setTextTemplate(messageDetail.getTextTemplate());
         }
     }
 
@@ -75,9 +78,9 @@ public class NoticeService {
 
     public List<MessageDetail> searchMessageByResourceId() {
         MessageTaskExample example = new MessageTaskExample();
-        List<MessageTask> messageTaskLists = messageTaskMapper.selectByExampleWithBLOBs(example);
+        List<MessageTaskWithBLOBs> messageTaskLists = messageTaskMapper.selectByExampleWithBLOBs(example);
         List<MessageDetail> scheduleMessageTask = new ArrayList<>();
-        Map<String, List<MessageTask>> MessageTaskMap = messageTaskLists.stream().collect(Collectors.groupingBy(MessageTask::getIdentification));
+        Map<String, List<MessageTaskWithBLOBs>> MessageTaskMap = messageTaskLists.stream().collect(Collectors.groupingBy(MessageTask::getIdentification));
         MessageTaskMap.forEach((k, v) -> {
             MessageDetail messageDetail = getMessageDetail(v);
             scheduleMessageTask.add(messageDetail);
@@ -91,9 +94,9 @@ public class NoticeService {
 
         MessageTaskExample example = new MessageTaskExample();
         example.createCriteria().andTaskTypeEqualTo(type);
-        List<MessageTask> messageTaskLists = messageTaskMapper.selectByExampleWithBLOBs(example);
+        List<MessageTaskWithBLOBs> messageTaskLists = messageTaskMapper.selectByExampleWithBLOBs(example);
 
-        Map<String, List<MessageTask>> messageTaskMap = messageTaskLists.stream()
+        Map<String, List<MessageTaskWithBLOBs>> messageTaskMap = messageTaskLists.stream()
                 .collect(Collectors.groupingBy(NoticeService::fetchGroupKey));
         messageTaskMap.forEach((k, v) -> {
             MessageDetail messageDetail = getMessageDetail(v);
@@ -108,11 +111,11 @@ public class NoticeService {
                 .collect(Collectors.toList());
     }
 
-    private MessageDetail getMessageDetail(List<MessageTask> messageTasks) {
+    private MessageDetail getMessageDetail(List<MessageTaskWithBLOBs> messageTasks) {
         Set<String> userIds = new HashSet<>();
 
         MessageDetail messageDetail = new MessageDetail();
-        for (MessageTask m : messageTasks) {
+        for (MessageTaskWithBLOBs m : messageTasks) {
             userIds.add(m.getUserId());
             messageDetail.setEvent(m.getEvent());
             messageDetail.setTaskType(m.getTaskType());
@@ -121,6 +124,7 @@ public class NoticeService {
             messageDetail.setIsSet(m.getIsSet());
             messageDetail.setCreateTime(m.getCreateTime());
             messageDetail.setTemplate(m.getTemplate());
+            messageDetail.setTextTemplate(m.getTextTemplate());
         }
         if (CollectionUtils.isNotEmpty(userIds)) {
             messageDetail.setUserIds(new ArrayList<>(userIds));
