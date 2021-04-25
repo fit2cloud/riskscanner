@@ -1,2 +1,2 @@
 
-ALTER TABLE user ADD wechat_account varchar(64) NOT NULL;
+ALTER TABLE user ADD wechat_account varchar(64) DEFAULT NULL;
