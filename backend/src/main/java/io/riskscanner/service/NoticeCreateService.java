@@ -118,7 +118,9 @@ public class NoticeCreateService {
             messageOrder.setSendTime(System.currentTimeMillis());
             messageOrderMapper.updateByPrimaryKeySelective(messageOrder);
 
+            LogUtil.debug("开始发送通知消息！" + messageOrder.getAccountName());
             sendTask(messageOrder);
+            LogUtil.debug("结束发送通知消息！" + messageOrder.getAccountName());
 
         } catch (Exception e) {
             messageOrder.setStatus(NoticeConstants.MessageOrderStatus.ERROR);

@@ -110,6 +110,9 @@ public class PlatformUtils {
                     proxy = "export https_proxy=http://" + proxyIp + ":" + proxyPort + ";" + "\n";
                 }
             }
+        } else {
+            proxy = "unset http_proxy;" + "\n" +
+                    "unset https_proxy;" + "\n";
         }
 
         switch (type) {
