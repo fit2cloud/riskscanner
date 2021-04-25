@@ -24,6 +24,7 @@ import com.tencentcloudapi.cvm.v20170312.models.RegionInfo;
 import io.riskscanner.base.domain.AccountWithBLOBs;
 import io.riskscanner.base.domain.Proxy;
 import io.riskscanner.base.rs.*;
+import io.riskscanner.commons.constants.CloudAccountConstants;
 import io.riskscanner.commons.constants.CommandEnum;
 import io.riskscanner.commons.constants.RegionsConstants;
 import io.riskscanner.commons.exception.PluginException;
@@ -87,119 +88,85 @@ public class PlatformUtils {
     public final static String fixedCommand(String custodian, String behavior, String dirPath, String fileName, Map<String, String> params) {
         String type = params.get("type");
         String region = params.get("region");
+        String proxyType = params.get("proxyType");
         String proxyIp = params.get("proxyIp");
         String proxyPort = params.get("proxyPort");
         String proxyName = params.get("proxyName");
         String proxyPassword = params.get("proxyPassword");
         String pre = "";
         String _pok = " ";
+        String proxy = "";
+        if (StringUtils.isNotEmpty(proxyType)) {
+            if (StringUtils.equalsIgnoreCase(proxyType, CloudAccountConstants.ProxyType.Http.toString())) {
+                if (StringUtils.isNotEmpty(proxyName)) {
+                    proxy = "export http_proxy=http://" + proxyIp + ":" + proxyPassword + "@" + proxyIp + ":" + proxyPort + ";" + "\n";
+                } else {
+                    proxy = "export http_proxy=http://" + proxyIp + ":" + proxyPort + ";" + "\n";
+                }
+            } else if (StringUtils.equalsIgnoreCase(proxyType, CloudAccountConstants.ProxyType.Https.toString())) {
+                if (StringUtils.isNotEmpty(proxyName)) {
+                    proxy = "export https_proxy=http://" + proxyIp + ":" + proxyPassword + "@" + proxyIp + ":" + proxyPort + ";" + "\n";
+                } else {
+                    proxy = "export https_proxy=http://" + proxyIp + ":" + proxyPort + ";" + "\n";
+                }
+            }
+        }
+
         switch (type) {
             case aws:
                 String awsAccessKey = params.get("accessKey");
                 String awsSecretKey = params.get("secretKey");
-                if (StringUtils.isNotEmpty(proxyIp)) {
-                    pre = "AWS_ACCESS_KEY_ID=" + awsAccessKey + " " +
-                            "AWS_SECRET_ACCESS_KEY=" + awsSecretKey + " " +
-                            "AWS_DEFAULT_REGION=" + region + " " +
-                            "PROXY_IP=" + proxyIp + " " +
-                            "PROXY_PORT=" + proxyPort + " " +
-                            "PROXY_NAME=" + proxyName + " " +
-                            "PROXY_PASSWORD=" + proxyPassword + " ";
-                } else {
-                    pre = "AWS_ACCESS_KEY_ID=" + awsAccessKey + " " +
-                            "AWS_SECRET_ACCESS_KEY=" + awsSecretKey + " " +
-                            "AWS_DEFAULT_REGION=" + region + " ";
-                }
+                pre = "AWS_ACCESS_KEY_ID=" + awsAccessKey + " " +
+                        "AWS_SECRET_ACCESS_KEY=" + awsSecretKey + " " +
+                        "AWS_DEFAULT_REGION=" + region + " ";
                 break;
             case azure:
                 String tenant = params.get("tenant");
                 String subscriptionId = params.get("subscription");
                 String client = params.get("client");
                 String key = params.get("key");
-                if (StringUtils.isNotEmpty(proxyIp)) {
-                    pre = "AZURE_TENANT_ID=" + tenant + " " +
-                            "AZURE_SUBSCRIPTION_ID=" + subscriptionId + " " +
-                            "AZURE_CLIENT_ID=" + client + " " +
-                            "AZURE_CLIENT_SECRET=" + key + " " +
-                            "PROXY_IP=" + proxyIp + " " +
-                            "PROXY_PORT=" + proxyPort + " " +
-                            "PROXY_NAME=" + proxyName + " " +
-                            "PROXY_PASSWORD=" + proxyPassword + " ";
-                } else {
-                    pre = "AZURE_TENANT_ID=" + tenant + " " +
-                            "AZURE_SUBSCRIPTION_ID=" + subscriptionId + " " +
-                            "AZURE_CLIENT_ID=" + client + " " +
-                            "AZURE_CLIENT_SECRET=" + key + " ";
-                }
+                pre = "AZURE_TENANT_ID=" + tenant + " " +
+                        "AZURE_SUBSCRIPTION_ID=" + subscriptionId + " " +
+                        "AZURE_CLIENT_ID=" + client + " " +
+                        "AZURE_CLIENT_SECRET=" + key + " ";
                 _pok = " --region=" + region + " ";
                 break;
             case aliyun:
                 String aliAccessKey = params.get("accessKey");
                 String aliSecretKey = params.get("secretKey");
-                if (StringUtils.isNotEmpty(proxyIp)) {
-                    pre = "ALIYUN_ACCESSKEYID=" + aliAccessKey + " " +
-                            "ALIYUN_ACCESSSECRET=" + aliSecretKey + " " +
-                            "ALIYUN_DEFAULT_REGION=" + region + " " +
-                            "PROXY_IP=" + proxyIp + " " +
-                            "PROXY_PORT=" + proxyPort + " " +
-                            "PROXY_NAME=" + proxyName + " " +
-                            "PROXY_PASSWORD=" + proxyPassword + " ";
-                } else {
-                    pre = "ALIYUN_ACCESSKEYID=" + aliAccessKey + " " +
-                            "ALIYUN_ACCESSSECRET=" + aliSecretKey + " " +
-                            "ALIYUN_DEFAULT_REGION=" + region + " ";
-                }
+                pre = "ALIYUN_ACCESSKEYID=" + aliAccessKey + " " +
+                        "ALIYUN_ACCESSSECRET=" + aliSecretKey + " " +
+                        "ALIYUN_DEFAULT_REGION=" + region + " ";
                 break;
             case huawei:
                 String huaweiAccessKey = params.get("ak");
                 String huaweiSecretKey = params.get("sk");
                 String projectId = params.get("projectId");
-                if (StringUtils.isNotEmpty(proxyIp)) {
-                    pre = "HUAWEI_AK=" + huaweiAccessKey + " " +
-                            "HUAWEI_SK=" + huaweiSecretKey + " " +
-                            "HUAWEI_PROJECT=" + projectId + " " +
-                            "HUAWEI_DEFAULT_REGION=" + region + " " +
-                            "PROXY_IP=" + proxyIp + " " +
-                            "PROXY_PORT=" + proxyPort + " " +
-                            "PROXY_NAME=" + proxyName + " " +
-                            "PROXY_PASSWORD=" + proxyPassword + " ";
-                } else {
-                    pre = "HUAWEI_AK=" + huaweiAccessKey + " " +
-                            "HUAWEI_SK=" + huaweiSecretKey + " " +
-                            "HUAWEI_PROJECT=" + projectId + " " +
-                            "HUAWEI_DEFAULT_REGION=" + region + " ";
-                }
+                pre = "HUAWEI_AK=" + huaweiAccessKey + " " +
+                        "HUAWEI_SK=" + huaweiSecretKey + " " +
+                        "HUAWEI_PROJECT=" + projectId + " " +
+                        "HUAWEI_DEFAULT_REGION=" + region + " ";
                 break;
             case tencent:
                 String qSecretId = params.get("secretId");
                 String qSecretKey = params.get("secretKey");
-                if (StringUtils.isNotEmpty(proxyIp)) {
-                    pre = "TENCENT_SECRETID=" + qSecretId + " " +
-                            "TENCENT_SECRETKEY=" + qSecretKey + " " +
-                            "TENCENT_DEFAULT_REGION=" + region + " " +
-                            "PROXY_IP=" + proxyIp + " " +
-                            "PROXY_PORT=" + proxyPort + " " +
-                            "PROXY_NAME=" + proxyName + " " +
-                            "PROXY_PASSWORD=" + proxyPassword + " ";
-                } else {
-                    pre = "TENCENT_SECRETID=" + qSecretId + " " +
-                            "TENCENT_SECRETKEY=" + qSecretKey + " " +
-                            "TENCENT_DEFAULT_REGION=" + region + " ";
-                }
+                pre = "TENCENT_SECRETID=" + qSecretId + " " +
+                        "TENCENT_SECRETKEY=" + qSecretKey + " " +
+                        "TENCENT_DEFAULT_REGION=" + region + " ";
                 break;
         }
         switch (behavior) {
             case "run":
-                return pre +
+                return proxy + pre +
                         custodian + " " + behavior + " -s " + dirPath + _pok + dirPath + "/" + fileName;
             case "validate":
-                return pre +
+                return proxy + pre +
                         custodian + " " + behavior + " " + dirPath + "/" + fileName;
             case "--dryrun":
-                return pre +
+                return proxy + pre +
                         custodian + " " + CommandEnum.run.getCommand() + " " + behavior + " -s " + dirPath + " -c " + dirPath + "/" + fileName;
             case "report":
-                return pre +
+                return proxy + pre +
                         custodian + " " + behavior + " -s " + dirPath + "/" + fileName;
             default:
                 throw new IllegalStateException("Unexpected value: " + behavior);
@@ -259,6 +226,7 @@ public class PlatformUtils {
             default:
                 throw new IllegalStateException("Unexpected value: " + account.getPluginId());
         }
+        map.put("proxyType", proxy != null?proxy.getProxyType():"");
         map.put("proxyIp", proxy != null?proxy.getProxyIp():"");
         map.put("proxyPort", proxy != null?proxy.getProxyPort():"");
         map.put("proxyName", proxy != null?proxy.getProxyName():"");

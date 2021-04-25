@@ -132,6 +132,17 @@
             :before-close="innerDrawerProxyClose"
             :visible.sync="innerDrawerProxy">
             <el-form :model="proxyForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="createProxyForm">
+              <el-form-item :label="$t('commons.proxy_type')" :rules="{required: true, message: $t('commons.proxy_type') + $t('commons.cannot_be_empty'), trigger: 'change'}">
+                <el-select style="width: 100%;" v-model="proxyForm.proxyType" :placeholder="$t('commons.proxy_type')">
+                  <el-option
+                    v-for="item in proxyType"
+                    :key="item.id"
+                    :label="item.value"
+                    :value="item.id">
+                    &nbsp;&nbsp; {{ item.value }}
+                  </el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item label="Proxy IP" prop="proxyIp">
                 <el-input v-model="proxyForm.proxyIp" autocomplete="off" :placeholder="$t('proxy.proxy_ip')"/>
               </el-form-item>
@@ -222,6 +233,17 @@
                 :before-close="innerDrawerProxyClose"
                 :visible.sync="innerDrawerProxy">
                 <el-form :model="proxyForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="updateProxyForm">
+                  <el-form-item :label="$t('commons.proxy_type')" :rules="{required: true, message: $t('commons.proxy_type') + $t('commons.cannot_be_empty'), trigger: 'change'}">
+                    <el-select style="width: 100%;" v-model="proxyForm.proxyType" :placeholder="$t('commons.proxy_type')">
+                      <el-option
+                        v-for="item in proxyType"
+                        :key="item.id"
+                        :label="item.value"
+                        :value="item.id">
+                        &nbsp;&nbsp; {{ item.value }}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
                   <el-form-item label="Proxy IP" prop="proxyIp">
                     <el-input v-model="proxyForm.proxyIp" autocomplete="off" :placeholder="$t('proxy.proxy_ip')"/>
                   </el-form-item>
@@ -352,7 +374,23 @@
               message: this.$t('commons.special_characters_are_not_supported'),
               trigger: 'blur'
             }
-          ]
+          ],
+          proxyIp: [
+            {required: true, message: this.$t('proxy.proxy_ip'), trigger: 'blur'},
+            {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
+          ],
+          proxyPort: [
+            {required: true, message: this.$t('proxy.proxy_port'), trigger: 'blur'},
+            {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
+          ],
+          proxyName: [
+            {required: false, message: this.$t('proxy.proxy_name'), trigger: 'blur'},
+            {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
+          ],
+          proxyPassword: [
+            {required: false, message: this.$t('proxy.proxy_password'), trigger: 'blur'},
+            {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
+          ],
         },
         buttons: [
           {
@@ -387,6 +425,10 @@
         accountGroups: [],
         isIndeterminate: true,
         groupsSelect: [],
+        proxyType: [
+          {id: 'Http', value: "Http"},
+          {id: 'Https', value: "Https"},
+        ],
       }
     },
 

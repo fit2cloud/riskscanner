@@ -155,11 +155,11 @@
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
           ],
           proxyName: [
-            {required: true, message: this.$t('proxy.proxy_name'), trigger: 'blur'},
+            {required: false, message: this.$t('proxy.proxy_name'), trigger: 'blur'},
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
           ],
           proxyPassword: [
-            {required: true, message: this.$t('proxy.proxy_password'), trigger: 'blur'},
+            {required: false, message: this.$t('proxy.proxy_password'), trigger: 'blur'},
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
           ],
         },
