@@ -620,7 +620,7 @@
           }
           let data = {}, key = {};
           for (let tmp of item.tmpList) {
-            key[tmp.name] = tmp.input;
+            key[tmp.name] = tmp.input.trim();
           }
           data["credential"] = JSON.stringify(key);
           data["name"] = item.name;
@@ -628,16 +628,16 @@
           if (item.isProxy) data["proxyId"] = item.proxyId;
 
           if (type === 'add') {
-                this.result = this.$post("/account/add", data,response => {
-                  if (response.success) {
-                    this.$success(this.$t('account.i18n_cs_create_success'));
-                    this.search();
-                    this.handleClose();
-                  } else {
-                    this.$error(response.message);
-                  }
-                });
+            this.result = this.$post("/account/add", data,response => {
+              if (response.success) {
+                this.$success(this.$t('account.i18n_cs_create_success'));
+                this.search();
+                this.handleClose();
+              } else {
+                this.$error(response.message);
               }
+            });
+          }
         }
       },
       //编辑云账号
