@@ -124,9 +124,9 @@ public class RuleController {
     }
 
     @ApiOperation(value = "规则组")
-    @GetMapping(value = "all/ruleGroups")
-    public List<RuleGroup> getRuleGroups() {
-        return ruleService.getRuleGroups();
+    @GetMapping(value = "ruleGroups/{pluginId}")
+    public List<RuleGroup> getRuleGroups(@PathVariable String pluginId) {
+        return ruleService.getRuleGroups(pluginId);
     }
 
     @ApiOperation(value = "规则条例")

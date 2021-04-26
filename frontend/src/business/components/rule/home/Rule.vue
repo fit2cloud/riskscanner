@@ -98,7 +98,7 @@
             <el-input v-model="createRuleForm.description" autocomplete="off" :placeholder="$t('rule.rule_description')"/>
           </el-form-item>
           <el-form-item :label="$t('account.cloud_platform')" :rules="{required: true, message: $t('account.cloud_platform'), trigger: 'change'}">
-            <el-select style="width: 100%;" v-model="createRuleForm.pluginId" :placeholder="$t('account.please_choose_plugin')">
+            <el-select style="width: 100%;" v-model="createRuleForm.pluginId" :placeholder="$t('account.please_choose_plugin')" @change="changePlugin(createRuleForm.pluginId)">
               <el-option
                 v-for="item in plugins"
                 :key="item.id"
@@ -196,7 +196,7 @@
             <el-input v-model="updateRuleForm.description" autocomplete="off" :placeholder="$t('rule.rule_description')"/>
           </el-form-item>
           <el-form-item :label="$t('account.cloud_platform')" :rules="{required: true, message: $t('account.cloud_platform'), trigger: 'change'}">
-            <el-select style="width: 100%;" v-model="updateRuleForm.pluginId" :placeholder="$t('account.please_choose_plugin')">
+            <el-select style="width: 100%;" v-model="updateRuleForm.pluginId" :placeholder="$t('account.please_choose_plugin')" @change="changePlugin(updateRuleForm.pluginId)">
               <el-option
                 v-for="item in plugins"
                 :key="item.id"
@@ -294,7 +294,7 @@
             <el-input v-model="copyRuleForm.description" autocomplete="off" :placeholder="$t('rule.rule_description')"/>
           </el-form-item>
           <el-form-item :label="$t('account.cloud_platform')" :rules="{required: true, message: $t('account.cloud_platform'), trigger: 'change'}">
-            <el-select style="width: 100%;" v-model="copyRuleForm.pluginId" :placeholder="$t('account.please_choose_plugin')">
+            <el-select style="width: 100%;" v-model="copyRuleForm.pluginId" :placeholder="$t('account.please_choose_plugin')" @change="changePlugin(copyRuleForm.pluginId)">
               <el-option
                 v-for="item in plugins"
                 :key="item.id"
@@ -476,7 +476,7 @@
           lineNumbers: true,
           line: true,
           indentWithTabs: true,
-        }
+        },
       }
     },
 
@@ -489,12 +489,14 @@
         this.createRuleForm = { parameter: [], script : "" };
         this.createVisible = true;
         this.activePlugin();
+        this.ruleSetOptionsFnc(null);
       },
       handleEdit(item) {
         if (typeof(item.parameter) == 'string') item.parameter = JSON.parse(item.parameter);
         item.tagKey = item.tags[0];
         this.updateRuleForm = Object.assign({}, item);
         this.updateVisible = true;
+        this.ruleSetOptionsFnc(item.pluginId);
         this.activePlugin();
       },
       handleCopy(item) {
@@ -502,7 +504,11 @@
         item.tagKey = item.tags[0];
         this.copyRuleForm = Object.assign({}, item);
         this.copyVisible = true;
+        this.ruleSetOptionsFnc(item.pluginId);
         this.activePlugin();
+      },
+      changePlugin(pluginId){
+        this.ruleSetOptionsFnc(pluginId);
       },
       handleClose() {
         this.createVisible =  false;
@@ -579,8 +585,8 @@
           {key: '高风险', value: "HighRisk"}
         ];
       },
-      ruleSetOptionsFnc () {
-        this.$get("/rule/all/ruleGroups", res => {
+      ruleSetOptionsFnc (pluginId) {
+        this.$get("/rule/ruleGroups/" + pluginId, res => {
           this.ruleSetOptions = res.data;
         });
       },
@@ -592,7 +598,6 @@
       init() {
         this.tagLists();
         this.severityOptionsFnc();
-        this.ruleSetOptionsFnc();
         this.inspectionSeportOptionsFnc();
         this.search();
       },

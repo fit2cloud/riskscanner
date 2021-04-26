@@ -424,8 +424,10 @@ public class RuleService {
         return extRuleTypeMapper.selectByExample();
     }
 
-    public List<RuleGroup> getRuleGroups() {
-        return ruleGroupMapper.selectByExample(null);
+    public List<RuleGroup> getRuleGroups(String pluginId) {
+        RuleGroupExample example = new RuleGroupExample();
+        example.createCriteria().andPluginIdEqualTo(pluginId);
+        return ruleGroupMapper.selectByExample(example);
     }
 
     public List<RuleInspectionReport> getRuleInspectionReport() {
