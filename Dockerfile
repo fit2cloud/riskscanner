@@ -1,4 +1,4 @@
-FROM registry.cn-qingdao.aliyuncs.com/x-lab/riskscanner/custodian:master
+FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:master
 
 ARG RS_VERSION=dev
 
