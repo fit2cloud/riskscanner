@@ -224,6 +224,11 @@
         })
       },
       search() {
+        if (!!this.condition.name) {
+          this.condition.proxyIp = this.condition.name;
+        } else {
+          this.condition.proxyIp = null;
+        }
         this.result = this.$post(this.buildPagePath(this.queryPath), this.condition, response => {
           let data = response.data;
           this.total = data.itemCount;
