@@ -315,7 +315,7 @@
   import ProxyDialogFooter from "../head/ProxyDialogFooter";
   import ProxyDialogCreateFooter from "../head/ProxyDialogCreateFooter";
   import DialogFooter from "@/business/components/common/components/DialogFooter";
-  import {ACCOUNT_NAME} from "../../../../common/js/constants";
+  import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
 
   /* eslint-disable */
   export default {
@@ -740,10 +740,12 @@
                 }
               }, () => {
                 for (let item of this.tableData) {
-                  if (this.selectIds[0]===item.id) {
-                    localStorage.setItem(ACCOUNT_ID, item.id);
-                    localStorage.setItem(ACCOUNT_NAME, item.name);
-                    break;
+                  for (let id of this.selectIds) {
+                    if (id===item.id) {
+                      localStorage.setItem(ACCOUNT_ID, item.id);
+                      localStorage.setItem(ACCOUNT_NAME, item.name);
+                      break;
+                    }
                   }
                 }
                 this.$success(this.$t('account.i18n_cs_create_success'));

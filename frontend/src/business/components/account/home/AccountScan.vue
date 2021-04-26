@@ -146,10 +146,6 @@
         params: [],
       }
     },
-    props: ["id"],
-    watch: {
-      '$route': 'init'
-    },
     created() {
       this.init();
     },
