@@ -108,12 +108,7 @@ public class NoticeCreateService {
                 return;
             }
 
-            String status;
-            if (successCount != messageOrderItemList.size()) {
-                status = NoticeConstants.MessageOrderStatus.ERROR;
-            } else {
-                status = NoticeConstants.MessageOrderStatus.FINISHED;
-            }
+            String status = NoticeConstants.MessageOrderStatus.FINISHED;
             messageOrder.setStatus(status);
             messageOrder.setSendTime(System.currentTimeMillis());
             messageOrderMapper.updateByPrimaryKeySelective(messageOrder);
@@ -170,6 +165,14 @@ public class NoticeCreateService {
         String event = NoticeConstants.Event.EXECUTE_SUCCESSFUL;
 
         List<Task> tasks = extTaskMapper.getTopTasksForEmail(messageOrder);
+
+        for (Task task : tasks) {
+            if (task.getReturnSum() == null) {
+                sendTask(messageOrder);
+                return;
+            }
+        }
+
         int returnSum = extTaskMapper.getReturnSumForEmail(messageOrder);
         int resourcesSum = extTaskMapper.getResourcesSumForEmail(messageOrder);
 
