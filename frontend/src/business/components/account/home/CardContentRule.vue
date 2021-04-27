@@ -164,9 +164,10 @@
           <el-table-column v-slot:default="scope" :label="$t('resource.F2C_ID')" min-width="20%">
             {{ scope.row.f2c_id }}
           </el-table-column>
-          <el-table-column v-slot:default="scope" :label="$t('rule.resource_type')" min-width="35%">
+          <el-table-column v-slot:default="scope" :label="$t('rule.resource_type')" min-width="15%">
             {{ scope.row.resourceType }}
           </el-table-column>
+          <el-table-column prop="taskName" :label="$t('rule.rule_name')" min-width="20%"/>
           <el-table-column :label="$t('account.cloud_account')" min-width="10%" show-overflow-tooltip>
             <template v-slot:default="scope">
               <span>

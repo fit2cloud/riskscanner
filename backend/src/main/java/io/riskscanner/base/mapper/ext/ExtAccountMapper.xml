@@ -278,6 +278,7 @@
             <if test="accountId != null">
                 AND t.account_id = #{accountId}
             </if>
+            AND t4.task_name IS NOT NULL
         </where>
         ORDER BY t.create_time DESC
     </select>
