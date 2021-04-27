@@ -243,22 +243,25 @@
 
     <select id="regionsList" resultType="java.util.Map">
         SELECT
-            IFNULL( sum(t2.return_sum), 0 ) AS returnSum,
-            IFNULL( sum(t2.resources_sum), 0 ) AS resourcesSum,
-            t.region_name AS regionName,
-            t.region_id AS regionId
+            IFNULL( sum(t3.return_sum), 0 ) AS returnSum,
+            IFNULL( sum(t3.resources_sum), 0 ) AS resourcesSum,
+            t1.region_name AS regionName,
+            t1.region_id AS regionId,
+            t1.account_label as accountName,
+            t1.account_url as accountUrl
         FROM
-            task_item t
-            LEFT JOIN task_item_resource t1 ON t.id = t1.task_item_id
-            LEFT JOIN resource t2 ON t2.id = t1.resource_id
+            task t
+            LEFT JOIN task_item t1 ON t.id = t1.task_id
+            LEFT JOIN task_item_resource t2 ON t1.id = t2.task_item_id
+            LEFT JOIN resource t3 ON t3.id = t2.resource_id
         <where>
             <if test="accountId != null">
-                AND t.account_id = #{accountId}
+                AND t1.account_id = #{accountId}
             </if>
-            AND t2.return_sum != 0
+            AND t3.resources_sum != 0
         </where>
         GROUP BY
-            t2.return_sum DESC, t.region_id, t.region_name
+            t1.region_id, t1.region_name, t1.account_label, t1.account_url
     </select>
 
     <select id="resourceList" resultType="java.util.Map">

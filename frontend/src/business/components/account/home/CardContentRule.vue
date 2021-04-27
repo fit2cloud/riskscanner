@@ -137,14 +137,22 @@
         <el-table border :data="regionsData" class="adjust-table table-content" @sort-change="sort" :row-class-name="tableRowClassName"
                   @filter-change="filter" @select-all="select" @select="select">
           <el-table-column type="index" min-width="20%"/>
-          <el-table-column :label="$t('account.region_name')" min-width="35%" show-overflow-tooltip>
+          <el-table-column :label="$t('account.region_name')" min-width="30%" show-overflow-tooltip>
             <template v-slot:default="scope">
                 {{ scope.row.regionName }}
             </template>
           </el-table-column>
-          <el-table-column :label="$t('account.region_id')" min-width="35%" show-overflow-tooltip>
+          <el-table-column :label="$t('account.region_id')" min-width="30%" show-overflow-tooltip>
             <template v-slot:default="scope">
               {{ scope.row.regionId }}
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('account.cloud_account')" min-width="10%" show-overflow-tooltip>
+            <template v-slot:default="scope">
+              <span>
+                <img :src="require(`@/assets/img/platform/${scope.row.accountUrl}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
+                 &nbsp;&nbsp; {{ scope.row.accountName }}
+              </span>
             </template>
           </el-table-column>
           <el-table-column prop="returnSum" :label="$t('history.resource_result')" min-width="30%" show-overflow-tooltip sortable>
