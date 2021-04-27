@@ -422,7 +422,7 @@
         ];
       },
       ruleSetOptionsFnc () {
-        this.$get("/rule/all/ruleGroups", res => {
+        this.$get("/rule/ruleGroups/" + null, res => {
           this.ruleSetOptions = res.data;
         });
       },
