@@ -423,7 +423,7 @@
             if (action === 'confirm') {
               this.result = this.$get("/resource/account/delete/" + obj.id,  res => {
                 this.$success(this.$t('commons.delete_success'));
-                this.search();
+                window.location.reload();
               });
             }
           }
