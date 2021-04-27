@@ -157,7 +157,7 @@ public class ResourceService {
     private void saveResourceItem(ResourceWithBLOBs resourceWithBLOBs, JSONObject jsonObject) {
         ResourceItem resourceItem = new ResourceItem();
         try{
-            String fid = jsonObject.getString("F2CId");
+            String fid = jsonObject.getString("F2CId") != null ? jsonObject.getString("F2CId") : jsonObject.getString("id");
             resourceItem.setAccountId(resourceWithBLOBs.getAccountId());
             resourceItem.setUpdateTime(System.currentTimeMillis());
             resourceItem.setPluginIcon(resourceWithBLOBs.getPluginIcon());
