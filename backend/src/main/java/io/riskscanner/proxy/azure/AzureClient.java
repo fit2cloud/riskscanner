@@ -24,8 +24,6 @@ import java.util.concurrent.*;
 public class AzureClient {
     private Azure azure;
 
-    private static ConcurrentHashMap<String, Azure> azureConcurrentHashMap = new ConcurrentHashMap<String, Azure>();
-
     public static List<Map<String, String>> regions = new ArrayList<>();
 
     public static Map<String, String> map = new HashMap<>();
@@ -35,10 +33,7 @@ public class AzureClient {
     }
 
     public AzureClient(final AzureCredential azureCredential, Proxy proxy) throws PluginException {
-        if (azureConcurrentHashMap.get(azureCredential.getSubscription()) != null) {
-            this.azure = azureConcurrentHashMap.get(azureCredential.getSubscription());
-            return;
-        }
+        ConcurrentHashMap<String, Azure> azureConcurrentHashMap = new ConcurrentHashMap<String, Azure>();
 
         try {
             ExecutorService executorService = Executors.newFixedThreadPool(4);
