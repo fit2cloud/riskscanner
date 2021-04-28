@@ -268,7 +268,7 @@ public class PlatformUtils {
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("regionId", region.getRegionName());
                         jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.getRegionName(), aws))?tranforRegionId2RegionName(region.getRegionName(), aws):region.getRegionName());
-                        jsonArray.add(jsonObject);
+                        if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                     });
                     break;
                 case azure:
@@ -281,7 +281,7 @@ public class PlatformUtils {
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("regionId", region.get("regionId"));
                             jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.get("regionId"), azure))?tranforRegionId2RegionName(region.get("regionId"), azure):region.get("regionName"));
-                            jsonArray.add(jsonObject);
+                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                         });
                     } catch (Exception e) {
                         LogUtil.error(e.getMessage());
@@ -300,7 +300,7 @@ public class PlatformUtils {
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("regionId", region.getRegionId());
                             jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.getRegionId(), aliyun))?tranforRegionId2RegionName(region.getRegionId(), aliyun):region.getLocalName());
-                            jsonArray.add(jsonObject);
+                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                         });
                     } catch (Exception e) {
                         LogUtil.error(e.getMessage());
@@ -329,7 +329,7 @@ public class PlatformUtils {
                             jsonObject.put("regionId", region.get("key"));
                             jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.get("key"), huawei))?tranforRegionId2RegionName(region.get("key"), huawei):region.get("value"));
                             jsonObject.put("projectId", region.get("projectId"));
-                            jsonArray.add(jsonObject);
+                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                         }
                     } catch (RSException | PluginException e) {
                         RSException.throwException(e.getMessage());
@@ -347,7 +347,7 @@ public class PlatformUtils {
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("regionId", regionInfo.getRegion());
                             jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(regionInfo.getRegion(), tencent))?tranforRegionId2RegionName(regionInfo.getRegion(), tencent):regionInfo.getRegionName());
-                            jsonArray.add(jsonObject);
+                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                         }
                     } catch (Exception e) {
                         LogUtil.error(e.getMessage());

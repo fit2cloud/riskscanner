@@ -6,7 +6,6 @@
             <el-row>
               <el-col :span="8">
                 <div class="grid-content">
-                  <!-- 第四行 -->
                   <el-row>
                   <el-col :span="8">
                     <span style="color: #909090;">{{ $t('account.scan_score_') }}</span>
@@ -422,8 +421,8 @@
           callback: (action) => {
             if (action === 'confirm') {
               this.result = this.$get("/resource/account/delete/" + obj.id,  res => {
+                setTimeout(function () {window.location.reload()}, 2000);
                 this.$success(this.$t('commons.delete_success'));
-                window.location.reload();
               });
             }
           }

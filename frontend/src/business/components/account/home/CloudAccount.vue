@@ -633,6 +633,7 @@
                 this.$success(this.$t('account.i18n_cs_create_success'));
                 this.search();
                 this.handleClose();
+                location.reload();
               } else {
                 this.$error(response.message);
               }
