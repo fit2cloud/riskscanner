@@ -92,9 +92,9 @@
           window.location.href = "/"
         }
       });
-      this.$get("/ldap/open", response => {
-        this.openLdap = response.data;
-      })
+      // this.$get("/ldap/open", response => {
+      //   this.openLdap = response.data;
+      // })
     },
     created: function () {
       // 主页添加键盘事件,注意,不能直接在焦点事件上添加回车
