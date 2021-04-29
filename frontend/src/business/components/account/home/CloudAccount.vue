@@ -572,6 +572,7 @@
       async changePluginForAdd (form, type){
         this.$get("/account/iam/strategy/" + form.pluginId,res => {
           form.script = res.data;
+          this.script = res.data;
         });
         let url = "/plugin/";
         this.result = await this.$get(url + form.pluginId, response => {
