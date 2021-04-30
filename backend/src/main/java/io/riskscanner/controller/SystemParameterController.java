@@ -3,7 +3,6 @@ package io.riskscanner.controller;
 import io.riskscanner.base.domain.SystemParameter;
 import io.riskscanner.commons.constants.ParamConstants;
 import io.riskscanner.commons.constants.RoleConstants;
-import io.riskscanner.ldap.domain.LdapInfo;
 import io.riskscanner.service.SystemParameterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -86,20 +85,6 @@ public class SystemParameterController {
     @RequiresRoles(value = {RoleConstants.ADMIN})
     public List<SystemParameter> dingdingInfo() {
         return systemParameterService.dingdingInfo(ParamConstants.Classify.DINGDING.getValue());
-    }
-
-    @ApiOperation(value = "保存LADP设置")
-    @PostMapping("/save/ldap")
-    @RequiresRoles(value = {RoleConstants.ADMIN})
-    public void saveLdap(@RequestBody List<SystemParameter> systemParameter) throws Exception {
-        systemParameterService.saveLdap(systemParameter);
-    }
-
-    @ApiOperation(value = "LDAP设置")
-    @GetMapping("/ldap/info")
-    @RequiresRoles(value = {RoleConstants.ADMIN})
-    public LdapInfo getLdapInfo() {
-        return systemParameterService.getLdapInfo(ParamConstants.Classify.LDAP.getValue());
     }
 
     @ApiOperation(value = "消息通知")
