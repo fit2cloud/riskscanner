@@ -148,14 +148,6 @@ public class UserService {
         OperationLogService.log(SessionUtils.getUser(), userRequest.getId(), userRequest.getName(), ResourceTypeConstants.USER.name(), ResourceOperation.CREATE, "创建用户");
     }
 
-    public void addLdapUser(User user) {
-        user.setCreateTime(System.currentTimeMillis());
-        user.setUpdateTime(System.currentTimeMillis());
-        user.setStatus(UserStatus.NORMAL);
-        checkEmailIsExist(user.getEmail());
-        userMapper.insertSelective(user);
-    }
-
     private void checkEmailIsExist(String email) {
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
@@ -436,12 +428,9 @@ public class UserService {
     public ResultHolder login(LoginRequest request) {
         String login = (String) SecurityUtils.getSubject().getSession().getAttribute("authenticate");
         String username = StringUtils.trim(request.getUsername());
-        String password = "";
-        if (!StringUtils.equals(login, UserSource.LDAP.name())) {
-            password = StringUtils.trim(request.getPassword());
-            if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-                return ResultHolder.error("user or password can't be null");
-            }
+        String password = StringUtils.trim(request.getPassword());
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+            return ResultHolder.error("user or password can't be null");
         }
 
         RsUserToken token = new RsUserToken(username, password, login);

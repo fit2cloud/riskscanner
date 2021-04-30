@@ -18,12 +18,11 @@
 import EmailSetting from "./EmailSetting";
 import WechatSetting from "./WechatSetting";
 import DingSetting from "./DingSetting";
-import LdapSetting from "./LdapSetting";
 /* eslint-disable */
 export default {
   name: "SystemParameterSetting",
   components: {
-    EmailSetting, WechatSetting, DingSetting, LdapSetting
+    EmailSetting, WechatSetting, DingSetting
   },
   data() {
     return {

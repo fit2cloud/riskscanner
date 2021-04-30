@@ -37,7 +37,7 @@
             <table-operator @editClick="edit(scope.row)" @deleteClick="del(scope.row)">
               <template v-slot:behind>
                 <table-operator-button :tip="$t('member.edit_password')" icon="el-icon-s-tools"
-                                          type="success" @exec="editPassword(scope.row)" v-if="!scope.row.isLdapUser"/>
+                                          type="success" @exec="editPassword(scope.row)"/>
               </template>
             </table-operator>
           </template>
@@ -104,7 +104,7 @@
           <el-input v-model="form.name" autocomplete="off"/>
         </el-form-item>
         <el-form-item :label="$t('commons.email')" prop="email" ref="emailForm">
-          <el-input v-model="form.email" autocomplete="off" :disabled="form.source === 'LDAP'"/>
+          <el-input v-model="form.email" autocomplete="off"/>
         </el-form-item>
         <el-form-item :label="$t('commons.phone') + '/' + $t('system_parameter_setting.dingding_account')" prop="phone" ref="phoneForm">
           <el-input v-model="form.phone" autocomplete="off"/>
@@ -358,7 +358,6 @@
                 let roles = data.roles;
                 // let userRoles = result.userRoles;
                 this.$set(this.tableData[i], "roles", roles);
-                this.$set(this.tableData[i], "isLdapUser", this.tableData[i].source === 'LDAP');
               });
             }
           }
