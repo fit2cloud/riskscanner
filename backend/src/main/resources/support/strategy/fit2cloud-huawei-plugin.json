@@ -1,31 +1,28 @@
 {
-  "Version": "2021-1-1",
+  "Version": "1.1",
   "Statement": [
     {
-      "Effect": "Allow",
       "Action": [
-        "obs:Get*"
+        "obs:*:get*",
+        "obs:*:list*",
+        "obs:*:head*"
       ],
-      "Resource": [
-        "huawei:obs:::<bucket>",
-        "huawei:obs:::<bucket>/*"
-      ]
+      "Effect": "Allow"
     },
     {
-      "Effect": "Allow",
+      "Condition": {
+        "StringNotEqualsIgnoreCase": {
+          "g:ServiceName": [
+            "iam"
+          ]
+        }
+      },
       "Action": [
-        "ecs:List*",
-        "eip:List*",
-        "disk:List*",
-        "vpc:Describe*",
-        "obs:Describe*",
-        "elb:List*",
-        "rds:List*",
-        "security-group:List*"
+        "*:*:get*",
+        "*:*:list*",
+        "*:*:head*"
       ],
-      "Resource": [
-        "*"
-      ]
+      "Effect": "Allow"
     }
   ]
 }
