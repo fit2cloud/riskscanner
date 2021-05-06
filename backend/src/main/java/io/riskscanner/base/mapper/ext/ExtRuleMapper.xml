@@ -117,6 +117,17 @@
                 </when>
             </choose>
         </if>
+        <if test='${condition}.group != null'>
+            and #{${condition}.group.value}
+            <choose>
+                <when test='${condition}.group.operator == "in"'>
+                    in (select group_id from rule_group_mapping where rule_id = t.id)
+                </when>
+                <when test='${condition}.groupId.operator == "not in"'>
+                    not in (select group_id from rule_group_mapping where rule_id = t.id)
+                </when>
+            </choose>
+        </if>
     </sql>
 
     <select id="listAllWithTag" parameterType="io.riskscanner.controller.request.rule.CreateRuleRequest"

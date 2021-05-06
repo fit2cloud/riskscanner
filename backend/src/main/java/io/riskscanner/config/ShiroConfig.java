@@ -3,7 +3,6 @@ package io.riskscanner.config;
 import io.riskscanner.commons.utils.ShiroUtils;
 import io.riskscanner.security.ApiKeyFilter;
 import io.riskscanner.security.UserModularRealmAuthenticator;
-import io.riskscanner.security.realm.LdapRealm;
 import io.riskscanner.security.realm.ShiroDBRealm;
 import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
@@ -84,12 +83,6 @@ public class ShiroConfig implements EnvironmentAware {
         return new ShiroDBRealm();
     }
 
-    @Bean
-    @DependsOn("lifecycleBeanPostProcessor")
-    public LdapRealm ldapRealm() {
-        return new LdapRealm();
-    }
-
     @Bean(name = "lifecycleBeanPostProcessor")
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
@@ -131,10 +124,8 @@ public class ShiroConfig implements EnvironmentAware {
         ApplicationContext context = event.getApplicationContext();
         List<Realm> realmList = new ArrayList<>();
         ShiroDBRealm shiroDBRealm = context.getBean(ShiroDBRealm.class);
-        LdapRealm ldapRealm = context.getBean(LdapRealm.class);
         // 基本realm
         realmList.add(shiroDBRealm);
-        realmList.add(ldapRealm);
         context.getBean(DefaultWebSecurityManager.class).setRealms(realmList);
     }
 

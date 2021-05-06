@@ -104,7 +104,7 @@
                 <el-switch v-model="form.isProxy"></el-switch>
               </el-form-item>
               <el-form-item v-if="form.script">
-                <el-link type="danger" @click="innerDrawer = true">{{ $t('account.iam_strategy') }}</el-link>
+                <el-link type="danger" @click="addAccountIam(form)">{{ $t('account.iam_strategy') }}</el-link>
                 <div>
                   <el-drawer
                     size="45%"
@@ -528,6 +528,14 @@
       },
       handleCopy(test) {
         this.$refs.apiCopy.open(test);
+      },
+      addAccountIam(form) {
+        //点击需要的IAM策略按钮
+        this.$get("/account/iam/strategy/" + form.pluginId,res => {
+          form.script = res.data;
+          this.script = res.data;
+          this.innerDrawer = true;
+        });
       },
       showRegions (tmp) {
         this.regions = tmp.regions;

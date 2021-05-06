@@ -1,22 +1,18 @@
 {
-	"Version": "2021-1-1",
-	"Statement": [
-		{
-			"Effect": "Allow",
-			"Action": [
-				"image:List*",
-				"vm:List*",
-				"vnet:List*",
-				"sqlserver:Describe*",
-				"redis:List*",
-				"publicip:Describe*",
-				"networksecuritygroup:List*",
-				"loadbalancer:Get*",
-				"disk::List*"
-			],
-			"Resource": [
-				"*"
+	"policyRule": {
+		"if": {
+			"allOf": [{
+				"field": "type",
+				"equals": "Microsoft.Compute/virtualMachines"
+			},
+				{
+					"field": "Microsoft.Compute/virtualMachines/sku.name",
+					"like": "Standard_G*"
+				}
 			]
+		},
+		"then": {
+			"effect": "deny"
 		}
-	]
+	}
 }

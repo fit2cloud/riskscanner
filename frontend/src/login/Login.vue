@@ -14,8 +14,6 @@
           <div class="form">
             <el-form-item v-slot:default>
               <el-radio-group v-model="form.authenticate">
-<!--                <el-radio label="LDAP" size="mini" v-if="openLdap">LDAP</el-radio>-->
-                <el-radio label="LOCAL" size="mini" v-if="openLdap">普通登录</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item prop="username">
@@ -73,7 +71,6 @@
         },
         msg: '',
         ready: false,
-        openLdap: false,
         loginUrl: 'signin',
       }
     },
@@ -92,9 +89,6 @@
           window.location.href = "/"
         }
       });
-      // this.$get("/ldap/open", response => {
-      //   this.openLdap = response.data;
-      // })
     },
     created: function () {
       // 主页添加键盘事件,注意,不能直接在焦点事件上添加回车
@@ -120,10 +114,6 @@
             switch (this.form.authenticate) {
               case "LOCAL":
                 this.loginUrl = "/signin";
-                this.doLogin();
-                break;
-              case "LDAP":
-                this.loginUrl = "/ldap/signin";
                 this.doLogin();
                 break;
               default:

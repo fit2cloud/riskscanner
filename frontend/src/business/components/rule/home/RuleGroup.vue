@@ -126,6 +126,48 @@
         </el-form>
       </el-drawer>
       <!--Info group-->
+
+      <!--rule list-->
+      <el-drawer class="rtl" :title="$t('rule.rule_list')" :visible.sync="listVisible" size="80%" :before-close="handleClose" :direction="direction"
+                 :destroy-on-close="true">
+        <el-table border :data="ruleForm" class="adjust-table table-content" @sort-change="sort" :row-class-name="tableRowClassName"
+                  @filter-change="filter" @select-all="select" @select="select">
+          <el-table-column type="index" min-width="4%"/>
+          <el-table-column prop="name" :label="$t('rule.rule_name')" min-width="18%" show-overflow-tooltip></el-table-column>
+          <el-table-column :label="$t('rule.resource_type')" min-width="10%" show-overflow-tooltip>
+            <template v-slot:default="scope">
+              <span v-for="(resourceType, index) in scope.row.types" :key="index">[{{ resourceType }}] </span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('account.cloud_platform')" min-width="11%" show-overflow-tooltip>
+            <template v-slot:default="scope">
+              <span>
+                <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
+                 &nbsp;&nbsp; {{ scope.row.pluginName }}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="7%" :label="$t('rule.severity')" column-key="severity">
+            <template v-slot:default="{row}">
+              <rule-type :row="row"/>
+            </template>
+          </el-table-column>
+          <el-table-column prop="description" :label="$t('rule.description')" min-width="28%" show-overflow-tooltip></el-table-column>
+          <el-table-column :label="$t('rule.status')" min-width="7%" show-overflow-tooltip>
+            <template v-slot:default="scope">
+              <el-switch @change="changeStatus(scope.row)" v-model="scope.row.status"/>
+            </template>
+          </el-table-column>
+          <el-table-column prop="lastModified" min-width="15%" :label="$t('rule.last_modified')" sortable>
+            <template v-slot:default="scope">
+              <span><i class="el-icon-time"></i> {{ scope.row.lastModified | timestampFormatDate }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+        <table-pagination :change="handleListSearch" :current-page.sync="ruleListPage" :page-size.sync="ruleListPageSize" :total="ruleListTotal"/>
+      </el-drawer>
+      <!--rule list-->
+
     </main-container>
 </template>
 
@@ -138,7 +180,8 @@
   import TableOperator from "../../common/components/TableOperator";
   import DialogFooter from "../../common/components/DialogFooter";
   import {_filter, _sort} from "@/common/js/utils";
-  import {RULE_GROUP_CONFIGS} from "../../common/components/search/search-components";
+  import RuleType from "./RuleType";
+  import {RULE_CONFIGS, RULE_GROUP_CONFIGS} from "../../common/components/search/search-components";
   import {LIST_CHANGE} from "@/business/components/common/head/ListEvent";
   /* eslint-disable */
   export default {
@@ -149,7 +192,8 @@
       TableHeader,
       TablePagination,
       TableOperator,
-      DialogFooter
+      DialogFooter,
+      RuleType
     },
     data() {
       return {
@@ -161,9 +205,11 @@
         tableData: [],
         createForm: {},
         updateForm: {},
+        ruleForm: [],
         createVisible: false,
         updateVisible: false,
         infoVisible: false,
+        listVisible: false,
         currentPage: 1,
         pageSize: 10,
         total: 0,
@@ -194,17 +240,29 @@
           {
             tip: this.$t('commons.detail'), icon: "el-icon-edit-outline", type: "primary",
             exec: this.handleInfo
-          }
+          },
+          {
+            tip: this.$t('rule.rule_list'), icon: "el-icon-tickets", type: "success",
+            exec: this.handleList
+          },
         ],
         buttons: [
           {
             tip: this.$t('commons.edit'), icon: "el-icon-edit", type: "primary",
             exec: this.handleEdit
-          }, {
+          },
+          {
+            tip: this.$t('rule.rule_list'), icon: "el-icon-tickets", type: "success",
+            exec: this.handleList
+          },
+          {
             tip: this.$t('commons.delete'), icon: "el-icon-delete", type: "danger",
             exec: this.handleDelete
           }
-        ]
+        ],
+        ruleListPage: 1,
+        ruleListPageSize: 10,
+        ruleListTotal: 0,
       }
     },
 
@@ -216,6 +274,26 @@
       create() {
         this.createForm = {};
         this.createVisible = true;
+      },
+      handleList(item) {
+        this.ruleListPage = 1;
+        this.ruleListPageSize = 10;
+        this.ruleListTotal = 0;
+        this.ruleForm = [];
+        this.handleListSearch(item);
+        this.listVisible = true;
+      },
+      handleListSearch (item) {
+        let condition = {
+          components: RULE_CONFIGS
+        };
+        condition.combine = {group: {operator: 'in', value: item.id }};
+        let url = "/rule/list/" + this.ruleListPage + "/" + this.ruleListPageSize;
+        this.result = this.$post(url, condition, response => {
+          let data = response.data;
+          this.ruleListTotal = data.itemCount;
+          this.ruleForm = data.listObject;
+        });
       },
       handleInfo(item) {
         this.updateForm = {};
@@ -231,6 +309,7 @@
         this.createVisible =  false;
         this.updateVisible =  false;
         this.infoVisible =  false;
+        this.listVisible =  false;
         this.search();
       },
       handleDelete(item) {
@@ -296,6 +375,15 @@
               });
             }
         });
+      },
+      tableRowClassName({row, rowIndex}) {
+        if (rowIndex%4 === 0) {
+          return 'success-row';
+        } else if (rowIndex%2 === 0) {
+          return 'warning-row';
+        } else {
+          return '';
+        }
       },
     },
     created() {
