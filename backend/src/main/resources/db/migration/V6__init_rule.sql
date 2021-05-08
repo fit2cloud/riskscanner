@@ -200,8 +200,8 @@ INSERT INTO rule_inspection_report VALUES (92, '确保仅审核通过的端口�
 INSERT INTO rule_inspection_report VALUES (93, '确保安全组配置了最小粒度的规则。', '安全通信网络', '网络架构', '删除授权策略为允许，授权对象为0.0.0.0/0安全组入方向规则。');
 INSERT INTO rule_inspection_report VALUES (94, '加密静态敏感信息。使用工具加密所有静态敏感信息。该工具采用未集成到操作系统中的辅助身份验证机制才能访问信息。', '安全计算环境', '安全审计', '如果您账号下所有处于关联状态的云盘若未加密，则会导致该规则不合规。');
 INSERT INTO rule_inspection_report VALUES (95, '确保仅审核通过的端口、协议和服务正在运行。确保只有符合条件的网络端口、协议和服务在系统上运行。该端口、协议和服务经过业务需求验证，对系统进行监听。', '安全计算环境', '安全审计', '将授权对象为0.0.0.0/0的安全组入方向规则的授权策略调整为拒绝或者修改授权对象。');
-INSERT INTO rule_inspection_report VALUES (96, '确保服务器端加密设置为“用服务密钥加密”。', '安全计算环境', '安全数据保护', '查看您账号下的OSS Bucket是否启用了加密，若未加密，会导致该规则不合规。');
-INSERT INTO rule_inspection_report VALUES (97, '确保RDS实例不对外开放。', '安全计算环境', '安全数据保护', '查看您账号下的OSS Bucket是否启用了加密，若未加密，会导致该规则不合规。');
+INSERT INTO rule_inspection_report VALUES (96, '确保服务器端加密设置为“用服务密钥加密”。', '安全计算环境', '安全数据保护', '查看您账号下的资源是否启用了加密，若未加密，会导致该规则不合规。');
+INSERT INTO rule_inspection_report VALUES (97, '确保RDS实例不对外开放。', '安全计算环境', '安全数据保护', '查看您账号下的RDS实例是否对外开放，若已开放，会导致该规则不合规。');
 
 
 INSERT INTO rule VALUES ('028b8362-08f2-404c-8e15-935426bb8545', 'Aliyun RDS实例公网访问扫描', 1, 'HighRisk', 'Aliyun  检测您账号下RDS实例不允许任意来源公网访问，视为“合规”，否则视为“不合规”', 'policies:\n    # 检测您账号下RDS实例不允许任意来源公网访问，视为“合规”，否则视为“不合规”。\n    - name: aliyun-rds-internet-access\n      resource: aliyun.rds\n      filters:\n        - type: internet-access\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"启用公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-aliyun-plugin', '阿里云', 'aliyun.png', concat(unix_timestamp(now()), '001'), 1, 'custodian');
