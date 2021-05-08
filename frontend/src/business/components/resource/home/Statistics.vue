@@ -30,10 +30,11 @@
                 <span>{{ group.description }}</span>
               </el-col>
               <el-col :span="4">
-                <span style="color: #909090;">{{ $t('resource.scene_state') }}</span>
+                <span style="color: #909090;">{{ $t('resource.statistics') }}</span>
               </el-col>
               <el-col :span="8">
-                <span>{{ group.state }}</span>
+                <span v-if="group.status == 'risky'" style="color: red;cursor: pointer;" @click="download"><i class="el-icon-download"></i> {{ $t('resource.download_report') }}</span>
+                <span v-if="group.status == 'risk_free'" style="color: green;"><i class="el-icon-loading"></i> {{ group.state }}</span>
               </el-col>
             </el-row>
             <el-row>
@@ -276,6 +277,7 @@
   import MetricChart from "./MetricChart";
   import {_filter, _sort, getCurrentAccountID} from "@/common/js/utils";
   import {ACCOUNT_ID} from "@/common/js/constants";
+  import {saveAs} from "@/common/js/FileSaver.js";
 
   /* eslint-disable */
   export default {
@@ -478,6 +480,39 @@
         this.$get("/rule/reScan/" + item.id + "/" + item.accountId, response => {
           if (response.success) {
             this.search();
+          }
+        });
+      },
+      download() {
+        let myDate = new Date();
+        this.$alert(this.$t('resource.download_report_description_start') + myDate.toLocaleString() + this.$t('resource.download_report_description_end'), this.$t('resource.download_report'), {
+          confirmButtonText: this.$t('commons.confirm'),
+          callback: (action) => {
+            if (action === 'confirm') {
+              let columns = [
+                {value: this.$t('resource.F2C_ID'), key: "f2cId"},
+                {value: this.$t('dashboard.resource_name'), key: "resourceName"},
+                {value: this.$t('rule.resource_type'), key: "resourceType"},
+                {value: this.$t('account.region_id'), key: "regionId"},
+                {value: this.$t('account.region_name'), key: "regionName"},
+                {value: this.$t('rule.rule_name'), key: "ruleName"},
+                {value: this.$t('rule.rule_description'), key: "ruleDescription"},
+                {value: this.$t('rule.severity'), key: "severity"},
+                {value: this.$t('resource.audit_name'), key: "auditName"},
+                {value: this.$t('resource.basic_requirements_for_grade_protection'), key: "basicRequirements"},
+                {value: this.$t('resource.suggestions_for_improvement'), key: "improvement"},
+              ];
+              this.result = this.$download("/resource/export/" + this.accountId, {
+                columns: columns
+              }, response => {
+                if (response.status === 201) {
+                  let blob = new Blob([response.data], {type: "'application/octet-stream'"});
+                  saveAs(blob, this.$t("resource.resource_report_xlsx"));
+                }
+              }, error => {
+                console.log("发顺丰无法", error);
+              });
+            }
           }
         });
       },

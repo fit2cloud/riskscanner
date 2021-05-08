@@ -41,6 +41,9 @@ export default {
     });
 
     function then(success, response, result) {
+      if (response.status === 201) {
+        success(response);
+      }
       if (!response.data) {
         success(response);
       } else if (response.data.success) {
@@ -156,6 +159,16 @@ export default {
         headers: {
           "Content-Type": undefined
         }
+      };
+      return Vue.prototype.$request(axiosRequestConfig, success, failure);
+    }
+
+    Vue.prototype.$download = function (url, param, success, failure) {
+      let axiosRequestConfig = {
+        method: "POST",
+        url: url,
+        data: param,
+        responseType: 'arraybuffer'
       };
       return Vue.prototype.$request(axiosRequestConfig, success, failure);
     }

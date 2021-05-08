@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -89,13 +90,13 @@ public class ResourceController {
         return resourceService.getResourceLog(resourceId);
     }
 
-    @ApiIgnore
-    @PostMapping("export")
-    public ResponseEntity<byte[]> exportCloudServers(@RequestBody ExcelExportRequest request) throws Exception {
-        byte[] bytes = resourceService.export(request);
+    @ApiOperation(value = "导出扫描报告")
+    @PostMapping("export/{accountId}")
+    public ResponseEntity<byte[]> exportReport(@RequestBody ExcelExportRequest request, @PathVariable String accountId) throws Exception {
+        byte[] bytes = resourceService.export(request, accountId);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", "Export");
+        headers.setContentDispositionFormData("attachment", "不合规资源扫描报告.xlsx");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .headers(headers)

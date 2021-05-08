@@ -2,6 +2,7 @@ package io.riskscanner.base.mapper.ext;
 
 
 import io.riskscanner.controller.request.resource.ResourceRequest;
+import io.riskscanner.dto.ExportDTO;
 import io.riskscanner.dto.ReportDTO;
 import io.riskscanner.dto.ResourceDTO;
 import io.riskscanner.dto.SourceDTO;
@@ -31,5 +32,7 @@ public interface ExtResourceMapper {
     Map<String, String> reportIso(@Param("accountId") String accountId, @Param("groupId") String groupId);
 
     List<Map<String, String>> groups(Map<String, Object> params);
+
+    List<ExportDTO> searchExportData(ResourceRequest resourceRequest, @Param("accountId") String accountId);
 
 }

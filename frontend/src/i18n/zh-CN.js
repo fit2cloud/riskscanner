@@ -591,6 +591,11 @@ export default {
     the_cloud_platform: '该云平台',
     not_currently: '暂时不支持此类型的资源的扫描: 0/0',
     status_on_off: '是否合规',
+    download_report: '下载报告',
+    download_report_description_start: '当前下载的为 ',
+    download_report_description_end: ' 生成的报告，若您需要获取最新报告请重新扫描。',
+    audit_name: '审计名称',
+    resource_report_xlsx: '不合规资源扫描报告.xlsx',
   },
   account: {
     cloud_account_setting: '云账号设置',
