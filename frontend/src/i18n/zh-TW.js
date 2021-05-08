@@ -591,6 +591,11 @@ export default {
     the_cloud_platform: '該雲平台',
     not_currently: '暫時不支持此類型的資源的掃描：0/0',
     status_on_off: '是否合規',
+    download_report: '下載報告',
+    download_report_description_start: '當前下載的為 ',
+    download_report_description_end: ' 生成的報告，若您需要獲取最新報告請重新掃描。',
+    audit_name: '審計名稱',
+    resource_report_xls: '不合規資源掃描報告.xls',
   },
   account: {
     cloud_account_setting: '雲賬號設置',

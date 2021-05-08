@@ -325,4 +325,27 @@
         AND t.id IN (SELECT group_id FROM rule_group_mapping)
     </select>
 
+    <select id="searchExportData" resultType="io.riskscanner.dto.ExportDTO" parameterType="java.lang.String">
+        SELECT
+            DISTINCT t.f2c_id as f2cId,
+            t.region_id as regionId,
+            t.region_name as regionName,
+            t1.resource_name as resourceName,
+            t.resource_type as resourceType,
+            t.severity,
+            t3.name as ruleName,
+            t3.description as ruleDescription,
+            t5.project,
+            t5.item_sort_first_level as firstLevel,
+            t5.item_sort_second_level as secondLevel,
+            t5.improvement
+        FROM resource_item t
+        JOIN resource t1 on t.resource_id = t1.id
+        JOIN resource_rule t2 on t.resource_id = t2.resource_id
+        JOIN rule t3 on t2.rule_id = t3.id
+        JOIN rule_inspection_report_mapping t4 on t3.id = t4.rule_id
+        JOIN rule_inspection_report t5 on t4.report_id = t5.id
+        WHERE t.account_id = #{accountId}
+        ORDER BY t.f2c_id
+    </select>
 </mapper>

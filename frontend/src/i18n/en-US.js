@@ -591,6 +591,11 @@ export default {
     the_cloud_platform:'The cloud platform',
     not_currently:'Scanning of this type of resource is temporarily not supported: 0/0',
     status_on_off:'Is it compliant',
+    download_report:'Download report',
+    download_report_description_start:'The current download is',
+    download_report_description_end:' generated report, if you need to get the latest report, please rescan it. ',
+    audit_name:'Audit name',
+    resource_report_xls:'Non-compliant resource scan report.xls',
   },
   account: {
     cloud_account_setting:'Cloud account settings',

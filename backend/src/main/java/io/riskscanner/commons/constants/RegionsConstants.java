@@ -62,6 +62,7 @@ public class RegionsConstants {
         AliyunMap.put("cn-wulanchabu", "华北6（乌兰察布）");
         AliyunMap.put("cn-hangzhou", "华东 1（杭州）");
         AliyunMap.put("cn-shanghai", "华东 2（上海）");
+        AliyunMap.put("cn-nanjing", "华东 5（南京）");
         AliyunMap.put("cn-shenzhen", "华南 1（深圳）");
         AliyunMap.put("cn-heyuan", "华南2（河源）");
         AliyunMap.put("cn-guangzhou", "华南3（广州）");
