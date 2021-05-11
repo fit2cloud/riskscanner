@@ -7,11 +7,11 @@ import com.amazonaws.regions.RegionUtils;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.google.gson.Gson;
 import io.riskscanner.base.domain.Proxy;
-import io.riskscanner.proxy.azure.Request;
+import io.riskscanner.proxy.Request;
 
 public class AWSRequest extends Request {
 	private AWSCredential awsCredential;
-	
+
 	public AWSRequest() {
 		super("", "");
 	}
@@ -21,7 +21,7 @@ public class AWSRequest extends Request {
 		setCredential(req.getCredential());
 		setRegionId(req.getRegionId());
 	}
-	
+
 	public String getSecretKey() {
 		awsCredential = getAwsCredential();
 		if(awsCredential != null) {
@@ -44,7 +44,7 @@ public class AWSRequest extends Request {
 		}
 		return awsCredential;
 	}
-	
+
 	public AmazonEC2Client getAmazonEC2Client(Proxy proxy) {
 		if(getAccessKey() != null && getAccessKey().trim().length() > 0 && getSecretKey() != null && getSecretKey().trim().length() > 0) {
 			AmazonEC2Client client = null;

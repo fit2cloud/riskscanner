@@ -8,7 +8,7 @@ import com.aliyuncs.http.clients.ApacheHttpClient;
 import com.aliyuncs.profile.DefaultProfile;
 import com.google.gson.Gson;
 import io.riskscanner.base.domain.Proxy;
-import io.riskscanner.proxy.azure.Request;
+import io.riskscanner.proxy.Request;
 
 import java.io.IOException;
 

@@ -21,6 +21,7 @@ import com.huaweicloud.sdk.iam.v3.model.*;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.cvm.v20170312.CvmClient;
 import com.tencentcloudapi.cvm.v20170312.models.RegionInfo;
+import com.vmware.vim25.mo.Datacenter;
 import io.riskscanner.base.domain.AccountWithBLOBs;
 import io.riskscanner.base.domain.Proxy;
 import io.riskscanner.base.rs.*;
@@ -39,9 +40,21 @@ import io.riskscanner.proxy.azure.AzureClient;
 import io.riskscanner.proxy.azure.AzureCredential;
 import io.riskscanner.proxy.huawei.ClientUtil;
 import io.riskscanner.proxy.huawei.HuaweiCloudCredential;
+import io.riskscanner.proxy.openstack.OpenStackCredential;
+import io.riskscanner.proxy.openstack.OpenStackRequest;
+import io.riskscanner.proxy.openstack.OpenStackUtils;
+import io.riskscanner.proxy.Request;
 import io.riskscanner.proxy.tencent.QCloudBaseRequest;
+import io.riskscanner.proxy.vsphere.VsphereBaseRequest;
+import io.riskscanner.proxy.vsphere.VsphereClient;
+import io.riskscanner.proxy.vsphere.VsphereCredential;
+import io.riskscanner.proxy.vsphere.VsphereRegion;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openstack4j.api.OSClient;
+import org.openstack4j.api.types.ServiceType;
+import org.openstack4j.model.compute.ext.Hypervisor;
+import org.openstack4j.openstack.storage.block.domain.VolumeBackendPool;
 
 import java.io.IOException;
 import java.util.*;
@@ -58,13 +71,15 @@ public class PlatformUtils {
     public final static String aliyun = "fit2cloud-aliyun-plugin";
     public final static String huawei = "fit2cloud-huawei-plugin";
     public final static String tencent = "fit2cloud-qcloud-plugin";
+    public final static String vsphere = "fit2cloud-vsphere-plugin";
+    public final static String openstack = "fit2cloud-openstack-plugin";
 
     /**
      * 支持的插件（云平台）
      *
      */
     public final static List<String> getPlugin() {
-        return Arrays.asList(aws, azure, aliyun, huawei, tencent);
+        return Arrays.asList(aws, azure, aliyun, huawei, tencent, vsphere, openstack);
     }
 
     /**
@@ -157,6 +172,28 @@ public class PlatformUtils {
                         "TENCENT_SECRETKEY=" + qSecretKey + " " +
                         "TENCENT_DEFAULT_REGION=" + region + " ";
                 break;
+            case openstack:
+                String oEndpoint = params.get("endpoint");
+                String oUserName = params.get("userName");
+                String oPassword = params.get("password");
+                String oProjectId = params.get("projectId");
+                String oDomainId = params.get("domainId");
+                pre = "OPENSTACK_ENDPOINT=" + oEndpoint + " " +
+                        "OPENSTACK_USERNAME=" + oUserName + " " +
+                        "OPENSTACK_PASSWORD=" + oPassword + " " +
+                        "OPENSTACK_PROJECTID=" + oProjectId + " " +
+                        "OPENSTACK_DOMAINID=" + oDomainId + " " +
+                        "OPENSTACK_DEFAULT_REGION=" + region + " ";
+                break;
+            case vsphere:
+                String vUserName = params.get("vUserName");
+                String vPassword = params.get("vPassword");
+                String vEndPoint = params.get("vEndPoint");
+                pre = "VSPHERE_USERNAME=" + vUserName + " " +
+                        "VSPHERE_PASSWORD=" + vPassword + " " +
+                        "VSPHERE_ENDPOINT=" + vEndPoint + " " +
+                        "VSPHERE_DEFAULT_REGION=" + region + " ";
+                break;
         }
         switch (behavior) {
             case "run":
@@ -224,6 +261,24 @@ public class PlatformUtils {
                 Credential tencentCredential = new Gson().fromJson(account.getCredential(), Credential.class);
                 map.put("secretId", tencentCredential.getSecretId());
                 map.put("secretKey", tencentCredential.getSecretKey());
+                map.put("region", region);
+                break;
+            case openstack:
+                map.put("type", openstack);
+                OpenStackCredential openStackCredential = new Gson().fromJson(account.getCredential(), OpenStackCredential.class);
+                map.put("endpoint", openStackCredential.getEndpoint());
+                map.put("userName", openStackCredential.getUserName());
+                map.put("password", openStackCredential.getPassword());
+                map.put("projectId", openStackCredential.getProjectId());
+                map.put("domainId", openStackCredential.getDomainId());
+                map.put("region", region);
+                break;
+            case vsphere:
+                map.put("type", vsphere);
+                VsphereCredential vsphereCredential = new Gson().fromJson(account.getCredential(), VsphereCredential.class);
+                map.put("vUserName", vsphereCredential.getvUserName());
+                map.put("vPassword", vsphereCredential.getvPassword());
+                map.put("vEndPoint", vsphereCredential.getvEndPoint());
                 map.put("region", region);
                 break;
             default:
@@ -353,6 +408,72 @@ public class PlatformUtils {
                         LogUtil.error(e.getMessage());
                     }
                     break;
+                case openstack:
+                    try {
+                        Request openStackReq = new Request();
+                        openStackReq.setCredential(account.getCredential());
+                        OpenStackRequest openstackRequest = OpenStackUtils.convert2OpenStackRequest(openStackReq);
+                        OSClient.OSClientV3 osClient = openstackRequest.getOpenStackClient();
+                        List<? extends org.openstack4j.model.identity.v3.Region> regions = osClient.identity().regions().list();
+
+                        if (OpenStackUtils.isAdmin(osClient)) {
+                            if (!CollectionUtils.isEmpty(regions)) {
+                                if (OpenStackUtils.isSupport(osClient, ServiceType.BLOCK_STORAGE)) {
+                                    regions.forEach(region -> {
+                                        JSONObject jsonObject = new JSONObject();
+                                        jsonObject.put("regionId", region.getId());
+                                        jsonObject.put("regionName", region.getId());
+                                        if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                                    });
+                                }else {
+                                    regions.forEach(region -> {
+                                        JSONObject jsonObject = new JSONObject();
+                                        jsonObject.put("regionId", region.getId());
+                                        jsonObject.put("regionName", region.getId());
+                                        if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                                    });
+                                }
+                            } else {
+                                String region = OpenStackUtils.getRegion(osClient);
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("regionId", region);
+                                jsonObject.put("regionName", region);
+                                if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                            }
+                        }
+                    } catch (Exception e) {
+                        throw new PluginException(e.getMessage(), e);
+                    }
+                    break;
+                case vsphere:
+                    VsphereClient vsphereClient = null;
+//                    try {
+//                        Request vsphereRequest = new Request();
+//                        vsphereRequest.setCredential(account.getCredential());
+//                        VsphereBaseRequest vsphereBaseRequest = new VsphereBaseRequest(vsphereRequest);
+//                        vsphereClient = vsphereBaseRequest.getVsphereClient();
+//                        List<Datacenter> list = vsphereClient.listDataCenters();
+//                        List<VsphereRegion> regions = new ArrayList<>();
+//                        for (Datacenter dc : list) {
+//                            regions.add(new VsphereRegion(dc.getName()));
+//                        }
+//                        for (VsphereRegion vsphereRegion : regions) {
+//                            JSONObject jsonObject = new JSONObject();
+//                            jsonObject.put("regionId", vsphereRegion.getName());
+//                            jsonObject.put("regionName", vsphereRegion.getName());
+//                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+//                        }
+//                    } catch (Exception e) {
+//                        if (e instanceof PluginException) {
+//                            throw (PluginException) e;
+//                        }
+//                        throw new PluginException(e.getMessage(), e);
+//                    } finally {
+//                        if (vsphereClient != null) {
+//                            vsphereClient.closeConnection();
+//                        }
+//                    }
+                    break;
                 default:
                     throw new IllegalStateException("Unexpected regions value{}: " + account.getPluginName());
             }
@@ -362,7 +483,7 @@ public class PlatformUtils {
         }
     }
 
-    public static boolean validateCredential (AccountWithBLOBs account, Proxy proxy) throws IOException {
+    public static boolean validateCredential (AccountWithBLOBs account, Proxy proxy) throws IOException, PluginException {
         switch (account.getPluginId()) {
             case aws:
                 try {
@@ -446,6 +567,38 @@ public class PlatformUtils {
                     LogUtil.error("Account verification failed : " + e.getMessage());
                     break;
                 }
+            case openstack:
+                try {
+                    Request openStackReq = new Request();
+                    openStackReq.setCredential(account.getCredential());
+                    OpenStackRequest openStackRequest = OpenStackUtils.convert2OpenStackRequest(openStackReq);
+                    return openStackRequest.getOpenStackClient() != null;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new PluginException("Failed to valid credential：" + e.getMessage());
+                }
+            case vsphere:
+                VsphereClient vsphereClient = null;
+                try {
+                    Request vsphereRequest = new Request();
+                    vsphereRequest.setCredential(account.getCredential());
+                    VsphereBaseRequest vsphereBaseRequest = new VsphereBaseRequest(vsphereRequest);
+                    vsphereClient = vsphereBaseRequest.getVsphereClient();
+                    if(!vsphereClient.isUseCustomSpec()){
+                        throw new PluginException("This version of vCenter is not supported!");
+                    }
+                    return true;
+                } catch (Exception e) {
+                    LogUtil.error("Verify that the account has an error！", e);
+                    if (e instanceof PluginException) {
+                        throw (PluginException) e;
+                    }
+                    throw new PluginException("Verify that the account has an error!", e);
+                } finally {
+                    if (vsphereClient != null) {
+                        vsphereClient.closeConnection();
+                    }
+                }
             default:
                 throw new IllegalStateException("Unexpected value: " + account.getPluginId());
         }
@@ -512,6 +665,12 @@ public class PlatformUtils {
                 break;
             case tencent:
                 strCn = RegionsConstants.TencentMap.get(strEn);
+                break;
+            case vsphere:
+                strCn = strEn;
+                break;
+            case openstack:
+                strCn = strEn;
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + pluginId);
@@ -582,6 +741,10 @@ public class PlatformUtils {
                 tempList = Arrays.asList(stringArray);
                 // 利用list的包含方法,进行判断
                 return !tempList.contains(region);
+            case vsphere:
+                break;
+            case openstack:
+                break;
             default:
         }
         return true;

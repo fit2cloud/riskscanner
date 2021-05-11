@@ -14,7 +14,7 @@ import com.huaweicloud.sdk.vpc.v2.VpcClient;
 import io.riskscanner.base.domain.Proxy;
 import io.riskscanner.base.rs.*;
 import io.riskscanner.commons.exception.RSException;
-import io.riskscanner.proxy.azure.Request;
+import io.riskscanner.proxy.Request;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package io.riskscanner.base.rs;
 
-import io.riskscanner.proxy.azure.Request;
+import io.riskscanner.proxy.Request;
 
 public class RequestWithParam extends Request {
     private String param;

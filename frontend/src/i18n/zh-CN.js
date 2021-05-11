@@ -655,6 +655,8 @@ export default {
     huawei: '华为云',
     aws: 'Amazon Web Services',
     azure: 'Microsoft Azure',
+    vsphere: 'VMware vSphere',
+    openstack: 'OpenStack',
     tuning: '调参',
     is_save_param_yes: '已配置参数',
     is_save_param_not: '未配置参数',

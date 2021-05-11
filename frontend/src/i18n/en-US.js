@@ -655,6 +655,8 @@ export default {
     huawei:'Huawei Cloud',
     aws:'Amazon AWS',
     azure:'Microsoft Azure',
+    vsphere: 'VMware vSphere',
+    openstack: 'OpenStack',
     tuning:'Tuning parameters',
     is_save_param_yes:'Parameters configured',
     is_save_param_not:'Parameter not configured',

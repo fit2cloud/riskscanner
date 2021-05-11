@@ -6,8 +6,8 @@ import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.cvm.v20170312.CvmClient;
 import io.riskscanner.base.domain.Proxy;
-import io.riskscanner.proxy.azure.Request;
 import io.riskscanner.commons.exception.RSException;
+import io.riskscanner.proxy.Request;
 import org.apache.commons.lang3.StringUtils;
 
 public class QCloudBaseRequest extends Request {

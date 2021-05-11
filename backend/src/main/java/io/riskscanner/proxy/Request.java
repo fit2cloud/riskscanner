@@ -1,4 +1,4 @@
-package io.riskscanner.proxy.azure;
+package io.riskscanner.proxy;
 
 public class Request {
     private String credential;
@@ -30,3 +30,4 @@ public class Request {
     }
 
 }
+
