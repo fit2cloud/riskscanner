@@ -46,8 +46,7 @@ public class CommandUtils {
         return stringBuilder.toString();
     }
 
-    public static String saveAsFile(String content, String id) throws Exception {
-        String dirPath = TaskConstants.RESULT_FILE_PATH_PREFIX + id;
+    public static String saveAsFile(String content, String dirPath, String fileName) throws Exception {
         File file = new File(dirPath);
         if (!file.exists()) {
             file.mkdirs();
@@ -55,7 +54,7 @@ public class CommandUtils {
         FileWriter fwriter = null;
         try {
             // true表示不覆盖原来的内容，而是加到文件的后面。若要覆盖原来的内容，直接省略这个参数就好
-            fwriter = new FileWriter(dirPath + "/policy.yml", false);
+            fwriter = new FileWriter(dirPath + "/" + fileName, false);
             fwriter.write(content);
         } catch (IOException ex) {
             ex.printStackTrace();

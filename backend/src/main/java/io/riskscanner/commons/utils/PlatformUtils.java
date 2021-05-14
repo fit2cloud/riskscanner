@@ -178,12 +178,21 @@ public class PlatformUtils {
                 String oPassword = params.get("password");
                 String oProjectId = params.get("projectId");
                 String oDomainId = params.get("domainId");
-                pre = "OPENSTACK_ENDPOINT=" + oEndpoint + " " +
-                        "OPENSTACK_USERNAME=" + oUserName + " " +
-                        "OPENSTACK_PASSWORD=" + oPassword + " " +
-                        "OPENSTACK_PROJECTID=" + oProjectId + " " +
-                        "OPENSTACK_DOMAINID=" + oDomainId + " " +
-                        "OPENSTACK_DEFAULT_REGION=" + region + " ";
+                try {
+                    String clouds =
+                            "clouds:\n" +
+                            "  demo:\n" +
+                            "    region_name: " + region + "\n" +
+                            "    auth:\n" +
+                            "      username: " + oUserName + "\n" +
+                            "      password: " + oPassword + "\n" +
+                            "      project_id: " + oProjectId + "\n" +
+                            "      domain_name: " + oDomainId + "\n" +
+                            "      auth_url: " + oEndpoint + "\n";
+                    CommandUtils.saveAsFile(clouds, dirPath, "clouds.yml");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case vsphere:
                 String vUserName = params.get("vUserName");

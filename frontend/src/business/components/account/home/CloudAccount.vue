@@ -89,7 +89,7 @@
                   <el-input :type="tmp.inputType" v-model="tmp.input" autocomplete="off" :placeholder="tmp.description"/>
                 </el-form-item>
               </div>
-              <el-form-item v-if="form.isProxy" :label="$t('commons.proxy')" :rules="{required: true, message: $t('commons.proxy') + $t('commons.cannot_be_empty'), trigger: 'change'}">
+              <el-form-item v-if="form.isProxy && form.pluginId && iamStrategyNotSupport.indexOf(form.pluginId) === -1" :label="$t('commons.proxy')" :rules="{required: true, message: $t('commons.proxy') + $t('commons.cannot_be_empty'), trigger: 'change'}">
                 <el-select style="width: 100%;" v-model="form.proxyId" :placeholder="$t('commons.proxy')">
                   <el-option
                     v-for="item in proxys"
@@ -100,10 +100,10 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item :label="$t('proxy.is_proxy')" :rules="{required: true, message: $t('commons.proxy') + $t('commons.cannot_be_empty'), trigger: 'change'}">
+              <el-form-item v-if="form.pluginId && iamStrategyNotSupport.indexOf(form.pluginId) === -1" :label="$t('proxy.is_proxy')" :rules="{required: true, message: $t('commons.proxy') + $t('commons.cannot_be_empty'), trigger: 'change'}">
                 <el-switch v-model="form.isProxy"></el-switch>
               </el-form-item>
-              <el-form-item v-if="form.script">
+              <el-form-item v-if="form.script && iamStrategyNotSupport.indexOf(form.pluginId) === -1">
                 <el-link type="danger" @click="addAccountIam(form)">{{ $t('account.iam_strategy') }}</el-link>
                 <div>
                   <el-drawer
@@ -208,10 +208,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('proxy.is_proxy')" :rules="{required: true, message: $t('commons.proxy') + $t('commons.cannot_be_empty'), trigger: 'change'}">
+          <el-form-item v-if="iamStrategyNotSupport.indexOf(form.pluginId) === -1" :label="$t('proxy.is_proxy')" :rules="{required: true, message: $t('commons.proxy') + $t('commons.cannot_be_empty'), trigger: 'change'}">
             <el-switch v-model="form.isProxy"></el-switch>
           </el-form-item>
-          <el-form-item v-if="script">
+          <el-form-item v-if="script && iamStrategyNotSupport.indexOf(form.pluginId) === -1">
             <el-link type="danger" @click="innerDrawer = true">{{ $t('account.iam_strategy') }}</el-link>
             <div>
               <el-drawer
@@ -429,6 +429,7 @@
           {id: 'Http', value: "Http"},
           {id: 'Https', value: "Https"},
         ],
+        iamStrategyNotSupport: ['fit2cloud-openstack-plugin', 'fit2cloud-vsphere-plugin'],
       }
     },
 
@@ -577,7 +578,7 @@
         return row.status === value;
       },
       //新增云账号选择插件查询云账号信息
-      async changePluginForAdd (form, type){
+      async changePluginForAdd (form){
         this.$get("/account/iam/strategy/" + form.pluginId,res => {
           form.script = res.data;
           this.script = res.data;

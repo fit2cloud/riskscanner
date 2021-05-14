@@ -1,7 +1,7 @@
 <template>
   <el-menu :unique-opened="true" class="header-user-menu align-right"
            mode="horizontal"
-           background-color="#002f48"
+           background-color="#004a71"
            text-color="#fff"
            active-text-color="#fff"
   >

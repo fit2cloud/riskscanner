@@ -179,7 +179,7 @@ public class TaskService {
             if (account.getProxyId() != null) proxy = proxyMapper.selectByPrimaryKey(account.getProxyId());
             JSONObject regionObj = (JSONObject) PlatformUtils._getRegions(account, proxy, accountService.validate(account.getId())).get(0);
             Map<String, String> map = PlatformUtils.getAccount(account, regionObj.get("regionId").toString(), proxyMapper.selectByPrimaryKey(account.getProxyId()));
-            dirPath = CommandUtils.saveAsFile(finalScript, uuid);
+            dirPath = CommandUtils.saveAsFile(finalScript, TaskConstants.RESULT_FILE_PATH_PREFIX + uuid, "policy.yml");
             String command = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.validate.getCommand(), dirPath, "policy.yml", map);
             String resultStr = CommandUtils.commonExecCmdWithResult(command, dirPath);
             if (!resultStr.isEmpty() && !resultStr.contains("INFO")) {

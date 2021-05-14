@@ -321,7 +321,9 @@
           {text: this.$t('account.tencent'), value: 'fit2cloud-qcloud-plugin'},
           {text: this.$t('account.huawei'), value: 'fit2cloud-huawei-plugin'},
           {text: this.$t('account.aws'), value: 'fit2cloud-aws-plugin'},
-          {text: this.$t('account.azure'), value: 'fit2cloud-azure-plugin'}
+          {text: this.$t('account.azure'), value: 'fit2cloud-azure-plugin'},
+          {text: this.$t('account.vsphere'), value: 'fit2cloud-vsphere-plugin'},
+          {text: this.$t('account.openstack'), value: 'fit2cloud-openstack-plugin'}
         ],
         visible: false,
         accountId: localStorage.getItem(ACCOUNT_ID),
