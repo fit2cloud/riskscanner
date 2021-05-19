@@ -456,32 +456,32 @@ public class PlatformUtils {
                     break;
                 case vsphere:
                     VsphereClient vsphereClient = null;
-//                    try {
-//                        Request vsphereRequest = new Request();
-//                        vsphereRequest.setCredential(account.getCredential());
-//                        VsphereBaseRequest vsphereBaseRequest = new VsphereBaseRequest(vsphereRequest);
-//                        vsphereClient = vsphereBaseRequest.getVsphereClient();
-//                        List<Datacenter> list = vsphereClient.listDataCenters();
-//                        List<VsphereRegion> regions = new ArrayList<>();
-//                        for (Datacenter dc : list) {
-//                            regions.add(new VsphereRegion(dc.getName()));
-//                        }
-//                        for (VsphereRegion vsphereRegion : regions) {
-//                            JSONObject jsonObject = new JSONObject();
-//                            jsonObject.put("regionId", vsphereRegion.getName());
-//                            jsonObject.put("regionName", vsphereRegion.getName());
-//                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
-//                        }
-//                    } catch (Exception e) {
-//                        if (e instanceof PluginException) {
-//                            throw (PluginException) e;
-//                        }
-//                        throw new PluginException(e.getMessage(), e);
-//                    } finally {
-//                        if (vsphereClient != null) {
-//                            vsphereClient.closeConnection();
-//                        }
-//                    }
+                    try {
+                        Request vsphereRequest = new Request();
+                        vsphereRequest.setCredential(account.getCredential());
+                        VsphereBaseRequest vsphereBaseRequest = new VsphereBaseRequest(vsphereRequest);
+                        vsphereClient = vsphereBaseRequest.getVsphereClient();
+                        List<Datacenter> list = vsphereClient.listDataCenters();
+                        List<VsphereRegion> regions = new ArrayList<>();
+                        for (Datacenter dc : list) {
+                            regions.add(new VsphereRegion(dc.getName()));
+                        }
+                        for (VsphereRegion vsphereRegion : regions) {
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("regionId", vsphereRegion.getName());
+                            jsonObject.put("regionName", vsphereRegion.getName());
+                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                        }
+                    } catch (Exception e) {
+                        if (e instanceof PluginException) {
+                            throw (PluginException) e;
+                        }
+                        throw new PluginException(e.getMessage(), e);
+                    } finally {
+                        if (vsphereClient != null) {
+                            vsphereClient.closeConnection();
+                        }
+                    }
                     break;
                 default:
                     throw new IllegalStateException("Unexpected regions value{}: " + account.getPluginName());

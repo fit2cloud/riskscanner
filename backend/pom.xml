@@ -568,24 +568,14 @@
 
         <!-- VMware -->
         <dependency>
-            <groupId>com.vmware</groupId>
-            <artifactId>vsphere-samples-nodeps</artifactId>
-            <version>6.7.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.toastcoders</groupId>
             <artifactId>yavijava</artifactId>
             <version>6.0.05</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-codec</artifactId>
-                    <groupId>commons-codec</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>commons-logging</artifactId>
-                    <groupId>commons-logging</groupId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.vmware</groupId>
+            <artifactId>vsphere-samples-nodeps</artifactId>
+            <version>6.7.0</version>
         </dependency>
         <dependency>
             <groupId>dom4j</groupId>

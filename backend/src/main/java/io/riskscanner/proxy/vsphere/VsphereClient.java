@@ -1,7 +1,6 @@
 package io.riskscanner.proxy.vsphere;
 
 import com.vmware.vim25.InvalidProperty;
-import com.vmware.vim25.RuntimeFault;
 import com.vmware.vim25.mo.Datacenter;
 import com.vmware.vim25.mo.InventoryNavigator;
 import com.vmware.vim25.mo.ManagedEntity;
@@ -61,54 +60,53 @@ public class VsphereClient {
             logger.error(ExceptionUtils.getStackTrace(e));
             throw new PluginException("Vsphere server address error!", e);
         }
-//        updateRootEntity(dataCenterId);
+        updateRootEntity(dataCenterId);
     }
 
     public void closeConnection() {
         si.getServerConnection().logout();
     }
-//
-//    private void updateRootEntity(String dataCenterId) throws PluginException {
-//        if (dataCenterId != null && dataCenterId.trim().length() > 0) {
-//            List<Datacenter> dcList = listDataCenters();
-//            for (Datacenter dc : dcList) {
-//                if (dc.getName().equals(dataCenterId.trim())) {
-//                    rootEntity = dc;
-//                    this.dataCenterId = dataCenterId.trim();
-//                    break;
-//                }
-//            }
-//        }
-//    }
 
-//    public List<Datacenter> listDataCenters() throws PluginException {
-//        return listResources(Datacenter.class);
-//    }
+    private void updateRootEntity(String dataCenterId) throws PluginException {
+        if (dataCenterId != null && dataCenterId.trim().length() > 0) {
+            List<Datacenter> dcList = listDataCenters();
+            for (Datacenter dc : dcList) {
+                if (dc.getName().equals(dataCenterId.trim())) {
+                    rootEntity = dc;
+                    this.dataCenterId = dataCenterId.trim();
+                    break;
+                }
+            }
+        }
+    }
 
-//    private <T extends ManagedEntity> List<T> listResources(Class<T> resClass) throws PluginException {
-//        return listResources(resClass, rootEntity);
-//    }
+    public List<Datacenter> listDataCenters() throws PluginException {
+        return listResources(Datacenter.class);
+    }
 
-//    @SuppressWarnings("unchecked")
-//    private <T extends ManagedEntity> List<T> listResources(Class<T> resClass, ManagedEntity rootEntity) throws PluginException {
-//        List<T> list = new ArrayList<T>();
-//        try {
-//            ManagedEntity[] mes = new InventoryNavigator(rootEntity).searchManagedEntities(resClass.getSimpleName());
-//            if (mes != null) {
-//                for (ManagedEntity m : mes) {
-//                    list.add((T) m);
-//                }
-//            }
-//        } catch (InvalidProperty e) {
-//            logger.error(ExceptionUtils.getStackTrace(e));
-//            throw new PluginException("invalid parameters!" + e.getFaultMessage());
-//        } catch (Exception e) {
-//            logger.error(ExceptionUtils.getStackTrace(e));
-//            throw new PluginException("Error getting resources!" + e.getLocalizedMessage(), e);
-//        } catch (RuntimeFault runtimeFault) {
-//        }
-//        return list;
-//    }
+    private <T extends ManagedEntity> List<T> listResources(Class<T> resClass) throws PluginException {
+        return listResources(resClass, rootEntity);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends ManagedEntity> List<T> listResources(Class<T> resClass, ManagedEntity rootEntity) throws PluginException {
+        List<T> list = new ArrayList<T>();
+        try {
+            ManagedEntity[] mes = new InventoryNavigator(rootEntity).searchManagedEntities(resClass.getSimpleName());
+            if (mes != null) {
+                for (ManagedEntity m : mes) {
+                    list.add((T) m);
+                }
+            }
+        } catch (InvalidProperty e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
+            throw new PluginException("invalid parameters!" + e.getLocalizedMessage(), e);
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
+            throw new PluginException("Error getting resources!" + e.getLocalizedMessage(), e);
+        }
+        return list;
+    }
 
     public boolean isUseCustomSpec() {
         return version() >= 550 ;
