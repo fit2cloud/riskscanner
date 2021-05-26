@@ -76,7 +76,7 @@ INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('4a7ec53d-79d
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('597dba4b-2c69-4654-958f-2ad1d572558a', '63dedb65-0237-4402-8a5c-1d2137840fdd', 'openstack.router');
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('8c2dae70-410d-42c3-ae6f-fb1ca586cf11', '6359bdcd-0d1d-4e43-817c-cc338f07a065', 'openstack.server');
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('8ef9ed9d-dd64-4d16-8172-6371d97278f6', 'c9162947-90f2-41c9-8df8-2d2244bb6f1d', 'openstack.security-group');
-INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('9c65aec9-9efa-43cc-97bd-4b6736eb5a71', 'b8e09c5a-fecc-4400-b831-d7f75f9cee01', 'openstack.flavor');
+INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('9c65aec9-9efa-43cc-97bd-4b6736eb5a71', 'b8e09c5a-fecc-4400-b831-d7f75f9cee01', 'openstack.network');
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('aa674db4-d8d5-4f1a-9234-121c8ada3816', '5673475f-c43d-432c-a6a6-f29479493b4d', 'openstack.volume');
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('bfc9d4c3-1c3d-48a5-8a7d-f65de17a8bef', 'ab3306d0-e734-4977-a462-42de0e1cf263', 'openstack.server');
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('c5f6c360-254a-4ed5-bf58-6022ce23c43a', '701ae534-4c13-45a2-8a72-e78afdea4d2b', 'openstack.security-groups');

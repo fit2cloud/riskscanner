@@ -2,27 +2,39 @@
   "Version": "1.1",
   "Statement": [
     {
+      "Effect": "Allow",
       "Action": [
-        "obs:*:get*",
-        "obs:*:list*",
-        "obs:*:head*"
-      ],
-      "Effect": "Allow"
+        "iam:agencies:*",
+        "iam:credentials:*",
+        "iam:groups:*",
+        "iam:identityProviders:*",
+        "iam:mfa:*",
+        "iam:permissions:*",
+        "iam:projects:*",
+        "iam:quotas:*",
+        "iam:roles:*",
+        "iam:users:*",
+        "iam:securitypolicies:*"
+      ]
     },
     {
+      "Effect": "Allow",
+      "Action": [
+        "obs:*:*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "*:*:*"
+      ],
       "Condition": {
         "StringNotEqualsIgnoreCase": {
           "g:ServiceName": [
             "iam"
           ]
         }
-      },
-      "Action": [
-        "*:*:get*",
-        "*:*:list*",
-        "*:*:head*"
-      ],
-      "Effect": "Allow"
+      }
     }
   ]
 }
