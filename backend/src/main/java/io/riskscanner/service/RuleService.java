@@ -513,7 +513,7 @@ public class RuleService {
                 List<SelectTag> selectTags = new LinkedList<>();
                 SelectTag s = new SelectTag();
                 s.setAccountId(account.getId());
-                JSONArray array = parseArray(account.getRegions());
+                JSONArray array = parseArray(rule.getRegions()!=null?rule.getRegions():account.getRegions());
                 JSONObject object;
                 List<String> regions = new ArrayList<>();
                 for (int i = 0; i < array.size(); i++) {
