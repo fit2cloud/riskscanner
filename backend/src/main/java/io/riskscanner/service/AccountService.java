@@ -65,14 +65,15 @@ public class AccountService {
     }
 
     public boolean validate(List<String> ids) {
-        ids.forEach(id -> commonThreadPool.addTask(() -> {
+        ids.forEach(id -> {
             try {
-                validate(id);
+                boolean validate = validate(id);
+                if(!validate) throw new RSException(Translator.get("failed_cloud_account"));
             } catch (Exception e) {
                 LogUtil.error(e.getMessage());
                 throw new RSException(e.getMessage());
             }
-        }));
+        });
         return true;
     }
 

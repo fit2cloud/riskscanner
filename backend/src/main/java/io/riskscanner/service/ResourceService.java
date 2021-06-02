@@ -453,6 +453,9 @@ public class ResourceService {
                             case "improvement":
                                 add(resource.getImprovement());
                                 break;
+                            case "project":
+                                add(resource.getProject());
+                                break;
                             default:
                                 add(MethodUtils.invokeMethod(resource, "get" + StringUtils.capitalize(ExcelExportUtils.underlineToCamelCase(column.getKey()))));
                                 break;

@@ -335,10 +335,10 @@
             t.severity,
             t3.name as ruleName,
             t3.description as ruleDescription,
-            IFNULL(t5.project, '暂无'),
+            IFNULL(t5.project, '暂无') as project,
             IFNULL(t5.item_sort_first_level, '暂无') as firstLevel,
             IFNULL(t5.item_sort_second_level, '暂无') as secondLevel,
-            IFNULL(t5.improvement, '暂无')
+            IFNULL(t5.improvement, '暂无') as improvement
         FROM resource_item t
         JOIN resource t1 on t.resource_id = t1.id
         JOIN resource_rule t2 on t.resource_id = t2.resource_id
