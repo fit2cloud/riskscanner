@@ -46,7 +46,7 @@ public class AzureClient {
                     Azure azureChina = null;
                     if (proxySetting != null) {
                         java.net.Proxy proxy = new java.net.Proxy(java.net.Proxy.Type.HTTP, new InetSocketAddress(proxySetting.getHost(), proxySetting.getPort()));
-                        configurable.withProxy(proxy) ;
+                        configurable.withProxy(proxy);
                         if (proxySetting.getUserName() != null && proxySetting.getUserName().trim().length() > 0) {
                             Authenticator.setDefault(new Authenticator() {
                                 @Override
@@ -75,7 +75,7 @@ public class AzureClient {
                     Azure azureGlobal = null;
                     if (proxySetting != null) {
                         java.net.Proxy proxy = new java.net.Proxy(java.net.Proxy.Type.HTTP, new InetSocketAddress(proxySetting.getHost(), proxySetting.getPort()));
-                        configurable.withProxy(proxy) ;
+                        configurable.withProxy(proxy);
                         if (proxySetting.getUserName() != null && proxySetting.getUserName().trim().length() > 0) {
                             Authenticator.setDefault(new Authenticator() {
                                 @Override
@@ -104,7 +104,7 @@ public class AzureClient {
                     Azure azureUS = null;
                     if (proxySetting != null) {
                         java.net.Proxy proxy = new java.net.Proxy(java.net.Proxy.Type.HTTP, new InetSocketAddress(proxySetting.getHost(), proxySetting.getPort()));
-                        configurable.withProxy(proxy) ;
+                        configurable.withProxy(proxy);
                         if (proxySetting.getUserName() != null && proxySetting.getUserName().trim().length() > 0) {
                             Authenticator.setDefault(new Authenticator() {
                                 @Override
@@ -133,7 +133,7 @@ public class AzureClient {
                     Azure azureGermany = null;
                     if (proxySetting != null) {
                         java.net.Proxy proxy = new java.net.Proxy(java.net.Proxy.Type.HTTP, new InetSocketAddress(proxySetting.getHost(), proxySetting.getPort()));
-                        configurable.withProxy(proxy) ;
+                        configurable.withProxy(proxy);
                         if (proxySetting.getUserName() != null && proxySetting.getUserName().trim().length() > 0) {
                             Authenticator.setDefault(new Authenticator() {
                                 @Override

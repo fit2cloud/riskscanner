@@ -115,6 +115,9 @@
             <if test="request.name != null and request.name != ''">
                 and t.name like CONCAT('%', #{request.name},'%')
             </if>
+            <if test="request.status != null and request.status != ''">
+                and t.status = #{request.status}
+            </if>
         </where>
         order by t.update_time desc
     </select>

@@ -352,16 +352,8 @@
                     <artifactId>okhttp</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>com.nimbusds</groupId>
-                    <artifactId>nimbus-jose-jwt</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>com.google.guava</groupId>
                     <artifactId>guava</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.squareup.retrofit2</groupId>
-                    <artifactId>retrofit</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>com.nimbusds</groupId>
@@ -374,33 +366,18 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.squareup.retrofit2</groupId>
-            <artifactId>retrofit</artifactId>
-            <version>2.5.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>oauth2-oidc-sdk</artifactId>
             <version>7.4</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ow2.asm</groupId>
-                    <artifactId>asm</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>net.minidev</groupId>
-                    <artifactId>json-smart</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-client-runtime</artifactId>
-            <version>1.0.0</version>
+            <version>1.7.12</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.squareup.retrofit2</groupId>
-                    <artifactId>retrofit</artifactId>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -583,6 +560,15 @@
             <version>1.6.1</version>
         </dependency>
         <!-- VMware -->
+
+        <!-- https://mvnrepository.com/artifact/com.google.cloud/google-cloud-core -->
+        <!-- Google Cloud -->
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-core</artifactId>
+            <version>1.94.8</version>
+        </dependency>
+        <!-- Google Cloud -->
 
         <!-- apache poi-->
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
