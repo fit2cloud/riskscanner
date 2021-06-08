@@ -36,11 +36,6 @@ export default {
     accountName: String
   },
   components: {SearchList},
-  watch: {
-    currentAccount() {
-      localStorage.setItem(ACCOUNT_NAME, this.currentAccount);
-    }
-  },
   data() {
     return {
       currentAccount: !!this.accountName?this.accountName:localStorage.getItem(ACCOUNT_NAME)

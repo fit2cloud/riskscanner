@@ -66,13 +66,15 @@ export default {
         this.result = this.$get("/account/allList", response => {
           this.items = response.data;
           this.searchArray = response.data;
-          let userLastAccountId = getCurrentUser().lastAccountId;
-          if (userLastAccountId) {
-            // id 是否存在
-            if (this.searchArray.length > 0 && this.searchArray.map(p => p.id).indexOf(userLastAccountId) !== -1) {
-              localStorage.setItem(ACCOUNT_ID, userLastAccountId);
-              let account = this.searchArray.filter(p => p.id === userLastAccountId);
-              if(account) localStorage.setItem(ACCOUNT_NAME, account[0].name);
+          if (!localStorage.getItem(ACCOUNT_ID)) {
+            let userLastAccountId = getCurrentUser().lastAccountId;
+            if (userLastAccountId) {
+              // id 是否存在
+              if (this.searchArray.length > 0 && this.searchArray.map(p => p.id).indexOf(userLastAccountId) !== -1) {
+                localStorage.setItem(ACCOUNT_ID, userLastAccountId);
+                let account = this.searchArray.filter(p => p.id === userLastAccountId);
+                if(account) localStorage.setItem(ACCOUNT_NAME, account[0].name);
+              }
             }
           }
           let accountId = getCurrentAccountID();
