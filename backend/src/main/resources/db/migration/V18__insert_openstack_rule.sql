@@ -1,5 +1,5 @@
 
-insert into plugin ( id, name, icon, update_time) values ('fit2cloud-openstack-plugin', 'OpenStack', 'openstack.png', concat(unix_timestamp(now()), '006'));
+INSERT INTO plugin ( id, name, icon, update_time) VALUES ('fit2cloud-openstack-plugin', 'OpenStack', 'openstack.png', concat(unix_timestamp(now()), '006'));
 
 INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('OpenStack 安全检查', '安全检查，为您提供通信网络、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-openstack-plugin', 1);
 
