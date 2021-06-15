@@ -73,13 +73,14 @@ public class PlatformUtils {
     public final static String tencent = "fit2cloud-qcloud-plugin";
     public final static String vsphere = "fit2cloud-vsphere-plugin";
     public final static String openstack = "fit2cloud-openstack-plugin";
+    public final static String gcp = "fit2cloud-gcp-plugin";
 
     /**
      * 支持的插件（云平台）
      *
      */
     public final static List<String> getPlugin() {
-        return Arrays.asList(aws, azure, aliyun, huawei, tencent, vsphere, openstack);
+        return Arrays.asList(aws, azure, aliyun, huawei, tencent, vsphere, openstack, gcp);
     }
 
     /**
@@ -482,6 +483,8 @@ public class PlatformUtils {
                             vsphereClient.closeConnection();
                         }
                     }
+                    break;
+                case gcp:
                     break;
                 default:
                     throw new IllegalStateException("Unexpected regions value{}: " + account.getPluginName());

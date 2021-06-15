@@ -145,7 +145,7 @@
             <el-table-column v-slot:default="scope" :label="$t('account.creator')" min-width="6%" show-overflow-tooltip>
               {{ scope.row.applyUser }}
             </el-table-column>
-            <el-table-column v-slot:default="scope" :label="$t('rule.severity')" min-width="8%" prop="severity" sortable show-overflow-tooltip>
+            <el-table-column v-slot:default="scope" :label="$t('rule.severity')" min-width="8%" :sort-by="['HighRisk', 'MediumRisk', 'LowRisk']" prop="severity" :sortable="true"  show-overflow-tooltip>
               <span v-if="scope.row.severity == 'HighRisk'" style="color: #f84846;"> {{ $t('rule.HighRisk') }}</span>
               <span v-else-if="scope.row.severity == 'MediumRisk'" style="color: #fe9636;"> {{ $t('rule.MediumRisk') }}</span>
               <span v-else-if="scope.row.severity == 'LowRisk'" style="color: #4dabef;"> {{ $t('rule.LowRisk') }}</span>
@@ -390,7 +390,7 @@
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
             {
               required: true,
-              message: this.$t('commons.special_characters_are_not_supported'),
+              message: this.$t("commons.special_characters_are_not_supported"),
               trigger: 'blur'
             }
           ]
@@ -549,6 +549,9 @@
             this.detailVisible = true;
           }
         });
+      },      handleClose(done) {
+        this.logVisible=false;
+        this.detailVisible=false;
       },
       handleClose(done) {
           this.logVisible=false;

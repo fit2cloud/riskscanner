@@ -21,9 +21,10 @@ import VueCodemirror from "vue-codemirror";
 import "codemirror/mode/shell/shell.js";
 import "codemirror/theme/bespin.css";
 import echarts from "echarts";
-
 // import base style
 import "codemirror/lib/codemirror.css"
+import 'element-ui/lib/theme-chalk/index.css'
+import 'vue-cron-generator/src/styles/global.less'
 
 // you can set default global options and events when Vue.use
 Vue.use(VueCodemirror,  {
@@ -56,5 +57,4 @@ new Vue({
   i18n,
   render: h => h(App)
 });
-
 

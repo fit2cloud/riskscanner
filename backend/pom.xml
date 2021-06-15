@@ -561,12 +561,22 @@
         </dependency>
         <!-- VMware -->
 
-        <!-- https://mvnrepository.com/artifact/com.google.cloud/google-cloud-core -->
         <!-- Google Cloud -->
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-core</artifactId>
             <version>1.94.8</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-storage</artifactId>
+            <version>1.115.0</version>
         </dependency>
         <!-- Google Cloud -->
 

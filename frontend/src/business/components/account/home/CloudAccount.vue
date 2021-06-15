@@ -371,7 +371,7 @@
             {min: 2, max: 50, message: this.$t('commons.input_limit', [2, 50]), trigger: 'blur'},
             {
               required: true,
-              message: this.$t('commons.special_characters_are_not_supported'),
+              message: this.$t("commons.special_characters_are_not_supported"),
               trigger: 'blur'
             }
           ],

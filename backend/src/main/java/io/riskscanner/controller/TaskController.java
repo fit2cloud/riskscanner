@@ -2,15 +2,10 @@ package io.riskscanner.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import io.riskscanner.base.domain.Task;
-import io.riskscanner.base.domain.TaskItemLog;
-import io.riskscanner.base.domain.TaskItemWithBLOBs;
+import io.riskscanner.base.domain.*;
 import io.riskscanner.commons.utils.PageUtils;
 import io.riskscanner.commons.utils.Pager;
-import io.riskscanner.dto.QuartzTaskDTO;
-import io.riskscanner.dto.TaskCopyDTO;
-import io.riskscanner.dto.TaskDTO;
-import io.riskscanner.dto.TaskItemLogDTO;
+import io.riskscanner.dto.*;
 import io.riskscanner.service.OrderService;
 import io.riskscanner.service.TaskService;
 import org.quartz.CronExpression;
@@ -57,6 +52,12 @@ public class TaskController {
         return PageUtils.setPageInfo(page, orderService.getQuartzLogByTaskItemId(taskItem));
     }
 
+    @PostMapping("quartz/rela/log/{qzTaskId}/{goPage}/{pageSize}")
+    public Pager<List<CloudAccountQuartzTaskRelaLog>> getQuartzLogs(@PathVariable int goPage, @PathVariable int pageSize, @PathVariable String qzTaskId) {
+        Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
+        return PageUtils.setPageInfo(page, orderService.getQuartzLogsById(qzTaskId));
+    }
+
     @GetMapping(value = "extendinfo/{taskId}")
     public TaskDTO getTaskExtendInfo(@PathVariable String taskId) {
         return orderService.getTaskExtendInfo(taskId);
@@ -76,13 +77,13 @@ public class TaskController {
     public Pager<List<Task>> getManualTasks(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody Map<String, Object> param) {
         Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
         param.put("type", "manual");
-        return PageUtils.setPageInfo(page, taskService.selectQuartzTasks(param));
+        return PageUtils.setPageInfo(page, taskService.selectManualTasks(param));
     }
 
     @PostMapping("manual/Alllist")
     public List<Task> getAllManualTasks(@RequestBody Map<String, Object> param) {
         param.put("type", "manual");
-        return taskService.selectQuartzTasks(param);
+        return taskService.selectManualTasks(param);
     }
 
     @GetMapping("manual/more/{taskId}")
@@ -108,36 +109,33 @@ public class TaskController {
     }
 
     @PostMapping("quartz/list/{goPage}/{pageSize}")
-    public Pager<List<Task>> getQuartzTasks(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody Map<String, Object> param) {
+    public Pager<List<CloudAccountQuartzTask>> getQuartzTasks(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody Map<String, Object> param) {
         Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
-        param.put("type", "quartz");
         return PageUtils.setPageInfo(page, taskService.selectQuartzTasks(param));
     }
 
     @PostMapping("quartz/Alllist")
-    public List<Task> getQuartzTasks(@RequestBody Map<String, Object> param) {
-        param.put("type", "quartz");
+    public List<CloudAccountQuartzTask> getQuartzTasks(@RequestBody Map<String, Object> param) {
         return taskService.selectQuartzTasks(param);
     }
 
     @PostMapping("quartz/create")
-    public boolean saveQuartzTask(@RequestBody QuartzTaskDTO quartzTaskDTO) throws Exception {
-        quartzTaskDTO.setType("quartz");
-        return taskService.saveQuartzTask(quartzTaskDTO);
+    public boolean saveQuartzTask(@RequestBody CloudAccountQuartzTaskDTO cloudAccountQuartzTaskDTO) throws Exception {
+        return taskService.saveQuartzTask(cloudAccountQuartzTaskDTO);
     }
 
-    @PostMapping("quartz/pause")
-    public void pauseQuartzTask(@RequestBody String quartzTaskId) throws Exception {
-        taskService.changeQuartzStatus(quartzTaskId, "pause");
+    @GetMapping("quartz/pause/{quartzTaskId}")
+    public boolean pauseQuartzTask(@PathVariable String quartzTaskId) throws Exception {
+        return taskService.changeQuartzStatus(quartzTaskId, "pause");
     }
 
-    @PostMapping("quartz/resume")
-    public void resumeQuartzTask(@RequestBody String quartzTaskId) throws Exception {
-        taskService.changeQuartzStatus(quartzTaskId, "resume");
+    @GetMapping("quartz/resume/{quartzTaskId}")
+    public boolean resumeQuartzTask(@PathVariable String quartzTaskId) throws Exception {
+        return taskService.changeQuartzStatus(quartzTaskId, "resume");
     }
 
-    @PostMapping("quartz/delete")
-    public void deleteQuartzTask(@RequestBody String quartzTaskId) {
+    @GetMapping("quartz/delete/{quartzTaskId}")
+    public void deleteQuartzTask(@PathVariable String quartzTaskId) {
         taskService.deleteQuartzTask(quartzTaskId);
     }
 
@@ -151,4 +149,5 @@ public class TaskController {
     public boolean validateCron(@RequestBody Map<String, String> map) {
         return CronExpression.isValidExpression(map.get("cron"));
     }
+
 }

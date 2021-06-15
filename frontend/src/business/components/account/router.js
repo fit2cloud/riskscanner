@@ -22,5 +22,10 @@ export default {
       name: "accountscan",
       component: () => import(/* webpackChunkName: "api" */ '@/business/components/account/home/AccountScan'),
     },
+    {
+      path: 'quartztask',
+      name: 'quartztask',
+      component: () => import(/* webpackChunkName: "api" */ '@/business/components/account/home/QuartzTask'),
+    },
   ]
 }

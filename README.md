@@ -34,7 +34,7 @@ RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，�
 2.  以 root 用户执行如下命令一键安装 RiskScanner。
 
 ```sh
-curl -sSL https://github.com/RiskScanner/riskscanner/releases/latest/download/quick_start.sh | sh
+curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/quick_start.sh | sh
 ```
 
 ## 帮助文档和演示视频

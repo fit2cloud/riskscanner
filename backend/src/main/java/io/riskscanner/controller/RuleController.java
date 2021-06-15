@@ -42,6 +42,12 @@ public class RuleController {
         return PageUtils.setPageInfo(page, ruleService.getRules(rule));
     }
 
+    @ApiIgnore
+    @GetMapping(value = "listByAccountId/{accountId}")
+    public List<Rule> listByAccountId(@PathVariable String accountId) {
+        return ruleService.getRulesByAccountId(accountId);
+    }
+
     @ApiOperation(value = "规则标签列表")
     @PostMapping(value = "ruleTag/list/{goPage}/{pageSize}")
     public Pager<List<RuleTag>> ruleTagList(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody RuleTagRequest request) {

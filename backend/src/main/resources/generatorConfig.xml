@@ -93,6 +93,9 @@
 <!--        <table tableName="resource" domainObjectName="Resource"/>-->
 <!--        <table tableName="resource_item" domainObjectName="ResourceItem"/>-->
 <!--        <table tableName="resource_rule" domainObjectName="ResourceRule"/>-->
+<!--        <table tableName="cloud_account_quartz_task" domainObjectName="CloudAccountQuartzTask"/>-->
+<!--        <table tableName="cloud_account_quartz_task_relation" domainObjectName="CloudAccountQuartzTaskRelation"/>-->
+<!--        <table tableName="cloud_account_quartz_task_rela_log" domainObjectName="CloudAccountQuartzTaskRelaLog"/>-->
 
     </context>
 </generatorConfiguration>

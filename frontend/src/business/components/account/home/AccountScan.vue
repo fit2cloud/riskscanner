@@ -73,7 +73,7 @@
                  :destroy-on-close="true">
         <el-form :model="form" label-position="right" label-width="60px" size="small" :rules="rule" ref="form">
           <el-form-item :label="$t('account.regions')">
-            <el-select v-model="form.quickSettingRegions" multiple filterable collapse-tags :placeholder="$t('account.please_choose_region')" :clearable="true" style="width: 100%;">
+            <el-select v-model="form.quickSettingRegions" multiple filterable :collapse-tags="false" :placeholder="$t('account.please_choose_region')" :clearable="true" style="width: 100%;">
               <el-checkbox v-model="checkAll" @change="selectOnChangeAll(checkAll, null)">{{ $t('account.i18n_sync_all') }}</el-checkbox>
               <el-option
                 v-for="item in regions"

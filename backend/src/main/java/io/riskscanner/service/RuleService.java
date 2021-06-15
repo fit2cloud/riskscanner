@@ -87,6 +87,12 @@ public class RuleService {
         return extRuleMapper.listAllWithTag(ruleRequest);
     }
 
+    public List<Rule> getRulesByAccountId(String accountId) {
+        RuleExample example = new RuleExample();
+        example.createCriteria().andPluginIdEqualTo(accountMapper.selectByPrimaryKey(accountId).getPluginId());
+        return ruleMapper.selectByExample(example);
+    }
+
     public List<RuleTag> ruleTagList(RuleTagRequest request) {
         return extRuleTagMapper.list(request);
     }

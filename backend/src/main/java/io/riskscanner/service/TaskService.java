@@ -7,12 +7,14 @@ import com.fit2cloud.quartz.service.QuartzManageService;
 import io.riskscanner.base.domain.*;
 import io.riskscanner.base.mapper.*;
 import io.riskscanner.base.mapper.ext.ExtTaskMapper;
+import io.riskscanner.base.rs.SelectTag;
 import io.riskscanner.commons.constants.CommandEnum;
 import io.riskscanner.commons.constants.ResourceOperation;
 import io.riskscanner.commons.constants.ResourceTypeConstants;
 import io.riskscanner.commons.constants.TaskConstants;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.*;
+import io.riskscanner.dto.CloudAccountQuartzTaskDTO;
 import io.riskscanner.dto.QuartzTaskDTO;
 import io.riskscanner.i18n.Translator;
 import org.apache.commons.lang3.StringUtils;
@@ -24,9 +26,9 @@ import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.alibaba.fastjson.JSON.parseArray;
 
 /**
  * @author maguohao
@@ -60,6 +62,14 @@ public class TaskService {
     private ResourceItemMapper resourceItemMapper;
     @Resource
     private ProxyMapper proxyMapper;
+    @Resource
+    private CloudAccountQuartzTaskMapper quartzTaskMapper;
+    @Resource
+    private CloudAccountQuartzTaskRelationMapper quartzTaskRelationMapper;
+    @Resource
+    private RuleMapper ruleMapper;
+    @Resource
+    private CloudAccountQuartzTaskRelaLogMapper quartzTaskRelaLogMapper;
 
     public Task saveManualTask(QuartzTaskDTO quartzTaskDTO, String messageOrderId) {
         try {
@@ -199,7 +209,7 @@ public class TaskService {
         return true;
     }
 
-    public List<Task> selectQuartzTasks(Map<String, Object> params) {
+    public List<Task> selectManualTasks(Map<String, Object> params) {
 
         TaskExample example = new TaskExample();
         TaskExample.Criteria criteria = example.createCriteria();
@@ -234,15 +244,148 @@ public class TaskService {
         return taskMapper.selectByExample(example);
     }
 
-    public boolean saveQuartzTask(QuartzTaskDTO quartzTaskDTO) throws Exception {
+    public List<CloudAccountQuartzTask> selectQuartzTasks(Map<String, Object> params) {
+
+        CloudAccountQuartzTaskExample example = new CloudAccountQuartzTaskExample();
+        CloudAccountQuartzTaskExample.Criteria criteria = example.createCriteria();
+        if (params.get("name") != null && StringUtils.isNotEmpty(params.get("name").toString())) {
+            criteria.andNameEqualTo("%" + params.get("name").toString() + "%");
+        }
+        if (params.get("cron") != null && StringUtils.isNotEmpty(params.get("cron").toString())) {
+            criteria.andCronLike(params.get("cron").toString());
+        }
+        example.setOrderByClause("create_time desc");
+        return quartzTaskMapper.selectByExample(example);
+    }
+
+    public boolean saveQuartzTask(CloudAccountQuartzTaskDTO dto) throws Exception {
         try {
-            this.validateYaml(quartzTaskDTO);
-            Task task = orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.RUNNING.name(), null);
-            Trigger trigger = addQuartzTask(task);
-            task.setLastFireTime(trigger.getNextFireTime().getTime());
-            if (trigger.getPreviousFireTime() != null) task.setPrevFireTime(trigger.getPreviousFireTime().getTime());
-            task.setTriggerId("quartz-task" + task.getId());
-            taskMapper.updateByPrimaryKeySelective(task);
+            dto.setId(UUIDUtil.newUUID());
+            dto.setApplyUser(SessionUtils.getUser().getName());
+            dto.setCreateTime(System.currentTimeMillis());
+            dto.setStatus(TaskConstants.TASK_STATUS.RUNNING.name());
+            dto.setCronDesc(DescCornUtils.descCorn(dto.getCron()));
+
+            Trigger trigger = addQuartzTask(dto);
+            dto.setTriggerId("quartz-task" + dto.getId());
+            dto.setLastFireTime(trigger.getNextFireTime().getTime());
+            if (trigger.getPreviousFireTime() != null) dto.setPrevFireTime(trigger.getPreviousFireTime().getTime());
+            quartzTaskMapper.insertSelective(dto);
+
+            if (StringUtils.equalsIgnoreCase(dto.getQzType(), "ACCOUNT")) {
+                for(String accountId : dto.getAccountIds()){
+                    CloudAccountQuartzTaskRelation quartzTaskRelation = new CloudAccountQuartzTaskRelation();
+                    quartzTaskRelation.setId(UUIDUtil.newUUID());
+                    quartzTaskRelation.setQuartzTaskId(dto.getId());
+                    quartzTaskRelation.setCreateTime(System.currentTimeMillis());
+                    quartzTaskRelation.setSourceId(accountId);
+                    quartzTaskRelation.setQzType(dto.getQzType());
+                    quartzTaskRelationMapper.insertSelective(quartzTaskRelation);
+
+                    AccountWithBLOBs account = accountMapper.selectByPrimaryKey(accountId);
+                    RuleExample example = new RuleExample();
+                    JSONArray jsonArray = new JSONArray();
+                    example.createCriteria().andPluginIdEqualTo(account.getPluginId());
+                    List<Rule> rules = ruleMapper.selectByExample(example);
+                    for (Rule rule : rules) {
+                        QuartzTaskDTO quartzTaskDTO = new QuartzTaskDTO();
+                        BeanUtils.copyBean(quartzTaskDTO, rule);
+                        quartzTaskDTO.setType("quartz");
+                        quartzTaskDTO.setAccountId(accountId);
+                        quartzTaskDTO.setCron(dto.getCron());
+                        quartzTaskDTO.setTaskName(rule.getName());
+
+                        List<SelectTag> selectTags = new LinkedList<>();
+                        SelectTag s = new SelectTag();
+                        s.setAccountId(account.getId());
+                        JSONArray j = parseArray(account.getRegions());
+                        JSONObject object;
+                        List<String> regions = new ArrayList<>();
+                        for (int i = 0; i < j.size(); i++) {
+                            object = j.getJSONObject(i);
+                            String value = object.getString("regionId");
+                            regions.add(value);
+                        }
+                        s.setRegions(regions);
+                        selectTags.add(s);
+                        quartzTaskDTO.setSelectTags(selectTags);
+                        quartzTaskDTO.setRegions(regions.toString());
+                        Task task = orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.RUNNING.name(), null);
+                        task.setLastFireTime(dto.getLastFireTime());
+                        task.setPrevFireTime(dto.getPrevFireTime());
+                        task.setTriggerId(dto.getTriggerId());
+                        taskMapper.updateByPrimaryKeySelective(task);
+
+                        jsonArray.add(task.getId());
+                    }
+
+                    quartzTaskRelation.setTaskIds(jsonArray.toJSONString());
+                    quartzTaskRelationMapper.updateByPrimaryKeySelective(quartzTaskRelation);
+
+                    CloudAccountQuartzTaskRelaLog quartzTaskRelaLog = new CloudAccountQuartzTaskRelaLog();
+                    quartzTaskRelaLog.setCreateTime(System.currentTimeMillis());
+                    quartzTaskRelaLog.setQuartzTaskRelaId(quartzTaskRelation.getId());
+                    quartzTaskRelaLog.setTaskIds(quartzTaskRelation.getTaskIds());
+                    quartzTaskRelaLog.setSourceId(quartzTaskRelation.getSourceId());
+                    quartzTaskRelaLog.setQzType(quartzTaskRelation.getQzType());
+                    quartzTaskRelaLog.setOperator(SessionUtils.getUser().getName());
+                    quartzTaskRelaLog.setOperation("新建定时任务");
+                    quartzTaskRelaLogMapper.insertSelective(quartzTaskRelaLog);
+                }
+            } else {
+                JSONArray jsonArray = new JSONArray();
+                for(String ruleId : dto.getRuleIds()){
+                    CloudAccountQuartzTaskRelation quartzTaskRelation = new CloudAccountQuartzTaskRelation();
+                    quartzTaskRelation.setId(UUIDUtil.newUUID());
+                    quartzTaskRelation.setQuartzTaskId(dto.getId());
+                    quartzTaskRelation.setCreateTime(System.currentTimeMillis());
+                    quartzTaskRelation.setSourceId(ruleId);
+                    quartzTaskRelation.setQzType(dto.getQzType());
+                    quartzTaskRelationMapper.insertSelective(quartzTaskRelation);
+
+                    QuartzTaskDTO quartzTaskDTO = new QuartzTaskDTO();
+                    BeanUtils.copyBean(quartzTaskDTO, ruleMapper.selectByPrimaryKey(ruleId));
+                    quartzTaskDTO.setType("quartz");
+                    quartzTaskDTO.setAccountId(dto.getAccountId());
+                    quartzTaskDTO.setCron(dto.getCron());
+                    quartzTaskDTO.setTaskName(ruleMapper.selectByPrimaryKey(ruleId).getName());
+
+                    List<SelectTag> selectTags = new LinkedList<>();
+                    SelectTag s = new SelectTag();
+                    s.setAccountId(dto.getAccountId());
+                    JSONArray j = parseArray(accountMapper.selectByPrimaryKey(dto.getAccountId()).getRegions());
+                    JSONObject object;
+                    List<String> regions = new ArrayList<>();
+                    for (int i = 0; i < j.size(); i++) {
+                        object = j.getJSONObject(i);
+                        String value = object.getString("regionId");
+                        regions.add(value);
+                    }
+                    s.setRegions(regions);
+                    selectTags.add(s);
+                    quartzTaskDTO.setSelectTags(selectTags);
+                    quartzTaskDTO.setRegions(regions.toString());
+                    Task task = orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.RUNNING.name(), null);
+                    task.setLastFireTime(dto.getLastFireTime());
+                    task.setPrevFireTime(dto.getPrevFireTime());
+                    task.setTriggerId(dto.getTriggerId());
+                    taskMapper.updateByPrimaryKeySelective(task);
+
+                    jsonArray.add(task.getId());
+                    quartzTaskRelation.setTaskIds(jsonArray.toJSONString());
+                    quartzTaskRelationMapper.updateByPrimaryKeySelective(quartzTaskRelation);
+
+                    CloudAccountQuartzTaskRelaLog quartzTaskRelaLog = new CloudAccountQuartzTaskRelaLog();
+                    quartzTaskRelaLog.setCreateTime(System.currentTimeMillis());
+                    quartzTaskRelaLog.setQuartzTaskRelaId(quartzTaskRelation.getId());
+                    quartzTaskRelaLog.setTaskIds(quartzTaskRelation.getTaskIds());
+                    quartzTaskRelaLog.setSourceId(quartzTaskRelation.getSourceId());
+                    quartzTaskRelaLog.setQzType(quartzTaskRelation.getQzType());
+                    quartzTaskRelaLog.setOperator(SessionUtils.getUser().getName());
+                    quartzTaskRelaLog.setOperation("新建定时任务");
+                    quartzTaskRelaLogMapper.insertSelective(quartzTaskRelaLog);
+                }
+            }
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
             throw e;
@@ -251,7 +394,7 @@ public class TaskService {
     }
 
 
-    private Trigger addQuartzTask(Task quartzTask) throws Exception {
+    private Trigger addQuartzTask(CloudAccountQuartzTask quartzTask) throws Exception {
         Trigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity("quartz-task" + quartzTask.getId())
                 .withSchedule(CronScheduleBuilder.cronSchedule(quartzTask.getCron()).withMisfireHandlingInstructionDoNothing())
@@ -267,9 +410,7 @@ public class TaskService {
 
 
     public void reAddQuartzOnStart() {
-        TaskExample example = new TaskExample();
-        example.createCriteria().andTypeEqualTo(TaskConstants.TaskType.quartz.name());
-        List<Task> quartzTasks = taskMapper.selectByExample(example);
+        List<CloudAccountQuartzTask> quartzTasks = quartzTaskMapper.selectByExample(null);
         quartzTasks.forEach(quartzTask -> {
             try {
                 if (quartzManageService.getTrigger(new TriggerKey(quartzTask.getTriggerId())) == null) {
@@ -278,7 +419,7 @@ public class TaskService {
                     if (trigger.getPreviousFireTime() != null)
                         quartzTask.setPrevFireTime(trigger.getPreviousFireTime().getTime());
                     quartzTask.setTriggerId("quartz-task" + quartzTask.getId());
-                    taskMapper.updateByPrimaryKeySelective(quartzTask);
+                    quartzTaskMapper.updateByPrimaryKeySelective(quartzTask);
                 }
             } catch (Exception e) {
                 RSException.throwException(e);
@@ -286,14 +427,12 @@ public class TaskService {
         });
     }
 
-    public Task getResources(String quartzTaskId) {
-        return taskMapper.selectByPrimaryKey(quartzTaskId);
+    public CloudAccountQuartzTask getResources(String quartzTaskId) {
+        return quartzTaskMapper.selectByPrimaryKey(quartzTaskId);
     }
 
     public void syncTriggerTime() {
-        TaskExample example = new TaskExample();
-        example.createCriteria().andTypeEqualTo(TaskConstants.TaskType.quartz.name());
-        List<Task> quartzTasks = taskMapper.selectByExample(example);
+        List<CloudAccountQuartzTask> quartzTasks = quartzTaskMapper.selectByExample(null);
         quartzTasks.forEach(quartzTask -> {
             Trigger trigger = null;
             try {
@@ -303,7 +442,7 @@ public class TaskService {
             }
             quartzTask.setLastFireTime(trigger.getNextFireTime().getTime());
             if (trigger.getPreviousFireTime() != null) quartzTask.setPrevFireTime(trigger.getPreviousFireTime().getTime());
-            taskMapper.updateByPrimaryKeySelective(quartzTask);
+            quartzTaskMapper.updateByPrimaryKeySelective(quartzTask);
 
         });
 
@@ -324,31 +463,36 @@ public class TaskService {
         });
     }
 
-    public void changeQuartzStatus(String quartzId, final String action) throws Exception {
-        Task quartzTask = taskMapper.selectByPrimaryKey(quartzId);
-        String triggerId = quartzTask.getTriggerId();
-        Trigger trigger = quartzManageService.getTrigger(new TriggerKey(triggerId));
-        String taskStatus = null;
-        switch (action) {
-            case QuartzTaskAction.PAUSE:
-                quartzManageService.pauseJob(trigger.getJobKey());
-                taskStatus = QuartzTaskStatus.PAUSE;
-                break;
+    public boolean changeQuartzStatus(String quartzId, final String action) throws Exception {
+        try {
+            CloudAccountQuartzTask quartzTask = quartzTaskMapper.selectByPrimaryKey(quartzId);
+            String triggerId = quartzTask.getTriggerId();
+            Trigger trigger = quartzManageService.getTrigger(new TriggerKey(triggerId));
+            String status = null;
+            switch (action) {
+                case QuartzTaskAction.PAUSE:
+                    quartzManageService.pauseJob(trigger.getJobKey());
+                    status = QuartzTaskStatus.PAUSE;
+                    break;
 
-            case QuartzTaskAction.RESUME:
-                quartzManageService.resumeJob(trigger.getJobKey());
-                taskStatus = QuartzTaskStatus.RUNNING;
-                break;
-            default:
-                RSException.throwException("action is not invalid");
+                case QuartzTaskAction.RESUME:
+                    quartzManageService.resumeJob(trigger.getJobKey());
+                    status = QuartzTaskStatus.RUNNING;
+                    break;
+                default:
+                    RSException.throwException("action is not invalid");
+            }
+            quartzTask.setStatus(status);
+            quartzTaskMapper.updateByPrimaryKeySelective(quartzTask);
+        } catch (Exception e) {
+            return false;
         }
-        quartzTask.setStatus(taskStatus);
-        taskMapper.updateByPrimaryKeySelective(quartzTask);
+        return true;
     }
 
 
     public void deleteQuartzTask(String quartzTaskId) {
-        Task quartzTask = taskMapper.selectByPrimaryKey(quartzTaskId);
+        CloudAccountQuartzTask quartzTask = quartzTaskMapper.selectByPrimaryKey(quartzTaskId);
         String triggerId = quartzTask.getTriggerId();
         Trigger trigger;
         try {
@@ -357,7 +501,17 @@ public class TaskService {
         } catch (Exception e) {
             LogUtil.warn("Scheduled task not found！");
         } finally {
-            this.deleteManualTask(quartzTaskId);
+            //删除整个任务
+            CloudAccountQuartzTaskRelationExample example = new CloudAccountQuartzTaskRelationExample();
+            example.createCriteria().andQuartzTaskIdEqualTo(quartzTaskId);
+            List<CloudAccountQuartzTaskRelation> quartzTaskRelations = quartzTaskRelationMapper.selectByExample(example);
+            for (CloudAccountQuartzTaskRelation quartzTaskRelation : quartzTaskRelations) {
+                CloudAccountQuartzTaskRelaLogExample quartzTaskRelaLogExample = new CloudAccountQuartzTaskRelaLogExample();
+                quartzTaskRelaLogExample.createCriteria().andQuartzTaskRelaIdEqualTo(quartzTaskRelation.getId());
+                quartzTaskRelaLogMapper.deleteByExample(quartzTaskRelaLogExample);
+                quartzTaskRelationMapper.deleteByPrimaryKey(quartzTaskRelation.getId());
+            }
+            quartzTaskMapper.deleteByPrimaryKey(quartzTaskId);
         }
     }
 

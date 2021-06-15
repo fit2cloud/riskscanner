@@ -142,7 +142,6 @@ public class ResourceCreateService {
     private boolean handleTaskItem(TaskItemWithBLOBs taskItem, Task task) {
         orderService.updateTaskItemStatus(taskItem.getId(), TaskConstants.TASK_STATUS.PROCESSING);
         try {
-            Thread.sleep(1000);
             for (int i = 0; i < taskItem.getCount(); i++) {
                 createResource(taskItem, task);
             }
@@ -171,7 +170,6 @@ public class ResourceCreateService {
             String command = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.run.getCommand(), dirPath, "policy.yml", map);
             LogUtil.info(task.getId() + " {}[command]: " + command);
             CommandUtils.saveAsFile(taskItem.getDetails(), TaskConstants.RESULT_FILE_PATH_PREFIX + task.getId() + "/" + taskItem.getRegionId(), "policy.yml");//重启服务后容器内文件在/tmp目录下会丢失
-            Thread.sleep(1000);//手动休眠1秒，云平台调用太快容易出达到最大连接数而超时
             resultStr = CommandUtils.commonExecCmdWithResult(command, dirPath);
             if (LogUtil.getLogger().isDebugEnabled()) {
                 LogUtil.getLogger().debug("resource created: {}", resultStr);
