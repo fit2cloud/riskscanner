@@ -47,7 +47,7 @@
         dialogVisible: false,
         githubUrl: 'https://github.com/riskscanner/riskscanner',
         websiteUrl: 'https://docs.riskscanner.io',
-        version: 'v1.2.0',
+        version: 'v1.2.1',
       }
     },
     created() {

@@ -1,4 +1,4 @@
-FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.2
+FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.2.1
 
 ARG RS_VERSION=dev
 

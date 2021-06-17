@@ -16,7 +16,8 @@
           <el-table-column prop="cronDesc" :label="$t('account.cron_expression_desc')" min-width="12%" show-overflow-tooltip></el-table-column>
           <el-table-column prop="prevFireTime" :label="$t('account.prev_fire_time')" min-width="12%" sortable>
             <template v-slot:default="scope">
-              <span><i class="el-icon-time"></i> {{ scope.row.prevFireTime == null ? '--' : scope.row.prevFireTime | timestampFormatDate  }}</span>
+              <span v-if="scope.row.prevFireTime"><i class="el-icon-time"></i> {{ scope.row.prevFireTime | timestampFormatDate }}</span>
+              <span v-if="!scope.row.prevFireTime"><i class="el-icon-time"></i> {{ '--' }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="lastFireTime" :label="$t('account.last_fire_time')" min-width="12%" sortable>

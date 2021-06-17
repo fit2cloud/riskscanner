@@ -652,7 +652,7 @@ public class OrderService {
 
                 CloudAccountQuartzTaskRelationExample example = new CloudAccountQuartzTaskRelationExample();
                 example.createCriteria().andQuartzTaskIdEqualTo(quartzTaskId);
-                List<CloudAccountQuartzTaskRelation> list = quartzTaskRelationMapper.selectByExample(example);
+                List<CloudAccountQuartzTaskRelation> list = quartzTaskRelationMapper.selectByExampleWithBLOBs(example);
                 for (CloudAccountQuartzTaskRelation quartzTaskRelation : list) {
                     JSONArray jsonArray = JSON.parseArray(quartzTaskRelation.getTaskIds());
                     for (Object o : jsonArray) {
@@ -662,11 +662,12 @@ public class OrderService {
                     }
                     CloudAccountQuartzTaskRelaLog quartzTaskRelaLog = new CloudAccountQuartzTaskRelaLog();
                     quartzTaskRelaLog.setCreateTime(System.currentTimeMillis());
+                    quartzTaskRelaLog.setQuartzTaskId(quartzTaskId);
                     quartzTaskRelaLog.setQuartzTaskRelaId(quartzTaskRelation.getId());
                     quartzTaskRelaLog.setTaskIds(quartzTaskRelation.getTaskIds());
                     quartzTaskRelaLog.setSourceId(quartzTaskRelation.getSourceId());
                     quartzTaskRelaLog.setQzType(quartzTaskRelation.getQzType());
-                    quartzTaskRelaLog.setOperator(SessionUtils.getUser().getName());
+                    quartzTaskRelaLog.setOperator("System");
                     quartzTaskRelaLog.setOperation("执行定时任务");
                     quartzTaskRelaLogMapper.insertSelective(quartzTaskRelaLog);
                 }

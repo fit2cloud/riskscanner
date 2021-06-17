@@ -324,6 +324,7 @@ public class TaskService {
 
                     CloudAccountQuartzTaskRelaLog quartzTaskRelaLog = new CloudAccountQuartzTaskRelaLog();
                     quartzTaskRelaLog.setCreateTime(System.currentTimeMillis());
+                    quartzTaskRelaLog.setQuartzTaskId(dto.getId());
                     quartzTaskRelaLog.setQuartzTaskRelaId(quartzTaskRelation.getId());
                     quartzTaskRelaLog.setTaskIds(quartzTaskRelation.getTaskIds());
                     quartzTaskRelaLog.setSourceId(quartzTaskRelation.getSourceId());
@@ -377,6 +378,7 @@ public class TaskService {
 
                     CloudAccountQuartzTaskRelaLog quartzTaskRelaLog = new CloudAccountQuartzTaskRelaLog();
                     quartzTaskRelaLog.setCreateTime(System.currentTimeMillis());
+                    quartzTaskRelaLog.setQuartzTaskId(dto.getId());
                     quartzTaskRelaLog.setQuartzTaskRelaId(quartzTaskRelation.getId());
                     quartzTaskRelaLog.setTaskIds(quartzTaskRelation.getTaskIds());
                     quartzTaskRelaLog.setSourceId(quartzTaskRelation.getSourceId());
@@ -386,6 +388,7 @@ public class TaskService {
                     quartzTaskRelaLogMapper.insertSelective(quartzTaskRelaLog);
                 }
             }
+            OperationLogService.log(SessionUtils.getUser(), dto.getId(), dto.getName(), ResourceTypeConstants.QUOTA.name(), ResourceOperation.CREATE, "创建定时任务");
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
             throw e;
@@ -484,6 +487,24 @@ public class TaskService {
             }
             quartzTask.setStatus(status);
             quartzTaskMapper.updateByPrimaryKeySelective(quartzTask);
+
+            CloudAccountQuartzTaskRelationExample example = new CloudAccountQuartzTaskRelationExample();
+            example.createCriteria().andQuartzTaskIdEqualTo(quartzId);
+            List<CloudAccountQuartzTaskRelation> list = quartzTaskRelationMapper.selectByExampleWithBLOBs(example);
+
+            for (CloudAccountQuartzTaskRelation quartzTaskRelation : list) {
+                CloudAccountQuartzTaskRelaLog quartzTaskRelaLog = new CloudAccountQuartzTaskRelaLog();
+                quartzTaskRelaLog.setCreateTime(System.currentTimeMillis());
+                quartzTaskRelaLog.setQuartzTaskId(quartzId);
+                quartzTaskRelaLog.setQuartzTaskRelaId(quartzTaskRelation.getId());
+                quartzTaskRelaLog.setTaskIds(quartzTaskRelation.getTaskIds());
+                quartzTaskRelaLog.setSourceId(quartzTaskRelation.getSourceId());
+                quartzTaskRelaLog.setQzType(quartzTaskRelation.getQzType());
+                quartzTaskRelaLog.setOperator("System");
+                quartzTaskRelaLog.setOperation(action.equals(QuartzTaskAction.PAUSE)? "暂停定时任务" : "启动定时任务");
+                quartzTaskRelaLogMapper.insertSelective(quartzTaskRelaLog);
+            }
+
         } catch (Exception e) {
             return false;
         }
@@ -512,6 +533,7 @@ public class TaskService {
                 quartzTaskRelationMapper.deleteByPrimaryKey(quartzTaskRelation.getId());
             }
             quartzTaskMapper.deleteByPrimaryKey(quartzTaskId);
+            OperationLogService.log(SessionUtils.getUser(), quartzTaskId, quartzTask.getName(), ResourceTypeConstants.QUOTA.name(), ResourceOperation.DELETE, "删除定时任务");
         }
     }
 
