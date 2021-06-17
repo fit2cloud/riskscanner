@@ -658,6 +658,8 @@ public class OrderService {
                     for (Object o : jsonArray) {
                         Task task = taskMapper.selectByPrimaryKey(o.toString());
                         task.setStatus(TaskConstants.TASK_STATUS.APPROVED.name());
+                        task.setLastFireTime(quartzTask.getLastFireTime());
+                        task.setPrevFireTime(quartzTask.getPrevFireTime());
                         taskMapper.updateByPrimaryKeySelective(task);
                     }
                     CloudAccountQuartzTaskRelaLog quartzTaskRelaLog = new CloudAccountQuartzTaskRelaLog();
