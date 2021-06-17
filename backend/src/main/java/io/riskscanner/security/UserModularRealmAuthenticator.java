@@ -22,6 +22,7 @@ public class UserModularRealmAuthenticator extends ModularRealmAuthenticator {
         RsUserToken userToken = (RsUserToken) authenticationToken;
         // 登录类型
         String loginType = userToken.getLoginType();
+        
         // 所有Realm
         Collection<Realm> realms = getRealms();
         // 登录类型对应的所有Realm

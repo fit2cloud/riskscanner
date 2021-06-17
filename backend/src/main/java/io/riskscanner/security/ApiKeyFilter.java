@@ -24,12 +24,12 @@ public class ApiKeyFilter extends AnonymousFilter {
                     if (LogUtil.getLogger().isDebugEnabled()) {
                         LogUtil.getLogger().debug("user auth: " + userId);
                     }
-                    SecurityUtils.getSubject().login(new UsernamePasswordToken(userId, ApiKeySessionHandler.random));
+                    SecurityUtils.getSubject().login(new RsUserToken(userId, ApiKeySessionHandler.random, "LOCAL"));
                 }
             } else {
                 if (ApiKeyHandler.isApiKeyCall(WebUtils.toHttp(request))) {
                     String userId = ApiKeyHandler.getUser(WebUtils.toHttp(request));
-                    SecurityUtils.getSubject().login(new UsernamePasswordToken(userId, ApiKeySessionHandler.random));
+                    SecurityUtils.getSubject().login(new RsUserToken(userId, ApiKeySessionHandler.random, "LOCAL"));
                 }
             }
 
