@@ -11,7 +11,11 @@
         <el-table border :data="tableData" class="adjust-table table-content" @sort-change="sort" :row-class-name="tableRowClassName">
           <el-table-column type="index" min-width="3%"/>
           <el-table-column prop="name" :label="$t('account.task_input_name')" min-width="10%" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="qzType" :label="$t('account.choose_qztype')" min-width="7%" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="qzType" :label="$t('account.choose_qztype')" min-width="7%" show-overflow-tooltip>
+            <template v-slot:default="scope">
+              <el-link type="primary" @click="showAccount(scope.row)">{{ scope.row.qzType }}</el-link>
+            </template>
+          </el-table-column>
           <el-table-column prop="cron" :label="$t('account.cron_expression')" min-width="10%" show-overflow-tooltip></el-table-column>
           <el-table-column prop="cronDesc" :label="$t('account.cron_expression_desc')" min-width="12%" show-overflow-tooltip></el-table-column>
           <el-table-column prop="prevFireTime" :label="$t('account.prev_fire_time')" min-width="12%" sortable>
@@ -324,6 +328,9 @@ import QuartzTaskLog from "@/business/components/account/home/QuartzTaskLog";
       create() {
         this.active = 1;
         this.createVisible = true;
+        this.preVisible = false;
+        this.confirmVisible = false;
+        this.nextVisible = true;
         this.form = {cron: DEFAULT_CRON_EXPRESSION, name: '', accountId: "", qzType: 'ACCOUNT', accountIds: [], ruleIds: []};
       },
       filterStatus(value, row) {
@@ -334,8 +341,30 @@ import QuartzTaskLog from "@/business/components/account/home/QuartzTaskLog";
         this.logVisible=false;
       },
       save() {
+        if (!this.form.cron) {
+          this.$error(this.$t('account.cron_not_null'));
+          return;
+        }
+        if (!this.form.qzType) {
+          this.$error(this.$t('account.qztype_not_null'));
+          return;
+        }
+        if (!this.form.name) {
+          this.$error(this.$t('account.name_not_null'));
+          return;
+        }
+        if (this.form.qzType==="ACCOUNT") {
+          if(this.form.accountIds){
+            this.$error(this.$t('account.accountIds_not_null'));
+            return;
+          }
+        } else {
+          if(this.form.ruleIds){
+            this.$error(this.$t('account.ruleIds_not_null'));
+            return;
+          }
+        }
         this.result = this.$post("/task/quartz/create", this.form, response => {
-          let data = response.data;
           this.createVisible =  false;
           this.search();
         });
@@ -447,6 +476,9 @@ import QuartzTaskLog from "@/business/components/account/home/QuartzTaskLog";
           this.logForm.total = data.itemCount;
           this.logVisible =  true;
         });
+      },
+      showAccount(row) {
+        console.log(row)
       },
     },
 

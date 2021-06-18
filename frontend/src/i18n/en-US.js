@@ -711,6 +711,8 @@ export default {
     pause_success:'Successfully paused the timing task',
     operator:'Creator',
     operation:'Action',
+    accountIds_not_null:'Cloud account is not allowed to be empty',
+    ruleIds_not_null:'The rule is not allowed to be empty',
   },
   proxy: {
     create:'Create an agent',

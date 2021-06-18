@@ -711,6 +711,9 @@ export default {
     pause_success: '暂停定时任务成功',
     operator: '创建者',
     operation: '动作',
+    accountIds_not_null: '云账号不允许为空',
+    ruleIds_not_null: '规则不允许为空',
+
   },
   proxy: {
     create: '创建代理',

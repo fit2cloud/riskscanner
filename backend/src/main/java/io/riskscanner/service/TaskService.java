@@ -537,6 +537,15 @@ public class TaskService {
         }
     }
 
+    public List<AccountWithBLOBs> showAccount(String taskId) {
+        try {
+            return null;
+        } catch (Exception e) {
+            LogUtil.error(e.getMessage());
+            throw new RSException(e.getMessage());
+        }
+    }
+
 }
 
 class QuartzTaskStatus {

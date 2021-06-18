@@ -711,6 +711,8 @@ export default {
     pause_success: '暫停定時任務成功',
     operator: '創建者',
     operation: '動作',
+    accountIds_not_null: '雲賬號不允許為空',
+    ruleIds_not_null: '規則不允許為空',
   },
   proxy: {
     create: '創建代理',

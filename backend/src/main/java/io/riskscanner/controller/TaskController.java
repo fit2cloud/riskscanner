@@ -150,4 +150,9 @@ public class TaskController {
         return CronExpression.isValidExpression(map.get("cron"));
     }
 
+    @GetMapping("show/account/{taskId}")
+    public List<AccountWithBLOBs> showAccount(@PathVariable String taskId) {
+        return taskService.showAccount(taskId);
+    }
+
 }

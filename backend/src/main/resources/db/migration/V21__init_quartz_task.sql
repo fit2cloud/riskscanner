@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `cloud_account_quartz_task` (
 CREATE TABLE IF NOT EXISTS `cloud_account_quartz_task_relation` (
     `id`                            varchar(50)           NOT NULL,
     `quartz_task_id`                varchar(50)           DEFAULT NULL COMMENT '定时任务ID',
-    `source_id`                     varchar(50)           DEFAULT NULL COMMENT '来源ID(accountId/ruleId)',
+    `source_id`                     varchar(50)           DEFAULT NULL COMMENT '来源ID(accountId)',
     `create_time`                   bigint(13)            DEFAULT NULL COMMENT '创建时间',
     `qz_type`                       varchar(32)           DEFAULT NULL COMMENT '定时任务类型',
     `task_ids`                      mediumtext            DEFAULT NULL COMMENT 'taskIds',
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `cloud_account_quartz_task_rela_log` (
     `id`                           int(11)             NOT NULL AUTO_INCREMENT,
     `quartz_task_id`               varchar(50)         DEFAULT NULL COMMENT '定时任务ID',
     `quartz_task_rela_id`          varchar(50)         DEFAULT NULL COMMENT '任务项ID',
-    `source_id`                    varchar(50)         DEFAULT NULL COMMENT '来源ID(accountId/ruleId)',
+    `source_id`                    varchar(50)         DEFAULT NULL COMMENT '来源ID(accountId)',
     `create_time`                  bigint(13)          DEFAULT NULL COMMENT '创建时间',
     `operator`                     varchar(100)        DEFAULT NULL COMMENT '操作人',
     `operation`                    varchar(255)        DEFAULT NULL COMMENT '操作内容',
