@@ -713,6 +713,8 @@ export default {
     operation:'Action',
     accountIds_not_null:'Cloud account is not allowed to be empty',
     ruleIds_not_null:'The rule is not allowed to be empty',
+    qztype_details:'Timing task details',
+    qztype_triggerId:'Timing task ID',
   },
   proxy: {
     create:'Create an agent',

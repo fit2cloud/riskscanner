@@ -549,9 +549,6 @@
             this.detailVisible = true;
           }
         });
-      },      handleClose(done) {
-        this.logVisible=false;
-        this.detailVisible=false;
       },
       handleClose(done) {
           this.logVisible=false;

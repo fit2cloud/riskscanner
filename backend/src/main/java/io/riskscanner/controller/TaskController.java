@@ -151,7 +151,7 @@ public class TaskController {
     }
 
     @GetMapping("show/account/{taskId}")
-    public List<AccountWithBLOBs> showAccount(@PathVariable String taskId) {
+    public ShowAccountQuartzTaskDTO showAccount(@PathVariable String taskId) {
         return taskService.showAccount(taskId);
     }
 

@@ -713,7 +713,8 @@ export default {
     operation: '动作',
     accountIds_not_null: '云账号不允许为空',
     ruleIds_not_null: '规则不允许为空',
-
+    qztype_details: '定时任务详情',
+    qztype_triggerId: '定时任务ID',
   },
   proxy: {
     create: '创建代理',

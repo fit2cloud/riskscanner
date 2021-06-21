@@ -713,6 +713,8 @@ export default {
     operation: '動作',
     accountIds_not_null: '雲賬號不允許為空',
     ruleIds_not_null: '規則不允許為空',
+    qztype_details: '定時任務詳情',
+    qztype_triggerId: '定時任務ID',
   },
   proxy: {
     create: '創建代理',

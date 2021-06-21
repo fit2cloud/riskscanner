@@ -182,6 +182,139 @@
       </el-drawer>
       <!--Quartz Task log-->
 
+      <!--Quartz Task detail-->
+      <el-drawer v-if="detailVisible" :close-on-click-modal="false" class="rtl" :visible.sync="detailVisible" size="75%" :show-close="false" :before-close="handleClose" :direction="direction"
+                 :destroy-on-close="true">
+        <div slot="title" class="dialog-title">
+          <span>{{ $t('account.qztype_details') }}</span>
+          <i class="el-icon-close el-icon-close-detail" @click="detailVisible=false"></i>
+        </div>
+        <el-form :model="detailForm" label-position="right"  size="small" ref="detailForm">
+          <el-form-item class="el-form-item-dev">
+            <el-tabs type="border-card">
+              <el-tab-pane>
+                <span slot="label"><i class="el-icon-reading"></i> {{ $t('account.quartz_task') }}</span>
+                <el-form label-position="left" inline class="demo-table-expand" >
+                  <el-form-item :label="$t('account.task_input_name')">
+                    <el-tooltip class="item" effect="dark" :content="detailForm.name" placement="top-start">
+                      <div v-if="detailForm.name" class="view-text">{{ detailForm.name }}</div>
+                    </el-tooltip>
+                  </el-form-item>
+                  <el-form-item :label="$t('account.choose_qztype')">
+                    <el-tooltip class="item" effect="dark" :content="detailForm.qzType" placement="top-start">
+                      <div v-if="detailForm.qzType" class="view-text">{{ detailForm.qzType }}</div>
+                    </el-tooltip>
+                  </el-form-item>
+                  <el-form-item :label="$t('account.cron_expression')">
+                    <el-tooltip class="item" effect="dark" :content="detailForm.cron" placement="top-start">
+                      <span v-if="detailForm.cron" class="view-text">{{ detailForm.cron }}</span>
+                    </el-tooltip>
+                  </el-form-item>
+                  <el-form-item :label="$t('account.cron_expression_desc')">
+                    <el-tooltip class="item" effect="dark" :content="detailForm.cronDesc" placement="top-start">
+                      <span v-if="detailForm.cronDesc" class="view-text">{{ detailForm.cronDesc }}</span>
+                    </el-tooltip>
+                  </el-form-item>
+                  <el-form-item :label="$t('account.prev_fire_time')">
+                    <span v-if="detailForm.prevFireTime">{{ detailForm.prevFireTime | timestampFormatDate }}</span>
+                    <span v-if="!detailForm.prevFireTime">{{ "--" }}</span>
+                  </el-form-item>
+                  <el-form-item :label="$t('account.last_fire_time')">
+                    <span>{{ detailForm.lastFireTime | timestampFormatDate }}</span>
+                  </el-form-item>
+                  <el-form-item :label="$t('account.task_status')">
+                    <el-button plain size="mini" type="success" v-if="detailForm.status === 'RUNNING'">
+                      <i class="el-icon-timer"></i> {{ $t('account.RUNNING') }}
+                    </el-button>
+                    <el-button plain size="mini" type="warning" v-else-if="detailForm.status === 'PAUSE'">
+                      <i class="el-icon-video-pause"></i> {{ $t('account.PAUSE') }}
+                    </el-button>
+                    <el-button plain size="mini" type="danger" v-else-if="detailForm.status === 'ERROR'">
+                      <i class="el-icon-error"></i> {{ $t('account.ERROR') }}
+                    </el-button>
+                  </el-form-item>
+                  <el-form-item :label="$t('account.creator')">
+                    <span>{{ detailForm.applyUser }}</span>
+                  </el-form-item>
+                  <el-form-item :label="$t('account.create_time')">
+                    <span>{{ detailForm.createTime | timestampFormatDate }}</span>
+                  </el-form-item>
+                  <el-form-item :label="$t('account.qztype_triggerId')">
+                    <span>{{ detailForm.triggerId }}</span>
+                  </el-form-item>
+                </el-form>
+
+                <el-divider></el-divider>
+
+                <el-row class="el-form-item-dev" v-for="dto in detailForm.quartzTaskRelationDtos" :key="dto.id">
+                  <el-table :show-header="true" :data="dto.taskList" class="adjust-table table-content">
+                    <el-table-column v-slot:default="scope" :label="$t('rule.rule_name')" min-width="20%">
+                        {{ scope.row.taskName }}
+                    </el-table-column>
+                    <el-table-column v-slot:default="scope" :label="$t('account.cloud_account')" min-width="15%">
+                      <span class="grid-content-log-span">
+                      <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
+                       &nbsp;&nbsp; {{ scope.row.accountName }}
+                    </span>
+                    </el-table-column>
+                    <el-table-column v-slot:default="scope" :label="$t('account.creator')" min-width="7%">
+                      {{ scope.row.applyUser }}
+                    </el-table-column>
+                    <el-table-column v-slot:default="scope" :label="$t('rule.severity')" min-width="8%" prop="severity">
+                      <span v-if="scope.row.severity == 'HighRisk'" style="color: #f84846;"> {{ $t('rule.HighRisk') }}</span>
+                      <span v-else-if="scope.row.severity == 'MediumRisk'" style="color: #fe9636;"> {{ $t('rule.MediumRisk') }}</span>
+                      <span v-else-if="scope.row.severity == 'LowRisk'" style="color: #4dabef;"> {{ $t('rule.LowRisk') }}</span>
+                      <span v-else> N/A</span>
+                    </el-table-column>
+                    <el-table-column v-slot:default="scope" :label="$t('resource.status')" min-width="12%" prop="status">
+                      <el-button plain size="mini" type="primary" v-if="scope.row.status === 'UNCHECKED'">
+                        <i class="el-icon-loading"></i> {{ $t('resource.i18n_in_process') }}
+                      </el-button>
+                      <el-button plain size="mini" type="primary" v-else-if="scope.row.status === 'APPROVED'">
+                        <i class="el-icon-loading"></i> {{ $t('resource.i18n_in_process') }}
+                      </el-button>
+                      <el-button plain size="mini" type="primary" v-else-if="scope.row.status === 'PROCESSING'">
+                        <i class="el-icon-loading"></i> {{ $t('resource.i18n_in_process') }}
+                      </el-button>
+                      <el-button plain size="mini" type="success" v-else-if="scope.row.status === 'FINISHED'">
+                        <i class="el-icon-success"></i> {{ $t('resource.i18n_done') }}
+                      </el-button>
+                      <el-button plain size="mini" type="danger" v-else-if="scope.row.status === 'ERROR'">
+                        <i class="el-icon-error"></i> {{ $t('resource.i18n_has_exception') }}
+                      </el-button>
+                      <el-button plain size="mini" type="warning" v-else-if="scope.row.status === 'WARNING'">
+                        <i class="el-icon-warning"></i> {{ $t('resource.i18n_has_warn') }}
+                      </el-button>
+                    </el-table-column>
+                    <el-table-column v-slot:default="scope" :label="$t('resource.i18n_not_compliance')" prop="returnSum" min-width="8%">
+                      <span v-if="scope.row.returnSum == null && scope.row.resourcesSum == null"> N/A</span>
+                      <span v-if="(scope.row.returnSum != null) && (scope.row.returnSum == 0)">
+                        {{ scope.row.returnSum }}/{{ scope.row.resourcesSum }}
+                      </span>
+                      <span v-if="(scope.row.returnSum != null) && (scope.row.returnSum > 0)">
+                        <el-link type="primary" class="text-click">{{ scope.row.returnSum }}/{{ scope.row.resourcesSum }}</el-link>
+                      </span>
+                    </el-table-column>
+                    <el-table-column v-slot:default="scope" :label="$t('resource.status_on_off')" prop="returnSum" min-width="10%">
+                      <span v-if="scope.row.returnSum == 0" style="color: #46ad59;">{{ $t('resource.i18n_compliance_true') }}</span>
+                      <span v-else-if="(scope.row.returnSum != null) && (scope.row.returnSum > 0)" style="color: #f84846;">{{ $t('resource.i18n_compliance_false') }}</span>
+                      <span v-else-if="scope.row.returnSum == null && scope.row.resourcesSum == null"> N/A</span>
+                    </el-table-column>
+                    <el-table-column prop="createTime" min-width="20%" :label="$t('account.update_time')">
+                      <template v-slot:default="scope">
+                        <span><i class="el-icon-time"></i> {{ scope.row.createTime | timestampFormatDate }}</span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </el-row>
+
+              </el-tab-pane>
+            </el-tabs>
+          </el-form-item>
+        </el-form>
+      </el-drawer>
+      <!--Quartz Task detail-->
+
     </main-container>
 </template>
 
@@ -288,6 +421,8 @@ import QuartzTaskLog from "@/business/components/account/home/QuartzTaskLog";
         goLogPage: 1,
         pageLogSize: 10,
         logTotal: 0,
+        detailVisible: false,
+        detailForm: {},
       }
     },
 
@@ -339,6 +474,7 @@ import QuartzTaskLog from "@/business/components/account/home/QuartzTaskLog";
       handleClose() {
         this.createVisible =  false;
         this.logVisible=false;
+        this.detailVisible=false;
       },
       save() {
         if (!this.form.cron) {
@@ -478,7 +614,11 @@ import QuartzTaskLog from "@/business/components/account/home/QuartzTaskLog";
         });
       },
       showAccount(row) {
-        console.log(row)
+        let url = "/task/show/account/" + row.id;
+        this.$get(url,response => {
+          this.detailForm = response.data;
+          this.detailVisible=true;
+        });
       },
     },
 
@@ -508,7 +648,7 @@ import QuartzTaskLog from "@/business/components/account/home/QuartzTaskLog";
   .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
-    padding: 10px 10%;
+    padding: 5px 1%;
     width: 47%;
   }
 
@@ -523,33 +663,20 @@ import QuartzTaskLog from "@/business/components/account/home/QuartzTaskLog";
     width: 80%;
   }
   .rtl >>> .el-form-item__content {
-    width: 75%;
-  }
-  .code-mirror {
-    height: 600px !important;
-  }
-  .code-mirror >>> .CodeMirror {
-    /* Set height, width, borders, and global font properties here */
-    height: 600px !important;
+    width: 100%;
   }
   /deep/ :focus{outline:0;}
   .el-box-card {
     margin: 10px 0;
   }
-  .el-radio-u {
-    display: flex;
-    display: -webkit-flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px;
-  }
   .row {
     margin-right: -15px;
     margin-left: -15px
   }
-  .el-checkbox {
-    text-align: right;
-    width: 98%;
+
+  .el-icon-close-detail {
+    float: right;
+    cursor:pointer;
   }
 </style>
 
