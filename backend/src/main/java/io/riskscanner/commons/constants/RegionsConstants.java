@@ -15,6 +15,8 @@ public class RegionsConstants {
 
     public static Map<String, String> TencentMap;
 
+    public static Map<String, String> GcpMap;
+
     static
     {
         AwsMap = new HashMap<>();
@@ -122,6 +124,48 @@ public class RegionsConstants {
         TencentMap.put("na-siliconvalley", "美国西部(硅谷)");
         TencentMap.put("na-toronto", "北美地区(多伦多)");
         // Tencent end
+
+        // GCP 国际 start
+        GcpMap.put("asia-east1-a", "亚太地区台湾彰化a");
+        GcpMap.put("asia-east1-b", "亚太地区台湾彰化b");
+        GcpMap.put("asia-east1-c", "亚太地区台湾彰化c");
+        GcpMap.put("asia-east2-a", "亚太地区香港a");
+        GcpMap.put("asia-east2-b", "亚太地区香港b");
+        GcpMap.put("asia-east2-c", "亚太地区香港c");
+        GcpMap.put("asia-northeast1-a", "亚太地区日本东京a");
+        GcpMap.put("asia-northeast1-b", "亚太地区日本东京b");
+        GcpMap.put("asia-northeast1-c", "亚太地区日本东京c");
+        GcpMap.put("asia-northeast2-a", "亚太地区日本大阪a");
+        GcpMap.put("asia-northeast2-b", "亚太地区日本大阪b");
+        GcpMap.put("asia-northeast2-c", "亚太地区日本大阪c");
+        GcpMap.put("asia-northeast3-a", "亚太地区韩国首尔a");
+        GcpMap.put("asia-northeast3-b", "亚太地区韩国首尔b");
+        GcpMap.put("asia-northeast3-c", "亚太地区韩国首尔c");
+        GcpMap.put("asia-south1-a", "亚太地区印度孟买a");
+        GcpMap.put("asia-south1-b", "亚太地区印度孟买b");
+        GcpMap.put("asia-south1-c", "亚太地区印度孟买c");
+        GcpMap.put("asia-southeast1-a", "亚太地区新加坡裕廊西a");
+        GcpMap.put("asia-southeast1-b", "亚太地区新加坡裕廊西b");
+        GcpMap.put("asia-southeast1-c", "亚太地区新加坡裕廊西c");
+        GcpMap.put("asia-southeast2-a", "亚太地区印度尼西亚雅加达a");
+        GcpMap.put("asia-southeast2-b", "亚太地区印度尼西亚雅加达b");
+        GcpMap.put("asia-southeast2-c", "亚太地区印度尼西亚雅加达c");
+        GcpMap.put("australia-southeast1-a", "亚太地区澳大利亚悉尼a");
+        GcpMap.put("australia-southeast1-b", "亚太地区澳大利亚悉尼b");
+        GcpMap.put("australia-southeast1-c", "亚太地区澳大利亚悉尼c");
+        GcpMap.put("europe-central2-a", "欧洲波兰华沙a");
+        GcpMap.put("europe-central2-b", "欧洲波兰华沙b");
+        GcpMap.put("europe-central2-c", "欧洲波兰华沙c");
+        GcpMap.put("europe-north1-a", "欧洲芬兰哈米纳a");
+        GcpMap.put("europe-north1-b", "欧洲芬兰哈米纳b");
+        GcpMap.put("europe-north1-c", "欧洲芬兰哈米纳c");
+        GcpMap.put("europe-west1-b", "欧洲比利时圣吉斯兰b");
+        GcpMap.put("europe-west1-c", "欧洲比利时圣吉斯兰c");
+        GcpMap.put("europe-west1-d", "欧洲比利时圣吉斯兰d");
+        GcpMap.put("europe-west2-a", "欧洲英国伦敦a");
+        GcpMap.put("europe-west2-b", "欧洲英国伦敦b");
+        GcpMap.put("europe-west2-c", "欧洲英国伦敦c");
+        // GCP 国际 end
     }
 
 }

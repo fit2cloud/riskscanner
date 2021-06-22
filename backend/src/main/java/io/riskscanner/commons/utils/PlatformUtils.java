@@ -14,7 +14,13 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.RegionUtils;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.DescribeRegionsResult;
+import com.google.cloud.storage.Acl;
+import com.google.cloud.storage.BlobInfo;
 import com.google.common.base.Strings;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.huaweicloud.sdk.iam.v3.IamClient;
 import com.huaweicloud.sdk.iam.v3.model.*;
@@ -31,6 +37,7 @@ import io.riskscanner.commons.constants.RegionsConstants;
 import io.riskscanner.commons.exception.PluginException;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.i18n.Translator;
+import io.riskscanner.proxy.Request;
 import io.riskscanner.proxy.aliyun.AliyunCredential;
 import io.riskscanner.proxy.aliyun.AliyunRequest;
 import io.riskscanner.proxy.aws.AWSCredential;
@@ -38,12 +45,13 @@ import io.riskscanner.proxy.aws.AWSRequest;
 import io.riskscanner.proxy.azure.AzureBaseRequest;
 import io.riskscanner.proxy.azure.AzureClient;
 import io.riskscanner.proxy.azure.AzureCredential;
+import io.riskscanner.proxy.gcp.GcpBaseRequest;
+import io.riskscanner.proxy.gcp.GcpClient;
 import io.riskscanner.proxy.huawei.ClientUtil;
 import io.riskscanner.proxy.huawei.HuaweiCloudCredential;
 import io.riskscanner.proxy.openstack.OpenStackCredential;
 import io.riskscanner.proxy.openstack.OpenStackRequest;
 import io.riskscanner.proxy.openstack.OpenStackUtils;
-import io.riskscanner.proxy.Request;
 import io.riskscanner.proxy.tencent.QCloudBaseRequest;
 import io.riskscanner.proxy.vsphere.VsphereBaseRequest;
 import io.riskscanner.proxy.vsphere.VsphereClient;
@@ -56,6 +64,7 @@ import org.openstack4j.api.types.ServiceType;
 import org.openstack4j.model.compute.ext.Hypervisor;
 import org.openstack4j.openstack.storage.block.domain.VolumeBackendPool;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -149,6 +158,10 @@ public class PlatformUtils {
                         "AZURE_CLIENT_ID=" + client + " " +
                         "AZURE_CLIENT_SECRET=" + key + " ";
                 _pok = " --region=" + region + " ";
+                break;
+            case gcp:
+                String googleCloudProject = params.get("googleCloudProject");
+                pre = "GOOGLE_CLOUD_PROJECT=" + googleCloudProject + " ";
                 break;
             case aliyun:
                 String aliAccessKey = params.get("accessKey");
@@ -290,6 +303,8 @@ public class PlatformUtils {
                 map.put("vPassword", vsphereCredential.getvPassword());
                 map.put("vEndPoint", vsphereCredential.getvEndPoint());
                 map.put("region", region);
+                break;
+            case gcp:
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + account.getPluginId());
@@ -611,6 +626,17 @@ public class PlatformUtils {
                         vsphereClient.closeConnection();
                     }
                 }
+            case gcp:
+                GcpClient gcpClient = null;
+                try {
+                    Request gcpRequest = new Request();
+                    gcpRequest.setCredential(account.getCredential());
+                    GcpBaseRequest gcpBaseRequest = new GcpBaseRequest(gcpRequest);
+                    gcpClient = gcpBaseRequest.getGcpClient();
+                    return gcpClient.authExplicit(gcpBaseRequest.getGcpCredential());
+                } catch (Exception e) {
+                    throw new PluginException("Verify that the account has an error!", e);
+                }
             default:
                 throw new IllegalStateException("Unexpected value: " + account.getPluginId());
         }
@@ -682,6 +708,9 @@ public class PlatformUtils {
                 strCn = strEn;
                 break;
             case openstack:
+                strCn = strEn;
+                break;
+            case gcp:
                 strCn = strEn;
                 break;
             default:
@@ -757,8 +786,12 @@ public class PlatformUtils {
                 break;
             case openstack:
                 break;
+            case gcp:
+                break;
             default:
+                throw new IllegalStateException("Unexpected value: " + pluginId);
         }
+
         return true;
     }
 
