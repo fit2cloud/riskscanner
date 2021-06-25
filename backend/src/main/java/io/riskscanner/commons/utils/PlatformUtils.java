@@ -14,12 +14,12 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.RegionUtils;
 import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.DescribeRegionsResult;
-import com.google.cloud.storage.Acl;
-import com.google.cloud.storage.BlobInfo;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.common.base.Strings;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.huaweicloud.sdk.iam.v3.IamClient;
@@ -47,6 +47,7 @@ import io.riskscanner.proxy.azure.AzureClient;
 import io.riskscanner.proxy.azure.AzureCredential;
 import io.riskscanner.proxy.gcp.GcpBaseRequest;
 import io.riskscanner.proxy.gcp.GcpClient;
+import io.riskscanner.proxy.gcp.GcpCredential;
 import io.riskscanner.proxy.huawei.ClientUtil;
 import io.riskscanner.proxy.huawei.HuaweiCloudCredential;
 import io.riskscanner.proxy.openstack.OpenStackCredential;
@@ -61,11 +62,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openstack4j.api.OSClient;
 import org.openstack4j.api.types.ServiceType;
-import org.openstack4j.model.compute.ext.Hypervisor;
-import org.openstack4j.openstack.storage.block.domain.VolumeBackendPool;
+import com.google.api.services.cloudresourcemanager.CloudResourceManager;
+import com.google.api.services.cloudresourcemanager.model.Project;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -159,10 +162,6 @@ public class PlatformUtils {
                         "AZURE_CLIENT_SECRET=" + key + " ";
                 _pok = " --region=" + region + " ";
                 break;
-            case gcp:
-                String googleCloudProject = params.get("googleCloudProject");
-                pre = "GOOGLE_CLOUD_PROJECT=" + googleCloudProject + " ";
-                break;
             case aliyun:
                 String aliAccessKey = params.get("accessKey");
                 String aliSecretKey = params.get("secretKey");
@@ -216,6 +215,16 @@ public class PlatformUtils {
                         "VSPHERE_PASSWORD=" + vPassword + " " +
                         "VSPHERE_ENDPOINT=" + vEndPoint + " " +
                         "VSPHERE_DEFAULT_REGION=" + region + " ";
+                break;
+            case gcp:
+                String credential = params.get("credential");
+                try {
+                    CommandUtils.commonExecCmdWithResult("export GOOGLE_APPLICATION_CREDENTIALS=" + credential, dirPath);
+                    CommandUtils.saveAsFile(credential, dirPath, "google_application_credentials.json");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                pre = "GOOGLE_CLOUD_PROJECT=" + region + " ";
                 break;
         }
         switch (behavior) {
@@ -305,6 +314,10 @@ public class PlatformUtils {
                 map.put("region", region);
                 break;
             case gcp:
+                map.put("type", gcp);
+                GcpCredential gcpCredential = new Gson().fromJson(account.getCredential(), GcpCredential.class);
+                map.put("credential", gcpCredential.getCredentials());
+                map.put("region", region);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + account.getPluginId());
@@ -500,6 +513,48 @@ public class PlatformUtils {
                     }
                     break;
                 case gcp:
+                    try {
+                        Request gcpRequest = new Request();
+                        gcpRequest.setCredential(account.getCredential());
+                        GcpBaseRequest gcpBaseRequest = new GcpBaseRequest(gcpRequest);
+                        HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+                        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+
+                        InputStream inputStream = new ByteArrayInputStream(gcpBaseRequest.getGcpCredential().getCredentials().getBytes(Charset.forName("UTF-8")));
+                        GoogleCredential credential = GoogleCredential.fromStream(inputStream)
+                                .createScoped(Lists.newArrayList("https://www.googleapis.com/auth/cloud-platform"));
+                        CloudResourceManager cloudResourceManagerService = new CloudResourceManager.Builder(httpTransport, jsonFactory, credential)
+                                .setApplicationName("Google-CloudResourceManagerSample/0.1")
+                                .build();
+                        JSONObject gcp = JSON.parseObject(gcpBaseRequest.getGcpCredential().getCredentials());
+                        String projectId = gcp.getString("quota_project_id");
+                        if (projectId==null) projectId = gcp.getString("project_id");
+                        CloudResourceManager.Projects.Get request =
+                                cloudResourceManagerService.projects().get(projectId);
+                        Project response = request.execute();
+                        if (response==null) {
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("regionId", projectId);
+                            jsonObject.put("regionName", projectId);
+                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                            break;
+                        }
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("regionId", projectId);
+                        jsonObject.put("regionName", response.getName());
+                        if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                    } catch (Exception e) {
+                        Request gcpRequest = new Request();
+                        gcpRequest.setCredential(account.getCredential());
+                        GcpBaseRequest gcpBaseRequest = new GcpBaseRequest(gcpRequest);
+                        JSONObject gcp = JSON.parseObject(gcpBaseRequest.getGcpCredential().getCredentials());
+                        String projectId = gcp.getString("quota_project_id");
+                        if (projectId==null) projectId = gcp.getString("project_id");
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("regionId", projectId);
+                        jsonObject.put("regionName", projectId);
+                        if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                    }
                     break;
                 default:
                     throw new IllegalStateException("Unexpected regions value{}: " + account.getPluginName());

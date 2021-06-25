@@ -165,6 +165,43 @@ public class RegionsConstants {
         GcpMap.put("europe-west2-a", "欧洲英国伦敦a");
         GcpMap.put("europe-west2-b", "欧洲英国伦敦b");
         GcpMap.put("europe-west2-c", "欧洲英国伦敦c");
+        GcpMap.put("europe-west3-a", "欧洲德国法兰克福a");
+        GcpMap.put("europe-west3-b", "欧洲德国法兰克福b");
+        GcpMap.put("europe-west3-c", "欧洲德国法兰克福c");
+        GcpMap.put("europe-west4-a", "欧洲荷兰埃姆斯哈文a");
+        GcpMap.put("europe-west4-b", "欧洲荷兰埃姆斯哈文b");
+        GcpMap.put("europe-west4-c", "欧洲荷兰埃姆斯哈文c");
+        GcpMap.put("europe-west6-a", "欧洲瑞士苏黎世a");
+        GcpMap.put("europe-west6-b", "欧洲瑞士苏黎世b");
+        GcpMap.put("europe-west6-c", "欧洲瑞士苏黎世c");
+        GcpMap.put("northamerica-northeast1-a", "北美洲魁北克省蒙特利尔a");
+        GcpMap.put("northamerica-northeast1-b", "北美洲魁北克省蒙特利尔b");
+        GcpMap.put("northamerica-northeast1-c", "北美洲魁北克省蒙特利尔c");
+        GcpMap.put("southamerica-east1-a", "南美洲巴西圣保罗省奥萨斯库a");
+        GcpMap.put("southamerica-east1-b", "南美洲巴西圣保罗省奥萨斯库b");
+        GcpMap.put("southamerica-east1-c", "南美洲巴西圣保罗省奥萨斯库c");
+        GcpMap.put("us-central1-a", "北美洲爱荷华州康瑟布拉夫斯a");
+        GcpMap.put("us-central1-b", "北美洲爱荷华州康瑟布拉夫斯b");
+        GcpMap.put("us-central1-c", "北美洲爱荷华州康瑟布拉夫斯c");
+        GcpMap.put("us-central1-f", "北美洲爱荷华州康瑟布拉夫斯f");
+        GcpMap.put("us-east1-b", "北美洲南卡罗来纳州蒙克斯科纳b");
+        GcpMap.put("us-east1-c", "北美洲南卡罗来纳州蒙克斯科纳c");
+        GcpMap.put("us-east1-d", "北美洲南卡罗来纳州蒙克斯科纳a");
+        GcpMap.put("us-east4-a", "北美洲弗吉尼亚阿什本a");
+        GcpMap.put("us-east4-b", "北美洲弗吉尼亚阿什本b");
+        GcpMap.put("us-east4-c", "北美洲弗吉尼亚阿什本c");
+        GcpMap.put("us-west1-a", "北美洲俄勒冈州达尔斯a");
+        GcpMap.put("us-west1-b", "北美洲俄勒冈州达尔斯b");
+        GcpMap.put("us-west1-c", "北美洲俄勒冈州达尔斯c");
+        GcpMap.put("us-west2-a", "北美洲加利福尼亚州洛杉矶a");
+        GcpMap.put("us-west2-b", "北美洲加利福尼亚州洛杉矶b");
+        GcpMap.put("us-west2-c", "北美洲加利福尼亚州洛杉矶c");
+        GcpMap.put("us-west3-a", "北美洲犹他州盐湖城a");
+        GcpMap.put("us-west3-b", "北美洲犹他州盐湖城b");
+        GcpMap.put("us-west3-c", "北美洲犹他州盐湖城c");
+        GcpMap.put("us-west4-a", "北美洲内华达州拉斯维加斯a");
+        GcpMap.put("us-west4-b", "北美洲内华达州拉斯维加斯b");
+        GcpMap.put("us-west4-c", "北美洲内华达州拉斯维加斯c");
         // GCP 国际 end
     }
 

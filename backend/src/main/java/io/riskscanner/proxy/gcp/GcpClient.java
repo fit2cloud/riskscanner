@@ -7,7 +7,6 @@ import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.common.collect.Lists;
-import io.riskscanner.commons.exception.PluginException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
