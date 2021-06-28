@@ -125,6 +125,7 @@ public class RegionsConstants {
         TencentMap.put("na-toronto", "北美地区(多伦多)");
         // Tencent end
 
+        GcpMap = new HashMap<>();
         // GCP 国际 start
         GcpMap.put("asia-east1-a", "亚太地区台湾彰化a");
         GcpMap.put("asia-east1-b", "亚太地区台湾彰化b");

@@ -523,9 +523,14 @@ public class RuleService {
                 JSONObject object;
                 List<String> regions = new ArrayList<>();
                 for (int i = 0; i < array.size(); i++) {
-                    object = array.getJSONObject(i);
-                    String value = object.getString("regionId");
-                    regions.add(value);
+                    try {
+                        object = array.getJSONObject(i);
+                        String value = object.getString("regionId");
+                        regions.add(value);
+                    } catch (Exception e) {
+                        String value = array.get(0).toString();
+                        regions.add(value);
+                    }
                 }
                 s.setRegions(regions);
                 selectTags.add(s);
