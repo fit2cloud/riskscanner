@@ -512,7 +512,7 @@
                   saveAs(blob, this.$t("resource.resource_report_xlsx"));
                 }
               }, error => {
-                console.log("发顺丰无法", error);
+                console.log("导出报错", error);
               });
             }
           }

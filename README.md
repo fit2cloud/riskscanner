@@ -1,4 +1,5 @@
-# RiskScanner 开源公有云安全合规扫描平台
+<p><a href="https://riskscanner.io"><img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/logo-dark.png" alt="DataEase" width="300" /></a></p>
+<h3>开源公有云安全合规扫描平台</h3>
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/956d688c965044d49ec807817efd3ca0)](https://app.codacy.com/gh/riskscanner/riskscanner?utm_source=github.com&utm_medium=referral&utm_content=riskscanner/riskscanner&utm_campaign=Badge_Grade)
 [![GitHub Licenses](https://img.shields.io/github/license/riskscanner/riskscanner?color=%00468F&style=flat-square)](https://www.gnu.org/licenses/old-licenses/gpl-2.0)
