@@ -7,7 +7,7 @@
 [![GitHub Stars](https://img.shields.io/github/stars/riskscanner/riskscanner?color=%231890FF&style=flat-square)](https://github.com/riskscanner/riskscanner)
 [![GitHub All Releases](https://img.shields.io/github/downloads/riskscanner/riskscanner/total)](https://github.com/riskscanner/riskscanner/releases)
 
-RiskScanner 是开源的公有云安全合规扫描平台，通过 Cloud Custodian 的 YAML DSL 定义扫描规则，实现对主流公有云资源的安全合规扫描及使用优化建议。
+RiskScanner 是开源的公有云安全合规扫描平台，通过 Cloud Custodian 的 YAML DSL 定义扫描规则，实现对主流公(私)有云资源的安全合规扫描及使用优化建议。
 
 **功能优势**
 
@@ -15,12 +15,12 @@ RiskScanner 是开源的公有云安全合规扫描平台，通过 Cloud Custodi
 > - [x] CIS 合规检查：符合 CIS 规范，检查和实时监控在云上的资源是否符合 CIS 要求；
 > - [x] 最佳实践建议：制定合规管控基线，为企业级用户提供最佳实践建议，持续提升合规水平。
 
-RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，界面美观、用户体验好，支持的公有云包括阿里云、腾讯云、华为云、Amazon Web Services、Microsoft Azure，支持的私有云包括 OpenStack、VMware vSphere 等。
+RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，界面美观、用户体验好，支持的公有云包括阿里云、腾讯云、华为云、Amazon Web Services、Microsoft Azure、Google Cloud，支持的私有云包括 OpenStack、VMware vSphere 等。
 
 **技术优势**
 
 > - [x] 规则简单灵活：扫描规则采用简单的 YAML 格式，简单易懂、并允许用户自定义规则；
-> - [x] 支持多公/私有云：支持的公有云包括阿里云、腾讯云、华为云、Amazon Web Services、Microsoft Azure，支持的私有云包括 OpenStack、VMware vSphere 等；
+> - [x] 支持多公/私有云：支持的公有云包括阿里云、腾讯云、华为云、Amazon Web Services、Microsoft Azure、Google Cloud，支持的私有云包括 OpenStack、VMware vSphere 等；
 > - [x] 支持多资源：支持的资源类型包括云服务器、云磁盘、云数据库、负载均衡、对象存储、专有网络、安全组等。
 
 ![功能架构](./frontend/src/assets/img/readme/functional-architecture.png)
