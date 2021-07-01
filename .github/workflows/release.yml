@@ -19,16 +19,15 @@ jobs:
         env:
           RELEASE_VERSION: ${{github.ref}}
         run: |
-          git clone https://github.com/riskscanner/riskscanner-installer.git
+          git clone https://github.com/riskscanner/riskscanner-installer.git --depth=1
           cd riskscanner-installer
-          rm -rf docker .git
+          rm -rf hudson.* .travis.yml .git .github
+          chmod +x rsctl.sh
           cd ..
-          chmod +x riskscanner-installer/riskscanner/install.sh
-          mv riskscanner-installer/riskscanner/{rsctl,install.conf,install.sh} riskscanner-installer/
           version=`echo $RELEASE_VERSION | tr 'a-z' 'A-Z' | tr -d 'REFS/TAGS/' | tr -d 'a-zA-Z'`
           filename=riskscanner-release-$version
           mv riskscanner-installer $filename
-          echo $version > $filename/riskscanner/templates/version
+          echo $version > $filename/config_init/conf/version
           tar -czvf $filename.tar.gz $filename
           echo "::set-output name=VERSION::$(echo $version)"
       - name: Create Release
@@ -47,7 +46,7 @@ jobs:
               1.  准备一台不小于 4 G内存的 64位 Linux 主机；
               2.  以 root 用户执行如下命令一键安装 RiskScanner。
             ```sh
-              curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/quick_start.sh | sh
+              curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/quick_start.sh | bash
             ```
             # 产品文档
             点击 [完整文档](https://docs.riskscanner.io/) 查看完整的安装和使用文档
@@ -71,6 +70,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./riskscanner-release-${{ steps.create_release_file.outputs.VERSION }}/riskscanner/quick_start.sh
+          asset_path: ./riskscanner-release-${{ steps.create_release_file.outputs.VERSION }}/quick_start.sh
           asset_name: quick_start.sh
           asset_content_type: application/text
