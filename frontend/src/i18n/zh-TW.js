@@ -436,6 +436,7 @@ export default {
     i18n_login: '登錄',
     i18n_logout: '登出',
     i18n_sync: '同步',
+    i18n_export: '導出',
     active_list: '活動列表',
     search_by_name: '按操作者名稱搜索',
     expand_all: '展開全部',
