@@ -24,7 +24,7 @@ jobs:
           rm -rf hudson.* .travis.yml .git .github
           chmod +x rsctl.sh
           cd ..
-          version=`echo $RELEASE_VERSION | tr 'a-z' 'A-Z' | tr -d 'REFS/TAGS/' | tr -d 'a-zA-Z'`
+          version=`echo ${RELEASE_VERSION##*/}`
           filename=riskscanner-release-$version
           mv riskscanner-installer $filename
           echo $version > $filename/config_init/conf/version
