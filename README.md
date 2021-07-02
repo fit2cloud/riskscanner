@@ -1,13 +1,15 @@
-<p><a href="https://riskscanner.io"><img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/logo-dark.png" alt="DataEase" width="300" /></a></p>
-<h3>开源公有云安全合规扫描平台</h3>
+<p align="center"><a href="https://riskscanner.io"><img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/logo-dark.png" alt="DataEase" width="300" /></a></p>
+<h3 align="center">开源多云安全合规扫描平台</h3>
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/956d688c965044d49ec807817efd3ca0)](https://app.codacy.com/gh/riskscanner/riskscanner?utm_source=github.com&utm_medium=referral&utm_content=riskscanner/riskscanner&utm_campaign=Badge_Grade)
-[![GitHub Licenses](https://img.shields.io/github/license/riskscanner/riskscanner?color=%00468F&style=flat-square)](https://www.gnu.org/licenses/old-licenses/gpl-2.0)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/riskscanner/riskscanner)](https://github.com/riskscanner/riskscanner/releases/latest)
-[![GitHub Stars](https://img.shields.io/github/stars/riskscanner/riskscanner?color=%231890FF&style=flat-square)](https://github.com/riskscanner/riskscanner)
-[![GitHub All Releases](https://img.shields.io/github/downloads/riskscanner/riskscanner/total)](https://github.com/riskscanner/riskscanner/releases)
+<p align="center">
+  <a href="https://app.codacy.com/gh/riskscanner/riskscanner?utm_source=github.com&utm_medium=referral&utm_content=riskscanner/riskscanner&utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/956d688c965044d49ec807817efd3ca0" alt="License: GPL v2"></a>
+  <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0"><img src="https://img.shields.io/github/license/riskscanner/riskscanner?color=%00468F&style=flat-square" alt="License: GPL v2"></a>
+  <a href="https://github.com/riskscanner/riskscanner/releases/latest"><img src="https://img.shields.io/github/v/release/riskscanner/riskscanner" alt="License: GPL v2"></a>
+  <a href="https://github.com/riskscanner/riskscanner"><img src="https://img.shields.io/github/stars/riskscanner/riskscanner?color=%231890FF&style=flat-square" alt="License: GPL v2"></a>
+  <a href="https://github.com/riskscanner/riskscanner/releases"><img src="https://img.shields.io/github/downloads/riskscanner/riskscanner/total" alt="License: GPL v2"></a>
+</p>
 
-RiskScanner 是开源的公有云安全合规扫描平台，通过 Cloud Custodian 的 YAML DSL 定义扫描规则，实现对主流公(私)有云资源的安全合规扫描及使用优化建议。
+RiskScanner 是开源的多云安全合规扫描平台，通过 Cloud Custodian 的 YAML DSL 定义扫描规则，实现对主流公(私)有云资源的安全合规扫描及使用优化建议。
 
 **功能优势**
 
