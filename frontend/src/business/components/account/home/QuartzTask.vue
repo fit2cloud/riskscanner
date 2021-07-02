@@ -490,12 +490,12 @@ import QuartzTaskLog from "@/business/components/account/home/QuartzTaskLog";
           return;
         }
         if (this.form.qzType==="ACCOUNT") {
-          if(this.form.accountIds){
+          if(this.form.accountIds>0){
             this.$error(this.$t('account.accountIds_not_null'));
             return;
           }
         } else {
-          if(this.form.ruleIds){
+          if(this.form.ruleIds>0){
             this.$error(this.$t('account.ruleIds_not_null'));
             return;
           }
