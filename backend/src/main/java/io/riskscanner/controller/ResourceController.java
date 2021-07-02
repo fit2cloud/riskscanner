@@ -115,7 +115,7 @@ public class ResourceController {
 
     @ApiOperation(value = "删除扫描记录")
     @GetMapping("account/delete/{id}")
-    public void deleteResourceByAccountId(@PathVariable String id) {
+    public void deleteResourceByAccountId(@PathVariable String id) throws Exception {
         resourceService.deleteResourceByAccountId(id);
     }
 

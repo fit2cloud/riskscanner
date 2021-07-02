@@ -4,14 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.fit2cloud.quartz.service.QuartzManageService;
 import io.riskscanner.base.domain.*;
 import io.riskscanner.base.mapper.*;
 import io.riskscanner.base.mapper.ext.ExtResourceMapper;
 import io.riskscanner.base.mapper.ext.ExtScanHistoryMapper;
 import io.riskscanner.base.mapper.ext.ExtTaskMapper;
-import io.riskscanner.commons.constants.CommandEnum;
-import io.riskscanner.commons.constants.ResourceConstants;
-import io.riskscanner.commons.constants.TaskConstants;
+import io.riskscanner.commons.constants.*;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.*;
 import io.riskscanner.controller.request.excel.ExcelExportRequest;
@@ -22,6 +21,8 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.quartz.Trigger;
+import org.quartz.TriggerKey;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -78,6 +79,15 @@ public class ResourceService {
     private ScanTaskHistoryMapper scanTaskHistoryMapper;
     @Resource
     private ProxyMapper proxyMapper;
+    @Resource
+    private CloudAccountQuartzTaskMapper quartzTaskMapper;
+    @Resource
+    private CloudAccountQuartzTaskRelationMapper quartzTaskRelationMapper;
+    @Resource
+    private CloudAccountQuartzTaskRelaLogMapper quartzTaskRelaLogMapper;
+    @Resource
+    private QuartzManageService quartzManageService;
+
 
     public SourceDTO source (String accountId) {
         return extResourceMapper.source(accountId);
@@ -466,11 +476,12 @@ public class ResourceService {
                 });
             }};
         }).collect(Collectors.toList());
+        OperationLogService.log(SessionUtils.getUser(), accountId, "RESOURCE", ResourceTypeConstants.RESOURCE.name(), ResourceOperation.EXPORT, "导出合规报告");
         return ExcelExportUtils.exportExcelData("不合规资源扫描报告", request.getColumns().stream().map(ExcelExportRequest.Column::getValue).collect(Collectors.toList()), data);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, rollbackFor = {RuntimeException.class, Exception.class})
-    public void deleteResourceByAccountId (String accountId) {
+    public void deleteResourceByAccountId (String accountId) throws Exception {
         TaskExample example = new TaskExample();
         example.createCriteria().andAccountIdEqualTo(accountId);
         List<Task> tasks = taskMapper.selectByExample(example);
@@ -501,6 +512,26 @@ public class ResourceService {
             history.setCreateTime(zero);
             scanHistoryMapper.insertSelective(history);
         }
+
+        CloudAccountQuartzTaskRelationExample quartzTaskRelationExample = new CloudAccountQuartzTaskRelationExample();
+        quartzTaskRelationExample.createCriteria().andSourceIdEqualTo(accountId);
+        List<CloudAccountQuartzTaskRelation> quartzTaskRelationList = quartzTaskRelationMapper.selectByExample(quartzTaskRelationExample);
+        for (CloudAccountQuartzTaskRelation quartzTaskRelation : quartzTaskRelationList) {
+            CloudAccountQuartzTaskRelaLogExample quartzTaskRelaLogExample = new CloudAccountQuartzTaskRelaLogExample();
+            quartzTaskRelaLogExample.createCriteria().andQuartzTaskRelaIdEqualTo(quartzTaskRelation.getId());
+            quartzTaskRelaLogMapper.deleteByExample(quartzTaskRelaLogExample);
+            quartzTaskRelationMapper.deleteByPrimaryKey(quartzTaskRelation.getId());
+
+            CloudAccountQuartzTask quartzTask = quartzTaskMapper.selectByPrimaryKey(quartzTaskRelation.getQuartzTaskId());
+            String triggerId = quartzTask.getTriggerId();
+            Trigger trigger = quartzManageService.getTrigger(new TriggerKey(triggerId));
+            quartzManageService.deleteJob(trigger.getJobKey());
+
+            quartzTaskMapper.deleteByPrimaryKey(quartzTaskRelation.getQuartzTaskId());
+        }
+
+        OperationLogService.log(SessionUtils.getUser(), accountId, "RESOURCE", ResourceTypeConstants.RESOURCE.name(), ResourceOperation.DELETE, "删除扫描结果");
+
     }
 
     public Map<String, String> reportIso (String accountId, String groupId) {

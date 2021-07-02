@@ -263,6 +263,7 @@
         ruleListPage: 1,
         ruleListPageSize: 10,
         ruleListTotal: 0,
+        itemId: "",
       }
     },
 
@@ -280,14 +281,15 @@
         this.ruleListPageSize = 10;
         this.ruleListTotal = 0;
         this.ruleForm = [];
-        this.handleListSearch(item);
+        this.itemId = item.id;
+        this.handleListSearch();
         this.listVisible = true;
       },
-      handleListSearch (item) {
+      handleListSearch () {
         let condition = {
           components: RULE_CONFIGS
         };
-        condition.combine = {group: {operator: 'in', value: item.id }};
+        condition.combine = {group: {operator: 'in', value: this.itemId }};
         let url = "/rule/list/" + this.ruleListPage + "/" + this.ruleListPageSize;
         this.result = this.$post(url, condition, response => {
           let data = response.data;
