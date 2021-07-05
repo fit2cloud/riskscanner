@@ -58,7 +58,7 @@ export default {
     }
 
     function exception(error, result, url) {
-      if (error.response && error.response.status === 401 && !unRedirectUrls.has(url)) {
+      if (error.response && error.response.status === 401 && !unRedirectUrls.has(url) && error.response.data.message !== "用户名或密码不正确") {
         login();
         return;
       }
