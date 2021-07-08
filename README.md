@@ -50,7 +50,7 @@ curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/qu
 
 ## 微信群
 
-![wechat-group](./frontend/src/assets/img/readme/wechat-group.png)
+<img src="./frontend/src/assets/img/readme/wechat-group.png" width="156" height="156"/>
 
 ## QQ 群
 
