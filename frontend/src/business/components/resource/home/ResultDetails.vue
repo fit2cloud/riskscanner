@@ -39,8 +39,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="regionName" :label="$t('account.regions')" min-width="15%"/>
-          <el-table-column min-width="20%" :label="$t('account.update_time')" sortable
-                           prop="updateTime">
+          <el-table-column min-width="20%" :label="$t('account.update_time')" prop="updateTime">
             <template v-slot:default="scope">
               <span><i class="el-icon-time"></i> {{ scope.row.updateTime | timestampFormatDate }}</span>
             </template>

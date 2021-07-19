@@ -130,9 +130,6 @@
                 AND t.f2c_id like CONCAT('%',#{name},'%')
             </if>
         </where>
-        <if test="sort != null">
-            ORDER BY ${sort}
-        </if>
         <if test="sort == null">
             ORDER BY t.create_time DESC
         </if>
