@@ -1,6 +1,12 @@
+FROM registry.cn-qingdao.aliyuncs.com/x-lab/nuclei:v1.4 as build-env
+
 FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.4
 
 ARG RS_VERSION=dev
+
+RUN apk add --no-cache bind-tools ca-certificates
+
+COPY --from=build-env /usr/local/bin/nuclei /usr/local/bin/nuclei
 
 RUN mkdir -p /opt/apps
 
