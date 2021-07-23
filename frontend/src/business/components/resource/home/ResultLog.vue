@@ -38,6 +38,27 @@
                 </el-col>
               </el-row>
             </div>
+            <div>
+                <el-button plain size="small" @click="showInformation(scope.row, $t('resource.i18n_resource_scanning_log'))">
+                  <i class="el-icon-tickets"></i> {{ $t('resource.i18n_resource_scanning_log') }}
+                </el-button>
+                <el-button plain size="small" @click="showInformation(scope.row, $t('resource.i18n_resource_scanning_api'))">
+                  <i class="el-icon-document-checked"></i> {{ $t('resource.i18n_resource_scanning_api') }}
+                </el-button>
+                <el-button plain size="small" @click="showInformation(scope.row, $t('resource.i18n_resource_scanning_return'))">
+                  <i class="el-icon-document"></i> {{ $t('resource.i18n_resource_scanning_return') }}
+                </el-button>
+            </div>
+            <div>
+              <el-drawer
+                size="45%"
+                :title="fileTitle"
+                :append-to-body="true"
+                :before-close="innerDrawerClose"
+                :visible.sync="innerDrawer">
+                <codemirror ref="cmEditor" v-model="script" class="code-mirror" :options="cmOptions" />
+              </el-drawer>
+            </div>
             <div class="bg-purple-div">
               <span v-for="(logItem, index) in scope.row.taskItemLogList" :key="index"
                     v-bind:class="{true: 'color-red', false: ''}[logItem.result == false]">
@@ -70,6 +91,20 @@
     data() {
       return {
         timer: '',
+        fileTitle: '',
+        innerDrawer: false,
+        script: '',
+        cmOptions: {
+          tabSize: 4,
+          mode: {
+            name: 'json',
+            json: true
+          },
+          theme: 'bespin',
+          lineNumbers: true,
+          line: true,
+          indentWithTabs: true,
+        },
       }
     },
     activated() {
@@ -106,6 +141,14 @@
           }
         }
         return sum == 0;
+      },
+      innerDrawerClose() {
+        this.innerDrawer = false;
+      },
+      showInformation(item, title) {
+        console.log(item, title);
+        this.title = title;
+        this.innerDrawer = true;
       },
     },
 
@@ -160,5 +203,11 @@
   .bg-purple-div {
     margin: 10px;
   }
-
+  .code-mirror {
+    height: 600px !important;
+  }
+  .code-mirror >>> .CodeMirror {
+    /* Set height, width, borders, and global font properties here */
+    height: 600px !important;
+  }
 </style>

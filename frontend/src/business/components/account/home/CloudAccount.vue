@@ -211,9 +211,9 @@
           <el-form-item v-if="iamStrategyNotSupport.indexOf(form.pluginId) === -1" :label="$t('proxy.is_proxy')" :rules="{required: true, message: $t('commons.proxy') + $t('commons.cannot_be_empty'), trigger: 'change'}">
             <el-switch v-model="form.isProxy"></el-switch>
           </el-form-item>
-          <el-form-item v-if="script && iamStrategyNotSupport.indexOf(form.pluginId) === -1">
-            <el-link type="danger" @click="innerDrawer = true">{{ $t('account.iam_strategy') }}</el-link>
-            <div>
+          <el-form-item v-if="script">
+            <el-link v-if="iamStrategyNotSupport.indexOf(form.pluginId) === -1" type="danger" @click="innerDrawer = true">{{ $t('account.iam_strategy') }}</el-link>
+            <div v-if="iamStrategyNotSupport.indexOf(form.pluginId) === -1">
               <el-drawer
                 size="45%"
                 :title="$t('account.iam_strategy')"
@@ -429,7 +429,7 @@
           {id: 'Http', value: "Http"},
           {id: 'Https', value: "Https"},
         ],
-        iamStrategyNotSupport: ['fit2cloud-openstack-plugin', 'fit2cloud-vsphere-plugin'],
+        iamStrategyNotSupport: ['fit2cloud-openstack-plugin', 'fit2cloud-vsphere-plugin', 'fit2cloud-nuclei-plugin'],
       }
     },
 

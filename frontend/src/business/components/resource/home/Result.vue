@@ -545,7 +545,6 @@
         this.$get("/task/detail/" + item.id, response => {
           if (response.success) {
             this.detailForm = response.data;
-            // this.initSelect();
             this.detailVisible = true;
           }
         });

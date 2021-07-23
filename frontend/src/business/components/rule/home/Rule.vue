@@ -91,6 +91,17 @@
       <el-drawer class="rtl" :title="$t('rule.create')" :visible.sync="createVisible" size="70%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
         <el-form :model="createRuleForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="createRuleForm">
+          <el-form-item :label="$t('account.scan_type')" :rules="{required: true, message: $t('account.scan_type'), trigger: 'change'}">
+            <el-select style="width: 100%;" v-model="createRuleForm.scanType" :placeholder="$t('account.please_choose_scan_type')" @change="changeScanType(createRuleForm.scanType)">
+              <el-option
+                v-for="item in scanTypes"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+                &nbsp;&nbsp; {{ $t(item.name) }}
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item :label="$t('rule.rule_name')" prop="name">
             <el-input v-model="createRuleForm.name" autocomplete="off" :placeholder="$t('rule.rule_name')"/>
           </el-form-item>
@@ -189,6 +200,9 @@
       <el-drawer class="rtl" :title="$t('rule.update')" :visible.sync="updateVisible" size="70%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
         <el-form :model="updateRuleForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="updateRuleForm">
+          <el-form-item :label="$t('account.scan_type')" prop="scanType">
+            <el-input v-model="updateRuleForm.scanType" autocomplete="off" :placeholder="$t('account.scan_type')" disabled/>
+          </el-form-item>
           <el-form-item :label="$t('rule.rule_name')" prop="name">
             <el-input v-model="updateRuleForm.name" autocomplete="off" :placeholder="$t('rule.rule_name')"/>
           </el-form-item>
@@ -287,6 +301,9 @@
       <el-drawer class="rtl" :title="$t('rule.copy')" :visible.sync="copyVisible" size="70%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
         <el-form :model="copyRuleForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="copyRuleForm">
+          <el-form-item :label="$t('account.scan_type')" prop="scanType">
+            <el-input v-model="copyRuleForm.scanType" autocomplete="off" :placeholder="$t('account.scan_type')" disabled/>
+          </el-form-item>
           <el-form-item :label="$t('rule.rule_name')" prop="name">
             <el-input v-model="copyRuleForm.name" autocomplete="off" :placeholder="$t('rule.rule_name')"/>
           </el-form-item>
@@ -477,6 +494,10 @@
           line: true,
           indentWithTabs: true,
         },
+        scanTypes: [
+          {id: 'custodian', name: 'Cloud Custodian'},
+          {id: 'nuclei', name: 'Nuclei'},
+        ],
       }
     },
 
@@ -486,9 +507,9 @@
 
     methods: {
       create() {
-        this.createRuleForm = { parameter: [], script : "" };
+        this.createRuleForm = { parameter: [], script : "", scanType: 'custodian' };
         this.createVisible = true;
-        this.activePlugin();
+        this.activePlugin(this.createRuleForm.scanType);
         this.ruleSetOptionsFnc(null);
       },
       handleEdit(item) {
@@ -497,7 +518,7 @@
         this.updateRuleForm = Object.assign({}, item);
         this.updateVisible = true;
         this.ruleSetOptionsFnc(item.pluginId);
-        this.activePlugin();
+        this.activePlugin(item.scanType);
       },
       handleCopy(item) {
         if (typeof(item.parameter) == 'string') item.parameter = JSON.parse(item.parameter);
@@ -505,10 +526,13 @@
         this.copyRuleForm = Object.assign({}, item);
         this.copyVisible = true;
         this.ruleSetOptionsFnc(item.pluginId);
-        this.activePlugin();
+        this.activePlugin(item.scanType);
       },
       changePlugin(pluginId){
         this.ruleSetOptionsFnc(pluginId);
+      },
+      changeScanType(scanType) {
+        this.activePlugin(scanType);
       },
       handleClose() {
         this.createVisible =  false;
@@ -539,8 +563,8 @@
         })
       },
       //查询插件
-      activePlugin() {
-        let url = "/plugin/all";
+      activePlugin(scanType) {
+        let url = "/plugin/scan/" + scanType;
         this.result = this.$get(url, response => {
           let data = response.data;
           this.plugins =  data;
