@@ -50,6 +50,7 @@ import io.riskscanner.proxy.gcp.GcpClient;
 import io.riskscanner.proxy.gcp.GcpCredential;
 import io.riskscanner.proxy.huawei.ClientUtil;
 import io.riskscanner.proxy.huawei.HuaweiCloudCredential;
+import io.riskscanner.proxy.nuclei.NucleiCredential;
 import io.riskscanner.proxy.openstack.OpenStackCredential;
 import io.riskscanner.proxy.openstack.OpenStackRequest;
 import io.riskscanner.proxy.openstack.OpenStackUtils;
@@ -86,6 +87,7 @@ public class PlatformUtils {
     public final static String vsphere = "fit2cloud-vsphere-plugin";
     public final static String openstack = "fit2cloud-openstack-plugin";
     public final static String gcp = "fit2cloud-gcp-plugin";
+    public final static String nuclei = "fit2cloud-nuclei-plugin";
 
     /**
      * 支持的插件（云平台）
@@ -226,6 +228,14 @@ public class PlatformUtils {
                 }
                 pre = "GOOGLE_CLOUD_PROJECT=" + region + " ";
                 break;
+            case nuclei:
+                try {
+                    String nucleiCredential = params.get("nucleiCredential");
+                    CommandUtils.saveAsFile(nucleiCredential, dirPath, "urls.txt");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "nuclei -l " + dirPath + "/urls.txt -t " + dirPath + "/" + fileName + " -o " + dirPath +  "/result.txt";
         }
         switch (behavior) {
             case "run":
@@ -318,6 +328,11 @@ public class PlatformUtils {
                 GcpCredential gcpCredential = new Gson().fromJson(account.getCredential(), GcpCredential.class);
                 map.put("credential", gcpCredential.getCredentials());
                 map.put("region", region);
+                break;
+            case nuclei:
+                map.put("type", nuclei);
+                NucleiCredential nucleiCredential = new Gson().fromJson(account.getCredential(), NucleiCredential.class);
+                map.put("nucleiCredential", nucleiCredential.getTargetAddress());
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + account.getPluginId());
@@ -556,6 +571,8 @@ public class PlatformUtils {
                         if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                     }
                     break;
+                case nuclei:
+                    break;
                 default:
                     throw new IllegalStateException("Unexpected regions value{}: " + account.getPluginName());
             }
@@ -692,6 +709,8 @@ public class PlatformUtils {
                 } catch (Exception e) {
                     throw new PluginException("Verify that the account has an error!", e);
                 }
+            case nuclei:
+                return true;
             default:
                 throw new IllegalStateException("Unexpected value: " + account.getPluginId());
         }
@@ -768,6 +787,9 @@ public class PlatformUtils {
             case gcp:
                 strCn = strEn;
                 break;
+            case nuclei:
+                strCn = strEn;
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + pluginId);
         }
@@ -842,6 +864,8 @@ public class PlatformUtils {
             case openstack:
                 break;
             case gcp:
+                break;
+            case nuclei:
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + pluginId);

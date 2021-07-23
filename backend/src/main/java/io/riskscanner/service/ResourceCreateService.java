@@ -7,6 +7,7 @@ import io.riskscanner.base.mapper.*;
 import io.riskscanner.base.mapper.ext.ExtScanHistoryMapper;
 import io.riskscanner.commons.constants.CloudAccountConstants;
 import io.riskscanner.commons.constants.CommandEnum;
+import io.riskscanner.commons.constants.ScanTypeConstants;
 import io.riskscanner.commons.constants.TaskConstants;
 import io.riskscanner.commons.utils.*;
 import io.riskscanner.controller.request.resource.ResourceRequest;
@@ -55,6 +56,8 @@ public class ResourceCreateService {
     private ExtScanHistoryMapper extScanHistoryMapper;
     @Resource
     private ProxyMapper proxyMapper;
+    @Resource
+    private NucleiService nucleiService;
 
     @QuartzScheduled(cron = "${cron.expression.local}")
     public void handleTasks() {
@@ -155,9 +158,22 @@ public class ResourceCreateService {
     }
 
     private void createResource(TaskItemWithBLOBs taskItem, Task task) throws Exception {
+        switch (task.getScanType()) {
+            case "custodian":
+                createCustodianResource(taskItem, task);
+                break;
+            case "nuclei":
+                nucleiService.createNucleiResource(taskItem, task);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: scantype");
+        }
+    }
+
+    private void createCustodianResource(TaskItemWithBLOBs taskItem, Task task) throws Exception {
         LogUtil.info("createResource for taskItem: {}", toJSONString(taskItem));
         String operation = Translator.get("i18n_create_resource");
-        String resultStr = "";
+        String resultStr = "", fileName = "policy.yml";
         try {
             TaskItemResourceExample example = new TaskItemResourceExample();
             example.createCriteria().andTaskIdEqualTo(task.getId()).andTaskItemIdEqualTo(taskItem.getId());
@@ -167,9 +183,9 @@ public class ResourceCreateService {
             String dirPath = TaskConstants.RESULT_FILE_PATH_PREFIX + task.getId() + "/" + taskItem.getRegionId();
             AccountWithBLOBs accountWithBLOBs = accountMapper.selectByPrimaryKey(taskItem.getAccountId());
             Map<String, String> map = PlatformUtils.getAccount(accountWithBLOBs, taskItem.getRegionId(), proxyMapper.selectByPrimaryKey(accountWithBLOBs.getProxyId()));
-            String command = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.run.getCommand(), dirPath, "policy.yml", map);
+            String command = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.run.getCommand(), dirPath, fileName, map);
             LogUtil.info(task.getId() + " {}[command]: " + command);
-            CommandUtils.saveAsFile(taskItem.getDetails(), TaskConstants.RESULT_FILE_PATH_PREFIX + task.getId() + "/" + taskItem.getRegionId(), "policy.yml");//重启服务后容器内文件在/tmp目录下会丢失
+            CommandUtils.saveAsFile(taskItem.getDetails(), dirPath, fileName);//重启服务后容器内文件在/tmp目录下会丢失
             resultStr = CommandUtils.commonExecCmdWithResult(command, dirPath);
             if (LogUtil.getLogger().isDebugEnabled()) {
                 LogUtil.getLogger().debug("resource created: {}", resultStr);
@@ -225,6 +241,7 @@ public class ResourceCreateService {
             throw e;
         }
     }
+
 
     public Map<String, Object> getParameters(String taskId) {
         Map<String, Object> map = new HashMap<>();

@@ -4,7 +4,7 @@ package io.riskscanner.commons.constants;
  * @author maguohao
  */
 public enum CommandEnum {
-    custodian("custodian"), run("run"), dryrun("--dryrun"), schema("schema"), report("report"), version("version"), validate("validate");
+    custodian("custodian"), run("run"), dryrun("--dryrun"), schema("schema"), report("report"), version("version"), validate("validate"), nuclei("nuclei");
 
     private String command;
 

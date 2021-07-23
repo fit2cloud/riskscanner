@@ -8,10 +8,7 @@ import io.riskscanner.base.domain.*;
 import io.riskscanner.base.mapper.*;
 import io.riskscanner.base.mapper.ext.ExtTaskMapper;
 import io.riskscanner.base.rs.SelectTag;
-import io.riskscanner.commons.constants.CommandEnum;
-import io.riskscanner.commons.constants.ResourceOperation;
-import io.riskscanner.commons.constants.ResourceTypeConstants;
-import io.riskscanner.commons.constants.TaskConstants;
+import io.riskscanner.commons.constants.*;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.*;
 import io.riskscanner.dto.*;
@@ -69,12 +66,19 @@ public class TaskService {
     private RuleMapper ruleMapper;
     @Resource
     private CloudAccountQuartzTaskRelaLogMapper quartzTaskRelaLogMapper;
+    @Resource
+    private NucleiService nucleiService;
 
     public Task saveManualTask(QuartzTaskDTO quartzTaskDTO, String messageOrderId) {
         try {
-
-            this.validateYaml(quartzTaskDTO);
-            return orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.APPROVED.name(), messageOrderId);
+            if (StringUtils.equalsIgnoreCase(quartzTaskDTO.getScanType(), ScanTypeConstants.custodian.name())) {
+                this.validateYaml(quartzTaskDTO);
+                return orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.APPROVED.name(), messageOrderId);
+            } else if (StringUtils.equalsIgnoreCase(quartzTaskDTO.getScanType(), ScanTypeConstants.nuclei.name())) {
+                return nucleiService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.APPROVED.name(), messageOrderId);
+            } else {
+                return orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.APPROVED.name(), messageOrderId);
+            }
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
             throw new RSException(e.getMessage());
@@ -188,14 +192,22 @@ public class TaskService {
             if (account.getProxyId() != null) proxy = proxyMapper.selectByPrimaryKey(account.getProxyId());
             JSONObject regionObj = (JSONObject) PlatformUtils._getRegions(account, proxy, accountService.validate(account.getId())).get(0);
             Map<String, String> map = PlatformUtils.getAccount(account, regionObj.get("regionId").toString(), proxyMapper.selectByPrimaryKey(account.getProxyId()));
-            dirPath = CommandUtils.saveAsFile(finalScript, TaskConstants.RESULT_FILE_PATH_PREFIX + uuid, "policy.yml");
-            String command = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.validate.getCommand(), dirPath, "policy.yml", map);
+            String fileName = "", commandEnum = "";
+            if (StringUtils.equalsIgnoreCase(quartzTaskDTO.getScanType(), ScanTypeConstants.custodian.name())) {
+                fileName = "policy.yml";
+                commandEnum = CommandEnum.custodian.getCommand();
+            } else if (StringUtils.equalsIgnoreCase(quartzTaskDTO.getScanType(), ScanTypeConstants.nuclei.name())){
+                fileName = "nuclei.yml";
+                commandEnum = CommandEnum.nuclei.getCommand();
+            }
+            dirPath = CommandUtils.saveAsFile(finalScript, TaskConstants.RESULT_FILE_PATH_PREFIX + uuid, fileName);
+            String command = PlatformUtils.fixedCommand(commandEnum, CommandEnum.validate.getCommand(), dirPath, fileName, map);
             String resultStr = CommandUtils.commonExecCmdWithResult(command, dirPath);
             if (!resultStr.isEmpty() && !resultStr.contains("INFO")) {
                 LogUtil.error(Translator.get("i18n_compliance_rule_error")+ " {validate}:" + resultStr);
                 RSException.throwException(Translator.get("i18n_compliance_rule_error"));
             }
-            String command2 = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.dryrun.getCommand(), dirPath, "policy.yml", map);
+            String command2 = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.dryrun.getCommand(), dirPath, fileName, map);
             String resultStr2 = CommandUtils.commonExecCmdWithResult(command2, dirPath);
             if (!resultStr.isEmpty() && !resultStr2.contains("INFO")) {
                 LogUtil.error(Translator.get("i18n_compliance_rule_error")+ " {dryrun}:" + resultStr);

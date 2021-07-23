@@ -2,5 +2,5 @@ package io.riskscanner.commons.constants;
 
 public class I18nConstants {
 
-    public static final String LANG_COOKIE_NAME = "MS_USER_LANG";
+    public static final String LANG_COOKIE_NAME = "RS_USER_LANG";
 }

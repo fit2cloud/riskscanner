@@ -3,11 +3,13 @@ package io.riskscanner.service;
 import io.riskscanner.base.domain.Plugin;
 import io.riskscanner.base.domain.PluginExample;
 import io.riskscanner.base.mapper.PluginMapper;
+import io.riskscanner.commons.constants.ScanTypeConstants;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.LogUtil;
 import io.riskscanner.commons.utils.ReadFileUtils;
 import io.riskscanner.controller.request.Plugin.PluginRequest;
 import io.riskscanner.i18n.Translator;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,9 +27,10 @@ public class PluginService {
     @Resource
     private PluginMapper pluginMapper;
 
-    public List<Plugin> getAllPlugin() {
+    public List<Plugin> getAllPlugin(String scanType) {
         PluginExample example = new PluginExample();
         example.setOrderByClause("update_time");
+        if (scanType!=null) example.createCriteria().andScanTypeLike(scanType);
         return pluginMapper.selectByExample(example);
     }
 

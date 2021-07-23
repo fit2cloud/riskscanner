@@ -11,6 +11,7 @@ import io.riskscanner.base.mapper.ext.ExtTaskMapper;
 import io.riskscanner.base.rs.SelectTag;
 import io.riskscanner.commons.constants.ResourceOperation;
 import io.riskscanner.commons.constants.ResourceTypeConstants;
+import io.riskscanner.commons.constants.ScanTypeConstants;
 import io.riskscanner.commons.constants.TaskConstants;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.*;
@@ -217,7 +218,7 @@ public class OrderService {
         task.setAccountId(quartzTaskDTO.getAccountId());
         task.setApplyUser(SessionUtils.getUser().getId());
         task.setStatus(status);
-        task.setScanType("custodian");
+        task.setScanType(ScanTypeConstants.custodian.name());
         if (quartzTaskDTO.getCron() != null){
             task.setCron(quartzTaskDTO.getCron());
             task.setCronDesc(DescCornUtils.descCorn(quartzTaskDTO.getCron()));

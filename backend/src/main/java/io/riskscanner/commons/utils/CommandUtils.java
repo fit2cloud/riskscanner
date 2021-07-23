@@ -1,7 +1,6 @@
 package io.riskscanner.commons.utils;
 
-
-import io.riskscanner.commons.constants.TaskConstants;
+import org.apache.commons.exec.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
@@ -70,6 +69,44 @@ public class CommandUtils {
             }
         }
         return dirPath;
+    }
+
+    /**
+     * @param command
+     * @param workDir 工作路径
+     * @Desc Nuclei 调用命令行工具，Java 调用 Runtime 执行 nuclei 命令会阻塞，所以找了apache-commons-exec异步执行
+     * @throws Exception
+     */
+    public static String commonExecCmdWithResultByNuclei(String command, String workDir) throws Exception {
+        FileOutputStream fileOutputStream = null;
+        try {
+            // 命令行
+            CommandLine commandLine = CommandLine.parse(command);
+
+            // 重定向stdout和stderr到文件
+            fileOutputStream = new FileOutputStream(workDir + "/exec.log");
+            PumpStreamHandler pumpStreamHandler = new PumpStreamHandler(fileOutputStream);
+
+            // 创建执行器
+            DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
+
+            ExecuteWatchdog watchdog = new ExecuteWatchdog(60*1000);
+            Executor executor = new DefaultExecutor();
+            executor.setStreamHandler(pumpStreamHandler);
+            executor.setExitValue(1);
+            executor.setWatchdog(watchdog);
+            executor.execute(commandLine, resultHandler);
+
+            resultHandler.waitFor();
+
+            return ReadFileUtils.readToBuffer(workDir + "/exec.log");
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            // 关闭流
+            fileOutputStream.close();
+        }
+
     }
 
 }

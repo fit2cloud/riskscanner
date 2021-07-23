@@ -623,6 +623,8 @@ export default {
     input_name: '请输入云账号名称',
     input_password: '请输入密码',
     please_choose_plugin: '请选择云插件',
+    please_choose_scan_type: '请选择规则引擎类型',
+    scan_type: '规则引擎类型',
     please_choose_region: '请选择区域',
     please_choose_account: '请选择云账号',
     i18n_account_cloud_plugin_param: '没有相关的插件参数',

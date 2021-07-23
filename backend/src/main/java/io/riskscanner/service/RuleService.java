@@ -12,6 +12,7 @@ import io.riskscanner.base.rs.SelectTag;
 import io.riskscanner.commons.constants.CloudAccountConstants;
 import io.riskscanner.commons.constants.ResourceOperation;
 import io.riskscanner.commons.constants.ResourceTypeConstants;
+import io.riskscanner.commons.constants.ScanTypeConstants;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.*;
 import io.riskscanner.controller.request.rule.CreateRuleRequest;
@@ -103,12 +104,13 @@ public class RuleService {
 
     public Rule saveRules(CreateRuleRequest ruleRequest) {
         try {
-            taskService.validateYaml(BeanUtils.copyBean(new QuartzTaskDTO(), ruleRequest));
+            if (StringUtils.equalsIgnoreCase(ruleRequest.getScanType(), ScanTypeConstants.custodian.toString())) {
+                taskService.validateYaml(BeanUtils.copyBean(new QuartzTaskDTO(), ruleRequest));
+            }
             if (StringUtils.isBlank(ruleRequest.getId())) {
                 ruleRequest.setId(UUIDUtil.newUUID());
                 ruleRequest.setLastModified(System.currentTimeMillis());
-                ruleRequest.setType("custodian");
-
+                ruleRequest.setType(ruleRequest.getScanType());
             }
             Rule t = ruleMapper.selectByPrimaryKey(ruleRequest.getId());
             if (t == null) {
@@ -159,19 +161,31 @@ public class RuleService {
             RuleTypeExample example = new RuleTypeExample();
             example.createCriteria().andRuleIdEqualTo(ruleRequest.getId());
             ruleTypeMapper.deleteByExample(example);
-            if (map != null) {
-                List<Map> list = (List) map.get("policies");
-                for (Map m : list) {
-                    String resourceType = m.get("resource").toString();
-                    example.createCriteria().andRuleIdEqualTo(ruleRequest.getId()).andResourceTypeEqualTo(resourceType);
-                    List<RuleType> ruleTypes = ruleTypeMapper.selectByExample(example);
-                    if (ruleTypes.isEmpty()) {
-                        ruleType.setId(UUIDUtil.newUUID());
-                        ruleType.setResourceType(resourceType);
-                        ruleTypeMapper.insertSelective(ruleType);
+            if (StringUtils.equalsIgnoreCase(ruleRequest.getScanType(), ScanTypeConstants.custodian.name())) {
+                if (map != null) {
+                    List<Map> list = (List) map.get("policies");
+                    for (Map m : list) {
+                        String resourceType = m.get("resource").toString();
+                        example.createCriteria().andRuleIdEqualTo(ruleRequest.getId()).andResourceTypeEqualTo(resourceType);
+                        List<RuleType> ruleTypes = ruleTypeMapper.selectByExample(example);
+                        if (ruleTypes.isEmpty()) {
+                            ruleType.setId(UUIDUtil.newUUID());
+                            ruleType.setResourceType(resourceType);
+                            ruleTypeMapper.insertSelective(ruleType);
+                        }
                     }
                 }
+            } else if(StringUtils.equalsIgnoreCase(ruleRequest.getScanType(), ScanTypeConstants.nuclei.name())){
+                String resourceType = "nuclei";
+                example.createCriteria().andRuleIdEqualTo(ruleRequest.getId()).andResourceTypeEqualTo(resourceType);
+                List<RuleType> ruleTypes = ruleTypeMapper.selectByExample(example);
+                if (ruleTypes.isEmpty()) {
+                    ruleType.setId(UUIDUtil.newUUID());
+                    ruleType.setResourceType(resourceType);
+                    ruleTypeMapper.insertSelective(ruleType);
+                }
             }
+
         } catch (Exception e) {
             LogUtil.error(Translator.get("i18n_compliance_rule_code_error") + ": " + e.getMessage());
             return false;
@@ -181,7 +195,9 @@ public class RuleService {
 
     public Rule copyRule(CreateRuleRequest ruleRequest) {
         try {
-            taskService.validateYaml(BeanUtils.copyBean(new QuartzTaskDTO(), ruleRequest));
+            if (StringUtils.equalsIgnoreCase(ruleRequest.getScanType(), ScanTypeConstants.custodian.toString())) {
+                taskService.validateYaml(BeanUtils.copyBean(new QuartzTaskDTO(), ruleRequest));
+            }
             ruleRequest.setLastModified(System.currentTimeMillis());
             ruleRequest.setId(UUIDUtil.newUUID());
             ruleRequest.setFlag(false);

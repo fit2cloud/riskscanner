@@ -623,6 +623,8 @@ export default {
     input_name: '請輸入雲賬號名稱',
     input_password: '請輸入密碼',
     please_choose_plugin: '請選擇雲插件',
+    please_choose_scan_type: '請選擇規則引擎類型',
+    scan_type: '規則引擎類型',
     please_choose_region: '請選擇區域',
     please_choose_account: '請選擇雲賬號',
     i18n_account_cloud_plugin_param: '沒有相關的插件參數',

@@ -96,16 +96,7 @@ public class ResourceService {
     public List<ResourceDTO> search(ResourceRequest request) {
         List<ResourceDTO> resourceDTOListTmp = new ArrayList<>();
         try {
-            List<ResourceDTO> complianceResultList = getComplianceResult(request);
-            for (ResourceDTO resourceDTO : complianceResultList) {
-                //pretty the json  string
-                StringBuilder stringBuffer;
-                stringBuffer = new StringBuilder();
-                String pretty = JSON.toJSONString(resourceDTO, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteDateUseDateFormat);
-                stringBuffer.append(pretty);
-                resourceDTO.setResourceStr(stringBuffer.toString());
-                resourceDTOListTmp.add(resourceDTO);
-            }
+            resourceDTOListTmp = getComplianceResult(request);
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
         }
@@ -139,6 +130,7 @@ public class ResourceService {
                 //资源详情
                 saveResourceItem(resourceWithBLOBs, parseObject(obj.toString()));
             }
+
             //资源、规则、申请人关联表
             ResourceRule resourceRule = new ResourceRule();
             resourceRule.setResourceId(resourceWithBLOBs.getId());

@@ -623,6 +623,8 @@ export default {
     input_name:'Please enter the cloud account name',
     input_password:'Please enter a password',
     please_choose_plugin:'Please choose a cloud plugin',
+    please_choose_scan_type:'Please select the rule engine type',
+    scan_type:'The rule engine type',
     please_choose_region:'Please choose a region',
     please_choose_account:'Please choose a cloud account',
     i18n_account_cloud_plugin_param:'No related plug-in parameters',

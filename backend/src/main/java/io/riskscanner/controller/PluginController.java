@@ -24,7 +24,13 @@ public class PluginController {
     @ApiOperation(value = "所有插件")
     @GetMapping("all")
     public List<Plugin> getAllPlugin() {
-        return pluginService.getAllPlugin();
+        return pluginService.getAllPlugin(null);
+    }
+
+    @ApiOperation(value = "扫描引擎类型过滤插件")
+    @GetMapping("scan/{scanType}")
+    public List<Plugin> getPlugins(@PathVariable String scanType) {
+        return pluginService.getAllPlugin(scanType);
     }
 
     @ApiOperation(value = "插件详情")
