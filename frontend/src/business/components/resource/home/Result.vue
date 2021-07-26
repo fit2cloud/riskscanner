@@ -201,7 +201,7 @@
         </el-card>
 
         <!--Task log-->
-        <el-drawer class="rtl" :title="$t('resource.i18n_log_detail')" :visible.sync="logVisible" size="60%" :before-close="handleClose" :direction="direction"
+        <el-drawer class="rtl" :title="$t('resource.i18n_log_detail')" :visible.sync="logVisible" size="65%" :before-close="handleClose" :direction="direction"
                    :destroy-on-close="true">
             <result-log :row="logForm"></result-log>
             <template v-slot:footer>

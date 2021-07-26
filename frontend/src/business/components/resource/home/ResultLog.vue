@@ -51,7 +51,7 @@
             </div>
             <div>
               <el-drawer
-                size="45%"
+                size="55%"
                 :title="fileTitle"
                 :append-to-body="true"
                 :before-close="innerDrawerClose"
@@ -146,9 +146,22 @@
         this.innerDrawer = false;
       },
       showInformation(item, title) {
-        console.log(item, title);
-        this.title = title;
-        this.innerDrawer = true;
+        this.$post("/resource/resourceLog", item.taskItem, response => {
+          let data = response.data;
+          switch (title) {
+            case this.$t('resource.i18n_resource_scanning_log'):
+              this.script = data.custodianRunLog?data.custodianRunLog:"[]";
+              break;
+            case this.$t('resource.i18n_resource_scanning_api'):
+              this.script = data.metadata?data.metadata:"[]";
+              break;
+            case this.$t('resource.i18n_resource_scanning_return'):
+              this.script = data.resources?data.resources:"[]";
+              break;
+          }
+          this.fileTitle = title;
+          this.innerDrawer = true;
+        });
       },
     },
 

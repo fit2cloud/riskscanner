@@ -133,7 +133,6 @@
     },
     methods: {
       scanAgain() {
-
       },
       sort(column) {
         _sort(column, this.condition);

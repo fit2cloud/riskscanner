@@ -40,7 +40,7 @@
       if (!lang) {
         lang = localStorage.getItem(DEFAULT_LANGUAGE);
       }
-      this.checkLanguage(lang)
+      this.checkLanguage(lang);
     },
     methods: {
       checkLanguage(lang) {

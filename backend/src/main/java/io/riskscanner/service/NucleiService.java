@@ -297,11 +297,11 @@ public class NucleiService {
             long now = System.currentTimeMillis();
             resourceWithBLOBs.setCreateTime(now);
             resourceWithBLOBs.setUpdateTime(now);
-            resourceWithBLOBs.setReturnSum((long) 1);
+            resourceWithBLOBs.setResourcesSum((long) 1);
             if (StringUtils.isNotEmpty(resourceWithBLOBs.getResources())) {
-                resourceWithBLOBs.setResourcesSum((long) 1);
+                resourceWithBLOBs.setReturnSum((long) 1);
             } else {
-                resourceWithBLOBs.setResourcesSum((long) 0);
+                resourceWithBLOBs.setReturnSum((long) 0);
             }
 
             AccountWithBLOBs account = accountMapper.selectByPrimaryKey(resourceWithBLOBs.getAccountId());

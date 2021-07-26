@@ -1,6 +1,8 @@
 package io.riskscanner.base.mapper.ext;
 
 
+import io.riskscanner.base.domain.ResourceWithBLOBs;
+import io.riskscanner.base.domain.TaskItem;
 import io.riskscanner.controller.request.resource.ResourceRequest;
 import io.riskscanner.dto.ExportDTO;
 import io.riskscanner.dto.ReportDTO;
@@ -34,5 +36,7 @@ public interface ExtResourceMapper {
     List<Map<String, String>> groups(Map<String, Object> params);
 
     List<ExportDTO> searchExportData(ResourceRequest resourceRequest, @Param("accountId") String accountId);
+
+    ResourceWithBLOBs resource(TaskItem taskItem);
 
 }

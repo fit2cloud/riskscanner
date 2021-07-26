@@ -3,6 +3,7 @@ package io.riskscanner.controller;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import io.riskscanner.base.domain.ResourceWithBLOBs;
+import io.riskscanner.base.domain.TaskItem;
 import io.riskscanner.commons.utils.PageUtils;
 import io.riskscanner.commons.utils.Pager;
 import io.riskscanner.controller.request.excel.ExcelExportRequest;
@@ -129,5 +130,11 @@ public class ResourceController {
     @PostMapping("rule/groups")
     public List<Map<String, String>> groups(@RequestBody Map<String, Object> params) {
         return resourceService.groups(params);
+    }
+
+    @ApiOperation(value = "资源日志")
+    @PostMapping("resourceLog")
+    public ResourceWithBLOBs resource(@RequestBody TaskItem taskItem) {
+        return resourceService.resource(taskItem);
     }
 }

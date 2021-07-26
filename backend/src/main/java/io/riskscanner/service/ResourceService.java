@@ -282,13 +282,15 @@ public class ResourceService {
     }
 
     public String toJSONString(String jsonString) {
-        JSONObject object = parseObject(jsonString);
+        String res = JSON.parse(jsonString).toString();
+        JSONObject object = parseObject(res);
         return JSON.toJSONString(object, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat);
     }
 
     public String toJSONString2(String jsonString) {
-        JSONArray jsonArray = parseArray(jsonString);
+        String res = JSON.parse(jsonString).toString();
+        JSONArray jsonArray = parseArray(res);
         return JSON.toJSONString(jsonArray, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat);
     }
@@ -532,5 +534,18 @@ public class ResourceService {
 
     public List<Map<String, String>> groups (Map<String, Object> params) {
         return extResourceMapper.groups(params);
+    }
+
+    public ResourceWithBLOBs resource(TaskItem taskItem) {
+        ResourceWithBLOBs resource = extResourceMapper.resource(taskItem);
+        try{
+            if (!StringUtils.equalsIgnoreCase(resource.getPluginId(), PlatformUtils.nuclei)) {
+                resource.setMetadata(toJSONString(resource.getMetadata()));
+                resource.setResources(toJSONString2(resource.getResources()));
+            }
+        } catch (Exception e) {
+            LogUtil.error(e.getMessage());
+        }
+        return resource;
     }
 }

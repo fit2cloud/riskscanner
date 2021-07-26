@@ -345,4 +345,30 @@
         WHERE t.account_id = #{accountId}
         ORDER BY t.f2c_id
     </select>
+
+    <select id="resource" resultType="io.riskscanner.base.domain.ResourceWithBLOBs" parameterType="io.riskscanner.base.domain.TaskItem">
+        SELECT t.*
+        FROM resource t
+        left join task_item_resource t1 on t.id = t1.resource_id
+        left join task_item t2 on t1.task_item_id = t2.id
+        <where>
+            <if test="taskId != null">
+                AND t1.task_id = #{taskId}
+            </if>
+            <if test="id != null">
+                AND t1.task_item_id = #{id}
+            </if>
+            <if test="accountId != null">
+                AND t.account_id = #{accountId}
+            </if>
+            <if test="regionId != null">
+                AND t.region_id = #{regionId}
+            </if>
+            <if test="ruleId != null">
+                AND t2.rule_id = #{ruleId}
+            </if>
+        </where>
+        ORDER BY t.create_time desc
+        limit 1
+    </select>
 </mapper>
