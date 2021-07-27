@@ -233,6 +233,9 @@ public class NucleiService {
             AccountWithBLOBs accountWithBLOBs = accountMapper.selectByPrimaryKey(taskItem.getAccountId());
             Map<String, String> map = PlatformUtils.getAccount(accountWithBLOBs, taskItem.getRegionId(), proxyMapper.selectByPrimaryKey(accountWithBLOBs.getProxyId()));
             String command = PlatformUtils.fixedCommand(CommandEnum.nuclei.getCommand(), CommandEnum.run.getCommand(), dirPath, fileName, map);
+            if(taskItem.getDetails().contains("workflows:")) {
+                command = command.replace("-t", "-w");
+            }
             LogUtil.info(task.getId() + " {}[command]: " + command);
             CommandUtils.saveAsFile(taskItem.getDetails(), dirPath, fileName);//重启服务后容器内文件在/tmp目录下会丢失
             resultStr = CommandUtils.commonExecCmdWithResultByNuclei(command, dirPath);
