@@ -1,5 +1,5 @@
 <p align="center"><a href="https://riskscanner.io"><img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/logo-dark.png" alt="DataEase" width="300" /></a></p>
-<h3 align="center">开源多云安全合规扫描平台</h3>
+<h3 align="center">开源多云安全合规扫描平台 <a href="https://github.com/riskscanner/riskscanner/blob/master/README_EN.md">[英文版]</a></h3>
 
 <p align="center">
   <a href="https://app.codacy.com/gh/riskscanner/riskscanner?utm_source=github.com&utm_medium=referral&utm_content=riskscanner/riskscanner&utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/956d688c965044d49ec807817efd3ca0" alt="A"></a>
@@ -9,7 +9,8 @@
   <a href="https://github.com/riskscanner/riskscanner/releases"><img src="https://img.shields.io/github/downloads/riskscanner/riskscanner/total" alt=""></a>
 </p>
 <hr />
-RiskScanner 是开源的多云安全合规扫描平台，通过 Cloud Custodian 的 YAML DSL 和 Nuclei 的 YAML 模板定义扫描规则，实现对主流公(私)有云资源、无账号网络侦查的安全合规扫描及使用优化建议。
+
+RiskScanner `/ˈrɪskˌskænə(r)/` 是开源的多云安全合规扫描平台，通过 Cloud Custodian 的 YAML DSL 和 Nuclei 的 YAML 模板定义扫描规则，实现对主流公(私)有云资源、无账号网络侦查的安全合规扫描及使用优化建议。
 
 **功能优势**
 
