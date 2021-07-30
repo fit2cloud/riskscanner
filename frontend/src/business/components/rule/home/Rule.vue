@@ -497,6 +497,7 @@
         scanTypes: [
           {id: 'custodian', name: 'Cloud Custodian'},
           {id: 'nuclei', name: 'Nuclei'},
+          {id: 'prowler', name: 'Prowler'},
         ],
       }
     },

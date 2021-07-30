@@ -58,6 +58,8 @@ public class ResourceCreateService {
     private ProxyMapper proxyMapper;
     @Resource
     private NucleiService nucleiService;
+    @Resource
+    private ProwlerService prowlerService;
 
     @QuartzScheduled(cron = "${cron.expression.local}")
     public void handleTasks() {
@@ -164,6 +166,9 @@ public class ResourceCreateService {
                 break;
             case "nuclei":
                 nucleiService.createNucleiResource(taskItem, task);
+                break;
+            case "prowler":
+                prowlerService.createProwlerResource(taskItem, task);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: scantype");

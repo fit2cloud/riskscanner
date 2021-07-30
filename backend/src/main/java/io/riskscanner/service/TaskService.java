@@ -68,6 +68,8 @@ public class TaskService {
     private CloudAccountQuartzTaskRelaLogMapper quartzTaskRelaLogMapper;
     @Resource
     private NucleiService nucleiService;
+    @Resource
+    private ProwlerService prowlerService;
 
     public Task saveManualTask(QuartzTaskDTO quartzTaskDTO, String messageOrderId) {
         try {
@@ -76,6 +78,8 @@ public class TaskService {
                 return orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.APPROVED.name(), messageOrderId);
             } else if (StringUtils.equalsIgnoreCase(quartzTaskDTO.getScanType(), ScanTypeConstants.nuclei.name())) {
                 return nucleiService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.APPROVED.name(), messageOrderId);
+            } else if (StringUtils.equalsIgnoreCase(quartzTaskDTO.getScanType(), ScanTypeConstants.prowler.name())) {
+                return prowlerService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.APPROVED.name(), messageOrderId);
             } else {
                 return orderService.createTask(quartzTaskDTO, TaskConstants.TASK_STATUS.APPROVED.name(), messageOrderId);
             }

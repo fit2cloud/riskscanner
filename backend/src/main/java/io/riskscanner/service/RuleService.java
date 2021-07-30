@@ -184,6 +184,15 @@ public class RuleService {
                     ruleType.setResourceType(resourceType);
                     ruleTypeMapper.insertSelective(ruleType);
                 }
+            } else if(StringUtils.equalsIgnoreCase(ruleRequest.getScanType(), ScanTypeConstants.prowler.name())){
+                String resourceType = "prowler";
+                example.createCriteria().andRuleIdEqualTo(ruleRequest.getId()).andResourceTypeEqualTo(resourceType);
+                List<RuleType> ruleTypes = ruleTypeMapper.selectByExample(example);
+                if (ruleTypes.isEmpty()) {
+                    ruleType.setId(UUIDUtil.newUUID());
+                    ruleType.setResourceType(resourceType);
+                    ruleTypeMapper.insertSelective(ruleType);
+                }
             }
 
         } catch (Exception e) {

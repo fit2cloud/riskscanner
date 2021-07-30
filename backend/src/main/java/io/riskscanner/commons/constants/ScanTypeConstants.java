@@ -1,5 +1,5 @@
 package io.riskscanner.commons.constants;
 
 public enum ScanTypeConstants {
-    custodian, nuclei
+    custodian, nuclei, prowler, tsunami
 }

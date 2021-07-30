@@ -34,6 +34,7 @@ import io.riskscanner.base.rs.*;
 import io.riskscanner.commons.constants.CloudAccountConstants;
 import io.riskscanner.commons.constants.CommandEnum;
 import io.riskscanner.commons.constants.RegionsConstants;
+import io.riskscanner.commons.constants.ScanTypeConstants;
 import io.riskscanner.commons.exception.PluginException;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.i18n.Translator;
@@ -147,6 +148,10 @@ public class PlatformUtils {
 
         switch (type) {
             case aws:
+                String scanType = params.get("scanType");
+                if(StringUtils.equalsIgnoreCase(scanType, ScanTypeConstants.prowler.name())){
+                    return "./prowler";
+                }
                 String awsAccessKey = params.get("accessKey");
                 String awsSecretKey = params.get("secretKey");
                 pre = "AWS_ACCESS_KEY_ID=" + awsAccessKey + " " +
