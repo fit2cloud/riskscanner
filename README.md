@@ -32,7 +32,7 @@ RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，�
 
 ## UI 界面展示
 
-![UI 界面展示](./frontend/src/assets/img/readme/dashboard.png)
+![UI 界面展示](./frontend/src/assets/img/readme/dashboard.gif)
 
 ## 快速开始
 
