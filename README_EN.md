@@ -10,7 +10,7 @@
 </p>
 <hr />
 
-RiskScanner `/ˈrɪskˌskænə(r)/` is an open source multi-cloud security compliance scanning platform, define scanning rules through Cloud Custodian's YAML DSL and Nuclei's YAML template, achieve security compliance scanning and use optimization suggestions for mainstream public (private) cloud resources and unaccounted network investigations.
+RiskScanner `/ˈrɪskˌskænə(r)/` is an open source multi-cloud security compliance scanning platform, Based on Cloud Custodian and Nuclei engines, it realizes security compliance scanning and vulnerability scanning of mainstream public (private) cloud resources.
 
 **Functional advantage**
 

@@ -10,7 +10,7 @@
 </p>
 <hr />
 
-RiskScanner `/ˈrɪskˌskænə(r)/` 是开源的多云安全合规扫描平台，通过 Cloud Custodian 的 YAML DSL 和 Nuclei 的 YAML 模板定义扫描规则，实现对主流公(私)有云资源、无账号网络侦查的安全合规扫描及使用优化建议。
+RiskScanner `/ˈrɪskˌskænə(r)/` 是开源的多云安全合规扫描平台，基于 Cloud Custodian 和 Nuclei 引擎，实现对主流公(私)有云资源的安全合规扫描和漏洞扫描。
 
 **功能优势**
 
