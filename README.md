@@ -19,14 +19,14 @@ RiskScanner `/ˈrɪskˌskænə(r)/` 是开源的多云安全合规扫描平台�
 > - [x] 漏洞扫描：通过对网络的扫描，发现可利用漏洞的安全检测（渗透攻击）；
 > - [x] 最佳实践建议：制定合规管控基线，为企业级用户提供最佳实践建议，持续提升合规水平；
 
-RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，界面美观、用户体验好，支持的公有云包括阿里云、腾讯云、华为云、Amazon Web Services、Microsoft Azure、Google Cloud，支持的私有云包括 OpenStack、VMware vSphere 等。并且支持无账号的网络侦查安全漏洞扫描。
+RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，界面美观、用户体验好，支持的公有云包括阿里云、腾讯云、华为云、Amazon Web Services、Microsoft Azure、Google Cloud，支持的私有云包括 OpenStack、VMware vSphere 等，并且支持漏洞扫描。
 
 **技术优势**
 
 > - [x] 规则简单灵活：扫描规则采用简单的 YAML 格式，简单易懂、并允许用户自定义规则；
 > - [x] 支持多公(私)有云：支持的公有云包括阿里云、腾讯云、华为云、Amazon Web Services、Microsoft Azure、Google Cloud，支持的私有云包括 OpenStack、VMware vSphere 等；
 > - [x] 支持多资源：支持的资源类型包括云服务器、云磁盘、云数据库、负载均衡、对象存储、专有网络、安全组等；
-> - [x] 支持无账号网络侦查：可配置攻击目标，零误报，包含了爬虫、通用漏洞检测（如 SQL 注入、XSS 检测）、指纹信息收集（如 Web 服务、语言框架等）、专用漏洞检测等；
+> - [x] 漏洞扫描：可配置攻击目标，零误报，包含了爬虫、通用漏洞检测（如 SQL 注入、XSS 检测）、指纹信息收集（如 Web 服务、语言框架等）、专用漏洞检测等；
 
 ![功能架构](./frontend/src/assets/img/readme/functional-architecture.png)
 
@@ -55,16 +55,12 @@ curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/qu
 
 <img src="./frontend/src/assets/img/readme/wechat-group.png" width="156" height="156"/>
 
-## QQ 群
-
-> 729460399
-
 ## 技术栈
 
 - 前端：[Vue.js](https://vuejs.org/)
 - 后端：[Spring Boot](https://www.tutorialspoint.com/spring_boot/spring_boot_introduction.htm)
 - 云平台扫描引擎：[Cloud Custodian](https://github.com/cloud-custodian/cloud-custodian)
-- 网络侦查扫描引擎：[Nuclei](https://github.com/projectdiscovery/nuclei)
+- 漏洞扫描引擎：[Nuclei](https://github.com/projectdiscovery/nuclei)
 - 数据库：[MySQL](https://www.mysql.com/)
 - 基础设施：[Docker](https://www.docker.com/)
 
