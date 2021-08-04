@@ -26,7 +26,7 @@ RiskScanner follows the GPL v2 open source agreement and uses SpringBoot/Vue for
 > - [x] Simple and flexible rules: scanning rules adopt simple YAML format, which is easy to understand and allows users to customize rules.
 > - [x] Support multiple public (private) clouds: Supported public clouds include Alibaba Cloud, Tencent Cloud, Huawei Cloud, Amazon Web Services, Microsoft Azure, Google Cloud, and supported private clouds include OpenStack, VMware vSphere, etc.
 > - [x] Support for multiple resources: Supported resource types include cloud servers, cloud disks, cloud databases, load balancing, object storage, private networks, security groups, etc.
-> - [x] Vulnerability scan: configurable attack targets, zero false positives, including crawling, general vulnerability detection (such as SQL injection, XSS detection), fingerprint information collection (such as Web services, language frameworks, etc.), special vulnerability detection, etc.
+> - [x] Support vulnerability scan: configurable attack targets, zero false positives, including crawling, general vulnerability detection (such as SQL injection, XSS detection), fingerprint information collection (such as Web services, language frameworks, etc.), special vulnerability detection, etc.
 
 ![Functional architecture](./frontend/src/assets/img/readme/functional-architecture-en.png)
 
