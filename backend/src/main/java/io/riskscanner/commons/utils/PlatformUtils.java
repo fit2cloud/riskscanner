@@ -821,6 +821,11 @@ public class PlatformUtils {
                     stringArray = new String[]{"cn-guangzhou"};
                     tempList = Arrays.asList(stringArray);
                     return !tempList.contains(region);
+                } else if (StringUtils.contains(resource, "aliyun.ram")) {
+                    // 因为ram是无区域资源，所以aliyun.ram资源仅绑定北京区，以防重复数据过多
+                    stringArray = new String[]{"cn-beijing"};
+                    tempList = Arrays.asList(stringArray);
+                    return tempList.contains(region);
                 }
                 break;
             case huawei:
