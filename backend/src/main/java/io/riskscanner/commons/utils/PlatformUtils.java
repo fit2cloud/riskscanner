@@ -813,16 +813,26 @@ public class PlatformUtils {
             case aliyun:
                 if (StringUtils.contains(resource, "aliyun.polardb")) {
                     // 不支持aliyun.polardb资源的区域
-                    stringArray = new String[]{"cn-wulanchabu", "cn-heyuan", "cn-guangzhou", "me-east-1"};
+                    stringArray = new String[]{"cn-wulanchabu", "cn-heyuan", "cn-guangzhou", "me-east-1", "cn-nanjing"};
                     tempList = Arrays.asList(stringArray);
                     return !tempList.contains(region);
                 } else if (StringUtils.contains(resource, "aliyun.mongodb")) {
                     // 不支持aliyun.mongodb资源的区域
-                    stringArray = new String[]{"cn-guangzhou"};
+                    stringArray = new String[]{"cn-guangzhou", "cn-nanjing"};
+                    tempList = Arrays.asList(stringArray);
+                    return !tempList.contains(region);
+                } else if (StringUtils.contains(resource, "aliyun.slb")) {
+                    // 不支持aliyun.slb资源的区域
+                    stringArray = new String[]{"cn-nanjing"};
                     tempList = Arrays.asList(stringArray);
                     return !tempList.contains(region);
                 } else if (StringUtils.contains(resource, "aliyun.ram")) {
                     // 因为ram是无区域资源，所以aliyun.ram资源仅绑定北京区，以防重复数据过多
+                    stringArray = new String[]{"cn-beijing"};
+                    tempList = Arrays.asList(stringArray);
+                    return tempList.contains(region);
+                } else if (StringUtils.contains(resource, "aliyun.cdn")) {
+                    // 因为cdn是无区域资源，所以aliyun.cdn资源仅绑定北京区，以防重复数据过多
                     stringArray = new String[]{"cn-beijing"};
                     tempList = Arrays.asList(stringArray);
                     return tempList.contains(region);
