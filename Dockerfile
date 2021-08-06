@@ -4,10 +4,7 @@ FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.4.1-rc1
 
 ARG RS_VERSION=dev
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
-     && rm -rf /var/cache/apk/* \
-     && apk update \
-     && apk add --no-cache bind-tools ca-certificates
+RUN mkdir /var/cache/apk && apk add --no-cache bind-tools ca-certificates
 
 COPY --from=build-env /usr/local/bin/nuclei /usr/local/bin/nuclei
 
