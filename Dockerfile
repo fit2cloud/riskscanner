@@ -4,7 +4,8 @@ FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.4.1-rc1
 
 ARG RS_VERSION=dev
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories \
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+     && rm -rf /var/cache/apk/* \
      && apk update \
      && apk add --no-cache bind-tools ca-certificates
 
