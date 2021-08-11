@@ -848,9 +848,10 @@ public class PlatformUtils {
                     tempList = Arrays.asList(stringArray);
                     return !tempList.contains(region);
                 } else if (StringUtils.contains(resource, "huawei.iam")) {
-                    stringArray = new String[]{"la-south-2", "sa-brazil-1", "na-mexico-1"};
+                    // 因为iam是无区域资源，所以huawei.iam资源仅绑定北京区，以防重复数据过多
+                    stringArray = new String[]{"cn-north-4"};
                     tempList = Arrays.asList(stringArray);
-                    return !tempList.contains(region);
+                    return tempList.contains(region);
                 } else if (StringUtils.contains(resource, "huawei.rds")) {
                     stringArray = new String[]{"la-south-2", "sa-brazil-1", "na-mexico-1"};
                     tempList = Arrays.asList(stringArray);
