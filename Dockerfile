@@ -4,7 +4,7 @@ FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.4.1
 
 ARG RS_VERSION=dev
 
-RUN mkdir /var/cache/apk && apk add --no-cache bind-tools ca-certificates
+RUN apk add --no-cache bind-tools ca-certificates
 
 COPY --from=build-env /usr/local/bin/nuclei /usr/local/bin/nuclei
 
