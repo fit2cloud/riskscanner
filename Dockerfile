@@ -1,6 +1,6 @@
 FROM registry.cn-qingdao.aliyuncs.com/x-lab/nuclei:v1.4 as build-env
 
-FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.4.1-rc1
+FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.4.1
 
 ARG RS_VERSION=dev
 
