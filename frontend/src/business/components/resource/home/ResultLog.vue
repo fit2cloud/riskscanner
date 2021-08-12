@@ -150,13 +150,13 @@
           let data = response.data;
           switch (title) {
             case this.$t('resource.i18n_resource_scanning_log'):
-              this.script = data.custodianRunLog?data.custodianRunLog:"[]";
+              this.script = data?data.custodianRunLog:"[]";
               break;
             case this.$t('resource.i18n_resource_scanning_api'):
-              this.script = data.metadata?data.metadata:"[]";
+              this.script = data?data.metadata:"[]";
               break;
             case this.$t('resource.i18n_resource_scanning_return'):
-              this.script = data.resources?data.resources:"[]";
+              this.script = data?data.resources:"[]";
               break;
           }
           this.fileTitle = title;
