@@ -367,8 +367,9 @@ public class PlatformUtils {
             }
             switch (account.getPluginId()) {
                 case aws:
-                    AWSCredential awsCredential = new Gson().fromJson(account.getCredential(), AWSCredential.class);
-                    AmazonEC2Client client = new AmazonEC2Client(new BasicAWSCredentials(awsCredential.getAccessKey(), awsCredential.getSecretKey()));
+                    AWSRequest awsReq = new AWSRequest();
+                    awsReq.setCredential(account.getCredential());
+                    AmazonEC2Client client = awsReq.getAmazonEC2Client(proxy);
                     DescribeRegionsResult result;
                     try {
                         client.setRegion(RegionUtils.getRegion("cn-north-1"));
