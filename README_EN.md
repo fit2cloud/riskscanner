@@ -10,13 +10,13 @@
 </p>
 <hr />
 
-RiskScanner `/ˈrɪskˌskænə(r)/` is an open source multi-cloud security compliance scanning platform, Based on Cloud Custodian and Nuclei engines, it realizes security compliance scanning and vulnerability scanning of mainstream public (private) cloud resources.
+RiskScanner is an open source multi-cloud security compliance scanning platform, Based on Cloud Custodian and Nuclei engines, it realizes security compliance scanning and vulnerability scanning of mainstream public (private) cloud resources.
 
 **Functional advantage**
 
 > - [x] Hierarchical protection 2.0 pre-inspection: Comply with Hierarchical Protection 2.0 specifications, covering various inspections such as security audit, access control, intrusion prevention, network architecture and management center.
 > - [x] CIS compliance inspection: In compliance with CIS specifications, check and real-time monitor whether resources on the cloud meet CIS requirements.
-> - [x] Vulnerability scan: security detection (penetration attack) that finds exploitable vulnerabilities by scanning the network.
+> - [x] Vulnerability scan: Based on the vulnerability rule library, the security vulnerabilities of designated network equipment and application services are detected through scanning and other means.
 > - [x] Best practice recommendations: Develop a compliance control baseline, provide best practice recommendations for enterprise-level users, and continue to improve the level of compliance.
 
 RiskScanner follows the GPL v2 open source agreement and uses SpringBoot/Vue for development. The interface is beautiful and the user experience is good. The supported public clouds include Alibaba Cloud, Tencent Cloud, Huawei Cloud, Amazon Web Services, Microsoft Azure, Google Cloud, and the supported private clouds include OpenStack, VMware vSphere, etc, and supports vulnerability scanning.
@@ -25,8 +25,8 @@ RiskScanner follows the GPL v2 open source agreement and uses SpringBoot/Vue for
 
 > - [x] Simple and flexible rules: scanning rules adopt simple YAML format, which is easy to understand and allows users to customize rules.
 > - [x] Support multiple public (private) clouds: Supported public clouds include Alibaba Cloud, Tencent Cloud, Huawei Cloud, Amazon Web Services, Microsoft Azure, Google Cloud, and supported private clouds include OpenStack, VMware vSphere, etc.
-> - [x] Support for multiple resources: Supported resource types include cloud servers, cloud disks, cloud databases, load balancing, object storage, private networks, security groups, etc.
-> - [x] Support vulnerability scan: configurable attack targets, zero false positives, including crawling, general vulnerability detection (such as SQL injection, XSS detection), fingerprint information collection (such as Web services, language frameworks, etc.), special vulnerability detection, etc.
+> - [x] Support multiple resource types: Supported resource types include cloud servers, cloud disks, cloud databases, load balancing, object storage, private networks, security groups, etc.
+> - [x] Rich and comprehensive vulnerability rule library: Covers OWASP TOP 10 Web vulnerabilities, such as: SQL injection, cross-site scripting (XSS), cross-site request forgery (CSRF), weak passwords, etc.
 
 ![Functional architecture](./frontend/src/assets/img/readme/functional-architecture-en.png)
 
@@ -62,7 +62,6 @@ curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/qu
 - Cloud platform scan engine：[Cloud Custodian](https://github.com/cloud-custodian/cloud-custodian)
 - Vulnerability Scan Engine：[Nuclei](https://github.com/projectdiscovery/nuclei)
 - Database：[MySQL](https://www.mysql.com/)
-- Infrastructure：[Docker](https://www.docker.com/)
 
 ## License & Copyright
 
