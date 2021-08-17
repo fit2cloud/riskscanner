@@ -23,6 +23,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -45,47 +46,47 @@ import static com.alibaba.fastjson.JSON.parseObject;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class ResourceService {
-    @Resource
+    @Resource @Lazy
     private ExtResourceMapper extResourceMapper;
-    @Resource
+    @Resource @Lazy
     private ResourceMapper resourceMapper;
-    @Resource
+    @Resource @Lazy
     private ResourceRuleMapper resourceRuleMapper;
-    @Resource
+    @Resource @Lazy
     private TaskItemMapper taskItemMapper;
-    @Resource
+    @Resource @Lazy
     private TaskItemResourceMapper taskItemResourceMapper;
-    @Resource
+    @Resource @Lazy
     private TaskMapper taskMapper;
-    @Resource
+    @Resource @Lazy
     private AccountMapper accountMapper;
-    @Resource
+    @Resource @Lazy
     private ExtTaskMapper extTaskMapper;
-    @Resource
+    @Resource @Lazy
     private TaskItemLogMapper taskItemLogMapper;
-    @Resource
+    @Resource @Lazy
     private TaskService taskService;
-    @Resource
+    @Resource @Lazy
     private OrderService orderService;
-    @Resource
+    @Resource @Lazy
     private RuleMapper ruleMapper;
-    @Resource
+    @Resource @Lazy
     private ResourceItemMapper resourceItemMapper;
-    @Resource
+    @Resource @Lazy
     private ScanHistoryMapper scanHistoryMapper;
-    @Resource
+    @Resource @Lazy
     private ExtScanHistoryMapper extScanHistoryMapper;
-    @Resource
+    @Resource @Lazy
     private ScanTaskHistoryMapper scanTaskHistoryMapper;
-    @Resource
+    @Resource @Lazy
     private ProxyMapper proxyMapper;
-    @Resource
+    @Resource @Lazy
     private CloudAccountQuartzTaskMapper quartzTaskMapper;
-    @Resource
+    @Resource @Lazy
     private CloudAccountQuartzTaskRelationMapper quartzTaskRelationMapper;
-    @Resource
+    @Resource @Lazy
     private CloudAccountQuartzTaskRelaLogMapper quartzTaskRelaLogMapper;
-    @Resource
+    @Resource @Lazy
     private QuartzManageService quartzManageService;
 
 

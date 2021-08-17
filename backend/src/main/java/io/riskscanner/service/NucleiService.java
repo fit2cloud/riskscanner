@@ -16,6 +16,7 @@ import io.riskscanner.i18n.Translator;
 import io.riskscanner.proxy.nuclei.NucleiCredential;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 
@@ -37,33 +38,33 @@ import static com.alibaba.fastjson.JSON.toJSONString;
 @Service
 public class NucleiService {
 
-    @Resource
+    @Resource @Lazy
     private TaskMapper taskMapper;
-    @Resource
+    @Resource @Lazy
     private TaskItemMapper taskItemMapper;
-    @Resource
+    @Resource @Lazy
     private TaskItemLogMapper taskItemLogMapper;
-    @Resource
+    @Resource @Lazy
     private CommonThreadPool commonThreadPool;
-    @Resource
+    @Resource @Lazy
     private TaskItemResourceMapper taskItemResourceMapper;
-    @Resource
+    @Resource @Lazy
     private ResourceMapper resourceMapper;
-    @Resource
+    @Resource @Lazy
     private AccountMapper accountMapper;
-    @Resource
+    @Resource @Lazy
     private ResourceRuleMapper resourceRuleMapper;
-    @Resource
+    @Resource @Lazy
     private NoticeService noticeService;
-    @Resource
+    @Resource @Lazy
     private ProxyMapper proxyMapper;
-    @Resource
+    @Resource @Lazy
     private OrderService orderService;
-    @Resource
+    @Resource @Lazy
     private RuleService ruleService;
-    @Resource
+    @Resource @Lazy
     private ResourceItemMapper resourceItemMapper;
-    @Resource
+    @Resource @Lazy
     private ExtTaskMapper extTaskMapper;
 
     public Task createTask(QuartzTaskDTO quartzTaskDTO, String status, String messageOrderId) throws Exception {

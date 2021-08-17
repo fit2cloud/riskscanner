@@ -21,6 +21,7 @@ import io.riskscanner.controller.request.rule.RuleTagRequest;
 import io.riskscanner.dto.*;
 import io.riskscanner.i18n.Translator;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -39,49 +40,49 @@ import static com.alibaba.fastjson.JSON.parseArray;
 @Transactional(rollbackFor = Exception.class)
 public class RuleService {
 
-    @Resource
+    @Resource @Lazy
     private RuleMapper ruleMapper;
-    @Resource
+    @Resource @Lazy
     private RuleTagMapper ruleTagMapper;
-    @Resource
+    @Resource @Lazy
     private RuleTagMappingMapper ruleTagMappingMapper;
-    @Resource
+    @Resource @Lazy
     private PluginMapper pluginMapper;
-    @Resource
+    @Resource @Lazy
     private ExtRuleMapper extRuleMapper;
-    @Resource
+    @Resource @Lazy
     private RuleTypeMapper ruleTypeMapper;
-    @Resource
+    @Resource @Lazy
     private ExtRuleTagMapper extRuleTagMapper;
-    @Resource
+    @Resource @Lazy
     private ExtRuleTypeMapper extRuleTypeMapper;
-    @Resource
+    @Resource @Lazy
     private TaskService taskService;
-    @Resource
+    @Resource @Lazy
     private ResourceRuleMapper resourceRuleMapper;
-    @Resource
+    @Resource @Lazy
     private CommonThreadPool commonThreadPool;
-    @Resource
+    @Resource @Lazy
     private AccountMapper accountMapper;
-    @Resource
+    @Resource @Lazy
     private AccountService accountService;
-    @Resource
+    @Resource @Lazy
     private RuleGroupMapper ruleGroupMapper;
-    @Resource
+    @Resource @Lazy
     private RuleGroupMappingMapper ruleGroupMappingMapper;
-    @Resource
+    @Resource @Lazy
     private RuleInspectionReportMapper ruleInspectionReportMapper;
-    @Resource
+    @Resource @Lazy
     private RuleInspectionReportMappingMapper ruleInspectionReportMappingMapper;
-    @Resource
+    @Resource @Lazy
     private OrderService orderService;
-    @Resource
+    @Resource @Lazy
     private ScanHistoryMapper scanHistoryMapper;
-    @Resource
+    @Resource @Lazy
     private ExtRuleGroupMapper extRuleGroupMapper;
-    @Resource
+    @Resource @Lazy
     private TaskItemMapper taskItemMapper;
-    @Resource
+    @Resource @Lazy
     private NoticeService noticeService;
 
     public List<RuleDTO> getRules(CreateRuleRequest ruleRequest) {

@@ -24,6 +24,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -42,43 +43,43 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
 
-    @Resource
+    @Resource @Lazy
     private TaskMapper taskMapper;
-    @Resource
+    @Resource @Lazy
     private TaskItemMapper taskItemMapper;
-    @Resource
+    @Resource @Lazy
     private ExtTaskMapper extTaskMapper;
-    @Resource
+    @Resource @Lazy
     private TaskItemLogMapper taskItemLogMapper;
-    @Resource
+    @Resource @Lazy
     private CommonThreadPool commonThreadPool;
-    @Resource
+    @Resource @Lazy
     private TaskItemResourceMapper taskItemResourceMapper;
-    @Resource
+    @Resource @Lazy
     private ResourceMapper resourceMapper;
-    @Resource
+    @Resource @Lazy
     private AccountMapper accountMapper;
-    @Resource
+    @Resource @Lazy
     private QuartzManageService quartzManageService;
-    @Resource
+    @Resource @Lazy
     private RuleMapper ruleMapper;
-    @Resource
+    @Resource @Lazy
     private ResourceRuleMapper resourceRuleMapper;
-    @Resource
+    @Resource @Lazy
     private RuleTagMappingMapper ruleTagMappingMapper;
-    @Resource
+    @Resource @Lazy
     private ExtResourceMapper extResourceMapper;
-    @Resource
+    @Resource @Lazy
     private ScanHistoryMapper scanHistoryMapper;
-    @Resource
+    @Resource @Lazy
     private ScanTaskHistoryMapper scanTaskHistoryMapper;
-    @Resource
+    @Resource @Lazy
     private NoticeService noticeService;
-    @Resource
+    @Resource @Lazy
     private CloudAccountQuartzTaskMapper quartzTaskMapper;
-    @Resource
+    @Resource @Lazy
     private CloudAccountQuartzTaskRelationMapper quartzTaskRelationMapper;
-    @Resource
+    @Resource @Lazy
     private CloudAccountQuartzTaskRelaLogMapper quartzTaskRelaLogMapper;
 
     public Task createTask(QuartzTaskDTO quartzTaskDTO, String status, String messageOrderId) throws Exception {
