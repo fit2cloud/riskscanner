@@ -228,7 +228,7 @@
   }
 
   .image {
-    background: url(../assets/info5.jpg);
+    background: url(../assets/info.jpg);
     height: 560px;
   }
 
