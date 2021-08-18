@@ -22,6 +22,30 @@
 			"Resource": [
 				"*"
 			]
+		},
+		{
+			"Action": [
+				"ds:ListAuthorizedApplications",
+				"ec2:GetEbsEncryptionByDefault",
+				"ecr:Describe*",
+				"support:Describe*",
+				"tag:GetTagKeys",
+				"lambda:GetFunction",
+				"glue:GetConnections",
+				"glue:SearchTables",
+				"s3:GetAccountPublicAccessBlock"
+			],
+			"Resource": "*",
+			"Effect": "Allow",
+			"Sid": "AllowMoreReadForProwler"
+		},
+		{
+			"Action": [
+				"securityhub:BatchImportFindings",
+				"securityhub:GetFindings"
+			],
+			"Effect": "Allow",
+			"Resource": "*"
 		}
 	]
 }

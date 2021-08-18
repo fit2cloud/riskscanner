@@ -3,6 +3,8 @@ INSERT INTO plugin ( id, name, icon, update_time) VALUES ('fit2cloud-gcp-plugin'
 
 INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('GCP 安全检查', '安全检查，为您提供通信网络、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-gcp-plugin', 1);
 
+SELECT @groupId := LAST_INSERT_ID();
+
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('1f3ef6ec-17ab-409d-9051-ea5c543312d1', 'Google Cloud 部署管理器扫描', 1, 'LowRisk', 'Google Cloud 检测账号下已达到到期日期的部署，未到期视为“合规”，否则属于“不合规”', 'policies:\n  # 检测账号下已达到到期日期的部署，未到期视为“合规”，否则属于“不合规”\n  - name: expired-deployments\n    description: Finds expired deployments\n    resource: gcp.dm-deployment\n    filters:\n    - type: value\n      key: insertTime\n      value_type: expiration\n      op: gte\n      value: ${{day}}', '[{\"key\":\"day\",\"name\":\"到期时间\",\"defaultValue\":\"7\",\"required\":true}]', 'fit2cloud-gcp-plugin', 'Google Cloud', 'gcp.png', concat(unix_timestamp(now()), '008'), 1, 'custodian');
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('34c7e619-6815-4c20-af8e-8d11b16a770c', 'Google Cloud SQL实例扫描', 1, 'HighRisk', 'Google Cloud 检测账号下Cloud SQL 实例的备份是否运行并列出超过 5 天的不成功备份，符合的视为“合规”，否则属于“不合规”', 'policies:\n# 检测账号下Cloud SQL 实例的备份是否运行并列出超过 5 天的不成功备份，符合的视为“合规”，否则属于“不合规”\n- name: sql-backup-run\n  description: |\n    check basic work of Cloud SQL filter on backup runs: lists unsucessful backups older than 5 days\n  resource: gcp.sql-backup-run\n  filters:\n    - type: value\n      key: status\n      op: not-equal\n      value: ${{status}}\n    - type: value\n      key: endTime\n      op: greater-than\n      value_type: age\n      value: ${{day}}', '[{\"key\":\"status\",\"name\":\"状态\",\"defaultValue\":\"SUCCESSFUL\",\"required\":true},{\"key\":\"day\",\"name\":\"天数\",\"defaultValue\":\"5\",\"required\":true}]', 'fit2cloud-gcp-plugin', 'Google Cloud', 'gcp.png', concat(unix_timestamp(now()), '008'), 1, 'custodian');
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('3a1a0fc7-98f3-4f8e-a434-76460ef2009b', 'Google Cloud DNS 策略日志记录扫描', 1, 'LowRisk', 'Google Cloud 检测账号下DNS 策略中的日志记录状态，未禁用视为“合规”，否则属于“不合规”', 'policies:\n    # 检测账号下DNS 策略中的日志记录状态，未禁用视为“合规”，否则属于“不合规”\n    - name: gcp-dns-policies-if-logging-disabled\n      resource: gcp.dns-policy\n      filters:\n        - type: value\n          key: enableLogging\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"是否禁用\",\"defaultValue\":\"false\",\"required\":true}]', 'fit2cloud-gcp-plugin', 'Google Cloud', 'gcp.png', concat(unix_timestamp(now()), '008'), 1, 'custodian');
@@ -36,16 +38,16 @@ INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('6
 INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('34c7e619-6815-4c20-af8e-8d11b16a770c', '91');
 
 
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('d147a425-ddd5-4826-b685-e3b3842ae253', '17');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6939910d-a7f1-4347-9238-abce1111f45d', '17');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('7557ce1b-aacf-4cd7-bb19-6e411621daf3', '17');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('9312ca46-1ce9-4e42-86b2-7f9b5c0db090', '17');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('1f3ef6ec-17ab-409d-9051-ea5c543312d1', '17');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('d2288b78-bab7-4195-9c16-79ae29b9f292', '17');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('3a1a0fc7-98f3-4f8e-a434-76460ef2009b', '17');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('95e46474-5611-4d82-a9c5-5da3398ad3a4', '17');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6923bc7a-fb4f-4c1c-ae70-dc6aac407e11', '17');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('34c7e619-6815-4c20-af8e-8d11b16a770c', '17');
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('d147a425-ddd5-4826-b685-e3b3842ae253', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6939910d-a7f1-4347-9238-abce1111f45d', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('7557ce1b-aacf-4cd7-bb19-6e411621daf3', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('9312ca46-1ce9-4e42-86b2-7f9b5c0db090', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('1f3ef6ec-17ab-409d-9051-ea5c543312d1', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('d2288b78-bab7-4195-9c16-79ae29b9f292', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('3a1a0fc7-98f3-4f8e-a434-76460ef2009b', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('95e46474-5611-4d82-a9c5-5da3398ad3a4', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6923bc7a-fb4f-4c1c-ae70-dc6aac407e11', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('34c7e619-6815-4c20-af8e-8d11b16a770c', @groupId);
 
 
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('0388fcf8-e189-4f1b-9a34-927c02ea4c52', '3a1a0fc7-98f3-4f8e-a434-76460ef2009b', 'gcp.dns-policy');

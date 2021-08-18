@@ -3,6 +3,8 @@ INSERT INTO plugin ( id, name, icon, update_time) VALUES ('fit2cloud-openstack-p
 
 INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('OpenStack 安全检查', '安全检查，为您提供通信网络、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-openstack-plugin', 1);
 
+SELECT @groupId := LAST_INSERT_ID();
+
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('1aab5692-85a5-4151-b67c-8c2c93353916', 'OpenStack 用户项目扫描', 1, 'LowRisk', 'OpenStack 检测用户是否绑定主项目，已绑定视为“合规”，否则属于“不合规”', 'policies:\n    # 检测用户是否绑定主项目，已绑定视为“合规”，否则属于“不合规”\n    - name: openstack-filter-user-project\n      resource: openstack.user\n      filters:\n        - type: project\n          default_project_id: ${{default_project_id}}', '[{\"key\":\"default_project_id\",\"name\":\"项目ID\",\"defaultValue\":\"\'\'\",\"required\":true}]', 'fit2cloud-openstack-plugin', 'OpenStack', 'openstack.png', concat(unix_timestamp(now()), '006'), 1, 'custodian');
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('311daee9-3c15-4b19-8fb7-97823c57eb23', 'OpenStack 模板类型扫描', 1, 'MediumRisk', 'OpenStack 检测模板实例类型是否为公有，并且内存/CPU/磁盘大于指定最低值，符合条件视为“合规”，否则属于“不合规”', 'policies:\n    # 检测模板实例类型是否为公有，并且内存/CPU/磁盘大于指定最低值，符合条件视为“合规”，否则属于“不合规”\n    - name: openstack-flavor\n      resource: openstack.flavor\n      filters:\n        - type: system\n          is_public: ${{is_public}}\n          ram: ${{ram}}\n          vcpus: ${{vcpus}}\n          disk: ${{disk}}', '[{\"key\":\"is_public\",\"name\":\"是否为公有\",\"defaultValue\":\"true\",\"required\":true},{\"key\":\"ram\",\"name\":\"内存大小\",\"defaultValue\":\"512\",\"required\":true},{\"key\":\"vcpus\",\"name\":\"CPU\",\"defaultValue\":\"1\",\"required\":true},{\"key\":\"disk\",\"name\":\"磁盘大小\",\"defaultValue\":\"1\",\"required\":true}]', 'fit2cloud-openstack-plugin', 'OpenStack', 'openstack.png', concat(unix_timestamp(now()), '006'), 1, 'custodian');
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('5673475f-c43d-432c-a6a6-f29479493b4d', 'OpenStack 卷加密扫描', 1, 'HighRisk', 'OpenStack 检测卷是否加密，加密视为“合规”，否则属于“不合规”', 'policies:\n    # 检测卷是否加密，加密视为“合规”，否则属于“不合规”\n    - name: openstack-volume\n      resource: openstack.volume\n      filters:\n        - type: status\n          is_encrypted: ${{is_encrypted}}', '[{\"key\":\"is_encrypted\",\"name\":\"是否加密\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-openstack-plugin', 'OpenStack', 'openstack.png', concat(unix_timestamp(now()), '006'), 1, 'custodian');
@@ -50,21 +52,21 @@ INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('7
 INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('701ae534-4c13-45a2-8a72-e78afdea4d2b', '95');
 
 
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5f6c1aed-8c46-48e6-b48d-2cf06568831f', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('1aab5692-85a5-4151-b67c-8c2c93353916', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('bf9a87c9-f709-4f84-8a86-5afde3eb40c3', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6bbd42bc-a251-498a-8b19-8de8c55e32aa', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5673475f-c43d-432c-a6a6-f29479493b4d', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('f7b906de-63e0-479b-b766-2e50df8fbe19', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6359bdcd-0d1d-4e43-817c-cc338f07a065', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5c4d5e15-ce0a-4322-8406-47e8bcb10bf4', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('ab3306d0-e734-4977-a462-42de0e1cf263', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('ccf64ae6-7f99-40fe-b45f-d86a4b63bdcc', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('311daee9-3c15-4b19-8fb7-97823c57eb23', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('b8e09c5a-fecc-4400-b831-d7f75f9cee01', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('c9162947-90f2-41c9-8df8-2d2244bb6f1d', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('701ae534-4c13-45a2-8a72-e78afdea4d2b', '15');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('63dedb65-0237-4402-8a5c-1d2137840fdd', '15');
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5f6c1aed-8c46-48e6-b48d-2cf06568831f', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('1aab5692-85a5-4151-b67c-8c2c93353916', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('bf9a87c9-f709-4f84-8a86-5afde3eb40c3', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6bbd42bc-a251-498a-8b19-8de8c55e32aa', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5673475f-c43d-432c-a6a6-f29479493b4d', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('f7b906de-63e0-479b-b766-2e50df8fbe19', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6359bdcd-0d1d-4e43-817c-cc338f07a065', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5c4d5e15-ce0a-4322-8406-47e8bcb10bf4', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('ab3306d0-e734-4977-a462-42de0e1cf263', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('ccf64ae6-7f99-40fe-b45f-d86a4b63bdcc', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('311daee9-3c15-4b19-8fb7-97823c57eb23', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('b8e09c5a-fecc-4400-b831-d7f75f9cee01', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('c9162947-90f2-41c9-8df8-2d2244bb6f1d', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('701ae534-4c13-45a2-8a72-e78afdea4d2b', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('63dedb65-0237-4402-8a5c-1d2137840fdd', @groupId);
 
 
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('03b9e633-db33-4720-8dd0-ee9e4f9f4ac6', '5c4d5e15-ce0a-4322-8406-47e8bcb10bf4', 'openstack.server');

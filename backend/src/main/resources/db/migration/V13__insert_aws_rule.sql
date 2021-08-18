@@ -2,9 +2,11 @@
 INSERT INTO plugin ( id, name, icon, update_time) VALUES ('fit2cloud-aws-plugin', 'Amazon Web Services', 'aws.png', concat(unix_timestamp(now()), '001'));
 
 INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('AWS 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-aws-plugin', 1);
+SELECT @groupId1 := LAST_INSERT_ID();
 INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('AWS CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-aws-plugin', 1);
+SELECT @groupId2 := LAST_INSERT_ID();
 INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('AWS S3合规基线', 'S3 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-aws-plugin', 1);
-
+SELECT @groupId3 := LAST_INSERT_ID();
 
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('07eb95ef-6d78-4b9a-8555-a42b6a16de99', 'AWS ELB SSL 黑名单扫描', 1, 'HighRisk', 'AWS  测您账号下ELB SSL 黑名单扫描，在白名单视为“合规”，黑名单视为“不合规”', 'policies:\n    # 测您账号下ELB SSL 黑名单扫描，在白名单视为“合规”，黑名单视为“不合规”\n    - name: aws-elb-ssl-whitelist\n      resource: aws.elb\n      filters:\n        - type: ssl-policy\n          blacklist:\n            - Protocol-TLSv1\n            - Protocol-TLSv1.1\n            - Protocol-TLSv1.2', '[]', 'fit2cloud-aws-plugin', 'Amazon Web Services', 'aws.png', concat(unix_timestamp(now()), '004'), 1, 'custodian');
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('0be7f5d4-766c-4b2b-910d-bec0f3aac977', 'AWS ELB实例使用扫描', 1, 'HighRisk', 'AWS  检测您账号下弹性负载均衡器是否使用，使用视为“合规”，否则视为“不合规”', 'policies:\n    # 检测您账号下弹性负载均衡器是否使用，使用视为“合规”，否则视为“不合规”\n    - name: aws-elb-unused\n      resource: aws.elb\n      filters:\n        - \"tag:maid_status\": absent\n        - Instances: []', '[]', 'fit2cloud-aws-plugin', 'Amazon Web Services', 'aws.png', concat(unix_timestamp(now()), '004'), 1, 'custodian');
@@ -55,27 +57,27 @@ INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('4
 INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('43a1556b-5417-4efb-88fc-33e8eeb68f71', '95');
 
 
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('befc89d7-1811-404a-9226-f8ecc22820e0', '10');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('07eb95ef-6d78-4b9a-8555-a42b6a16de99', '10');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('d0f3f4b0-000a-4407-85ee-ed4a2f9dac44', '10');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('c30779c4-44b8-4c7b-b2ec-29ff3a96033b', '10');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('a90a1ba1-b392-4bf2-af31-20ecbefe5811', '10');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('a6c513a8-8e18-4341-94b7-b6588fdcd1f4', '10');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('0dda84c1-794b-4977-bb66-6f12695c6c51', '10');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('43a1556b-5417-4efb-88fc-33e8eeb68f71', '10');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('35b5c651-5bd6-44b8-85ee-ae6adfa42dc3', '11');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('fa5e89e3-417d-4296-9d17-ca51ed914be5', '11');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5c47228c-7fe1-484b-a5b6-7c1968074f69', '11');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('befc89d7-1811-404a-9226-f8ecc22820e0', '11');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('bd1a0479-ef54-4208-a520-50caf6acfe87', '11');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('0be7f5d4-766c-4b2b-910d-bec0f3aac977', '11');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('07eb95ef-6d78-4b9a-8555-a42b6a16de99', '11');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('b1491f69-f3b8-40ae-9659-4242dbc30a0b', '11');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('a90a1ba1-b392-4bf2-af31-20ecbefe5811', '11');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('b57cbdba-b4d7-4da7-84db-25b9f2d5324b', '11');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('43a1556b-5417-4efb-88fc-33e8eeb68f71', '11');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('d0f3f4b0-000a-4407-85ee-ed4a2f9dac44', '12');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('c30779c4-44b8-4c7b-b2ec-29ff3a96033b', '12');
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('befc89d7-1811-404a-9226-f8ecc22820e0', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('07eb95ef-6d78-4b9a-8555-a42b6a16de99', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('d0f3f4b0-000a-4407-85ee-ed4a2f9dac44', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('c30779c4-44b8-4c7b-b2ec-29ff3a96033b', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('a90a1ba1-b392-4bf2-af31-20ecbefe5811', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('a6c513a8-8e18-4341-94b7-b6588fdcd1f4', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('0dda84c1-794b-4977-bb66-6f12695c6c51', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('43a1556b-5417-4efb-88fc-33e8eeb68f71', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('35b5c651-5bd6-44b8-85ee-ae6adfa42dc3', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('fa5e89e3-417d-4296-9d17-ca51ed914be5', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5c47228c-7fe1-484b-a5b6-7c1968074f69', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('befc89d7-1811-404a-9226-f8ecc22820e0', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('bd1a0479-ef54-4208-a520-50caf6acfe87', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('0be7f5d4-766c-4b2b-910d-bec0f3aac977', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('07eb95ef-6d78-4b9a-8555-a42b6a16de99', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('b1491f69-f3b8-40ae-9659-4242dbc30a0b', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('a90a1ba1-b392-4bf2-af31-20ecbefe5811', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('b57cbdba-b4d7-4da7-84db-25b9f2d5324b', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('43a1556b-5417-4efb-88fc-33e8eeb68f71', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('d0f3f4b0-000a-4407-85ee-ed4a2f9dac44', @groupId3);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('c30779c4-44b8-4c7b-b2ec-29ff3a96033b', @groupId3);
 
 
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('02971259-93f0-4cbe-921b-e9c589ca3543', '0dda84c1-794b-4977-bb66-6f12695c6c51', 'aws.rds');

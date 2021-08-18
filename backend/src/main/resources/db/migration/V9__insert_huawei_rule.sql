@@ -1,9 +1,11 @@
 
 
 INSERT INTO rule_group VALUES (4, 'Huawei 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-huawei-plugin', 1);
+SELECT @groupId1 := LAST_INSERT_ID();
 INSERT INTO rule_group VALUES (5, 'Huawei CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-huawei-plugin', 1);
+SELECT @groupId2 := LAST_INSERT_ID();
 INSERT INTO rule_group VALUES (6, 'Huawei OBS合规基线', 'OBS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-huawei-plugin', 1);
-
+SELECT @groupId3 := LAST_INSERT_ID();
 
 INSERT INTO rule(id, name, status, severity, description, script, parameter, plugin_id, plugin_name, plugin_icon, last_modified, flag, scan_type) VALUES ('0cf1e428-3c37-4aa6-b651-acb46c4838c0', 'Huawei Redis实例公网访问扫描', 1, 'HighRisk', 'Huawei  账号下Redis实例不允许任意来源公网访问，视为“合规”，否则属于“不合规”', 'policies:\n    # 账号下Redis实例不允许任意来源公网访问，视为“合规”\n    - name: huawei-redis-internet-access\n      resource: huawei.redis\n      filters:\n        - type: internet-access\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-huawei-plugin', '华为云', 'fusion.png', concat(unix_timestamp(now()), '002'), 1, 'custodian');
 INSERT INTO rule(id, name, status, severity, description, script, parameter, plugin_id, plugin_name, plugin_icon, last_modified, flag, scan_type) VALUES ('108c875b-bf3c-4034-b07d-15faa8715257', 'Huawei ECS实例公网IP扫描', 1, 'HighRisk', 'Huawei ECS实例未直接绑定公网IP，视为“合规”，否则属于“不合规”。该规则仅适用于 IPv4 协议', 'policies:\n    # ECS实例未直接绑定公网IP，视为“合规”。该规则仅适用于 IPv4 协议\n    - name: huawei-ecs-public-ipaddress\n      resource: huawei.ecs\n      filters:\n        - type: public-ip-address', '[]', 'fit2cloud-huawei-plugin', '华为云', 'fusion.png', concat(unix_timestamp(now()), '002'), 1, 'custodian');
@@ -91,31 +93,31 @@ INSERT INTO rule_inspection_report_mapping(id, rule_id, report_id) VALUES (110, 
 INSERT INTO rule_inspection_report_mapping(id, rule_id, report_id) VALUES (111, 'bb878650-b62b-4980-a6aa-4d61c1a429a0', '13');
 
 
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (43, '36908c29-c15e-4c73-a964-5fb97bbb27fa', '1');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (44, '968837c3-25f2-4848-8174-5413c859f1f1', '5');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (45, '968837c3-25f2-4848-8174-5413c859f1f1', '6');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (46, '2677aa0f-6796-4138-902b-f736e0c3d8da', '5');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (47, '2677aa0f-6796-4138-902b-f736e0c3d8da', '6');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (48, '7e7b3463-c7da-4545-bbc7-f97c83f429e4', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (49, '5c681b76-fea3-4cb9-b6d4-a92d0d2d44fa', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (50, '108c875b-bf3c-4034-b07d-15faa8715257', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (51, '3b3a76cf-78e4-4c48-84da-baf2af6be696', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (52, '3c4f6db4-6f8d-4e42-9c7e-d209fe5489fb', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (53, 'f7e8d1c4-16f7-4079-b110-b60db0cd91bf', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (54, '8f3f7596-569b-4cde-97a2-1d565b8224e1', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (55, '99e762e7-766f-4e55-9133-773593497b44', '5');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (56, '99e762e7-766f-4e55-9133-773593497b44', '6');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (57, 'b1260ecf-47fa-4613-8ed4-71417f29441b', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (58, 'f744fdd9-166d-40a7-ad91-9e933ad514cc', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (59, 'f744fdd9-166d-40a7-ad91-9e933ad514cc', '5');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (60, '33a70278-c772-4ef0-93c9-4b9d3df1e242', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (61, 'ce805504-de52-4ecc-a86a-4905d2a558f3', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (62, 'e58a3395-aee8-40bb-8f2f-d7156c0435cb', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (63, 'e58a3395-aee8-40bb-8f2f-d7156c0435cb', '5');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (64, '0cf1e428-3c37-4aa6-b651-acb46c4838c0', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (65, '3ce82502-1c03-4ab0-b8ed-83f631a20805', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (66, 'bb878650-b62b-4980-a6aa-4d61c1a429a0', '4');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (67, '332ce586-70de-4053-a922-f76d6340a03c', '4');
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (43, '36908c29-c15e-4c73-a964-5fb97bbb27fa', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (44, '968837c3-25f2-4848-8174-5413c859f1f1', @groupId2);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (45, '968837c3-25f2-4848-8174-5413c859f1f1', @groupId3);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (46, '2677aa0f-6796-4138-902b-f736e0c3d8da', @groupId2);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (47, '2677aa0f-6796-4138-902b-f736e0c3d8da', @groupId3);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (48, '7e7b3463-c7da-4545-bbc7-f97c83f429e4', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (49, '5c681b76-fea3-4cb9-b6d4-a92d0d2d44fa', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (50, '108c875b-bf3c-4034-b07d-15faa8715257', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (51, '3b3a76cf-78e4-4c48-84da-baf2af6be696', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (52, '3c4f6db4-6f8d-4e42-9c7e-d209fe5489fb', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (53, 'f7e8d1c4-16f7-4079-b110-b60db0cd91bf', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (54, '8f3f7596-569b-4cde-97a2-1d565b8224e1', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (55, '99e762e7-766f-4e55-9133-773593497b44', @groupId2);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (56, '99e762e7-766f-4e55-9133-773593497b44', @groupId3);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (57, 'b1260ecf-47fa-4613-8ed4-71417f29441b', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (58, 'f744fdd9-166d-40a7-ad91-9e933ad514cc', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (59, 'f744fdd9-166d-40a7-ad91-9e933ad514cc', @groupId2);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (60, '33a70278-c772-4ef0-93c9-4b9d3df1e242', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (61, 'ce805504-de52-4ecc-a86a-4905d2a558f3', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (62, 'e58a3395-aee8-40bb-8f2f-d7156c0435cb', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (63, 'e58a3395-aee8-40bb-8f2f-d7156c0435cb', @groupId2);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (64, '0cf1e428-3c37-4aa6-b651-acb46c4838c0', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (65, '3ce82502-1c03-4ab0-b8ed-83f631a20805', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (66, 'bb878650-b62b-4980-a6aa-4d61c1a429a0', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (67, '332ce586-70de-4053-a922-f76d6340a03c', @groupId1);
 
 
 INSERT INTO rule_type(id, rule_id, resource_type) VALUES ('0663e58a-ce96-4687-9778-6df448501ba8', '3b3a76cf-78e4-4c48-84da-baf2af6be696', 'huawei.eip');

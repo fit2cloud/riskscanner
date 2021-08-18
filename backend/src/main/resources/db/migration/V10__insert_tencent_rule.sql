@@ -1,9 +1,11 @@
 
 
 INSERT INTO rule_group VALUES (7, 'Tencent 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-qcloud-plugin', 1);
+SELECT @groupId1 := LAST_INSERT_ID();
 INSERT INTO rule_group VALUES (8, 'Tencent CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-qcloud-plugin', 1);
+SELECT @groupId2 := LAST_INSERT_ID();
 INSERT INTO rule_group VALUES (9, 'Tencent COS合规基线', 'COS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-qcloud-plugin', 1);
-
+SELECT @groupId3 := LAST_INSERT_ID();
 
 INSERT INTO rule(id, name, status, severity, description, script, parameter, plugin_id, plugin_name, plugin_icon, last_modified, flag, scan_type) VALUES ('1240a2b8-f7ef-47c3-8048-2dd95d6d5b54', 'Tencent EIP带宽峰值扫描', 1, 'HighRisk', 'Tencent  检测您账号下的弹性IP实例是否达到最低带宽要求，是视为“合规”，否则视为“不合规”', 'policies:\n    # 检测您账号下的弹性IP实例是否达到最低带宽要求\n    - name: tencent-eip-bandwidth\n      resource: tencent.eip\n      filters:\n        - type: bandwidth\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"按带宽计费的公网型实例的带宽峰值\",\"defaultValue\":\"10\",\"required\":true}]', 'fit2cloud-qcloud-plugin', '腾讯云', 'qcloud.png', concat(unix_timestamp(now()), '003'), 1, 'custodian');
 INSERT INTO rule(id, name, status, severity, description, script, parameter, plugin_id, plugin_name, plugin_icon, last_modified, flag, scan_type) VALUES ('159e19e9-e956-4c52-92fc-c9746372e448', 'Tencent CVM实例关机计费模式扫描', 1, 'HighRisk', 'Tencent CVM实例的关机计费模式是否为关机停止收费，是视为“合规”，否则视为“不合规”', 'policies:\n    # CVM实例的关机计费模式是否为关机停止收费，是视为“合规”，否则视为“不合规”\n    - name: tencent-cvm-stop-charging-mode\n      resource: tencent.cvm\n      filters:\n        - type: stop-charging-mode\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"计费模式\",\"defaultValue\":\"STOP_CHARGING\",\"required\":true}]', 'fit2cloud-qcloud-plugin', '腾讯云', 'qcloud.png', concat(unix_timestamp(now()), '003'), 1, 'custodian');
@@ -99,35 +101,35 @@ INSERT INTO rule_inspection_report_mapping(id, rule_id, report_id) VALUES (158, 
 INSERT INTO rule_inspection_report_mapping(id, rule_id, report_id) VALUES (159, 'c1b41cbc-1263-4d67-a7c6-cf064999c6f8', '7');
 
 
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (68, '17dbe1a1-e9e7-4513-aa07-597ae932ff73', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (69, '159e19e9-e956-4c52-92fc-c9746372e448', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (70, 'bfbf6be1-69f8-448e-9c23-c5267530d573', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (71, 'f9d3db46-d340-4487-ae9b-82b827108912', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (72, 'f9d3db46-d340-4487-ae9b-82b827108912', '8');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (73, '2631d8a3-e5d8-4ef3-88c9-a8176fae110b', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (74, '1240a2b8-f7ef-47c3-8048-2dd95d6d5b54', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (75, '525d0b91-ca93-4d3d-8679-195aef136e0b', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (76, '525d0b91-ca93-4d3d-8679-195aef136e0b', '8');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (77, 'c95be861-6e0e-4404-9b21-5ccfcd94ee3f', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (78, '21fc2518-3b2b-475a-8398-4b1d9f68cfdb', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (79, 'a0dca246-563a-49c3-8a43-3c537ba1fb36', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (80, '59a95d30-30d7-45bf-ac47-80afed002ade', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (81, '59a95d30-30d7-45bf-ac47-80afed002ade', '8');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (82, 'cb9320af-4ee6-4c11-8840-8ec4b9cc8276', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (83, '3e66d418-3e47-475b-a863-03a9653940ed', '9');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (84, 'c1b41cbc-1263-4d67-a7c6-cf064999c6f8', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (85, '4cffcef8-be1e-44e0-8057-892e2cf588d5', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (86, '4cffcef8-be1e-44e0-8057-892e2cf588d5', '8');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (87, '3e66d418-3e47-475b-a863-03a9653940ed', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (88, '3e66d418-3e47-475b-a863-03a9653940ed', '8');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (89, '68363ad8-cce8-4458-b8f1-9bd1d1af54a7', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (90, 'ca991f61-49a4-49b2-9d14-16ca338d8149', '9');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (91, '2c4de559-7182-44e7-9657-b97412f0f0a7', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (92, '77eab07c-1e3c-4713-acf1-ed1bede0531d', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (93, '77eab07c-1e3c-4713-acf1-ed1bede0531d', '9');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (94, 'f8badb51-4a56-48cc-993f-6eb6698ea0ea', '7');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (95, 'f8badb51-4a56-48cc-993f-6eb6698ea0ea', '9');
-INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (96, 'ca991f61-49a4-49b2-9d14-16ca338d8149', '7');
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (68, '17dbe1a1-e9e7-4513-aa07-597ae932ff73', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (69, '159e19e9-e956-4c52-92fc-c9746372e448', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (70, 'bfbf6be1-69f8-448e-9c23-c5267530d573', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (71, 'f9d3db46-d340-4487-ae9b-82b827108912', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (72, 'f9d3db46-d340-4487-ae9b-82b827108912', @groupId2);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (73, '2631d8a3-e5d8-4ef3-88c9-a8176fae110b', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (74, '1240a2b8-f7ef-47c3-8048-2dd95d6d5b54', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (75, '525d0b91-ca93-4d3d-8679-195aef136e0b', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (76, '525d0b91-ca93-4d3d-8679-195aef136e0b', @groupId2);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (77, 'c95be861-6e0e-4404-9b21-5ccfcd94ee3f', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (78, '21fc2518-3b2b-475a-8398-4b1d9f68cfdb', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (79, 'a0dca246-563a-49c3-8a43-3c537ba1fb36', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (80, '59a95d30-30d7-45bf-ac47-80afed002ade', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (81, '59a95d30-30d7-45bf-ac47-80afed002ade', @groupId2);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (82, 'cb9320af-4ee6-4c11-8840-8ec4b9cc8276', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (83, '3e66d418-3e47-475b-a863-03a9653940ed', @groupId3);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (84, 'c1b41cbc-1263-4d67-a7c6-cf064999c6f8', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (85, '4cffcef8-be1e-44e0-8057-892e2cf588d5', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (86, '4cffcef8-be1e-44e0-8057-892e2cf588d5', @groupId2);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (87, '3e66d418-3e47-475b-a863-03a9653940ed', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (88, '3e66d418-3e47-475b-a863-03a9653940ed', @groupId2);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (89, '68363ad8-cce8-4458-b8f1-9bd1d1af54a7', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (90, 'ca991f61-49a4-49b2-9d14-16ca338d8149', @groupId3);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (91, '2c4de559-7182-44e7-9657-b97412f0f0a7', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (92, '77eab07c-1e3c-4713-acf1-ed1bede0531d', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (93, '77eab07c-1e3c-4713-acf1-ed1bede0531d', @groupId3);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (94, 'f8badb51-4a56-48cc-993f-6eb6698ea0ea', @groupId1);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (95, 'f8badb51-4a56-48cc-993f-6eb6698ea0ea', @groupId3);
+INSERT INTO rule_group_mapping(id, rule_id, group_id) VALUES (96, 'ca991f61-49a4-49b2-9d14-16ca338d8149', @groupId1);
 
 
 INSERT INTO rule_type(id, rule_id, resource_type) VALUES ('09c1be72-fdb4-40fe-9b5c-a3b4ea2d1c90', '159e19e9-e956-4c52-92fc-c9746372e448', 'tencent.cvm');

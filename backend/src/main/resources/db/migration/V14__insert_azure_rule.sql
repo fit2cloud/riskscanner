@@ -2,8 +2,9 @@
 INSERT INTO plugin ( id, name, icon, update_time) VALUES ('fit2cloud-azure-plugin', 'Microsoft Azure', 'azure.png', concat(unix_timestamp(now()), '001'));
 
 INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Azure 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-azure-plugin', 1);
+SELECT @groupId1 := LAST_INSERT_ID();
 INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Azure CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-azure-plugin', 1);
-
+SELECT @groupId2 := LAST_INSERT_ID();
 
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('29ee6650-3e4f-44e3-aadd-0ae15618afa9', 'Azure 公网IP地址DDoS攻击扫描', 1, 'MediumRisk', 'Azure  检测您账号下的公网IP地址是否受到DDoS攻击，没有受到DDoS攻击视为“合规”，否则视为“不合规”，否则视为“不合规”', 'policies:\n  # 检测您账号下的公网IP地址是否受到DDoS攻击，没有受到DDoS攻击视为“合规”，否则视为“不合规”\n  - name: azure-publicip-dropping-packets\n    resource: azure.publicip\n    filters:\n      - type: metric\n        metric: IfUnderDDoSAttack\n        op: gt\n        aggregation: maximum\n        threshold: 0\n        timeframe: ${{timeframe}}', '[{\"key\":\"timeframe\",\"name\":\"小时(h)\",\"defaultValue\":\"72\",\"required\":true}]', 'fit2cloud-azure-plugin', 'Microsoft Azure', 'azure.png', concat(unix_timestamp(now()), '005'), 1, 'custodian');
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('3e324555-83e2-4ac9-8ac2-1dae350d52ff', 'Azure 网络安全组扫描', 1, 'MediumRisk', 'Azure  检测您账号下的网络安全组是否打开了某些端口、关闭了某些端口，符合视为“合规”，否则视为“不合规”', 'policies:\n  # 检测您账号下的网络安全组是否打开了某些端口、关闭了某些端口，符合视为“合规”，否则视为“不合规”\n  - name: azure-close-egress-except-TCP\n    resource: azure.networksecuritygroup\n    filters:\n     - type: ingress\n       ports: ${{allow_port}}\n       access: \'Allow\'\n     - type: ingress\n       ports: ${{deny_port}}\n       access: \'Deny\'', '[{\"key\":\"allow_port\",\"name\":\"打开了的端口\",\"defaultValue\":\"\'80\'\",\"required\":true},{\"key\":\"deny_port\",\"name\":\"关闭了的端口\",\"defaultValue\":\"\'443-3306\'\",\"required\":true}]', 'fit2cloud-azure-plugin', 'Microsoft Azure', 'azure.png', concat(unix_timestamp(now()), '005'), 1, 'custodian');
@@ -51,29 +52,29 @@ INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('6
 INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('4852857f-b454-4375-b405-0033fed73f09', '11');
 
 
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('c3259122-ac07-4256-83da-b6361c9d3abb', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6967e834-ace6-48d2-9f95-f541b614810d', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('29ee6650-3e4f-44e3-aadd-0ae15618afa9', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('f6c72297-33db-49dd-a106-06cf2ff47069', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('802fbf6c-92ac-4153-bea3-42b7720d8124', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('f7c03491-fc0a-4ae7-87ed-6423748b2372', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('f7c03491-fc0a-4ae7-87ed-6423748b2372', '13');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5870d5df-7674-4f40-ae06-0408c935acd6', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5870d5df-7674-4f40-ae06-0408c935acd6', '13');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6a71a114-ba92-4e0b-bd9d-2f6c8ecee88d', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6a71a114-ba92-4e0b-bd9d-2f6c8ecee88d', '13');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6873838e-3a47-4255-b49e-af5fbf5cb454', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6873838e-3a47-4255-b49e-af5fbf5cb454', '13');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('77ac25d5-0a66-4890-aa7e-5b276fce299a', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('77ac25d5-0a66-4890-aa7e-5b276fce299a', '13');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('dd11251a-7fd4-499c-857b-c7dcf4c98958', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('dd11251a-7fd4-499c-857b-c7dcf4c98958', '13');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('618a61bb-eecc-4109-b387-4a313f10c1a9', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('618a61bb-eecc-4109-b387-4a313f10c1a9', '13');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('3e324555-83e2-4ac9-8ac2-1dae350d52ff', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('94d168d0-8e62-4173-96fd-326eb267273e', '14');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('4852857f-b454-4375-b405-0033fed73f09', '13');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('4852857f-b454-4375-b405-0033fed73f09', '14');
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('c3259122-ac07-4256-83da-b6361c9d3abb', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6967e834-ace6-48d2-9f95-f541b614810d', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('29ee6650-3e4f-44e3-aadd-0ae15618afa9', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('f6c72297-33db-49dd-a106-06cf2ff47069', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('802fbf6c-92ac-4153-bea3-42b7720d8124', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('f7c03491-fc0a-4ae7-87ed-6423748b2372', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('f7c03491-fc0a-4ae7-87ed-6423748b2372', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5870d5df-7674-4f40-ae06-0408c935acd6', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5870d5df-7674-4f40-ae06-0408c935acd6', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6a71a114-ba92-4e0b-bd9d-2f6c8ecee88d', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6a71a114-ba92-4e0b-bd9d-2f6c8ecee88d', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6873838e-3a47-4255-b49e-af5fbf5cb454', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6873838e-3a47-4255-b49e-af5fbf5cb454', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('77ac25d5-0a66-4890-aa7e-5b276fce299a', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('77ac25d5-0a66-4890-aa7e-5b276fce299a', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('dd11251a-7fd4-499c-857b-c7dcf4c98958', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('dd11251a-7fd4-499c-857b-c7dcf4c98958', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('618a61bb-eecc-4109-b387-4a313f10c1a9', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('618a61bb-eecc-4109-b387-4a313f10c1a9', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('3e324555-83e2-4ac9-8ac2-1dae350d52ff', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('94d168d0-8e62-4173-96fd-326eb267273e', @groupId2);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('4852857f-b454-4375-b405-0033fed73f09', @groupId1);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('4852857f-b454-4375-b405-0033fed73f09', @groupId2);
 
 
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('0ff7213c-e03e-4e57-a956-3705f2c590b7', 'dd11251a-7fd4-499c-857b-c7dcf4c98958', 'azure.cosmosdb');

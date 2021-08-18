@@ -97,9 +97,11 @@ INSERT INTO rule_tag (tag_key, tag_name, _index, flag) VALUES ('tagging', '标�
 
 
 INSERT INTO rule_group VALUES (1, 'Aliyun 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-aliyun-plugin', 1);
+SELECT @groupId1 := LAST_INSERT_ID();
 INSERT INTO rule_group VALUES (2, 'Aliyun CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-aliyun-plugin', 1);
+SELECT @groupId2 := LAST_INSERT_ID();
 INSERT INTO rule_group VALUES (3, 'Aliyun OSS合规基线', 'OSS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-aliyun-plugin', 1);
-
+SELECT @groupId3 := LAST_INSERT_ID();
 
 INSERT INTO rule_inspection_report VALUES (1, '应保证网络设备的业务处理能力满足业务高峰期需要。', '安全通信网络', '网络架构', '您可以通过VPC控制台，定期查看当前资源配额使用情况。');
 INSERT INTO rule_inspection_report VALUES (2, '应保证网络各个部分的带宽满足业务高峰期需要。', '安全通信网络', '网络架构', '您可以根据业务实际情况在创建实例是申请带宽，云监控支持通过监控弹性公网IP支持网络带宽监控。另可以配置 DDoS 原生防护能力，保障业务高可用性。');
@@ -337,48 +339,48 @@ INSERT INTO rule_inspection_report_mapping VALUES (70, '2adbae64-6403-4dfb-92ab-
 INSERT INTO rule_inspection_report_mapping VALUES (71, '2adbae64-6403-4dfb-92ab-637354da49f8', '13');
 
 
-INSERT INTO rule_group_mapping VALUES (1, 'd690be79-2e8c-4054-bbe6-496bd29e91fe', '1');
-INSERT INTO rule_group_mapping VALUES (2, '6fd132c0-b4df-4685-b132-5441d1aef2f8', '1');
-INSERT INTO rule_group_mapping VALUES (3, 'c95fde94-53a5-4658-98a4-56a0c6d951d4', '1');
-INSERT INTO rule_group_mapping VALUES (4, 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', '1');
-INSERT INTO rule_group_mapping VALUES (5, 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', '3');
-INSERT INTO rule_group_mapping VALUES (6, '8c635fda-7f89-4d5c-b0f4-2116f1b65554', '1');
-INSERT INTO rule_group_mapping VALUES (7, '8c635fda-7f89-4d5c-b0f4-2116f1b65554', '3');
-INSERT INTO rule_group_mapping VALUES (8, '0b2ece35-a17e-4584-ac2d-0b11483d04fb', '1');
-INSERT INTO rule_group_mapping VALUES (9, '594e7673-c0db-40a4-9a0c-f70f0e58cc62', '1');
-INSERT INTO rule_group_mapping VALUES (10, '44343a84-39e2-4fbc-b8c5-d3ac06186501', '1');
-INSERT INTO rule_group_mapping VALUES (11, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', '1');
-INSERT INTO rule_group_mapping VALUES (12, 'e054787c-5826-4242-8450-b0daa926ea40', '1');
-INSERT INTO rule_group_mapping VALUES (13, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '1');
-INSERT INTO rule_group_mapping VALUES (14, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', '2');
-INSERT INTO rule_group_mapping VALUES (15, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', '1');
-INSERT INTO rule_group_mapping VALUES (16, 'ff153eea-2628-440b-b054-186d6f5a7708', '1');
-INSERT INTO rule_group_mapping VALUES (17, '88a77028-0e2a-4201-a713-ded3a94864f9', '1');
-INSERT INTO rule_group_mapping VALUES (18, '88a77028-0e2a-4201-a713-ded3a94864f9', '2');
-INSERT INTO rule_group_mapping VALUES (19, '7d323895-f07b-4845-8b3d-01c78180f270', '1');
-INSERT INTO rule_group_mapping VALUES (20, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', '1');
-INSERT INTO rule_group_mapping VALUES (21, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', '2');
-INSERT INTO rule_group_mapping VALUES (22, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', '1');
-INSERT INTO rule_group_mapping VALUES (23, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', '3');
-INSERT INTO rule_group_mapping VALUES (24, '429f8396-e04b-49d9-8b38-80647ac87e66', '1');
-INSERT INTO rule_group_mapping VALUES (25, '429f8396-e04b-49d9-8b38-80647ac87e66', '3');
-INSERT INTO rule_group_mapping VALUES (26, 'ba1edc8f-0944-4ebb-a953-f655aa710e84', '1');
-INSERT INTO rule_group_mapping VALUES (27, '1299a29b-e19d-4186-93fd-a18ed1b2584a', '1');
-INSERT INTO rule_group_mapping VALUES (28, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '1');
-INSERT INTO rule_group_mapping VALUES (29, 'ae65e90c-124c-4a81-8081-746d47f44e8f', '2');
-INSERT INTO rule_group_mapping VALUES (30, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', '1');
-INSERT INTO rule_group_mapping VALUES (31, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', '2');
-INSERT INTO rule_group_mapping VALUES (32, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', '1');
-INSERT INTO rule_group_mapping VALUES (33, '2533542d-5422-4bd5-8849-6a69ec05a874', '1');
-INSERT INTO rule_group_mapping VALUES (34, '083d24e2-881f-488b-b120-8f2cd961707f', '1');
-INSERT INTO rule_group_mapping VALUES (35, '9d94781e-922d-48c3-90a1-393dc79f2442', '1');
-INSERT INTO rule_group_mapping VALUES (36, '9d94781e-922d-48c3-90a1-393dc79f2442', '2');
-INSERT INTO rule_group_mapping VALUES (37, '9d94781e-922d-48c3-90a1-393dc79f2442', '3');
-INSERT INTO rule_group_mapping VALUES (38, '028b8362-08f2-404c-8e15-935426bb8545', '1');
-INSERT INTO rule_group_mapping VALUES (39, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '1');
-INSERT INTO rule_group_mapping VALUES (40, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', '2');
-INSERT INTO rule_group_mapping VALUES (41, 'beda16d0-93fd-4366-9ebf-f5ce1360cd60', '1');
-INSERT INTO rule_group_mapping VALUES (42, '2adbae64-6403-4dfb-92ab-637354da49f8', '1');
+INSERT INTO rule_group_mapping VALUES (1, 'd690be79-2e8c-4054-bbe6-496bd29e91fe', @groupId1);
+INSERT INTO rule_group_mapping VALUES (2, '6fd132c0-b4df-4685-b132-5441d1aef2f8', @groupId1);
+INSERT INTO rule_group_mapping VALUES (3, 'c95fde94-53a5-4658-98a4-56a0c6d951d4', @groupId1);
+INSERT INTO rule_group_mapping VALUES (4, 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', @groupId1);
+INSERT INTO rule_group_mapping VALUES (5, 'fdef013f-ce14-468a-9af4-1c0fabc7e6e1', @groupId3);
+INSERT INTO rule_group_mapping VALUES (6, '8c635fda-7f89-4d5c-b0f4-2116f1b65554', @groupId1);
+INSERT INTO rule_group_mapping VALUES (7, '8c635fda-7f89-4d5c-b0f4-2116f1b65554', @groupId3);
+INSERT INTO rule_group_mapping VALUES (8, '0b2ece35-a17e-4584-ac2d-0b11483d04fb', @groupId1);
+INSERT INTO rule_group_mapping VALUES (9, '594e7673-c0db-40a4-9a0c-f70f0e58cc62', @groupId1);
+INSERT INTO rule_group_mapping VALUES (10, '44343a84-39e2-4fbc-b8c5-d3ac06186501', @groupId1);
+INSERT INTO rule_group_mapping VALUES (11, '29763f5e-ef4c-431d-b44f-39cd1b5b5363', @groupId1);
+INSERT INTO rule_group_mapping VALUES (12, 'e054787c-5826-4242-8450-b0daa926ea40', @groupId1);
+INSERT INTO rule_group_mapping VALUES (13, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', @groupId1);
+INSERT INTO rule_group_mapping VALUES (14, 'e2d51fc6-2ec2-4d17-bf87-13a3df90ea5d', @groupId2);
+INSERT INTO rule_group_mapping VALUES (15, 'c57f055e-fd84-4af3-ba97-892a8fdc1fed', @groupId1);
+INSERT INTO rule_group_mapping VALUES (16, 'ff153eea-2628-440b-b054-186d6f5a7708', @groupId1);
+INSERT INTO rule_group_mapping VALUES (17, '88a77028-0e2a-4201-a713-ded3a94864f9', @groupId1);
+INSERT INTO rule_group_mapping VALUES (18, '88a77028-0e2a-4201-a713-ded3a94864f9', @groupId2);
+INSERT INTO rule_group_mapping VALUES (19, '7d323895-f07b-4845-8b3d-01c78180f270', @groupId1);
+INSERT INTO rule_group_mapping VALUES (20, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', @groupId1);
+INSERT INTO rule_group_mapping VALUES (21, '339cf3fc-f9d9-457e-ac72-40d37c402bdf', @groupId2);
+INSERT INTO rule_group_mapping VALUES (22, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', @groupId1);
+INSERT INTO rule_group_mapping VALUES (23, 'd826c85d-cb42-4824-ab13-6d7a8026d9ae', @groupId3);
+INSERT INTO rule_group_mapping VALUES (24, '429f8396-e04b-49d9-8b38-80647ac87e66', @groupId1);
+INSERT INTO rule_group_mapping VALUES (25, '429f8396-e04b-49d9-8b38-80647ac87e66', @groupId3);
+INSERT INTO rule_group_mapping VALUES (26, 'ba1edc8f-0944-4ebb-a953-f655aa710e84', @groupId1);
+INSERT INTO rule_group_mapping VALUES (27, '1299a29b-e19d-4186-93fd-a18ed1b2584a', @groupId1);
+INSERT INTO rule_group_mapping VALUES (28, 'ae65e90c-124c-4a81-8081-746d47f44e8f', @groupId1);
+INSERT INTO rule_group_mapping VALUES (29, 'ae65e90c-124c-4a81-8081-746d47f44e8f', @groupId2);
+INSERT INTO rule_group_mapping VALUES (30, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', @groupId1);
+INSERT INTO rule_group_mapping VALUES (31, '70c1e701-b87a-4e4d-8648-3db7ecc2c066', @groupId2);
+INSERT INTO rule_group_mapping VALUES (32, '3e5d47ac-86b6-40d1-a191-1b2ff2496118', @groupId1);
+INSERT INTO rule_group_mapping VALUES (33, '2533542d-5422-4bd5-8849-6a69ec05a874', @groupId1);
+INSERT INTO rule_group_mapping VALUES (34, '083d24e2-881f-488b-b120-8f2cd961707f', @groupId1);
+INSERT INTO rule_group_mapping VALUES (35, '9d94781e-922d-48c3-90a1-393dc79f2442', @groupId1);
+INSERT INTO rule_group_mapping VALUES (36, '9d94781e-922d-48c3-90a1-393dc79f2442', @groupId2);
+INSERT INTO rule_group_mapping VALUES (37, '9d94781e-922d-48c3-90a1-393dc79f2442', @groupId3);
+INSERT INTO rule_group_mapping VALUES (38, '028b8362-08f2-404c-8e15-935426bb8545', @groupId1);
+INSERT INTO rule_group_mapping VALUES (39, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', @groupId1);
+INSERT INTO rule_group_mapping VALUES (40, 'df4fb45c-f9bc-4c8e-996d-036c9d2f1800', @groupId2);
+INSERT INTO rule_group_mapping VALUES (41, 'beda16d0-93fd-4366-9ebf-f5ce1360cd60', @groupId1);
+INSERT INTO rule_group_mapping VALUES (42, '2adbae64-6403-4dfb-92ab-637354da49f8', @groupId1);
 
 
 INSERT INTO rule_type VALUES ('245bc538-2c33-430a-a61c-37000d058263', 'ff153eea-2628-440b-b054-186d6f5a7708', 'aliyun.redis');

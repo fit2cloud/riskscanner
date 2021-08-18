@@ -3,6 +3,8 @@ INSERT INTO plugin ( id, name, icon, update_time) VALUES ('fit2cloud-vsphere-plu
 
 INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('VMware 安全检查', '安全检查，为您提供通信网络、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-vsphere-plugin', 1);
 
+SELECT @groupId := LAST_INSERT_ID();
+
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('6503123d-6442-49f4-8118-883c354ac868', 'VMware vSphere Host 电源状态扫描', 1, 'LowRisk', 'VMware vSphere 检测账号下 Host 电源状态是否属于开机状态，属于视为“合规”，否则属于“不合规”', 'policies:\n  #检测账号下 Host 电源状态是否属于开机状态，属于视为“合规”，否则属于“不合规”\n  - name: vsphere-host-power-state\n    resource: vsphere.host\n    filters:\n      - not:\n        - type: system\n          power_state: ${{power_state}}', '[{\"key\":\"power_state\",\"name\":\"电源状态\",\"defaultValue\":\"POWERED_ON\",\"required\":true}]', 'fit2cloud-vsphere-plugin', 'VMware vSphere', 'vmware.png', concat(unix_timestamp(now()), '007'), 1, 'custodian');
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('7b494857-7010-446f-9deb-aab10262160e', 'VMware vSphere Datacenter关联资源扫描', 1, 'HighRisk', 'VMware vSphere 检测账号下Datacenter是否关联host、network、vm，关联视为“合规”，否则属于“不合规”', 'policies:\n  - name: vsphere-datacenter-system\n    resource: vsphere.datacenter\n    filters:\n      - not:\n        - type: system\n          host_folder: ${{host_folder}}\n          network_folder: ${{network_folder}}\n          vm_folder: ${{vm_folder}}', '[{\"key\":\"host_folder\",\"name\":\"关联host\",\"defaultValue\":\"\'\'\",\"required\":true},{\"key\":\"network_folder\",\"name\":\"关联network\",\"defaultValue\":\"\'\'\",\"required\":true},{\"key\":\"vm_folder\",\"name\":\"关联vm\",\"defaultValue\":\"\'\'\",\"required\":true}]', 'fit2cloud-vsphere-plugin', 'VMware vSphere', 'vmware.png', concat(unix_timestamp(now()), '007'), 1, 'custodian');
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('82d95569-e9be-4a26-a18e-f1590bac97fb', 'VMware vSphere Host 连接状态扫描', 1, 'LowRisk', 'VMware vSphere 检测账号下 Host 连接状态，连接视为“合规”，否则属于“不合规”', 'policies:\n  #检测账号下 Host 连接状态，连接视为“合规”，否则属于“不合规”\n  - name: vsphere-host-power-state\n    resource: vsphere.host\n    filters:\n      - not:\n        - type: system\n          connection_state: ${{connection_state}}', '[{\"key\":\"connection_state\",\"name\":\"连接状态\",\"defaultValue\":\"CONNECTED\",\"required\":true}]', 'fit2cloud-vsphere-plugin', 'VMware vSphere', 'vmware.png', concat(unix_timestamp(now()), '007'), 1, 'custodian');
@@ -34,23 +36,23 @@ INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('e
 INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('faa53ae5-f534-4a3c-85e2-22398dadd468', '64');
 INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('eab382c4-49db-420c-b4e1-987b47bf6661', '59');
 INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('eab382c4-49db-420c-b4e1-987b47bf6661', '60');
-INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('82d95569-e9be-4a26-a18e-f1590bac97fb', '16');
-INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('6503123d-6442-49f4-8118-883c354ac868', '16');
+INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('82d95569-e9be-4a26-a18e-f1590bac97fb', '17');
+INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('6503123d-6442-49f4-8118-883c354ac868', '17');
 INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('b62df3f7-581b-4591-9373-581dd3dcdd88', '3');
 INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('8dccd008-f79b-4460-9b55-539f488e009a', '64');
 INSERT INTO `rule_inspection_report_mapping` (`rule_id`, `report_id`) VALUES ('b798aa33-bd01-47ac-8cec-64f4f5d02866', '64');
 
 
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('d004829c-b359-4993-84fd-0441c1ea9c6b', '16');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('7b494857-7010-446f-9deb-aab10262160e', '16');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('e9d801ab-3790-415e-9565-bd7208cb1b54', '16');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('faa53ae5-f534-4a3c-85e2-22398dadd468', '16');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('eab382c4-49db-420c-b4e1-987b47bf6661', '16');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('82d95569-e9be-4a26-a18e-f1590bac97fb', '16');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6503123d-6442-49f4-8118-883c354ac868', '16');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('b62df3f7-581b-4591-9373-581dd3dcdd88', '16');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('8dccd008-f79b-4460-9b55-539f488e009a', '16');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('b798aa33-bd01-47ac-8cec-64f4f5d02866', '16');
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('d004829c-b359-4993-84fd-0441c1ea9c6b', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('7b494857-7010-446f-9deb-aab10262160e', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('e9d801ab-3790-415e-9565-bd7208cb1b54', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('faa53ae5-f534-4a3c-85e2-22398dadd468', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('eab382c4-49db-420c-b4e1-987b47bf6661', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('82d95569-e9be-4a26-a18e-f1590bac97fb', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6503123d-6442-49f4-8118-883c354ac868', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('b62df3f7-581b-4591-9373-581dd3dcdd88', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('8dccd008-f79b-4460-9b55-539f488e009a', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('b798aa33-bd01-47ac-8cec-64f4f5d02866', @groupId);
 
 
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('06e232b8-c8df-4bb5-9ce2-997bcbdc5e7a', '6503123d-6442-49f4-8118-883c354ac868', 'vsphere.host');

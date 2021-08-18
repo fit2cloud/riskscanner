@@ -7,6 +7,8 @@ INSERT INTO plugin ( id, name, icon, update_time, scan_type) VALUES ('fit2cloud-
 
 INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Nuclei 漏洞扫描', '漏洞扫描，为您提供发现可利用漏洞的一种安全检测（渗透攻击）。', '漏洞扫描', 'fit2cloud-nuclei-plugin', 1);
 
+SELECT @groupId := LAST_INSERT_ID();
+
 INSERT INTO `cloud_account` (`id`, `name`, `credential`, `plugin_id`, `plugin_name`, `plugin_icon`, `status`, `create_time`, `update_time`, `creator`, `regions`, `proxy_id`) VALUES ('rs124d9d-f108-3198-8198-798k9971f814', 'Nuclei 漏洞扫描', '{\"description\":\"基于模板的 nuclei 被用来发送请求给目标，有着实现零误报的优点，并且可以对已知的路径进行有效的扫描。nuclei 的主要用于在初期的探测阶段快速地对已知的且易于检测的漏洞或者 CVE 进行扫描。如果存在 WAF 的话，nuclei 使用 retryablehttp-go 库来处理各种错误，并且重新尝试攻击。\", \"targetAddress\":\"127.0.0.1\"}', 'fit2cloud-nuclei-plugin', 'Nuclei', 'nuclei.png', 'VALID', concat(unix_timestamp(now()), '010'), concat(unix_timestamp(now()), '010'), 'admin', '[{\"regionId\":\"ALL\",\"regionName\":\"Nuclei 漏洞扫描\"}]', 0);
 
 INSERT INTO `rule` (`id`, `name`, `status`, `severity`, `description`, `script`, `parameter`, `plugin_id`, `plugin_name`, `plugin_icon`, `last_modified`, `flag`, `scan_type`) VALUES ('3808ac89-6fb0-4953-a6f3-a464f1b603bd', 'Nuclei  Springboot Security扫描', 1, 'LowRisk', 'Nuclei  基于条件的工作流，首先尝试检测 springboot 是否在目标上运行。如果找到 springboot，则会运行它的漏洞利用列表, 无返回结果属于则合规，否则属于则\"不合规\"', 'id: springboot-workflow\n\ninfo:\n  name: Springboot Security Checks\n  author: dwisiswant0\n\nworkflows:\n  - template: technologies/springboot-actuator.yaml\n    subtemplates:\n      - template: cves/2018/CVE-2018-1271.yaml\n      - template: cves/2018/CVE-2018-1271.yaml\n      - template: cves/2020/CVE-2020-5410.yaml\n      - template: vulnerabilities/springboot/springboot-actuators-jolokia-xxe.yaml\n      - template: vulnerabilities/springboot/springboot-h2-db-rce.yaml', '[]', 'fit2cloud-nuclei-plugin', 'Nuclei', 'nuclei.png', concat(unix_timestamp(now()), '010'), 1, 'nuclei');
@@ -33,16 +35,16 @@ INSERT INTO `rule_tag_mapping` (`rule_id`, `tag_key`) VALUES ('3808ac89-6fb0-495
 INSERT INTO `rule_tag_mapping` (`rule_id`, `tag_key`) VALUES ('f50705c1-8930-4a53-b32d-da08eda1161c', 'safety');
 
 
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6bc48581-98bb-4563-9735-a505002e344f', '18');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('afd0480e-651b-4229-aa68-d642e074fb59', '18');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('cfc3ad75-2599-47ab-bfb2-af8a07531250', '18');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5227e5cd-7e66-4f32-8515-7895fdc79535', '18');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('ffecf574-f388-40ad-aebb-9a46ef798dcf', '18');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('49fb8964-15ab-45b9-864c-69b7e7cd5b71', '18');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('ae7de16c-0a39-4119-a5c0-d0916f549e95', '18');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('fc94e69d-a3bb-46a4-9f24-60f8369c6f15', '18');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('3808ac89-6fb0-4953-a6f3-a464f1b603bd', '18');
-INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('f50705c1-8930-4a53-b32d-da08eda1161c', '18');
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('6bc48581-98bb-4563-9735-a505002e344f', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('afd0480e-651b-4229-aa68-d642e074fb59', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('cfc3ad75-2599-47ab-bfb2-af8a07531250', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('5227e5cd-7e66-4f32-8515-7895fdc79535', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('ffecf574-f388-40ad-aebb-9a46ef798dcf', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('49fb8964-15ab-45b9-864c-69b7e7cd5b71', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('ae7de16c-0a39-4119-a5c0-d0916f549e95', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('fc94e69d-a3bb-46a4-9f24-60f8369c6f15', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('3808ac89-6fb0-4953-a6f3-a464f1b603bd', @groupId);
+INSERT INTO `rule_group_mapping` (`rule_id`, `group_id`) VALUES ('f50705c1-8930-4a53-b32d-da08eda1161c', @groupId);
 
 
 INSERT INTO `rule_type` (`id`, `rule_id`, `resource_type`) VALUES ('4d0c4031-3532-475d-a588-ac414dea9b50', 'f50705c1-8930-4a53-b32d-da08eda1161c', 'nuclei');
