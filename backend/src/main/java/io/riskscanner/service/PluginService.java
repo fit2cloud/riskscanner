@@ -6,6 +6,7 @@ import io.riskscanner.base.mapper.PluginMapper;
 import io.riskscanner.commons.constants.ScanTypeConstants;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.LogUtil;
+import io.riskscanner.commons.utils.PlatformUtils;
 import io.riskscanner.commons.utils.ReadFileUtils;
 import io.riskscanner.controller.request.Plugin.PluginRequest;
 import io.riskscanner.i18n.Translator;
@@ -30,7 +31,13 @@ public class PluginService {
     public List<Plugin> getAllPlugin(String scanType) {
         PluginExample example = new PluginExample();
         example.setOrderByClause("update_time");
-        if (scanType!=null) example.createCriteria().andScanTypeLike(scanType);
+        if (scanType!=null) {
+            if (StringUtils.equalsIgnoreCase(scanType, ScanTypeConstants.prowler.name())) {
+                example.createCriteria().andIdEqualTo(PlatformUtils.aws);
+            } else {
+                example.createCriteria().andScanTypeLike(scanType);
+            }
+        }
         return pluginMapper.selectByExample(example);
     }
 

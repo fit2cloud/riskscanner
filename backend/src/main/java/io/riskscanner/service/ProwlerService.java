@@ -13,16 +13,13 @@ import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.*;
 import io.riskscanner.dto.QuartzTaskDTO;
 import io.riskscanner.i18n.Translator;
-import io.riskscanner.proxy.nuclei.NucleiCredential;
+import io.riskscanner.proxy.aws.AWSCredential;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.Yaml;
 
 import javax.annotation.Resource;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,12 +70,10 @@ public class ProwlerService {
 
         String script = quartzTaskDTO.getScript();
         JSONArray jsonArray = JSON.parseArray(quartzTaskDTO.getParameter());
+        String dirName = "group1";
         for (Object o : jsonArray) {
             JSONObject jsonObject = (JSONObject) o;
-            String key = "${{" + jsonObject.getString("key") + "}}";
-            if (script.contains(key)) {
-                script = script.replace(key, jsonObject.getString("defaultValue"));
-            }
+            dirName = jsonObject.getString("defaultValue");
         }
 
         this.deleteTaskItems(task.getId());
@@ -90,7 +85,7 @@ public class ProwlerService {
                 taskItemWithBLOBs.setId(uuid);
                 taskItemWithBLOBs.setTaskId(task.getId());
                 taskItemWithBLOBs.setRuleId(quartzTaskDTO.getId());
-                taskItemWithBLOBs.setCustomData(script);
+                taskItemWithBLOBs.setCustomData(dirName);
                 taskItemWithBLOBs.setStatus(TaskConstants.TASK_STATUS.UNCHECKED.name());
                 taskItemWithBLOBs.setSeverity(quartzTaskDTO.getSeverity());
                 taskItemWithBLOBs.setCreateTime(task.getCreateTime());
@@ -104,50 +99,32 @@ public class ProwlerService {
                 taskItemMapper.insertSelective(taskItemWithBLOBs);
 
                 final String finalScript = script;
+                final String finalDirName = dirName;
                 commonThreadPool.addTask(() -> {
                     String sc = "";
-                    String dirPath = "";
-                    try {
-                        LogUtil.info(" ::: Generate nuclei.yml file start ::: ");
-                        dirPath = CommandUtils.saveAsFile(finalScript, TaskConstants.RESULT_FILE_PATH_PREFIX + taskId + "/" + regionId, "prowler.yml");
-                        LogUtil.info(" ::: Generate nuclei.yml file end ::: " + dirPath);
-                    } catch (Exception e) {
-                        LogUtil.error("[{}] Generate nuclei.yml file，and nuclei run failed:{}", taskId + "/" + regionId, e.getMessage());
-                    }
-                    Yaml yaml = new Yaml();
-                    Map map = null;
-                    try {
-                        map = (Map) yaml.load(new FileInputStream(dirPath + "/prowler.yml"));
-                    } catch (FileNotFoundException e) {
-                        LogUtil.error(e.getMessage());
-                    }
-                    if (map != null) {
-                        String dirName = "prowler";
-                        String resourceType = "prowler";
+                    String resourceType = "prowler";
 
-                        TaskItemResourceWithBLOBs taskItemResource = new TaskItemResourceWithBLOBs();
-                        taskItemResource.setTaskId(taskId);
-                        taskItemResource.setTaskItemId(taskItemWithBLOBs.getId());
-                        taskItemResource.setDirName(dirName);
-                        taskItemResource.setResourceType(resourceType);
-                        taskItemResource.setResourceName(dirName);
+                    TaskItemResourceWithBLOBs taskItemResource = new TaskItemResourceWithBLOBs();
+                    taskItemResource.setTaskId(taskId);
+                    taskItemResource.setTaskItemId(taskItemWithBLOBs.getId());
+                    taskItemResource.setDirName(finalDirName);
+                    taskItemResource.setResourceType(resourceType);
+                    taskItemResource.setResourceName(finalDirName);
 
-                        //包含actions
-                        taskItemResource.setResourceCommandAction(yaml.dump(map));
+                    //包含actions
+                    taskItemResource.setResourceCommandAction(finalScript);
 
-                        //不包含actions
-                        taskItemResource.setResourceCommand(yaml.dump(map));
-                        taskItemResourceMapper.insertSelective(taskItemResource);
+                    //不包含actions
+                    taskItemResource.setResourceCommand(finalScript);
+                    taskItemResourceMapper.insertSelective(taskItemResource);
 
-                        resourceTypes.add(resourceType);
+                    resourceTypes.add(resourceType);
 
-                        sc = yaml.dump(map);
-                        taskItemWithBLOBs.setDetails(sc);
-                        taskItemMapper.updateByPrimaryKeySelective(taskItemWithBLOBs);
+                    taskItemWithBLOBs.setDetails(sc);
+                    taskItemMapper.updateByPrimaryKeySelective(taskItemWithBLOBs);
 
-                        task.setResourceTypes(resourceTypes.toString());
-                        taskMapper.updateByPrimaryKeySelective(task);
-                    }
+                    task.setResourceTypes(resourceTypes.toString());
+                    taskMapper.updateByPrimaryKeySelective(task);
                 });
             }
         }
@@ -223,19 +200,18 @@ public class ProwlerService {
     public void createProwlerResource(TaskItemWithBLOBs taskItem, Task task) throws Exception {
         LogUtil.info("createResource for taskItem: {}", toJSONString(taskItem));
         String operation = Translator.get("i18n_create_resource");
-        String resultStr = "", fileName = "prowler.yml";
+        String resultStr = "", fileName = taskItem.getCustomData();
         try {
             TaskItemResourceExample example = new TaskItemResourceExample();
             example.createCriteria().andTaskIdEqualTo(task.getId()).andTaskItemIdEqualTo(taskItem.getId());
             List<TaskItemResourceWithBLOBs> list = taskItemResourceMapper.selectByExampleWithBLOBs(example);
             if (list.isEmpty()) return;
 
-            String dirPath = TaskConstants.RESULT_FILE_PATH_PREFIX + task.getId() + "/" + taskItem.getRegionId();
+            String dirPath = "~/.aws/prowler";
             AccountWithBLOBs accountWithBLOBs = accountMapper.selectByPrimaryKey(taskItem.getAccountId());
             Map<String, String> map = PlatformUtils.getAccount(accountWithBLOBs, taskItem.getRegionId(), proxyMapper.selectByPrimaryKey(accountWithBLOBs.getProxyId()));
-            String command = PlatformUtils.fixedCommand(CommandEnum.nuclei.getCommand(), CommandEnum.run.getCommand(), dirPath, fileName, map);
+            String command = PlatformUtils.fixedCommand(CommandEnum.prowler.getCommand(), CommandEnum.run.getCommand(), dirPath, fileName, map);
             LogUtil.info(task.getId() + " {}[command]: " + command);
-            CommandUtils.saveAsFile(taskItem.getDetails(), dirPath, fileName);//重启服务后容器内文件在/tmp目录下会丢失
             resultStr = CommandUtils.commonExecCmdWithResultByNuclei(command, dirPath);
             if (LogUtil.getLogger().isDebugEnabled()) {
                 LogUtil.getLogger().debug("resource created: {}", resultStr);
@@ -256,15 +232,15 @@ public class ProwlerService {
                     orderService.saveTaskItemLog(taskItemId, taskItemId, Translator.get("i18n_operation_ex") + ": " + operation, Translator.get("i18n_ex_rule_not_exist"), false);
                     throw new Exception(Translator.get("i18n_ex_rule_not_exist") + ":" + taskItem.getRuleId());
                 }
-                String nucleiRun = resultStr;
+                String prowlerRun = resultStr;
                 String metadata = resultStr;
-                String resources = ReadFileUtils.readToBuffer(dirPath + "/" + TaskConstants.NUCLEI_RUN_RESULT_FILE);
+                String resources = resultStr;
 
                 ResourceWithBLOBs resourceWithBLOBs = new ResourceWithBLOBs();
                 if (taskItemResource.getResourceId() != null) {
                     resourceWithBLOBs = resourceMapper.selectByPrimaryKey(taskItemResource.getResourceId());
                 }
-                resourceWithBLOBs.setCustodianRunLog(nucleiRun);
+                resourceWithBLOBs.setCustodianRunLog(prowlerRun);
                 resourceWithBLOBs.setMetadata(metadata);
                 resourceWithBLOBs.setResources(resources);
                 resourceWithBLOBs.setResourceName(resourceName);
@@ -307,14 +283,16 @@ public class ProwlerService {
 
             AccountWithBLOBs account = accountMapper.selectByPrimaryKey(resourceWithBLOBs.getAccountId());
             resourceWithBLOBs = updateResourceSum(resourceWithBLOBs, account);
-            NucleiCredential nucleiCredential = new Gson().fromJson(account.getCredential(), NucleiCredential.class);
+            AWSCredential awsCredential = new Gson().fromJson(account.getCredential(), AWSCredential.class);
             SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
             sdf.applyPattern("yyyy-MM-dd HH:mm:ss a");// a为am/pm的标记
             Date date = new Date();// 获取当前时间
             String json = "{\n" +
                     "  \"id\": " + "\"" + UUIDUtil.newUUID() + "\"" + ",\n" +
                     "  \"CreatedTime\": " + "\"" + sdf.format(date) + "\"" + ",\n" +
-                    "  \"Domain\": " + "\"" + nucleiCredential.getTargetAddress() + "\"" + ",\n" +
+                    "  \"AccessKey\": " + "\"" + awsCredential.getAccessKey() + "\"" + ",\n" +
+                    "  \"SecretKey\": " + "\"" + awsCredential.getSecretKey() + "\"" + ",\n" +
+                    "  \"RegionName\": " + "\"" + resourceWithBLOBs.getRegionName() + "\"" + ",\n" +
                     "  \"Result\": " + "\"" + resourceWithBLOBs.getResources() + "\"" + "\n" +
                     "}";
             //资源详情
@@ -368,7 +346,7 @@ public class ProwlerService {
                 resourceMapper.insertSelective(resourceWithBLOBs);
             }
         } catch (Exception e) {
-            LogUtil.error("[{}] Generate updateResourceSum nuclei.yml file，and nuclei run failed:{}", resourceWithBLOBs.getId(), e.getMessage());
+            LogUtil.error(resourceWithBLOBs.getId(), e.getMessage());
             throw e;
         }
         return resourceWithBLOBs;

@@ -146,23 +146,23 @@ public class RuleService {
     @SuppressWarnings({"unchecked"})
     public boolean saveRuleType(CreateRuleRequest ruleRequest) {
         try {
-            String script = ruleRequest.getScript();
-            JSONArray jsonArray = parseArray(ruleRequest.getParameter());
-            for (Object o : jsonArray) {
-                JSONObject jsonObject = (JSONObject) o;
-                String key = "${{" + jsonObject.getString("key") + "}}";
-                if (script.contains(key)) {
-                    script = script.replace(key, jsonObject.getString("defaultValue"));
-                }
-            }
-            Yaml yaml = new Yaml();
-            Map map = yaml.load(script);
             RuleType ruleType = new RuleType();
             ruleType.setRuleId(ruleRequest.getId());
             RuleTypeExample example = new RuleTypeExample();
             example.createCriteria().andRuleIdEqualTo(ruleRequest.getId());
             ruleTypeMapper.deleteByExample(example);
             if (StringUtils.equalsIgnoreCase(ruleRequest.getScanType(), ScanTypeConstants.custodian.name())) {
+                String script = ruleRequest.getScript();
+                JSONArray jsonArray = parseArray(ruleRequest.getParameter());
+                for (Object o : jsonArray) {
+                    JSONObject jsonObject = (JSONObject) o;
+                    String key = "${{" + jsonObject.getString("key") + "}}";
+                    if (script.contains(key)) {
+                        script = script.replace(key, jsonObject.getString("defaultValue"));
+                    }
+                }
+                Yaml yaml = new Yaml();
+                Map map = yaml.load(script);
                 if (map != null) {
                     List<Map> list = (List) map.get("policies");
                     for (Map m : list) {
