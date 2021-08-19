@@ -1,10 +1,10 @@
 
 
-INSERT INTO rule_group VALUES (4, 'Huawei 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-huawei-plugin', 1);
+INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Huawei 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-huawei-plugin', 1);
 SELECT @groupId1 := LAST_INSERT_ID();
-INSERT INTO rule_group VALUES (5, 'Huawei CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-huawei-plugin', 1);
+INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Huawei CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-huawei-plugin', 1);
 SELECT @groupId2 := LAST_INSERT_ID();
-INSERT INTO rule_group VALUES (6, 'Huawei OBS合规基线', 'OBS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-huawei-plugin', 1);
+INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Huawei OBS合规基线', 'OBS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-huawei-plugin', 1);
 SELECT @groupId3 := LAST_INSERT_ID();
 
 INSERT INTO rule(id, name, status, severity, description, script, parameter, plugin_id, plugin_name, plugin_icon, last_modified, flag, scan_type) VALUES ('0cf1e428-3c37-4aa6-b651-acb46c4838c0', 'Huawei Redis实例公网访问扫描', 1, 'HighRisk', 'Huawei  账号下Redis实例不允许任意来源公网访问，视为“合规”，否则属于“不合规”', 'policies:\n    # 账号下Redis实例不允许任意来源公网访问，视为“合规”\n    - name: huawei-redis-internet-access\n      resource: huawei.redis\n      filters:\n        - type: internet-access\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"公网访问\",\"defaultValue\":\"true\",\"required\":true}]', 'fit2cloud-huawei-plugin', '华为云', 'fusion.png', concat(unix_timestamp(now()), '002'), 1, 'custodian');

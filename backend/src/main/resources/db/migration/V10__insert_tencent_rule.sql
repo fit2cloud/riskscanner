@@ -1,10 +1,10 @@
 
 
-INSERT INTO rule_group VALUES (7, 'Tencent 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-qcloud-plugin', 1);
+INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Tencent 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-qcloud-plugin', 1);
 SELECT @groupId1 := LAST_INSERT_ID();
-INSERT INTO rule_group VALUES (8, 'Tencent CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-qcloud-plugin', 1);
+INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Tencent CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-qcloud-plugin', 1);
 SELECT @groupId2 := LAST_INSERT_ID();
-INSERT INTO rule_group VALUES (9, 'Tencent COS合规基线', 'COS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-qcloud-plugin', 1);
+INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Tencent COS合规基线', 'COS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-qcloud-plugin', 1);
 SELECT @groupId3 := LAST_INSERT_ID();
 
 INSERT INTO rule(id, name, status, severity, description, script, parameter, plugin_id, plugin_name, plugin_icon, last_modified, flag, scan_type) VALUES ('1240a2b8-f7ef-47c3-8048-2dd95d6d5b54', 'Tencent EIP带宽峰值扫描', 1, 'HighRisk', 'Tencent  检测您账号下的弹性IP实例是否达到最低带宽要求，是视为“合规”，否则视为“不合规”', 'policies:\n    # 检测您账号下的弹性IP实例是否达到最低带宽要求\n    - name: tencent-eip-bandwidth\n      resource: tencent.eip\n      filters:\n        - type: bandwidth\n          value: ${{value}}', '[{\"key\":\"value\",\"name\":\"按带宽计费的公网型实例的带宽峰值\",\"defaultValue\":\"10\",\"required\":true}]', 'fit2cloud-qcloud-plugin', '腾讯云', 'qcloud.png', concat(unix_timestamp(now()), '003'), 1, 'custodian');

@@ -96,11 +96,11 @@ INSERT INTO rule_tag (tag_key, tag_name, _index, flag) VALUES ('cost', '费用',
 INSERT INTO rule_tag (tag_key, tag_name, _index, flag) VALUES ('tagging', '标签', 3, 1);
 
 
-INSERT INTO rule_group VALUES (1, 'Aliyun 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-aliyun-plugin', 1);
+INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Aliyun 等保预检', '等保合规检查（全称为等级保护合规检查）为您提供了全面覆盖通信网络、区域边界、计算环境和管理中心的网络安全检查。', '等保三级', 'fit2cloud-aliyun-plugin', 1);
 SELECT @groupId1 := LAST_INSERT_ID();
-INSERT INTO rule_group VALUES (2, 'Aliyun CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-aliyun-plugin', 1);
+INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Aliyun CIS合规检查', 'CIS（Center for Internet Security）合规检查能力，为您动态且持续地监控您保有在云上的资源是否符合 CIS Control 网络安全架构要求。', '高风险', 'fit2cloud-aliyun-plugin', 1);
 SELECT @groupId2 := LAST_INSERT_ID();
-INSERT INTO rule_group VALUES (3, 'Aliyun OSS合规基线', 'OSS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-aliyun-plugin', 1);
+INSERT INTO rule_group (`name`, `description`, `level`, `plugin_id`, `flag`) VALUES ('Aliyun OSS合规基线', 'OSS 合规检查为您提供全方位的对象存储资源检查功能。', '高风险', 'fit2cloud-aliyun-plugin', 1);
 SELECT @groupId3 := LAST_INSERT_ID();
 
 INSERT INTO rule_inspection_report VALUES (1, '应保证网络设备的业务处理能力满足业务高峰期需要。', '安全通信网络', '网络架构', '您可以通过VPC控制台，定期查看当前资源配额使用情况。');
