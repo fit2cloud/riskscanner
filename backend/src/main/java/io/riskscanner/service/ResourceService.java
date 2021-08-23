@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.alibaba.fastjson.JSON.parseArray;
@@ -339,7 +341,7 @@ public class ResourceService {
                 operation = Translator.get("i18n_more_resource");
                 finalScript = resourceWithBLOBs.getResourceCommand();
             }
-            String dirPath;
+
             AccountExample example = new AccountExample();
             example.createCriteria().andPluginNameEqualTo(resourceWithBLOBs.getPluginName()).andStatusEqualTo("VALID");
             String region = resourceWithBLOBs.getRegionId();
@@ -347,13 +349,37 @@ public class ResourceService {
             TaskItemResourceExample taskItemResourceExample = new TaskItemResourceExample();
             taskItemResourceExample.createCriteria().andResourceIdEqualTo(resourceWithBLOBs.getId());
             TaskItemResource taskItemResource = taskItemResourceMapper.selectByExample(taskItemResourceExample).get(0);
-            TaskItem taskItem = taskItemMapper.selectByPrimaryKey(taskItemResource.getTaskItemId());
+            TaskItemWithBLOBs taskItem = taskItemMapper.selectByPrimaryKey(taskItemResource.getTaskItemId());
             AccountWithBLOBs accountWithBLOBs = accountMapper.selectByPrimaryKey(resourceWithBLOBs.getAccountId());
             Map<String, String> map = PlatformUtils.getAccount(accountWithBLOBs, region, proxyMapper.selectByPrimaryKey(accountWithBLOBs.getProxyId()));
 
             orderService.saveTaskItemLog(taskItem.getId(), resourceWithBLOBs.getId(), Translator.get("i18n_operation_begin") + ": " + operation, StringUtils.EMPTY, true);
 
-            dirPath = CommandUtils.saveAsFile(finalScript, TaskConstants.RESULT_FILE_PATH_PREFIX + resourceWithBLOBs.getId(), "policy.yml");
+            Task task = taskMapper.selectByPrimaryKey(taskItem.getTaskId());
+            switch (task.getScanType()) {
+                case "custodian":
+                    createCustodianResource(finalScript, resourceWithBLOBs, map, taskItem, taskItemResource, operation);
+                    break;
+                case "nuclei":
+                    createNucleiResource(resourceWithBLOBs, taskItem, operation);
+                    break;
+                case "prowler":
+                    createProwlerResource(resourceWithBLOBs, taskItem, task, operation);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: scantype");
+            }
+
+        } catch (Exception e) {
+            RSException.throwException(e.getMessage());
+        }
+        return resourceWithBLOBs;
+    }
+
+    private void createCustodianResource (String finalScript, ResourceWithBLOBs resourceWithBLOBs, Map<String, String> map,
+                                          TaskItemWithBLOBs taskItem, TaskItemResource taskItemResource, String operation) {
+        try {
+            String dirPath = CommandUtils.saveAsFile(finalScript, TaskConstants.RESULT_FILE_PATH_PREFIX + resourceWithBLOBs.getId(), "policy.yml");
             String command = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.run.getCommand(), dirPath, "policy.yml", map);
             String resultStr = CommandUtils.commonExecCmdWithResult(command, dirPath);
             if (!resultStr.isEmpty() && !resultStr.contains("INFO")) {
@@ -378,8 +404,79 @@ public class ResourceService {
         } catch (Exception e) {
             RSException.throwException(e.getMessage());
         }
-        return resourceWithBLOBs;
     }
+
+    private void createNucleiResource (ResourceWithBLOBs resourceWithBLOBs, TaskItemWithBLOBs taskItem, String operation) {
+        try {
+            String dirPath = TaskConstants.RESULT_FILE_PATH_PREFIX + taskItem.getTaskId() + "/" + taskItem.getRegionId();
+            AccountWithBLOBs accountWithBLOBs = accountMapper.selectByPrimaryKey(taskItem.getAccountId());
+            Map<String, String> map = PlatformUtils.getAccount(accountWithBLOBs, taskItem.getRegionId(), proxyMapper.selectByPrimaryKey(accountWithBLOBs.getProxyId()));
+            String command = PlatformUtils.fixedCommand(CommandEnum.nuclei.getCommand(), CommandEnum.run.getCommand(), dirPath, "nuclei.yml", map);
+            if(taskItem.getDetails().contains("workflows:")) {
+                command = command.replace("-t", "-w");
+            }
+            LogUtil.info(taskItem.getTaskId() + " {}[command]: " + command);
+            CommandUtils.saveAsFile(taskItem.getDetails(), dirPath, "nuclei.yml");//重启服务后容器内文件在/tmp目录下会丢失
+            String resultStr = CommandUtils.commonExecCmdWithResultByNuclei(command, dirPath);
+
+            String nucleiRun = resultStr;
+            String metadata = resultStr;
+            String resources = ReadFileUtils.readToBuffer(dirPath + "/" + TaskConstants.NUCLEI_RUN_RESULT_FILE);
+
+            resourceWithBLOBs.setCustodianRunLog(nucleiRun);
+            resourceWithBLOBs.setMetadata(metadata);
+            resourceWithBLOBs.setResources(resources);
+
+            resourceWithBLOBs.setResourcesSum((long) 1);
+            if (StringUtils.isNotEmpty(resourceWithBLOBs.getResources())) {
+                resourceWithBLOBs.setReturnSum((long) 1);
+            } else {
+                resourceWithBLOBs.setReturnSum((long) 0);
+            }
+
+            orderService.saveTaskItemLog(taskItem.getId(), resourceWithBLOBs.getId(), Translator.get("i18n_operation_end") + ": " + operation, Translator.get("i18n_cloud_account") + ": " + resourceWithBLOBs.getPluginName() + "，"
+                    + Translator.get("i18n_region") + ": " + resourceWithBLOBs.getRegionName() + "，" + Translator.get("i18n_rule_type") + ": " + resourceWithBLOBs.getResourceType() + "，" + Translator.get("i18n_resource_manage") + ": "
+                    + resourceWithBLOBs.getResourceName() + "，" + Translator.get("i18n_resource_manage") + ": " + resourceWithBLOBs.getReturnSum() + "/" + resourceWithBLOBs.getResourcesSum(), true);
+        } catch (Exception e) {
+            RSException.throwException(e.getMessage());
+        }
+    }
+
+    private void createProwlerResource (ResourceWithBLOBs resourceWithBLOBs,
+                                          TaskItemWithBLOBs taskItem, Task task, String operation) {
+        try {
+            String dirPath = TaskConstants.PROWLER_RESULT_FILE_PATH;
+            String fileName = task.getResourceTypes().replace("[", "").replace("]", "");
+            AccountWithBLOBs accountWithBLOBs = accountMapper.selectByPrimaryKey(taskItem.getAccountId());
+            Map<String, String> map = PlatformUtils.getAccount(accountWithBLOBs, taskItem.getRegionId(), proxyMapper.selectByPrimaryKey(accountWithBLOBs.getProxyId()));
+            String command = PlatformUtils.fixedCommand(CommandEnum.prowler.getCommand(), CommandEnum.run.getCommand(), dirPath, fileName, map);
+            LogUtil.info(taskItem.getTaskId() + " {}[command]: " + command);
+            CommandUtils.commonExecCmdWithResult(command, dirPath);
+
+            String prowlerRun = ReadFileUtils.readToBuffer(dirPath + "/" + TaskConstants.PROWLER_RUN_RESULT_FILE);
+            String metadata = taskItem.getCustomData();
+            String resources = ReadFileUtils.readToBuffer(dirPath + "/" + TaskConstants.PROWLER_RUN_RESULT_FILE);
+
+            resourceWithBLOBs.setCustodianRunLog(prowlerRun);
+            resourceWithBLOBs.setMetadata(metadata);
+            resourceWithBLOBs.setResources(resources);
+
+            long passNum = resourceWithBLOBs.getResources()!=null?appearNumber(resourceWithBLOBs.getResources(), "PASS!"):0;
+            long failNum = resourceWithBLOBs.getResources()!=null?appearNumber(resourceWithBLOBs.getResources(), "FAIL!"):0;
+            long infoNum = resourceWithBLOBs.getResources()!=null?appearNumber(resourceWithBLOBs.getResources(), "INFO!"):0;
+            long warnNum = resourceWithBLOBs.getResources()!=null?appearNumber(resourceWithBLOBs.getResources(), "WARN!"):0;
+
+            resourceWithBLOBs.setResourcesSum(passNum + failNum + infoNum + warnNum);
+            resourceWithBLOBs.setReturnSum(failNum);
+
+            orderService.saveTaskItemLog(taskItem.getId(), resourceWithBLOBs.getId(), Translator.get("i18n_operation_end") + ": " + operation, Translator.get("i18n_cloud_account") + ": " + resourceWithBLOBs.getPluginName() + "，"
+                    + Translator.get("i18n_region") + ": " + resourceWithBLOBs.getRegionName() + "，" + Translator.get("i18n_rule_type") + ": " + resourceWithBLOBs.getResourceType() + "，" + Translator.get("i18n_resource_manage") + ": "
+                    + resourceWithBLOBs.getResourceName() + "，" + Translator.get("i18n_resource_manage") + ": " + resourceWithBLOBs.getReturnSum() + "/" + resourceWithBLOBs.getResourcesSum(), true);
+        } catch (Exception e) {
+            RSException.throwException(e.getMessage());
+        }
+    }
+
 
     public List<ResourceLogDTO> getResourceLog(String resourceId) {
         List<ResourceLogDTO> result = new ArrayList<>();
@@ -548,5 +645,22 @@ public class ResourceService {
             LogUtil.error(e.getMessage());
         }
         return resource;
+    }
+
+    /**
+     * 获取指定字符串出现的次数
+     *
+     * @param srcText 源字符串
+     * @param findText 要查找的字符串
+     * @return
+     */
+    public static int appearNumber(String srcText, String findText) {
+        int count = 0;
+        Pattern p = Pattern.compile(findText);
+        Matcher m = p.matcher(srcText);
+        while (m.find()) {
+            count++;
+        }
+        return count;
     }
 }
