@@ -794,4 +794,11 @@ export default {
     empty:'Do not configure',
     workDay:'Working day',
   },
+  '阿里云': 'Aliyun',
+  '腾讯云': 'Tencent',
+  '华为云': 'Huawei',
+  '管理员': 'Admin',
+  '安全': 'Security',
+  '费用': 'Cost',
+  '标签': 'Label',
 };

@@ -141,26 +141,7 @@
                   </el-option>
                 </el-select>
               </div>
-<!--              <el-table :data="form.accounts" style="width: 100%;margin: 50px 0 0 0;">-->
-<!--                <el-table-column v-slot:default="scope" :label="$t('account.name')" min-width="80%">-->
-<!--                  <el-select style="width: 100%;margin: 0 0;" v-model="scope.row.accountId" :placeholder="$t('account.please_choose_account')">-->
-<!--                    <el-option-->
-<!--                      v-for="item in accounts"-->
-<!--                      :key="item.id"-->
-<!--                      :label="item.name"-->
-<!--                      :value="item.id">-->
-<!--                      <img :src="require(`@/assets/img/platform/${item.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>-->
-<!--                      &nbsp;&nbsp; {{ $t(item.name) }}-->
-<!--                    </el-option>-->
-<!--                  </el-select>-->
-<!--                </el-table-column>-->
-<!--                <el-table-column v-slot:default="scope" :label="$t('rule.clear')" min-width="20%">-->
-<!--                  <i class="el-icon-close" @click="removeParam(form.accounts, scope.row)"></i>-->
-<!--                </el-table-column>-->
-<!--              </el-table>-->
-<!--              <el-button type="primary" style="width: 100%;margin: 10px 0;" plain @click="addParam(form.accounts)">{{ $t('account.account_add') }}</el-button>-->
             </div>
-
           </el-form>
         <dialog-footer
           @cancel="createVisible = false"

@@ -7,7 +7,7 @@
             <el-tab-pane
               :key="tag.tagKey"
               v-for="tag in tags"
-              :label="tag.tagName">
+              :label="$t(tag.tagName)">
             </el-tab-pane>
           </el-tabs>
           <table-header :condition.sync="condition"
