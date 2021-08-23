@@ -13,7 +13,6 @@ import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.*;
 import io.riskscanner.dto.QuartzTaskDTO;
 import io.riskscanner.i18n.Translator;
-import io.riskscanner.proxy.aws.AWSCredential;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.context.annotation.Lazy;
@@ -25,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.alibaba.fastjson.JSON.parseObject;
 import static com.alibaba.fastjson.JSON.toJSONString;
@@ -70,14 +71,15 @@ public class ProwlerService {
 
         String script = quartzTaskDTO.getScript();
         JSONArray jsonArray = JSON.parseArray(quartzTaskDTO.getParameter());
-        String dirName = "group1";
+        String groupName = "group1";
         for (Object o : jsonArray) {
             JSONObject jsonObject = (JSONObject) o;
-            dirName = jsonObject.getString("defaultValue");
+            groupName = jsonObject.getString("defaultValue");
         }
 
         this.deleteTaskItems(task.getId());
         List<String> resourceTypes = new ArrayList();
+        resourceTypes.add(groupName);
         for (SelectTag selectTag : quartzTaskDTO.getSelectTags()) {
             for (String regionId : selectTag.getRegions()) {
                 TaskItemWithBLOBs taskItemWithBLOBs = new TaskItemWithBLOBs();
@@ -85,7 +87,7 @@ public class ProwlerService {
                 taskItemWithBLOBs.setId(uuid);
                 taskItemWithBLOBs.setTaskId(task.getId());
                 taskItemWithBLOBs.setRuleId(quartzTaskDTO.getId());
-                taskItemWithBLOBs.setCustomData(dirName);
+                taskItemWithBLOBs.setCustomData(script);
                 taskItemWithBLOBs.setStatus(TaskConstants.TASK_STATUS.UNCHECKED.name());
                 taskItemWithBLOBs.setSeverity(quartzTaskDTO.getSeverity());
                 taskItemWithBLOBs.setCreateTime(task.getCreateTime());
@@ -99,10 +101,9 @@ public class ProwlerService {
                 taskItemMapper.insertSelective(taskItemWithBLOBs);
 
                 final String finalScript = script;
-                final String finalDirName = dirName;
+                final String finalDirName = groupName;
                 commonThreadPool.addTask(() -> {
-                    String sc = "";
-                    String resourceType = "prowler";
+                    String resourceType = finalDirName;
 
                     TaskItemResourceWithBLOBs taskItemResource = new TaskItemResourceWithBLOBs();
                     taskItemResource.setTaskId(taskId);
@@ -118,9 +119,8 @@ public class ProwlerService {
                     taskItemResource.setResourceCommand(finalScript);
                     taskItemResourceMapper.insertSelective(taskItemResource);
 
-                    resourceTypes.add(resourceType);
 
-                    taskItemWithBLOBs.setDetails(sc);
+                    taskItemWithBLOBs.setDetails(finalScript);
                     taskItemMapper.updateByPrimaryKeySelective(taskItemWithBLOBs);
 
                     task.setResourceTypes(resourceTypes.toString());
@@ -200,25 +200,23 @@ public class ProwlerService {
     public void createProwlerResource(TaskItemWithBLOBs taskItem, Task task) throws Exception {
         LogUtil.info("createResource for taskItem: {}", toJSONString(taskItem));
         String operation = Translator.get("i18n_create_resource");
-        String resultStr = "", fileName = taskItem.getCustomData();
+        String resultStr = "";
+        String fileName = task.getResourceTypes().replace("[", "").replace("]", "");
         try {
             TaskItemResourceExample example = new TaskItemResourceExample();
             example.createCriteria().andTaskIdEqualTo(task.getId()).andTaskItemIdEqualTo(taskItem.getId());
             List<TaskItemResourceWithBLOBs> list = taskItemResourceMapper.selectByExampleWithBLOBs(example);
             if (list.isEmpty()) return;
 
-            String dirPath = "~/.aws/prowler";
+            String dirPath = TaskConstants.PROWLER_RESULT_FILE_PATH;
             AccountWithBLOBs accountWithBLOBs = accountMapper.selectByPrimaryKey(taskItem.getAccountId());
             Map<String, String> map = PlatformUtils.getAccount(accountWithBLOBs, taskItem.getRegionId(), proxyMapper.selectByPrimaryKey(accountWithBLOBs.getProxyId()));
             String command = PlatformUtils.fixedCommand(CommandEnum.prowler.getCommand(), CommandEnum.run.getCommand(), dirPath, fileName, map);
             LogUtil.info(task.getId() + " {}[command]: " + command);
-            resultStr = CommandUtils.commonExecCmdWithResultByNuclei(command, dirPath);
+            resultStr = CommandUtils.commonExecCmdWithResult(command, dirPath);
             if (LogUtil.getLogger().isDebugEnabled()) {
                 LogUtil.getLogger().debug("resource created: {}", resultStr);
             }
-            if (resultStr.contains("ERR"))
-                throw new Exception(Translator.get("i18n_create_resource_failed") + ": " + resultStr);
-
 
             for (TaskItemResourceWithBLOBs taskItemResource : list) {
 
@@ -232,9 +230,9 @@ public class ProwlerService {
                     orderService.saveTaskItemLog(taskItemId, taskItemId, Translator.get("i18n_operation_ex") + ": " + operation, Translator.get("i18n_ex_rule_not_exist"), false);
                     throw new Exception(Translator.get("i18n_ex_rule_not_exist") + ":" + taskItem.getRuleId());
                 }
-                String prowlerRun = resultStr;
-                String metadata = resultStr;
-                String resources = resultStr;
+                String prowlerRun = ReadFileUtils.readToBuffer(dirPath + "/" + TaskConstants.PROWLER_RUN_RESULT_FILE);
+                String metadata = taskItem.getCustomData();
+                String resources = ReadFileUtils.readToBuffer(dirPath + "/" + TaskConstants.PROWLER_RUN_RESULT_FILE);
 
                 ResourceWithBLOBs resourceWithBLOBs = new ResourceWithBLOBs();
                 if (taskItemResource.getResourceId() != null) {
@@ -256,9 +254,6 @@ public class ProwlerService {
                 LogUtil.info("The returned data is{}: " + new Gson().toJson(resource));
                 orderService.saveTaskItemLog(taskItemId, resourceType, Translator.get("i18n_operation_end") + ": " + operation, Translator.get("i18n_cloud_account") + ": " + resource.getPluginName() + "，"
                         + Translator.get("i18n_region") + ": " + resource.getRegionName() + "，" + Translator.get("i18n_rule_type") + ": " + resourceType + "，" + Translator.get("i18n_resource_manage") + ": " + resource.getReturnSum() + "/" + resource.getResourcesSum(), true);
-                //执行完删除返回目录文件，以便于下一次操作覆盖
-                String deleteResourceDir = "rm -rf " + dirPath;
-                CommandUtils.commonExecCmdWithResult(deleteResourceDir, dirPath);
             }
 
         } catch (Exception e) {
@@ -274,30 +269,27 @@ public class ProwlerService {
             long now = System.currentTimeMillis();
             resourceWithBLOBs.setCreateTime(now);
             resourceWithBLOBs.setUpdateTime(now);
-            resourceWithBLOBs.setResourcesSum((long) 1);
-            if (StringUtils.isNotEmpty(resourceWithBLOBs.getResources())) {
-                resourceWithBLOBs.setReturnSum((long) 1);
-            } else {
-                resourceWithBLOBs.setReturnSum((long) 0);
-            }
+
+            long passNum = resourceWithBLOBs.getResources()!=null?appearNumber(resourceWithBLOBs.getResources(), "PASS!"):0;
+            long failNum = resourceWithBLOBs.getResources()!=null?appearNumber(resourceWithBLOBs.getResources(), "FAIL!"):0;
+            long infoNum = resourceWithBLOBs.getResources()!=null?appearNumber(resourceWithBLOBs.getResources(), "INFO!"):0;
+            long warnNum = resourceWithBLOBs.getResources()!=null?appearNumber(resourceWithBLOBs.getResources(), "WARN!"):0;
+            resourceWithBLOBs.setResourcesSum(passNum + failNum + infoNum + warnNum);
+            resourceWithBLOBs.setReturnSum(failNum);
 
             AccountWithBLOBs account = accountMapper.selectByPrimaryKey(resourceWithBLOBs.getAccountId());
             resourceWithBLOBs = updateResourceSum(resourceWithBLOBs, account);
-            AWSCredential awsCredential = new Gson().fromJson(account.getCredential(), AWSCredential.class);
             SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
             sdf.applyPattern("yyyy-MM-dd HH:mm:ss a");// a为am/pm的标记
             Date date = new Date();// 获取当前时间
             String json = "{\n" +
                     "  \"id\": " + "\"" + UUIDUtil.newUUID() + "\"" + ",\n" +
                     "  \"CreatedTime\": " + "\"" + sdf.format(date) + "\"" + ",\n" +
-                    "  \"AccessKey\": " + "\"" + awsCredential.getAccessKey() + "\"" + ",\n" +
-                    "  \"SecretKey\": " + "\"" + awsCredential.getSecretKey() + "\"" + ",\n" +
                     "  \"RegionName\": " + "\"" + resourceWithBLOBs.getRegionName() + "\"" + ",\n" +
-                    "  \"Result\": " + "\"" + resourceWithBLOBs.getResources() + "\"" + "\n" +
+                    "  \"Result\": " + "\"" + resourceWithBLOBs.getResources() + "\n" +
                     "}";
             //资源详情
             saveResourceItem(resourceWithBLOBs, parseObject(json));
-
 
             //资源、规则、申请人关联表
             ResourceRule resourceRule = new ResourceRule();
@@ -392,6 +384,23 @@ public class ProwlerService {
         } else {
             taskItemResourceMapper.insertSelective(taskItemResource);
         }
+    }
+
+    /**
+     * 获取指定字符串出现的次数
+     *
+     * @param srcText 源字符串
+     * @param findText 要查找的字符串
+     * @return
+     */
+    public static int appearNumber(String srcText, String findText) {
+        int count = 0;
+        Pattern p = Pattern.compile(findText);
+        Matcher m = p.matcher(srcText);
+        while (m.find()) {
+            count++;
+        }
+        return count;
     }
 
 }

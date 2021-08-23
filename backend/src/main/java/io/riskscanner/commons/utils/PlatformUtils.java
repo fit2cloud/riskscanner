@@ -148,13 +148,12 @@ public class PlatformUtils {
 
         switch (type) {
             case aws:
-                String scanType = params.get("scanType");
                 String awsAccessKey = params.get("accessKey");
                 String awsSecretKey = params.get("secretKey");
-                if(StringUtils.equalsIgnoreCase(scanType, ScanTypeConstants.prowler.name())){
+                if(StringUtils.equalsIgnoreCase(custodian, ScanTypeConstants.prowler.name())){
                     pre = "export AWS_ACCESS_KEY_ID=" + awsAccessKey + ";" + "\n" +
                             "export AWS_SECRET_ACCESS_KEY=" + awsSecretKey + ";" + "\n";
-                    return proxy + pre + "./prowler -g " + (StringUtils.isNotEmpty(fileName)?fileName:"group1") + " -f " + region + " -s -M html";
+                    return proxy + pre + "./prowler -g " + (StringUtils.isNotEmpty(fileName)?fileName:"group1") + " -f " + region + " -s -M text > result.txt";
                 }
                 pre = "AWS_ACCESS_KEY_ID=" + awsAccessKey + " " +
                         "AWS_SECRET_ACCESS_KEY=" + awsSecretKey + " " +

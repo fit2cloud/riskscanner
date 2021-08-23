@@ -63,7 +63,9 @@ public class TaskConstants {
     public final static String METADATA_RESULT_FILE = "metadata.json";
     public final static String RESOURCES_RESULT_FILE = "resources.json";
     public final static String NUCLEI_RUN_RESULT_FILE = "result.txt";
+    public final static String PROWLER_RUN_RESULT_FILE = "result.txt";
 
     public final static String RESULT_FILE_PATH = "/tmp/{task_id}/policy.yml";
     public final static String RESULT_FILE_PATH_PREFIX = "/tmp/";
+    public final static String PROWLER_RESULT_FILE_PATH = "/tmp/prowler";
 }
