@@ -1,10 +1,12 @@
 FROM registry.cn-qingdao.aliyuncs.com/x-lab/nuclei:v1.4 as build-env
 
-FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.4.1
+FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.5
 
 ARG RS_VERSION=dev
 
-RUN apk add --no-cache bind-tools ca-certificates
+RUN apk add --no-cache bind-tools ca-certificates && \
+    apk --update --no-cache add python3 bash curl jq file coreutils && \
+    pip install awscli boto3 detect-secrets
 
 COPY --from=build-env /usr/local/bin/nuclei /usr/local/bin/nuclei
 
