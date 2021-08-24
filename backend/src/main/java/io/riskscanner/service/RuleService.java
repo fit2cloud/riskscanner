@@ -340,6 +340,36 @@ public class RuleService {
         return ruleDTO;
     }
 
+    public RuleDTO getRuleDtoById(String ruleId, String accountId) throws Exception {
+        RuleDTO ruleDTO = extRuleMapper.selectByPrimaryKey(ruleId, accountId);
+
+        //规则标签
+        List<String> tags = new LinkedList<>();
+        RuleTagMappingExample example = new RuleTagMappingExample();
+        example.createCriteria().andRuleIdEqualTo(ruleId);
+        List<RuleTagMapping> ruleTagMappingList = ruleTagMappingMapper.selectByExample(example);
+        ruleTagMappingList.forEach(obj -> tags.add(obj.getTagKey()));
+        ruleDTO.setTags(tags);
+
+        //规则组
+        List<Integer> ruleSets = new ArrayList<>();
+        RuleGroupMappingExample ruleGroupMappingExample = new RuleGroupMappingExample();
+        ruleGroupMappingExample.createCriteria().andRuleIdEqualTo(ruleId);
+        List<RuleGroupMapping> ruleGroupMappings = ruleGroupMappingMapper.selectByExample(ruleGroupMappingExample);
+        ruleGroupMappings.forEach(obj -> ruleSets.add(Integer.valueOf(obj.getGroupId())));
+        ruleDTO.setRuleSets(ruleSets);
+
+        //规则条例
+        List<Integer> inspectionSeports = new ArrayList<>();
+        RuleInspectionReportMappingExample ruleInspectionReportMappingExample = new RuleInspectionReportMappingExample();
+        ruleInspectionReportMappingExample.createCriteria().andRuleIdEqualTo(ruleId);
+        List<RuleInspectionReportMapping> ruleInspectionReportMappings = ruleInspectionReportMappingMapper.selectByExample(ruleInspectionReportMappingExample);
+        ruleInspectionReportMappings.forEach(obj -> inspectionSeports.add(Integer.valueOf(obj.getReportId())));
+        ruleDTO.setInspectionSeports(inspectionSeports);
+
+        return ruleDTO;
+    }
+
     public RuleDTO getRuleByTaskId(String taskId) throws Exception {
         TaskItemExample taskItemExample = new TaskItemExample();
         taskItemExample.createCriteria().andTaskIdEqualTo(taskId);
@@ -501,7 +531,7 @@ public class RuleService {
         example.createCriteria().andTaskIdEqualTo(taskId);
         List<TaskItem> taskItems = taskItemMapper.selectByExample(example);
         AccountWithBLOBs account = accountMapper.selectByPrimaryKey(accountId);
-        RuleDTO rule = getRuleById(taskItems.get(0).getRuleId());
+        RuleDTO rule = getRuleDtoById(taskItems.get(0).getRuleId(), accountId);
         if (!rule.getStatus()) RSException.throwException(Translator.get("i18n_disabled_rules_not_scanning"));
         Integer scanId = orderService.insertScanHistory(account);
         this.dealTask(rule, account, scanId, null);

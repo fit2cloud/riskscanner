@@ -1,3 +1,5 @@
+import io.riskscanner.commons.constants.TaskConstants;
+import io.riskscanner.commons.utils.LogUtil;
 import io.riskscanner.commons.utils.UUIDUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -5,10 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Scanner;
 
 public class Test {
 
@@ -71,6 +73,33 @@ public class Test {
             throw new Exception("AES encrypt error:", e);
         }
 
+    }
+
+    @org.junit.Test
+    public void test3 () throws Exception {
+        try {
+            File file = new File(TaskConstants.PROWLER_RESULT_FILE_PATH + "/" + TaskConstants.PROWLER_RUN_RESULT_FILE);
+            if (file.isFile() && file.exists()) { // 判断文件是否存在
+                InputStreamReader read = new InputStreamReader(
+                        new FileInputStream(file), "UTF-8");// 考虑到编码格式
+                BufferedReader bufferedReader = new BufferedReader(read);
+                String lineTxt = null;
+                while ((lineTxt = bufferedReader.readLine()) != null)
+                {
+                    if(lineTxt.contains("FAIL!")){
+                        System.out.println(lineTxt);
+                    }
+                }
+                bufferedReader.close();
+                read.close();
+
+            } else {
+                System.out.println("找不到指定的文件");
+            }
+        } catch (Exception error) {
+            LogUtil.error(error.getMessage(), "读取文件内容出错");
+            throw new Exception(error.getMessage());
+        }
     }
 
 }

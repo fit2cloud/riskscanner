@@ -19,11 +19,12 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,7 +60,7 @@ public class ProwlerService {
     @Resource @Lazy
     private OrderService orderService;
     @Resource @Lazy
-    private RuleService ruleService;
+    private RuleMapper ruleMapper;
     @Resource @Lazy
     private ResourceItemMapper resourceItemMapper;
     @Resource @Lazy
@@ -225,7 +226,7 @@ public class ProwlerService {
                 String taskItemId = taskItem.getId();
                 if (StringUtils.equals(task.getType(), TaskConstants.TaskType.manual.name()))
                     orderService.saveTaskItemLog(taskItemId, "resourceType", Translator.get("i18n_operation_begin") + ": " + operation, StringUtils.EMPTY, true);
-                Rule rule = ruleService.getRuleById(taskItem.getRuleId());
+                Rule rule = ruleMapper.selectByPrimaryKey(taskItem.getRuleId());
                 if (rule == null) {
                     orderService.saveTaskItemLog(taskItemId, taskItemId, Translator.get("i18n_operation_ex") + ": " + operation, Translator.get("i18n_ex_rule_not_exist"), false);
                     throw new Exception(Translator.get("i18n_ex_rule_not_exist") + ":" + taskItem.getRuleId());
@@ -279,17 +280,41 @@ public class ProwlerService {
 
             AccountWithBLOBs account = accountMapper.selectByPrimaryKey(resourceWithBLOBs.getAccountId());
             resourceWithBLOBs = updateResourceSum(resourceWithBLOBs, account);
-            SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-            sdf.applyPattern("yyyy-MM-dd HH:mm:ss a");// a为am/pm的标记
-            Date date = new Date();// 获取当前时间
-            String json = "{\n" +
-                    "  \"id\": " + "\"" + UUIDUtil.newUUID() + "\"" + ",\n" +
-                    "  \"CreatedTime\": " + "\"" + sdf.format(date) + "\"" + ",\n" +
-                    "  \"RegionName\": " + "\"" + resourceWithBLOBs.getRegionName() + "\"" + ",\n" +
-                    "  \"Result\": " + "\"" + resourceWithBLOBs.getResources() + "\n" +
-                    "}";
-            //资源详情
-            saveResourceItem(resourceWithBLOBs, parseObject(json));
+            try {
+                File file = new File(TaskConstants.PROWLER_RESULT_FILE_PATH + "/" + TaskConstants.PROWLER_RUN_RESULT_FILE);
+                if (file.isFile() && file.exists()) { // 判断文件是否存在
+                    InputStreamReader read = new InputStreamReader(
+                            new FileInputStream(file), "UTF-8");// 考虑到编码格式
+                    BufferedReader bufferedReader = new BufferedReader(read);
+                    String lineTxt = null;
+                    while ((lineTxt = bufferedReader.readLine()) != null) {
+                        if(lineTxt.contains("FAIL!")){
+                            SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
+                            sdf.applyPattern("yyyy-MM-dd HH:mm:ss a");// a为am/pm的标记
+                            Date date = new Date();// 获取当前时间
+                            String fid = UUIDUtil.newUUID();
+                            lineTxt = lineTxt.replaceAll("", "").replaceAll("\u001B", "");
+                            String json = "{\n" +
+                                    "  \"id\": " + "\"" + fid + "\"" + ",\n" +
+                                    "  \"ScanTime\": " + "\"" + sdf.format(date) + "\"" + ",\n" +
+                                    "  \"RegionName\": " + "\"" + resourceWithBLOBs.getRegionName() + "\"" + ",\n" +
+                                    "  \"Result\": " + "\"" + lineTxt + "\"" + "\n" +
+                                    "}";
+                            //资源详情
+                            saveResourceItem(resourceWithBLOBs, json, fid);
+                        }
+                    }
+                    bufferedReader.close();
+                    read.close();
+
+                } else {
+                    LogUtil.error("找不到指定的文件");
+                    throw new Exception("找不到指定的文件");
+                }
+            } catch (Exception error) {
+                LogUtil.error(error.getMessage(), "读取文件内容出错");
+                throw new Exception(error.getMessage());
+            }
 
             //资源、规则、申请人关联表
             ResourceRule resourceRule = new ResourceRule();
@@ -344,10 +369,9 @@ public class ProwlerService {
         return resourceWithBLOBs;
     }
 
-    private void saveResourceItem(ResourceWithBLOBs resourceWithBLOBs, JSONObject jsonObject) {
+    private void saveResourceItem(ResourceWithBLOBs resourceWithBLOBs, String json, String fid) {
         ResourceItem resourceItem = new ResourceItem();
         try{
-            String fid = UUIDUtil.newUUID();
             resourceItem.setAccountId(resourceWithBLOBs.getAccountId());
             resourceItem.setUpdateTime(System.currentTimeMillis());
             resourceItem.setPluginIcon(resourceWithBLOBs.getPluginIcon());
@@ -359,19 +383,11 @@ public class ProwlerService {
             resourceItem.setSeverity(resourceWithBLOBs.getSeverity());
             resourceItem.setResourceType(resourceWithBLOBs.getResourceType());
             resourceItem.setF2cId(fid);
-            resourceItem.setResource(jsonObject.toJSONString());
+            resourceItem.setResource(json);
 
-            ResourceItemExample example = new ResourceItemExample();
-            example.createCriteria().andResourceIdEqualTo(resourceWithBLOBs.getId());
-            List<ResourceItem> resourceItems = resourceItemMapper.selectByExampleWithBLOBs(example);
-            if (!resourceItems.isEmpty()) {
-                resourceItem.setId(resourceItems.get(0).getId());
-                resourceItemMapper.updateByPrimaryKeySelective(resourceItem);
-            } else {
-                resourceItem.setId(UUIDUtil.newUUID());
-                resourceItem.setCreateTime(System.currentTimeMillis());
-                resourceItemMapper.insertSelective(resourceItem);
-            }
+            resourceItem.setId(fid);
+            resourceItem.setCreateTime(System.currentTimeMillis());
+            resourceItemMapper.insertSelective(resourceItem);
         } catch (Exception e) {
             LogUtil.error(e.getMessage());
             throw e;

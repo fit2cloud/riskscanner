@@ -182,4 +182,29 @@
         WHERE t.id IN
         (SELECT report_id FROM rule_inspection_report_mapping WHERE rule_id = #{id})
     </select>
+
+    <select id="selectByPrimaryKey" resultMap="io.riskscanner.base.mapper.ext.ExtRuleMapper.BaseResultMap2">
+        SELECT
+            t.id,
+            t.name,
+            t.status,
+            t.severity,
+            t.description,
+            t.script,
+            IFNULL (t1.`parameter`, t.`parameter`) as parameter,
+            CASE WHEN t1.`parameter` IS NOT NULL
+            THEN true
+            ELSE false
+            END AS isSaveParam,
+            t.plugin_id as plugin_id,
+            t.plugin_name as plugin_name,
+            t.plugin_icon as plugin_icon,
+            t.last_modified as last_modified,
+            t.scan_type as scan_type,
+            t1.regions
+        FROM rule t
+        LEFT JOIN rule_account_parameter t1 ON t.id = t1.rule_id AND t1.account_id = #{accountId}
+        WHERE t.id = #{ruleId}
+    </select>
+
 </mapper>

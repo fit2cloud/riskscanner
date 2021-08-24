@@ -61,7 +61,7 @@ public class NucleiService {
     @Resource @Lazy
     private OrderService orderService;
     @Resource @Lazy
-    private RuleService ruleService;
+    private RuleMapper ruleMapper;
     @Resource @Lazy
     private ResourceItemMapper resourceItemMapper;
     @Resource @Lazy
@@ -254,7 +254,7 @@ public class NucleiService {
                 String taskItemId = taskItem.getId();
                 if (StringUtils.equals(task.getType(), TaskConstants.TaskType.manual.name()))
                     orderService.saveTaskItemLog(taskItemId, "resourceType", Translator.get("i18n_operation_begin") + ": " + operation, StringUtils.EMPTY, true);
-                Rule rule = ruleService.getRuleById(taskItem.getRuleId());
+                Rule rule = ruleMapper.selectByPrimaryKey(taskItem.getRuleId());
                 if (rule == null) {
                     orderService.saveTaskItemLog(taskItemId, taskItemId, Translator.get("i18n_operation_ex") + ": " + operation, Translator.get("i18n_ex_rule_not_exist"), false);
                     throw new Exception(Translator.get("i18n_ex_rule_not_exist") + ":" + taskItem.getRuleId());

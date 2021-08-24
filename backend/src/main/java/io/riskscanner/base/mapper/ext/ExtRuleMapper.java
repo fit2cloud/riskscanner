@@ -12,4 +12,6 @@ public interface ExtRuleMapper {
     List<RuleTag> getTagsOfRule(@Param("ruleId") String ruleId);
 
     List<RuleDTO> listAllWithTag(CreateRuleRequest Rule);
+
+    RuleDTO selectByPrimaryKey(@Param("ruleId") String ruleId, @Param("accountId") String accountId);
 }
