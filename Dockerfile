@@ -1,4 +1,6 @@
-FROM registry.cn-qingdao.aliyuncs.com/x-lab/nuclei:v1.4 as build-env
+FROM registry.cn-qingdao.aliyuncs.com/x-lab/nuclei:v1.5 as nuclei-env
+
+FROM registry.cn-qingdao.aliyuncs.com/x-lab/prowler:v1.5 as prowler-env
 
 FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.5
 
@@ -8,7 +10,9 @@ RUN apk add --no-cache bind-tools ca-certificates && \
     apk --update --no-cache add python3 bash curl jq file coreutils && \
     pip install awscli boto3 detect-secrets
 
-COPY --from=build-env /usr/local/bin/nuclei /usr/local/bin/nuclei
+COPY --from=nuclei-env /usr/local/bin/nuclei /usr/local/bin/nuclei
+
+COPY --from=prowler-env /prowler /prowler
 
 RUN mkdir -p /opt/apps
 
