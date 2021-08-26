@@ -31,10 +31,7 @@ import com.vmware.vim25.mo.Datacenter;
 import io.riskscanner.base.domain.AccountWithBLOBs;
 import io.riskscanner.base.domain.Proxy;
 import io.riskscanner.base.rs.*;
-import io.riskscanner.commons.constants.CloudAccountConstants;
-import io.riskscanner.commons.constants.CommandEnum;
-import io.riskscanner.commons.constants.RegionsConstants;
-import io.riskscanner.commons.constants.ScanTypeConstants;
+import io.riskscanner.commons.constants.*;
 import io.riskscanner.commons.exception.PluginException;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.i18n.Translator;
@@ -116,7 +113,7 @@ public class PlatformUtils {
      * @param params
      * @return
      */
-    public final static String fixedCommand(String custodian, String behavior, String dirPath, String fileName, Map<String, String> params) {
+    public final static String fixedCommand(String custodian, String behavior, String dirPath, String fileName, Map<String, String> params) throws IOException {
         String type = params.get("type");
         String region = params.get("region");
         String proxyType = params.get("proxyType");
@@ -151,8 +148,17 @@ public class PlatformUtils {
                 String awsAccessKey = params.get("accessKey");
                 String awsSecretKey = params.get("secretKey");
                 if(StringUtils.equalsIgnoreCase(custodian, ScanTypeConstants.prowler.name())){
-                    pre = "export AWS_ACCESS_KEY_ID=" + awsAccessKey + ";" + "\n" +
-                            "export AWS_SECRET_ACCESS_KEY=" + awsSecretKey + ";" + "\n";
+                    String config = ReadFileUtils.readToBuffer("~/.aws/config");
+                    String credentials = ReadFileUtils.readToBuffer("~/.aws/credentials");
+                    if(!config.contains(region)) {
+                        pre = "sed '$a" + "region=" + region + "' ~/.aws/config" + "\n";
+                    }
+                    if (!credentials.contains(awsAccessKey)) {
+                        pre = pre + "sed '$a" + "aws_access_key_id=" + awsAccessKey + "' ~/.aws/credentials" + "\n";
+                    }
+                    if (!credentials.contains(awsSecretKey)) {
+                        pre = pre + "sed '$a" + "aws_secret_access_key=" + awsSecretKey + "' ~/.aws/credentials" + "\n";
+                    }
                     return proxy + pre + "./prowler -g " + (StringUtils.isNotEmpty(fileName)?fileName:"group1") + " -f " + region + " -s -M text > result.txt";
                 }
                 pre = "AWS_ACCESS_KEY_ID=" + awsAccessKey + " " +
