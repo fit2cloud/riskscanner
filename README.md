@@ -10,7 +10,7 @@
 </p>
 <hr />
 
-RiskScanner 是开源的多云安全合规扫描平台，基于 Cloud Custodian 和 Nuclei 引擎，实现对主流公(私)有云资源的安全合规扫描和漏洞扫描。
+RiskScanner 是开源的多云安全合规扫描平台，基于 Cloud Custodian、Prowler 和 Nuclei 引擎，实现对主流公(私)有云资源的安全合规扫描和漏洞扫描。
 
 **功能优势**
 
@@ -28,11 +28,13 @@ RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，�
 > - [x] 支持多资源类型：支持的资源类型包括云服务器、云磁盘、云数据库、负载均衡、对象存储、专有网络、安全组等；
 > - [x] 丰富全面的漏洞规则库：覆盖 OWASP TOP 10 的 Web 漏洞，例如：SQL 注入、跨站脚本攻击（XSS）、跨站请求伪造（CSRF）、弱密码等。
 
-![功能架构](./frontend/src/assets/img/readme/functional-architecture.png)
+![功能架构](https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/functional-architecture.png)
+<img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/functional-architecture.png" width="2628" height="1280"/>
 
 ## UI 界面展示
 
-![UI 界面展示](./frontend/src/assets/img/readme/dashboard.gif)
+![UI 界面展示](https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/dashboard.gif)
+<img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/dashboard.gif" width="2628" height="1280"/>
 
 ## 快速开始
 
@@ -53,13 +55,14 @@ curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/qu
 
 ## 微信群
 
-<img src="./frontend/src/assets/img/readme/wechat-group.png" width="156" height="156"/>
+<img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/wechat-group.png" width="156" height="156"/>
 
 ## 技术栈
 
 - 前端：[Vue.js](https://vuejs.org/)
 - 后端：[Spring Boot](https://www.tutorialspoint.com/spring_boot/spring_boot_introduction.htm)
 - 云平台扫描引擎：[Cloud Custodian](https://github.com/cloud-custodian/cloud-custodian)
+- AWS 扫描引擎：[Prowler](https://github.com/toniblyx/prowler)
 - 漏洞扫描引擎：[Nuclei](https://github.com/projectdiscovery/nuclei)
 - 数据库：[MySQL](https://www.mysql.com/)
 

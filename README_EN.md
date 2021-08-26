@@ -10,7 +10,7 @@
 </p>
 <hr />
 
-RiskScanner is an open source multi-cloud security compliance scanning platform, Based on Cloud Custodian and Nuclei engines, it realizes security compliance scanning and vulnerability scanning of mainstream public (private) cloud resources.
+RiskScanner is an open source multi-cloud security compliance scanning platform, Based on Cloud Custodian、Prowler and Nuclei engines, it realizes security compliance scanning and vulnerability scanning of mainstream public (private) cloud resources.
 
 **Functional advantage**
 
@@ -60,6 +60,7 @@ curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/qu
 - Front end：[Vue.js](https://vuejs.org/)
 - Rear end：[Spring Boot](https://www.tutorialspoint.com/spring_boot/spring_boot_introduction.htm)
 - Cloud platform scan engine：[Cloud Custodian](https://github.com/cloud-custodian/cloud-custodian)
+- AWS scan engine：[Prowler](https://github.com/toniblyx/prowler)
 - Vulnerability Scan Engine：[Nuclei](https://github.com/projectdiscovery/nuclei)
 - Database：[MySQL](https://www.mysql.com/)
 
