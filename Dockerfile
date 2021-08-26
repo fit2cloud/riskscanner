@@ -7,7 +7,8 @@ FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.5
 ARG RS_VERSION=dev
 
 RUN apk add --no-cache bind-tools ca-certificates && \
-    apk --update --no-cache add python3 bash curl jq file coreutils && \
+    apk --update --no-cache add python3 bash curl jq file coreutils py3-pip && \
+    pip3 install --upgrade pip && \
     pip install awscli boto3 detect-secrets
 
 COPY --from=nuclei-env /usr/local/bin/nuclei /usr/local/bin/nuclei
