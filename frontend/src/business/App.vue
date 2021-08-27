@@ -12,6 +12,7 @@
         <cs-user/>
         <cs-language-switch/>
         <help/>
+        <notification/>
       </el-col>
     </el-row>
 
@@ -26,6 +27,7 @@
   import Help from "./components/common/head/Help";
   import CsLanguageSwitch from "./components/common/head/LanguageSwitch";
   import {saveLocalStorage} from "../common/js/utils";
+  import Notification from "@/business/components/common/head/Notification";
 
   export default {
     name: "app",
@@ -47,7 +49,7 @@
         window.location.href = "/login"
       });
     },
-    components: {CsLanguageSwitch, CsUser, CsView, CsTopMenus, Help},
+    components: {Notification, CsLanguageSwitch, CsUser, CsView, CsTopMenus, Help},
     methods: {}
   }
 </script>
