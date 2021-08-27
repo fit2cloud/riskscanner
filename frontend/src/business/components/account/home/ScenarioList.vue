@@ -7,8 +7,8 @@
 </template>
 
 <script>
-  import CardContentRule from "./CardContentRule";
-  /* eslint-disable */
+import CardContentRule from "./CardContentRule";
+/* eslint-disable */
   export default {
     name: "ScenarioList",
     components: {

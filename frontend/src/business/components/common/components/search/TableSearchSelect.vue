@@ -10,8 +10,8 @@
 </template>
 
 <script>
-  import TableSearchComponent from "./TableSearchComponet";
-  /* eslint-disable */
+import TableSearchComponent from "./TableSearchComponet";
+/* eslint-disable */
   export default {
     name: "TableSearchSelect",
     components: {TableSearchComponent},

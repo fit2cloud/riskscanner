@@ -44,10 +44,10 @@
   </el-card>
 </template>
 <script>
-  import {_filter, _sort} from "@/common/js/utils";
-  import TablePagination from "../../common/pagination/TablePagination";
+import {_filter, _sort} from "@/common/js/utils";
+import TablePagination from "../../common/pagination/TablePagination";
 
-  const assets = [
+const assets = [
     {key: "ec2", value: "el-icon-s-platform"},
     {key: "ecs", value: "el-icon-s-platform"},
     {key: "cvm", value: "el-icon-s-platform"},

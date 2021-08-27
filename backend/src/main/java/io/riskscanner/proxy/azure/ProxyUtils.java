@@ -1,7 +1,6 @@
 package io.riskscanner.proxy.azure;
 
 import io.riskscanner.base.domain.Proxy;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

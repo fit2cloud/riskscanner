@@ -22,13 +22,13 @@
 </template>
 
 <script>
-  import ScenarioModule from "../.././common/components/ScenarioModule";
-  import ScenarioList from "./ScenarioList";
-  import Container from "../.././common/components/Container";
-  import AsideContainer from "../.././common/components/AsideContainer";
-  import MainContainer from "../.././common/components/MainContainer";
+import ScenarioModule from "../.././common/components/ScenarioModule";
+import ScenarioList from "./ScenarioList";
+import Container from "../.././common/components/Container";
+import AsideContainer from "../.././common/components/AsideContainer";
+import MainContainer from "../.././common/components/MainContainer";
 
-  /* eslint-disable */
+/* eslint-disable */
   export default {
     name: "AccountOverview",
     components: {

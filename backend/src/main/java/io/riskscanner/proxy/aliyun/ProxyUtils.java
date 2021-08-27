@@ -3,13 +3,9 @@ package io.riskscanner.proxy.aliyun;
 
 import io.riskscanner.base.domain.Proxy;
 import io.riskscanner.commons.constants.CloudAccountConstants;
-import io.riskscanner.proxy.tencent.QCloudProxySetting;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.FileReader;
-import java.util.Properties;
 
 
 public class ProxyUtils {

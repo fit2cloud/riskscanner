@@ -32,9 +32,9 @@
   </div>
 </template>
 <script>
-  import DashboardPieChart from "@/business/components/common/chart/DashboardPieChart";
-  import RuleGroupPieChart from "@/business/components/common/chart/RuleGroupPieChart";
-  /* eslint-disable */
+import DashboardPieChart from "@/business/components/common/chart/DashboardPieChart";
+import RuleGroupPieChart from "@/business/components/common/chart/RuleGroupPieChart";
+/* eslint-disable */
   export default {
     name: "MdCardContentOverall",
     components: {

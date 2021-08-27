@@ -20,8 +20,8 @@
 </template>
 
 <script>
-    import AsideContainer from "./AsideContainer";
-    /* eslint-disable */
+import AsideContainer from "./AsideContainer";
+/* eslint-disable */
     export default {
       name: "AsideItem",
       components: {AsideContainer},

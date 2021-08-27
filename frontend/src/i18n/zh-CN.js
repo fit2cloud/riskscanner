@@ -796,7 +796,7 @@ export default {
     workDay: '工作日',
   },
   webmsg: {
-    web_msg: '站内消息通知',
+    web_msg: '站内消息',
     show_more: '查看更多',
     all_type: '全部类型',
     content: '消息内容',
@@ -809,6 +809,9 @@ export default {
     receive_manage: '接收管理',
     i18n_msg_type_all: '全部类型',
     channel_inner_msg: '站内消息',
+    all_msg: '所有消息',
+    unread_msg: '未读消息',
+    read_msg: '已读消息',
   },
   '阿里云': '阿里云',
   '腾讯云': '腾讯云',

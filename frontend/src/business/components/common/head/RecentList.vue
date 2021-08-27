@@ -15,9 +15,9 @@
 </template>
 
 <script>
-  import {hasRoles} from "../../../../common/js/utils";
-  import {ROLE_USER} from "../../../../common/js/constants";
-  /* eslint-disable */
+import {hasRoles} from "../../../../common/js/utils";
+import {ROLE_USER} from "../../../../common/js/constants";
+/* eslint-disable */
   export default {
     name: "RecentList",
     props: {

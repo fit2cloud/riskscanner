@@ -3,8 +3,9 @@ package io.riskscanner.base.mapper;
 import io.riskscanner.base.domain.Account;
 import io.riskscanner.base.domain.AccountExample;
 import io.riskscanner.base.domain.AccountWithBLOBs;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface AccountMapper {
     /**

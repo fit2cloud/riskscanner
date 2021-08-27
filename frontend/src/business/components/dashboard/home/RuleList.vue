@@ -33,10 +33,10 @@
 </template>
 
 <script>
-  import RuleListPieChart from "@/business/components/common/chart/RuleListPieChart";
-  import RuleListExpandChart from "@/business/components/common/chart/RuleListExpandChart";
+import RuleListPieChart from "@/business/components/common/chart/RuleListPieChart";
+import RuleListExpandChart from "@/business/components/common/chart/RuleListExpandChart";
 
-  /* eslint-disable */
+/* eslint-disable */
   export default {
     name: "RuleList",
     components: {

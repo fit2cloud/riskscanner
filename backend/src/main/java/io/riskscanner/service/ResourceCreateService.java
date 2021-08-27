@@ -7,7 +7,6 @@ import io.riskscanner.base.mapper.*;
 import io.riskscanner.base.mapper.ext.ExtScanHistoryMapper;
 import io.riskscanner.commons.constants.CloudAccountConstants;
 import io.riskscanner.commons.constants.CommandEnum;
-import io.riskscanner.commons.constants.ScanTypeConstants;
 import io.riskscanner.commons.constants.TaskConstants;
 import io.riskscanner.commons.utils.*;
 import io.riskscanner.controller.request.resource.ResourceRequest;

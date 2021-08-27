@@ -796,7 +796,7 @@ export default {
     workDay:'Working day',
   },
   webmsg: {
-    web_msg:'In-site message notification',
+    web_msg:'In-site message',
     show_more:'View more',
     all_type:'All types',
     content:'Message content',

@@ -2,7 +2,6 @@ package io.riskscanner.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.riskscanner.base.domain.MsgChannel;
 import io.riskscanner.base.domain.MsgSetting;
 import io.riskscanner.commons.utils.PageUtils;
@@ -15,15 +14,14 @@ import io.riskscanner.dto.MsgGridDto;
 import io.riskscanner.service.MsgService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Api(tags = "系统：消息管理")
-@RequestMapping("/api/msg")
+@RequestMapping("/msg")
 @RestController
 public class MsgController {
 

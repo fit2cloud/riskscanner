@@ -17,10 +17,10 @@
 </template>
 
 <script>
-  import {getCurrentUser} from "../../../../common/js/utils";
-  import AboutUs from "./AboutUs";
-  import axios from "axios";
-  /* eslint-disable */
+import {getCurrentUser} from "../../../../common/js/utils";
+import AboutUs from "./AboutUs";
+import axios from "axios";
+/* eslint-disable */
   export default {
     name: "User",
     components: {AboutUs},

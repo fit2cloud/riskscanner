@@ -20,11 +20,11 @@
 </template>
 
 <script>
-  import TableSearchBar from '@/business/components/common/components/TableSearchBar';
-  import TableButton from '@/business/components/common/components/TableButton';
-  import TableAdvSearchBar from "@/business/components/common/components/search/TableAdvSearchBar";
+import TableSearchBar from '@/business/components/common/components/TableSearchBar';
+import TableButton from '@/business/components/common/components/TableButton';
+import TableAdvSearchBar from "@/business/components/common/components/search/TableAdvSearchBar";
 
-  export default {
+export default {
     name: "TableHeader",
     components: {TableAdvSearchBar, TableSearchBar, TableButton},
     props: {

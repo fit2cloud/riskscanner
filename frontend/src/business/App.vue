@@ -21,15 +21,15 @@
 </template>
 
 <script>
-  import CsTopMenus from "./components/common/head/HeaderTopMenus";
-  import CsView from "./components/common/router/CsView";
-  import CsUser from "./components/common/head/HeaderUser";
-  import Help from "./components/common/head/Help";
-  import CsLanguageSwitch from "./components/common/head/LanguageSwitch";
-  import {saveLocalStorage} from "../common/js/utils";
-  import Notification from "@/business/components/common/head/Notification";
+import CsTopMenus from "./components/common/head/HeaderTopMenus";
+import CsView from "./components/common/router/CsView";
+import CsUser from "./components/common/head/HeaderUser";
+import Help from "./components/common/head/Help";
+import CsLanguageSwitch from "./components/common/head/LanguageSwitch";
+import {saveLocalStorage} from "../common/js/utils";
+import Notification from "@/business/components/common/head/Notification";
 
-  export default {
+export default {
     name: "app",
     data() {
       return {

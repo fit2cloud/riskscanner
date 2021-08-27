@@ -13,8 +13,8 @@
 </template>
 
 <script>
-  import {cronValidate} from "../../../../common/js/cron";
-  /* eslint-disable */
+import {cronValidate} from "../../../../common/js/cron";
+/* eslint-disable */
   export default {
     name: 'CrontabResult',
     data() {

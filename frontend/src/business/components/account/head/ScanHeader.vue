@@ -38,10 +38,10 @@
 </template>
 
 <script>
-  import TableSearchBar from '../../common/components/TableSearchBar';
-  import TableButton from '../../common/components/TableButton';
+import TableSearchBar from '../../common/components/TableSearchBar';
+import TableButton from '../../common/components/TableButton';
 
-  export default {
+export default {
     name: "TableHeader",
     components: {TableSearchBar, TableButton},
     props: {

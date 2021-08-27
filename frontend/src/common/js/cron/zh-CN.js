@@ -1,4 +1,4 @@
-import { CUR_YEAR, UPPER_LIMIT_YEAR } from '../constant/filed'
+import {CUR_YEAR, UPPER_LIMIT_YEAR} from '../constant/filed'
 
 export default {
   common: {

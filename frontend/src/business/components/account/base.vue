@@ -12,9 +12,9 @@
 </template>
 <script>
 
-  import AccountHeaderMenus from "./head/AccountHeaderMenus";
+import AccountHeaderMenus from "./head/AccountHeaderMenus";
 
-  export default {
+export default {
     name: "account",
     components: {AccountHeaderMenus},
     data() {

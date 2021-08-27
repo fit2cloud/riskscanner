@@ -796,7 +796,7 @@ export default {
     workDay: '工作日',
   },
   webmsg: {
-    web_msg: '站內消息通知',
+    web_msg: '站內消息',
     show_more: '查看更多',
     all_type: '全部類型',
     content: '消息內容',

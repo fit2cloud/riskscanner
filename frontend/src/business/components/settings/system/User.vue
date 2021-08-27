@@ -156,15 +156,15 @@
 
 
 <script>
-  import CreateBox from "../CreateBox";
-  import TablePagination from "../../common/pagination/TablePagination";
-  import TableHeader from "../../common/components/TableHeader";
-  import TableOperator from "../../common/components/TableOperator";
-  import DialogFooter from "../../common/components/DialogFooter";
-  import TableOperatorButton from "../../common/components/TableOperatorButton";
-  import {listenGoBack, removeGoBackListener} from "@/common/js/utils";
-  import RolesTag from "../../common/components/RolesTag";
-  /* eslint-disable */
+import CreateBox from "../CreateBox";
+import TablePagination from "../../common/pagination/TablePagination";
+import TableHeader from "../../common/components/TableHeader";
+import TableOperator from "../../common/components/TableOperator";
+import DialogFooter from "../../common/components/DialogFooter";
+import TableOperatorButton from "../../common/components/TableOperatorButton";
+import {listenGoBack, removeGoBackListener} from "@/common/js/utils";
+import RolesTag from "../../common/components/RolesTag";
+/* eslint-disable */
   export default {
     name: "User",
     components: {

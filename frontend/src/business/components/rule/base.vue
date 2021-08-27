@@ -12,9 +12,9 @@
 </template>
 <script>
 
-  import RuleHeaderMenus from "./head/RuleHeaderMenus";
+import RuleHeaderMenus from "./head/RuleHeaderMenus";
 
-  export default {
+export default {
     name: "rule",
     components: {RuleHeaderMenus},
     data() {

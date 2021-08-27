@@ -20,7 +20,6 @@ import CKEditor from "@ckeditor/ckeditor5-vue";
 import VueCodemirror from "vue-codemirror";
 import "codemirror/mode/shell/shell.js";
 import "codemirror/theme/bespin.css";
-import echarts from "echarts";
 // import base style
 import "codemirror/lib/codemirror.css"
 import 'element-ui/lib/theme-chalk/index.css'

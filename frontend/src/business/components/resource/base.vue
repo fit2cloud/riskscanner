@@ -12,9 +12,9 @@
 </template>
 <script>
 
-  import ResourceHeaderMenus from "./head/ResourceHeaderMenus";
+import ResourceHeaderMenus from "./head/ResourceHeaderMenus";
 
-  export default {
+export default {
     name: "resource",
     components: {ResourceHeaderMenus},
     data() {

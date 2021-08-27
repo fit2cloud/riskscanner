@@ -6,7 +6,6 @@ import io.riskscanner.base.mapper.ProxyMapper;
 import io.riskscanner.commons.constants.ResourceOperation;
 import io.riskscanner.commons.constants.ResourceTypeConstants;
 import io.riskscanner.commons.exception.RSException;
-import io.riskscanner.commons.utils.CodingUtil;
 import io.riskscanner.commons.utils.SessionUtils;
 import io.riskscanner.i18n.Translator;
 import org.springframework.stereotype.Service;

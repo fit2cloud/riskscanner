@@ -1,7 +1,5 @@
 package io.riskscanner.dto;
 
-import java.io.Serializable;
-
 /**
  * @author maguohao
  */

@@ -64,11 +64,11 @@
 </template>
 
 <script>
-  import {getCurrentAccountID} from "@/common/js/utils";
-  import NodeTree from "@/business/components/common/components/NodeTree";
-  import {buildNodePath} from "@/common/js/NodeTree";
-  import DialogFooter from "../../common/components/DialogFooter";
-  /* eslint-disable */
+import {getCurrentAccountID} from "@/common/js/utils";
+import NodeTree from "@/business/components/common/components/NodeTree";
+import {buildNodePath} from "@/common/js/NodeTree";
+import DialogFooter from "../../common/components/DialogFooter";
+/* eslint-disable */
   export default {
     name: 'ScenarioModule',
     components: {

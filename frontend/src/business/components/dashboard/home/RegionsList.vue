@@ -30,9 +30,9 @@
 </template>
 
 <script>
-  import RegionsPieChart from "@/business/components/common/chart/RegionsPieChart";
-  import RegionsListExpand from "./RegionsListExpand";
-  /* eslint-disable */
+import RegionsPieChart from "@/business/components/common/chart/RegionsPieChart";
+import RegionsListExpand from "./RegionsListExpand";
+/* eslint-disable */
   export default {
     name: "RegionsList",
     components: {

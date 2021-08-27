@@ -2,8 +2,6 @@ package io.riskscanner.dto;
 
 
 import io.riskscanner.base.domain.CloudAccountQuartzTask;
-import io.riskscanner.base.domain.CloudAccountQuartzTaskRelaLog;
-import io.riskscanner.base.domain.CloudAccountQuartzTaskRelation;
 
 import java.util.List;
 

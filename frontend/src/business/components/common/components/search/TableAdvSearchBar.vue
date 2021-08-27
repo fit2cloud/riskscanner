@@ -20,9 +20,9 @@
 </template>
 
 <script>
-  import components from "./search-components";
-  import {cloneDeep} from "lodash";
-  /* eslint-disable */
+import components from "./search-components";
+import {cloneDeep} from "lodash";
+/* eslint-disable */
   export default {
     components: {...components},
     name: "TableAdvSearchBar",

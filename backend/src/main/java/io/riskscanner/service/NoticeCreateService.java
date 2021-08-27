@@ -2,20 +2,19 @@ package io.riskscanner.service;
 
 import com.fit2cloud.quartz.anno.QuartzScheduled;
 import io.riskscanner.base.domain.*;
-import io.riskscanner.base.mapper.*;
+import io.riskscanner.base.mapper.MessageOrderItemMapper;
+import io.riskscanner.base.mapper.MessageOrderMapper;
+import io.riskscanner.base.mapper.TaskMapper;
 import io.riskscanner.base.mapper.ext.ExtTaskMapper;
-import io.riskscanner.commons.constants.CloudAccountConstants;
 import io.riskscanner.commons.constants.NoticeConstants;
 import io.riskscanner.commons.constants.TaskConstants;
 import io.riskscanner.commons.utils.BeanUtils;
 import io.riskscanner.commons.utils.CommonBeanFactory;
 import io.riskscanner.commons.utils.CommonThreadPool;
 import io.riskscanner.commons.utils.LogUtil;
-import io.riskscanner.message.MessageDetail;
 import io.riskscanner.message.NoticeModel;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.config.MessageConstraints;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -4,7 +4,7 @@ import elementEnLocale from 'element-ui/lib/locale/lang/en'
 import elementZhCNLocale from 'element-ui/lib/locale/lang/zh-CN'
 import enUSLocale from 'vue-cron-generator/src/locale/en'
 import zhCNLocale from 'vue-cron-generator/src/locale/zh-CN'
-import { getLocale } from './tools'
+import {getLocale} from './tools'
 
 Vue.use(VueI18n)
 

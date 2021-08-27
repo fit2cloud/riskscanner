@@ -7,8 +7,8 @@
 </template>
 
 <script>
-  import HistoryList from "./HistoryList";
-  /* eslint-disable */
+import HistoryList from "./HistoryList";
+/* eslint-disable */
   export default {
     name: "ScenarioList",
     components: {

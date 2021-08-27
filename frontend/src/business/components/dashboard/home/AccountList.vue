@@ -30,9 +30,9 @@
 
 <script>
 
-  import AccountPieChart from "@/business/components/common/chart/AccountPieChart";
-  import AccountExpandChart from "@/business/components/common/chart/AccountExpandChart";
-  /* eslint-disable */
+import AccountPieChart from "@/business/components/common/chart/AccountPieChart";
+import AccountExpandChart from "@/business/components/common/chart/AccountExpandChart";
+/* eslint-disable */
   export default {
     name: "AccountList",
     components: {

@@ -1,6 +1,7 @@
 package io.riskscanner.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiGettokenRequest;
 import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
@@ -11,12 +12,12 @@ import com.dingtalk.api.response.OapiUserGetByMobileResponse;
 import io.riskscanner.base.domain.SystemParameter;
 import io.riskscanner.base.domain.SystemParameterExample;
 import io.riskscanner.base.mapper.SystemParameterMapper;
-import io.riskscanner.message.NotificationBasicResponse;
 import io.riskscanner.commons.constants.ParamConstants;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.commons.utils.EncryptUtils;
 import io.riskscanner.commons.utils.LogUtil;
 import io.riskscanner.i18n.Translator;
+import io.riskscanner.message.NotificationBasicResponse;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +28,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import com.dingtalk.api.DefaultDingTalkClient;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;

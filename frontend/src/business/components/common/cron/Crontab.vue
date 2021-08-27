@@ -110,15 +110,15 @@
 </template>
 
 <script>
-  import CrontabSecond from "./CrontabSecond.vue";
-  import CrontabMin from "./CrontabMin.vue";
-  import CrontabHour from "./CrontabHour.vue";
-  import CrontabDay from "./CrontabDay.vue";
-  import CrontabMouth from "./CrontabMouth.vue";
-  import CrontabWeek from "./CrontabWeek.vue";
-  import CrontabYear from "./CrontabYear.vue";
-  import CrontabResult from "./CrontabResult.vue";
-  /* eslint-disable */
+import CrontabSecond from "./CrontabSecond.vue";
+import CrontabMin from "./CrontabMin.vue";
+import CrontabHour from "./CrontabHour.vue";
+import CrontabDay from "./CrontabDay.vue";
+import CrontabMouth from "./CrontabMouth.vue";
+import CrontabWeek from "./CrontabWeek.vue";
+import CrontabYear from "./CrontabYear.vue";
+import CrontabResult from "./CrontabResult.vue";
+/* eslint-disable */
   export default {
     name: "Crontab",
     data() {

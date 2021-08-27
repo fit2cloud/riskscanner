@@ -9,9 +9,9 @@
 </template>
 
 <script>
-  import TableButton from "./TableButton";
-  import TipButton from "./TipButton";
-  /* eslint-disable */
+import TableButton from "./TableButton";
+import TipButton from "./TipButton";
+/* eslint-disable */
   export default {
     name: "TableOperatorButton",
     components: {TipButton, TableButton},

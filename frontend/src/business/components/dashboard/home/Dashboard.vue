@@ -19,12 +19,12 @@
     </main-container>
 </template>
 <script>
-  import MainContainer from "../../common/components/MainContainer";
-  import AccountList from "./AccountList";
-  import RegionsList from "./RegionsList";
-  import RuleList from "./RuleList";
-  import Compliance from "./Compliance";
-  /* eslint-disable */
+import MainContainer from "../../common/components/MainContainer";
+import AccountList from "./AccountList";
+import RegionsList from "./RegionsList";
+import RuleList from "./RuleList";
+import Compliance from "./Compliance";
+/* eslint-disable */
   export default {
     name: "dashboard",
     components: {

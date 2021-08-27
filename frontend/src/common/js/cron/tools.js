@@ -1,4 +1,4 @@
-import { NUMBER } from './reg'
+import {NUMBER} from './reg'
 
 export const
   sortNum = (a, b) => {

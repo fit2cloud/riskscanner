@@ -297,19 +297,19 @@
 </template>
 
 <script>
-  import TableOperators from "../../common/components/TableOperators";
-  import MainContainer from "../../common/components/MainContainer";
-  import Container from "../../common/components/Container";
-  import TableHeader from "../head/ResourceTableHeader";
-  import TablePagination from "../../common/pagination/TablePagination";
-  import TableOperator from "../../common/components/TableOperator";
-  import DialogFooter from "../../common/components/DialogFooter";
-  import CenterChart from "../../common/components/CenterChart";
-  import ResultLog from "./ResultLog";
-  import {_filter, _sort, getCurrentAccountID} from "@/common/js/utils";
-  import {ACCOUNT_ID} from "@/common/js/constants";
+import TableOperators from "../../common/components/TableOperators";
+import MainContainer from "../../common/components/MainContainer";
+import Container from "../../common/components/Container";
+import TableHeader from "../head/ResourceTableHeader";
+import TablePagination from "../../common/pagination/TablePagination";
+import TableOperator from "../../common/components/TableOperator";
+import DialogFooter from "../../common/components/DialogFooter";
+import CenterChart from "../../common/components/CenterChart";
+import ResultLog from "./ResultLog";
+import {_filter, _sort, getCurrentAccountID} from "@/common/js/utils";
+import {ACCOUNT_ID} from "@/common/js/constants";
 
-  /* eslint-disable */
+/* eslint-disable */
   export default {
     components: {
       TableOperators,

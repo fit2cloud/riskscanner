@@ -3,8 +3,8 @@
 </template>
 
 <script>
-  import RsChart from "@/business/components/common/chart/RsChart";
-  /* eslint-disable */
+import RsChart from "@/business/components/common/chart/RsChart";
+/* eslint-disable */
   export default {
     name: "ScoreChart",
     components: {RsChart},

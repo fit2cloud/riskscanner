@@ -1,6 +1,5 @@
 import io.riskscanner.commons.constants.TaskConstants;
 import io.riskscanner.commons.utils.LogUtil;
-import io.riskscanner.commons.utils.UUIDUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 
@@ -10,7 +9,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Scanner;
 
 public class Test {
 

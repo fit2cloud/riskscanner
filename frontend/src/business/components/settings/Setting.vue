@@ -17,13 +17,13 @@
 </template>
 
 <script>
-  import CurrentUser from "./CurrentUser";
-  import SettingMenu from "./SettingMenu";
-  import AsideContainer from "../common/components/AsideContainer";
-  import Container from "../common/components/Container";
-  import MainContainer from "../common/components/MainContainer";
+import CurrentUser from "./CurrentUser";
+import SettingMenu from "./SettingMenu";
+import AsideContainer from "../common/components/AsideContainer";
+import Container from "../common/components/Container";
+import MainContainer from "../common/components/MainContainer";
 
-  export default {
+export default {
     name: "Setting",
     components: {MainContainer, Container, AsideContainer, SettingMenu, CurrentUser},
   }

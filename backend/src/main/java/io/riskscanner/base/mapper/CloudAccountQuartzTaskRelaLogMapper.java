@@ -2,8 +2,9 @@ package io.riskscanner.base.mapper;
 
 import io.riskscanner.base.domain.CloudAccountQuartzTaskRelaLog;
 import io.riskscanner.base.domain.CloudAccountQuartzTaskRelaLogExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface CloudAccountQuartzTaskRelaLogMapper {
     /**

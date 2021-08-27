@@ -48,14 +48,13 @@
 </template>
 <script>
 
-  import MainContainer from "../../common/components/MainContainer";
-  import TablePagination from "../../common/pagination/TablePagination";
-  import TableOperator from "../../common/components/TableOperator";
-  import Container from "../../common/components/Container";
-  import {_filter, _sort} from "@/common/js/utils";
-  import TableHeader from "../head/TableHeader";
-  import {ACCOUNT_CONFIGS} from "../../common/components/search/search-components";
-  /* eslint-disable */
+import MainContainer from "../../common/components/MainContainer";
+import TablePagination from "../../common/pagination/TablePagination";
+import TableOperator from "../../common/components/TableOperator";
+import Container from "../../common/components/Container";
+import {_filter, _sort} from "@/common/js/utils";
+import TableHeader from "../head/TableHeader";
+/* eslint-disable */
   export default {
     name: "active",
     components: {

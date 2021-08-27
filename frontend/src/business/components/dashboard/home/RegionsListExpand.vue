@@ -32,8 +32,8 @@
 </template>
 
 <script>
-  import RegionsExpandChart from "@/business/components/common/chart/RegionsExpandChart";
-  /* eslint-disable */
+import RegionsExpandChart from "@/business/components/common/chart/RegionsExpandChart";
+/* eslint-disable */
   export default {
     name: "RegionsListExpand",
     components: {

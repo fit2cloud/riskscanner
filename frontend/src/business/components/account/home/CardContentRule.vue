@@ -290,10 +290,10 @@
   </el-card>
 </template>
 <script>
-  import {_filter, _sort} from "@/common/js/utils";
-  import TablePagination from "../../common/pagination/TablePagination";
-  import DialogFooter from "../../common/components/DialogFooter";
-  /* eslint-disable */
+import {_filter, _sort} from "@/common/js/utils";
+import TablePagination from "../../common/pagination/TablePagination";
+import DialogFooter from "../../common/components/DialogFooter";
+/* eslint-disable */
   const assets = [
     {key: "ec2", value: "el-icon-s-platform"},
     {key: "ecs", value: "el-icon-s-platform"},

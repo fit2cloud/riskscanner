@@ -12,9 +12,9 @@
 </template>
 <script>
 
-  import HeaderMenus from "./head/HeaderMenus";
+import HeaderMenus from "./head/HeaderMenus";
 
-  export default {
+export default {
     name: "dashboard",
     components: {HeaderMenus},
     data() {

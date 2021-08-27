@@ -9,8 +9,8 @@
 </template>
 
 <script>
-  import Tag from "./Tag";
-  /* eslint-disable */
+import Tag from "./Tag";
+/* eslint-disable */
   export default {
     name: "RolesTag",
     components: {Tag},

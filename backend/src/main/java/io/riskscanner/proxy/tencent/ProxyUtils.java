@@ -2,7 +2,6 @@ package io.riskscanner.proxy.tencent;
 
 
 import io.riskscanner.base.domain.Proxy;
-import io.riskscanner.proxy.aliyun.AliyunProxySetting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

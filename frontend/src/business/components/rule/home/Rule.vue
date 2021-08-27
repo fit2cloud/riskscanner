@@ -402,18 +402,18 @@
 </template>
 
 <script>
-  import TableOperators from "../../common/components/TableOperators";
-  import MainContainer from "../../common/components/MainContainer";
-  import Container from "../../common/components/Container";
-  import TableHeader from "../../common/components/TableHeader";
-  import TablePagination from "../../common/pagination/TablePagination";
-  import TableOperator from "../../common/components/TableOperator";
-  import DialogFooter from "../../common/components/RuleDialogFooter";
-  import {_filter, _sort} from "@/common/js/utils";
-  import RuleType from "./RuleType";
-  import {RULE_CONFIGS} from "../../common/components/search/search-components";
+import TableOperators from "../../common/components/TableOperators";
+import MainContainer from "../../common/components/MainContainer";
+import Container from "../../common/components/Container";
+import TableHeader from "../../common/components/TableHeader";
+import TablePagination from "../../common/pagination/TablePagination";
+import TableOperator from "../../common/components/TableOperator";
+import DialogFooter from "../../common/components/RuleDialogFooter";
+import {_filter, _sort} from "@/common/js/utils";
+import RuleType from "./RuleType";
+import {RULE_CONFIGS} from "../../common/components/search/search-components";
 
-  /* eslint-disable */
+/* eslint-disable */
   export default {
     components: {
       TableOperators,

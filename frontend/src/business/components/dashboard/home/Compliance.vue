@@ -8,8 +8,8 @@
 </template>
 
 <script>
-  import MdCardContentOverall from "./MdCardContentOverall";
-  /* eslint-disable */
+import MdCardContentOverall from "./MdCardContentOverall";
+/* eslint-disable */
   export default {
     name: "Compliance",
     components: {

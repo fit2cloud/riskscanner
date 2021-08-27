@@ -109,14 +109,14 @@
 </template>
 
 <script>
-  import CreateBox from "../CreateBox";
-  import TablePagination from "../../common/pagination/TablePagination";
-  import TableHeader from "../head/ProxyTableHeader";
-  import TableOperator from "../../common/components/TableOperator";
-  import DialogFooter from "../../common/components/DialogFooter";
-  import TableOperatorButton from "../../common/components/TableOperatorButton";
-  import {listenGoBack, removeGoBackListener} from "@/common/js/utils";
-  /* eslint-disable */
+import CreateBox from "../CreateBox";
+import TablePagination from "../../common/pagination/TablePagination";
+import TableHeader from "../head/ProxyTableHeader";
+import TableOperator from "../../common/components/TableOperator";
+import DialogFooter from "../../common/components/DialogFooter";
+import TableOperatorButton from "../../common/components/TableOperatorButton";
+import {listenGoBack, removeGoBackListener} from "@/common/js/utils";
+/* eslint-disable */
   export default {
     name: "Proxy",
     components: {

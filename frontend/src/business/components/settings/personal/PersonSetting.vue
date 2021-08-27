@@ -78,11 +78,11 @@
 </template>
 
 <script>
-  import {TokenKey} from "../../../../common/js/constants";
-  import DialogFooter from "../../common/components/DialogFooter";
-  import {getCurrentUser, listenGoBack, removeGoBackListener} from "../../../../common/js/utils";
-  import TableOperatorButton from "../../common/components/TableOperatorButton";
-  /* eslint-disable */
+import {TokenKey} from "../../../../common/js/constants";
+import DialogFooter from "../../common/components/DialogFooter";
+import {getCurrentUser, listenGoBack, removeGoBackListener} from "../../../../common/js/utils";
+import TableOperatorButton from "../../common/components/TableOperatorButton";
+/* eslint-disable */
   export default {
     name: "PersonSetting",
     components: {DialogFooter, TableOperatorButton},

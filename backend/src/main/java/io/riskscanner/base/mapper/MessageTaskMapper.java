@@ -3,8 +3,9 @@ package io.riskscanner.base.mapper;
 import io.riskscanner.base.domain.MessageTask;
 import io.riskscanner.base.domain.MessageTaskExample;
 import io.riskscanner.base.domain.MessageTaskWithBLOBs;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface MessageTaskMapper {
     /**

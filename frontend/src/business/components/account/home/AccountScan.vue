@@ -95,17 +95,17 @@
 </template>
 
 <script>
-  import TableOperators from "../../common/components/TableOperators";
-  import MainContainer from "../../common/components/MainContainer";
-  import Container from "../../common/components/Container";
-  import ScanHeader from "../head/ScanHeader";
-  import TablePagination from "../../common/pagination/TablePagination";
-  import TableOperator from "../../common/components/TableOperator";
-  import DialogFooter from "../../common/components/DialogFooter";
-  import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
-  import {_sort} from "@/common/js/utils";
+import TableOperators from "../../common/components/TableOperators";
+import MainContainer from "../../common/components/MainContainer";
+import Container from "../../common/components/Container";
+import ScanHeader from "../head/ScanHeader";
+import TablePagination from "../../common/pagination/TablePagination";
+import TableOperator from "../../common/components/TableOperator";
+import DialogFooter from "../../common/components/DialogFooter";
+import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
+import {_sort} from "@/common/js/utils";
 
-  /* eslint-disable */
+/* eslint-disable */
   export default {
     name: "AccountScan",
     components: {

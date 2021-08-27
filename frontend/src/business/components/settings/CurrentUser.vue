@@ -8,9 +8,9 @@
 </template>
 
 <script>
-  import {getCurrentUser} from "@/common/js/utils";
+import {getCurrentUser} from "@/common/js/utils";
 
-  export default {
+export default {
     name: "CurrentUser",
 
     data() {

@@ -58,17 +58,17 @@
 </template>
 
 <script>
-  import TableOperators from "../../common/components/TableOperators";
-  import MainContainer from "../../common/components/MainContainer";
-  import Container from "../../common/components/Container";
-  import TableHeader from "../head/DetailTableHeader";
-  import TablePagination from "../../common/pagination/TablePagination";
-  import TableOperator from "../../common/components/TableOperator";
-  import DialogFooter from "../../common/components/RuleDialogFooter";
-  import CenterChart from "../../common/components/CenterChart";
-  import ResultReadOnly from "./ResultReadOnly";
-  import {_filter, _sort} from "@/common/js/utils";
-  /* eslint-disable */
+import TableOperators from "../../common/components/TableOperators";
+import MainContainer from "../../common/components/MainContainer";
+import Container from "../../common/components/Container";
+import TableHeader from "../head/DetailTableHeader";
+import TablePagination from "../../common/pagination/TablePagination";
+import TableOperator from "../../common/components/TableOperator";
+import DialogFooter from "../../common/components/RuleDialogFooter";
+import CenterChart from "../../common/components/CenterChart";
+import ResultReadOnly from "./ResultReadOnly";
+import {_filter, _sort} from "@/common/js/utils";
+/* eslint-disable */
   export default {
     name: "ResultDetails",
     components: {
