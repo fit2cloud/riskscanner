@@ -62,7 +62,7 @@ public class MsgService {
         return Msgs;
     }
 
-    public List<MsgGridDto> queryGrid(String userId, MsgRequest msgRequest, List<Long> typeIds) {
+    public List<MsgGridDto> queryGrid(String userId, MsgRequest msgRequest) {
         String orderClause = " create_time desc";
         MsgExample example = new MsgExample();
         MsgExample.Criteria criteria = example.createCriteria();
@@ -72,10 +72,6 @@ public class MsgService {
 
         if (CollectionUtils.isNotEmpty(orders)) {
             orderClause = String.join(", ", orders);
-        }
-
-        if (CollectionUtils.isNotEmpty(typeIds)){
-            criteria.andTypeIdIn(typeIds);
         }
 
         if (ObjectUtils.isNotEmpty(msgRequest.getStatus())) {

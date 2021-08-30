@@ -41,9 +41,8 @@
 
 
     <select id="queryGrid" parameterType="io.riskscanner.base.domain.MsgExample" resultMap="msgGridDto">
-        select sm.*, smt.router, smt.callback
+        select sm.*
         from msg sm
-        left join msg_type smt on smt.msg_type_id = sm.type_id
 
         <if test="_parameter != null">
             <include refid="Example_Where_Clause" />

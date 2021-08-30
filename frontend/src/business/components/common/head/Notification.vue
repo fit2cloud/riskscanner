@@ -17,6 +17,7 @@
 
 </template>
 <script>
+
 export default {
   components: {},
   data() {
@@ -35,6 +36,18 @@ export default {
   },
   mounted() {
   },
+  beforeDestroy() {
+    this.timer && clearInterval(this.timer)
+  },
+  destroyed() {
+    this.timer && clearInterval(this.timer)
+  },
+  created() {
+    // 每30s定时刷新拉取消息
+    this.timer = setInterval(() => {
+      this.queryCount();
+    }, 30000);
+  },
   methods: {
     setColor(e) {
       if (e) {
@@ -43,7 +56,13 @@ export default {
         document.querySelector("#notification").setAttribute("style", "background-color:rgb(0, 74, 113);color:white;");
       }
     },
+    queryCount() {
+      this.$post('/msg/unReadCount', {}, response => {
+        this.count = response.data;
+      });
+    },
     notification() {
+      this.$router.push('/setting/webmsg').catch(error => error);
     },
   }
 }

@@ -32,19 +32,15 @@ public class MsgController {
     @PostMapping("/list/{goPage}/{pageSize}")
     public Pager<List<MsgGridDto>> messages(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody MsgRequest msgRequest) {
         String userId = SessionUtils.getUser().getId();
-        List<Long> typeIds = null;
         Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
-        Pager<List<MsgGridDto>> listPager = PageUtils.setPageInfo(page, msgService.queryGrid(userId, msgRequest, typeIds));
+        Pager<List<MsgGridDto>> listPager = PageUtils.setPageInfo(page, msgService.queryGrid(userId, msgRequest));
         return listPager;
     }
 
     @ApiOperation("查询未读数量")
     @PostMapping("/unReadCount")
     public Long unReadCount(@RequestBody Map<String, String> request) {
-        if(null == request || null == request.get("userId")) {
-            throw new RuntimeException("缺少用户ID");
-        }
-        String userId = request.get("userId");
+        String userId = SessionUtils.getUser().getId();
         return msgService.queryCount(userId);
     }
 

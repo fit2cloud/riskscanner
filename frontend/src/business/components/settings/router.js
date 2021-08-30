@@ -28,6 +28,11 @@ export default {
       meta: {system: true, title: "commons.proxy"}
     },
     {
+      path: "webmsg",
+      component: () => import("@/business/components/settings/system/Msg"),
+      meta: {system: true, title: "webmsg.web_msg"}
+    },
+    {
       path: "personsetting",
       component: () => import(/* webpackChunkName: "setting" */ "@/business/components/settings/personal/PersonSetting"),
       meta: {person: true, title: "commons.personal_setting"}

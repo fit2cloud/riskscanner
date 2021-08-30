@@ -10,7 +10,7 @@ CREATE TABLE `msg` (
   `param` varchar(255) DEFAULT NULL COMMENT '路由参数',
   `create_time` bigint(13) NOT NULL COMMENT '发送时间',
   `read_time` bigint(13) DEFAULT NULL COMMENT '读取时间',
-  `content` varchar(255) DEFAULT NULL COMMENT '消息内容',
+  `content` varchar(512) DEFAULT NULL COMMENT '消息内容',
   PRIMARY KEY (`msg_id`) USING BTREE,
   KEY `inx_msg_userid` (`user_id`) USING BTREE,
   KEY `inx_msg_type` (`type_id`) USING BTREE,
