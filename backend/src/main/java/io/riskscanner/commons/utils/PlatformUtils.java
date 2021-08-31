@@ -32,10 +32,7 @@ import com.vmware.vim25.mo.Datacenter;
 import io.riskscanner.base.domain.AccountWithBLOBs;
 import io.riskscanner.base.domain.Proxy;
 import io.riskscanner.base.rs.*;
-import io.riskscanner.commons.constants.CloudAccountConstants;
-import io.riskscanner.commons.constants.CommandEnum;
-import io.riskscanner.commons.constants.RegionsConstants;
-import io.riskscanner.commons.constants.ScanTypeConstants;
+import io.riskscanner.commons.constants.*;
 import io.riskscanner.commons.exception.PluginException;
 import io.riskscanner.commons.exception.RSException;
 import io.riskscanner.i18n.Translator;
@@ -150,19 +147,25 @@ public class PlatformUtils {
                 String awsAccessKey = params.get("accessKey");
                 String awsSecretKey = params.get("secretKey");
                 if(StringUtils.equalsIgnoreCase(custodian, ScanTypeConstants.prowler.name())){
-                    String defaultL = "[default]";
-                    CommandUtils.saveAsFile(defaultL, "/root/aws", "config");
-                    CommandUtils.saveAsFile(defaultL, "/root/aws", "credentials");
-                    String config = ReadFileUtils.readToBuffer("/root/aws/config");
-                    String credentials = ReadFileUtils.readToBuffer("/root/aws/credentials");
+                    String defaultConfig = "[default]" + "\n"
+                            + "region=" + region;
+                    String defaultCredentials = "[default]" + "\n"
+                            + "aws_access_key_id=" + awsAccessKey  + "\n"
+                            + "aws_secret_access_key=" + awsSecretKey;
+                    CommandUtils.saveAsFile(defaultConfig, TaskConstants.PROWLER_CONFIG_FILE_PATH, "config");
+                    CommandUtils.saveAsFile(defaultCredentials, TaskConstants.PROWLER_CONFIG_FILE_PATH, "credentials");
+                    CommandUtils.commonExecCmdWithResult("sudo echo '[default]' > " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config",  TaskConstants.PROWLER_CONFIG_FILE_PATH);
+                    CommandUtils.commonExecCmdWithResult("sudo echo '[default]' > " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials",  TaskConstants.PROWLER_CONFIG_FILE_PATH);
+                    String config = ReadFileUtils.readToBuffer(TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config");
+                    String credentials = ReadFileUtils.readToBuffer(TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials");
                     if(!config.contains(region)) {
-                        pre = "sed '$a" + "region=" + region + "' /root/aws/config" + "\n";
+                        pre = "sed '$a" + "region=" + region + "' "+ TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config" + "\n";
                     }
                     if (!credentials.contains(awsAccessKey)) {
-                        pre = pre + "sed '$a" + "aws_access_key_id=" + awsAccessKey + "' /root/aws/credentials" + "\n";
+                        pre = pre + "sed '$a" + "aws_access_key_id=" + awsAccessKey + "' " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials" + "\n";
                     }
                     if (!credentials.contains(awsSecretKey)) {
-                        pre = pre + "sed '$a" + "aws_secret_access_key=" + awsSecretKey + "' /root/aws/credentials" + "\n";
+                        pre = pre + "sed '$a" + "aws_secret_access_key=" + awsSecretKey + "' " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials" + "\n";
                     }
                     return proxy + pre + "./prowler -g " + (StringUtils.isNotEmpty(fileName)?fileName:"group1") + " -f " + region + " -s -M text > result.txt";
                 }
