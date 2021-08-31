@@ -147,25 +147,18 @@ public class PlatformUtils {
                 String awsAccessKey = params.get("accessKey");
                 String awsSecretKey = params.get("secretKey");
                 if(StringUtils.equalsIgnoreCase(custodian, ScanTypeConstants.prowler.name())){
-                    String defaultConfig = "[default]" + "\n"
-                            + "region=" + region;
-                    String defaultCredentials = "[default]" + "\n"
-                            + "aws_access_key_id=" + awsAccessKey  + "\n"
-                            + "aws_secret_access_key=" + awsSecretKey;
-                    CommandUtils.saveAsFile(defaultConfig, TaskConstants.PROWLER_CONFIG_FILE_PATH, "config");
-                    CommandUtils.saveAsFile(defaultCredentials, TaskConstants.PROWLER_CONFIG_FILE_PATH, "credentials");
-                    CommandUtils.commonExecCmdWithResult("sudo echo '[default]' > " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config",  TaskConstants.PROWLER_CONFIG_FILE_PATH);
-                    CommandUtils.commonExecCmdWithResult("sudo echo '[default]' > " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials",  TaskConstants.PROWLER_CONFIG_FILE_PATH);
+                    CommandUtils.commonExecCmdWithResult("sudo echo '[default]' > " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config", TaskConstants.PROWLER_CONFIG_FILE_PATH);
+                    CommandUtils.commonExecCmdWithResult("sudo echo '[default]' > " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials", TaskConstants.PROWLER_CONFIG_FILE_PATH);
                     String config = ReadFileUtils.readToBuffer(TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config");
                     String credentials = ReadFileUtils.readToBuffer(TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials");
                     if(!config.contains(region)) {
-                        pre = "sed '$a" + "region=" + region + "' "+ TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config" + "\n";
+                        CommandUtils.commonExecCmdWithResult("sed '$a" + "region=" + region + "' "+ TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config", TaskConstants.PROWLER_CONFIG_FILE_PATH);
                     }
                     if (!credentials.contains(awsAccessKey)) {
-                        pre = pre + "sed '$a" + "aws_access_key_id=" + awsAccessKey + "' " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials" + "\n";
+                        CommandUtils.commonExecCmdWithResult("sed '$a" + "aws_access_key_id=" + awsAccessKey + "' " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials", TaskConstants.PROWLER_CONFIG_FILE_PATH);
                     }
                     if (!credentials.contains(awsSecretKey)) {
-                        pre = pre + "sed '$a" + "aws_secret_access_key=" + awsSecretKey + "' " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials" + "\n";
+                        CommandUtils.commonExecCmdWithResult("sed '$a" + "aws_secret_access_key=" + awsSecretKey + "' " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials", TaskConstants.PROWLER_CONFIG_FILE_PATH);
                     }
                     return proxy + pre + "./prowler -g " + (StringUtils.isNotEmpty(fileName)?fileName:"group1") + " -f " + region + " -s -M text > result.txt";
                 }
