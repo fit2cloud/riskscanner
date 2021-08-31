@@ -68,5 +68,5 @@ public class TaskConstants {
     public final static String RESULT_FILE_PATH = "/tmp/{task_id}/policy.yml";
     public final static String RESULT_FILE_PATH_PREFIX = "/tmp/";
     public final static String PROWLER_RESULT_FILE_PATH = "/prowler";//本地启动用 /tmp
-    public final static String PROWLER_CONFIG_FILE_PATH = "/root/aws";//本地启动用 ~/.aws
+    public final static String PROWLER_CONFIG_FILE_PATH = "/root/.aws";//本地启动用 ~/.aws
 }
