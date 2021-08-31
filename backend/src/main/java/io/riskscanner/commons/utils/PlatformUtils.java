@@ -154,8 +154,14 @@ public class PlatformUtils {
                             + "aws_secret_access_key=" + awsSecretKey;
                     CommandUtils.saveAsFile(defaultConfig, TaskConstants.PROWLER_CONFIG_FILE_PATH, "config");
                     CommandUtils.saveAsFile(defaultCredentials, TaskConstants.PROWLER_CONFIG_FILE_PATH, "credentials");
-                    CommandUtils.commonExecCmdWithResult("echo -e '" + defaultConfig + "' >> " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config", TaskConstants.PROWLER_CONFIG_FILE_PATH);
-                    CommandUtils.commonExecCmdWithResult("echo -e '" + defaultCredentials + "' >> " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials", TaskConstants.PROWLER_CONFIG_FILE_PATH);
+                    String config = ReadFileUtils.readToBuffer(TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config");
+                    String credentials = ReadFileUtils.readToBuffer(TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials");
+                    if(!config.contains(region)) {
+                        CommandUtils.commonExecCmdWithResult("echo -e '" + defaultConfig + "' >> " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config", TaskConstants.PROWLER_CONFIG_FILE_PATH);
+                    }
+                    if (!credentials.contains(awsAccessKey) && !credentials.contains(awsSecretKey)) {
+                        CommandUtils.commonExecCmdWithResult("echo -e '" + defaultCredentials + "' >> " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials", TaskConstants.PROWLER_CONFIG_FILE_PATH);
+                    }
                     return proxy + "./prowler -g " + (StringUtils.isNotEmpty(fileName)?fileName:"group1") + " -f " + region + " -s -M text > result.txt";
                 }
                 pre = "AWS_ACCESS_KEY_ID=" + awsAccessKey + " " +
