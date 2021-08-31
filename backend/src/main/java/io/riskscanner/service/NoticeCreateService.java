@@ -5,13 +5,11 @@ import io.riskscanner.base.domain.*;
 import io.riskscanner.base.mapper.MessageOrderItemMapper;
 import io.riskscanner.base.mapper.MessageOrderMapper;
 import io.riskscanner.base.mapper.TaskMapper;
+import io.riskscanner.base.mapper.WebMsgMapper;
 import io.riskscanner.base.mapper.ext.ExtTaskMapper;
 import io.riskscanner.commons.constants.NoticeConstants;
 import io.riskscanner.commons.constants.TaskConstants;
-import io.riskscanner.commons.utils.BeanUtils;
-import io.riskscanner.commons.utils.CommonBeanFactory;
-import io.riskscanner.commons.utils.CommonThreadPool;
-import io.riskscanner.commons.utils.LogUtil;
+import io.riskscanner.commons.utils.*;
 import io.riskscanner.message.NoticeModel;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -43,6 +41,8 @@ public class NoticeCreateService {
     private MessageOrderItemMapper messageOrderItemMapper;
     @Resource
     private ExtTaskMapper extTaskMapper;
+    @Resource
+    private WebMsgMapper webMsgMapper;
 
     @QuartzScheduled(cron = "${cron.expression.notice}")
     public void handleTasks() {
@@ -189,5 +189,14 @@ public class NoticeCreateService {
                 .paramMap(paramMap)
                 .build();
         noticeSendService.send(noticeModel);
+
+        LogUtil.debug("开始添加站内消息！" + messageOrder.getAccountName());
+        WebMsg msg = new WebMsg();
+        msg.setStatus(false);
+        msg.setType("扫描结果");
+        msg.setCreateTime(System.currentTimeMillis());
+        msg.setContent("安全合规扫描结果【" + messageOrder.getAccountName() + "】" +  messageOrder.getStatus() + "【 不合规资源/合规资源】" + returnSum  + "/" + resourcesSum);
+        webMsgMapper.insertSelective(msg);
+        LogUtil.debug("结束添加站内消息！" + messageOrder.getAccountName());
     }
 }

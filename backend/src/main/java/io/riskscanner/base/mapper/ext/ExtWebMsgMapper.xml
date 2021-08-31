@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="io.riskscanner.base.mapper.ext.ExtMsgMapper">
+<mapper namespace="io.riskscanner.base.mapper.ext.ExtWebMsgMapper">
 
-    <resultMap id="msgGridDto" type="io.riskscanner.dto.MsgGridDto" extends="io.riskscanner.base.mapper.MsgMapper.BaseResultMap">
-        <result column="router" property="router"></result>
-        <result column="callback" property="callback"></result>
-    </resultMap>
     <sql id="Example_Where_Clause">
         <where>
             <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -35,34 +31,6 @@
             </foreach>
         </where>
     </sql>
-
-
-
-
-
-    <select id="queryGrid" parameterType="io.riskscanner.base.domain.MsgExample" resultMap="msgGridDto">
-        select sm.*
-        from msg sm
-
-        <if test="_parameter != null">
-            <include refid="Example_Where_Clause" />
-        </if>
-        <if test="orderByClause != null">
-            order by ${orderByClause}
-        </if>
-        <if test="orderByClause == null">
-            order by sm.create_time desc
-        </if>
-    </select>
-
-
-    <insert id="batchInsert" parameterType="io.riskscanner.base.domain.MsgSetting">
-        INSERT INTO msg_setting (user_id,type_id,channel_id,enable)
-        VALUES
-        <foreach collection="settings" item="setting" separator=",">
-            (#{setting.userId}, #{setting.typeId}, #{setting.channelId}, #{setting.enable})
-        </foreach>
-    </insert>
 
 
 </mapper>

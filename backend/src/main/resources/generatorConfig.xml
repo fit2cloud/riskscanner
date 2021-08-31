@@ -96,9 +96,7 @@
 <!--        <table tableName="cloud_account_quartz_task" domainObjectName="CloudAccountQuartzTask"/>-->
 <!--        <table tableName="cloud_account_quartz_task_relation" domainObjectName="CloudAccountQuartzTaskRelation"/>-->
 <!--        <table tableName="cloud_account_quartz_task_rela_log" domainObjectName="CloudAccountQuartzTaskRelaLog"/>-->
-<!--        <table tableName="msg" domainObjectName="Msg"/>-->
-<!--        <table tableName="msg_channel" domainObjectName="MsgChannel"/>-->
-<!--        <table tableName="msg_setting" domainObjectName="MsgSetting"/>-->
+        <table tableName="web_msg" domainObjectName="WebMsg"/>
 
     </context>
 </generatorConfiguration>

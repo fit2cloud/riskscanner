@@ -1,10 +1,5 @@
 package io.riskscanner.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class UserRoleHelpDTO {
 
     private String roleId;

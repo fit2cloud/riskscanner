@@ -1,11 +1,7 @@
 package io.riskscanner.dto;
 
 import io.riskscanner.base.domain.Schedule;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class ScheduleDao extends Schedule {
 
     private String resourceName;

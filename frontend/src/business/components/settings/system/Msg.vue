@@ -22,7 +22,7 @@
               <i v-if="!scope.row.status" class="el-icon-message" style="color: red;" />
               <i v-else class="el-icon-message"/>
             </span>
-            <span style="margin-left: 6px;" class="de-msg-a" @click="toDetail(scope.row)">
+            <span style="margin-left: 6px;" class="de-msg-a">
               {{ scope.row.content }}
             </span>
           </span>
@@ -36,7 +36,9 @@
       </el-table-column>
 
       <el-table-column prop="typeId" sortable="custom" :label="$t('webmsg.type')" width="140">
-          <span>{{ 'xxx' }}</span>
+        <template slot-scope="scope">
+          <span>{{ scope.row.type }}</span>
+        </template>
       </el-table-column>
 
     </el-table>
@@ -54,10 +56,10 @@ export default {
   },
   data() {
     return {
-      selectType: 0,
+      selectType: 2,
       result: {},
       msgTypes: [
-        { value: null, label: this.$t('webmsg.all_msg') },
+        { value: 2, label: this.$t('webmsg.all_msg') },
         { value: 0, label: this.$t('webmsg.unread_msg') },
         { value: 1, label: this.$t('webmsg.read_msg') }
       ],
@@ -69,7 +71,7 @@ export default {
         total: 0
       },
       orderConditions: [],
-      form: {},
+      form: {status: 0},
       selectIds: [],
       loading: false,
     }
@@ -84,30 +86,32 @@ export default {
     select(selection) {
       this.selectIds = [];
       selection.forEach(s => {
-        this.selectIds.push(s.msgId);
+        this.selectIds.push(s.id);
       });
     },
     search() {
       const { currentPage, pageSize } = this.paginationConfig;
-      this.result = this.$post('/msg/list/' + currentPage + '/' + pageSize, this.form, response => {
+      if(this.selectType===2){
+        this.form = {};
+      }
+      this.result = this.$post('/webmsg/list/' + currentPage + '/' + pageSize, this.form, response => {
         this.tableData = response.data.listObject;
         this.paginationConfig.total = response.data.itemCount;
       });
     },
     typeChange(value) {
-      if(value!=null){
+      if(value!=2){
         this.form.status = value;
       }else{
         this.form = {};
       }
       this.search();
     },
-    toDetail(row) {
-    },
     // 设置已读
     setReaded(row) {
-      this.$post('/msg/setReaded/' + row.msgId, {}, response => {
+      this.$post('/webmsg/setReaded/' + row.id, {}, response => {
         bus.$emit('refresh-top-notification');
+        this.selectIds = [];
         this.search();
       });
     },
@@ -117,7 +121,8 @@ export default {
         return;
       }
       const param = this.selectIds;
-      this.$post('/msg/batchRead', param, response => {
+      this.$post('/webmsg/batchRead', param, response => {
+        this.selectIds = [];
         this.search();
       });
     },
@@ -127,7 +132,8 @@ export default {
         return;
       }
       const param = this.selectIds;
-      this.$post('/msg/batchDelete', param, response => {
+      this.$post('/webmsg/batchDelete', param, response => {
+        this.selectIds = [];
         this.search();
       });
     },

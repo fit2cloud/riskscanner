@@ -3,14 +3,10 @@ package io.riskscanner.dto;
 import io.riskscanner.base.domain.Role;
 import io.riskscanner.base.domain.User;
 import io.riskscanner.base.domain.UserRole;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 public class UserDTO extends User {
 
     private List<Role> roles = new ArrayList<>();

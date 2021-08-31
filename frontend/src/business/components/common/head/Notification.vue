@@ -57,7 +57,7 @@ export default {
       }
     },
     queryCount() {
-      this.$post('/msg/unReadCount', {}, response => {
+      this.$post('/webmsg/unReadCount', {}, response => {
         this.count = response.data;
       });
     },
