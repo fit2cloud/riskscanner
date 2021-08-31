@@ -53,7 +53,7 @@ curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/qu
 
 ## WeChat group
 
-<img src="./frontend/src/assets/img/readme/wechat-group.png" width="156" height="156"/>
+<img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/wechat-group.png" width="156" height="156"/>
 
 ## Technology stack
 
