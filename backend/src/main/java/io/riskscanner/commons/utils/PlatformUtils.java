@@ -147,8 +147,11 @@ public class PlatformUtils {
                 String awsAccessKey = params.get("accessKey");
                 String awsSecretKey = params.get("secretKey");
                 if(StringUtils.equalsIgnoreCase(custodian, ScanTypeConstants.prowler.name())){
-                    CommandUtils.commonExecCmdWithResult("sudo echo '[default]' > " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config", TaskConstants.PROWLER_CONFIG_FILE_PATH);
-                    CommandUtils.commonExecCmdWithResult("sudo echo '[default]' > " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials", TaskConstants.PROWLER_CONFIG_FILE_PATH);
+                    String defaultL = "[default]";
+                    CommandUtils.saveAsFile(defaultL, TaskConstants.PROWLER_CONFIG_FILE_PATH, "config");
+                    CommandUtils.saveAsFile(defaultL, TaskConstants.PROWLER_CONFIG_FILE_PATH, "credentials");
+                    CommandUtils.commonExecCmdWithResult("echo '[default]' > " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config", TaskConstants.PROWLER_CONFIG_FILE_PATH);
+                    CommandUtils.commonExecCmdWithResult("echo '[default]' > " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials", TaskConstants.PROWLER_CONFIG_FILE_PATH);
                     String config = ReadFileUtils.readToBuffer(TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config");
                     String credentials = ReadFileUtils.readToBuffer(TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials");
                     if(!config.contains(region)) {
