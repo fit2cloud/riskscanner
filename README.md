@@ -29,12 +29,10 @@ RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，�
 > - [x] 丰富全面的漏洞规则库：覆盖 OWASP TOP 10 的 Web 漏洞，例如：SQL 注入、跨站脚本攻击（XSS）、跨站请求伪造（CSRF）、弱密码等。
 
 ![功能架构](https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/functional-architecture.png)
-<img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/functional-architecture.png"/>
 
 ## UI 界面展示
 
 ![UI 界面展示](https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/dashboard.gif)
-<img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/dashboard.gif"/>
 
 ## 快速开始
 
