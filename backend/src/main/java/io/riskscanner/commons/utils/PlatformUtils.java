@@ -115,7 +115,7 @@ public class PlatformUtils {
      * @param params
      * @return
      */
-    public final static String fixedCommand(String custodian, String behavior, String dirPath, String fileName, Map<String, String> params) throws IOException {
+    public final static String fixedCommand(String custodian, String behavior, String dirPath, String fileName, Map<String, String> params) throws Exception {
         String type = params.get("type");
         String region = params.get("region");
         String proxyType = params.get("proxyType");
@@ -150,6 +150,9 @@ public class PlatformUtils {
                 String awsAccessKey = params.get("accessKey");
                 String awsSecretKey = params.get("secretKey");
                 if(StringUtils.equalsIgnoreCase(custodian, ScanTypeConstants.prowler.name())){
+                    String defaultL = "[default]";
+                    CommandUtils.saveAsFile(defaultL, "/root/aws", "config");
+                    CommandUtils.saveAsFile(defaultL, "/root/aws", "credentials");
                     String config = ReadFileUtils.readToBuffer("/root/aws/config");
                     String credentials = ReadFileUtils.readToBuffer("/root/aws/credentials");
                     if(!config.contains(region)) {
