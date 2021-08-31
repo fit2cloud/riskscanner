@@ -148,10 +148,10 @@ public class PlatformUtils {
                 String awsSecretKey = params.get("secretKey");
                 if(StringUtils.equalsIgnoreCase(custodian, ScanTypeConstants.prowler.name())){
                     String defaultConfig = "[default]" + "\n"
-                            + "region=" + region;
+                            + "region=" + region + "\n";
                     String defaultCredentials = "[default]" + "\n"
                             + "aws_access_key_id=" + awsAccessKey  + "\n"
-                            + "aws_secret_access_key=" + awsSecretKey;
+                            + "aws_secret_access_key=" + awsSecretKey + "\n";
                     CommandUtils.saveAsFile(defaultConfig, TaskConstants.PROWLER_CONFIG_FILE_PATH, "config");
                     CommandUtils.saveAsFile(defaultCredentials, TaskConstants.PROWLER_CONFIG_FILE_PATH, "credentials");
                     String config = ReadFileUtils.readToBuffer(TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config");
