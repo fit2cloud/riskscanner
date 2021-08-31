@@ -150,16 +150,16 @@ public class PlatformUtils {
                 String awsAccessKey = params.get("accessKey");
                 String awsSecretKey = params.get("secretKey");
                 if(StringUtils.equalsIgnoreCase(custodian, ScanTypeConstants.prowler.name())){
-                    String config = ReadFileUtils.readToBuffer("~/.aws/config");
-                    String credentials = ReadFileUtils.readToBuffer("~/.aws/credentials");
+                    String config = ReadFileUtils.readToBuffer("/root/aws/config");
+                    String credentials = ReadFileUtils.readToBuffer("/root/aws/credentials");
                     if(!config.contains(region)) {
-                        pre = "sed '$a" + "region=" + region + "' ~/.aws/config" + "\n";
+                        pre = "sed '$a" + "region=" + region + "' /root/aws/config" + "\n";
                     }
                     if (!credentials.contains(awsAccessKey)) {
-                        pre = pre + "sed '$a" + "aws_access_key_id=" + awsAccessKey + "' ~/.aws/credentials" + "\n";
+                        pre = pre + "sed '$a" + "aws_access_key_id=" + awsAccessKey + "' /root/aws/credentials" + "\n";
                     }
                     if (!credentials.contains(awsSecretKey)) {
-                        pre = pre + "sed '$a" + "aws_secret_access_key=" + awsSecretKey + "' ~/.aws/credentials" + "\n";
+                        pre = pre + "sed '$a" + "aws_secret_access_key=" + awsSecretKey + "' /root/aws/credentials" + "\n";
                     }
                     return proxy + pre + "./prowler -g " + (StringUtils.isNotEmpty(fileName)?fileName:"group1") + " -f " + region + " -s -M text > result.txt";
                 }
