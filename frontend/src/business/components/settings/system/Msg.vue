@@ -35,24 +35,25 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="typeId" sortable="custom" :label="$t('webmsg.type')" width="140">
+      <el-table-column prop="type" sortable="custom" :label="$t('webmsg.type')" width="140">
         <template slot-scope="scope">
           <span>{{ scope.row.type }}</span>
         </template>
       </el-table-column>
-
     </el-table>
-
+    <table-pagination :change="search" :current-page.sync="paginationConfig.currentPage" :page-size.sync="paginationConfig.pageSize" :total="paginationConfig.total"/>
   </div>
 </template>
 
 <script>
 
-import bus from '@/common/js/bus'
+import bus from '@/common/js/bus';
+import TablePagination from "@/business/components/common/pagination/TablePagination";
 
 export default {
   name: "Msg",
   components: {
+    TablePagination,
   },
   data() {
     return {
