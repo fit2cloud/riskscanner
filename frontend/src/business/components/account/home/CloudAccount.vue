@@ -760,10 +760,10 @@ import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
                   }
                 }
                 this.$success(this.$t('account.i18n_cs_create_success'));
-                this.$router.push({
-                  path: '/resource/result',
-                }).catch(error => error);
               });
+              this.$router.push({
+                path: '/resource/result',
+              }).catch(error => error);
             }
           }
         });
