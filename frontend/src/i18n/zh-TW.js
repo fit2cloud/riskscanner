@@ -508,6 +508,7 @@ export default {
     change_status_off: '已停用',
     full_param: '請填寫完整參數',
     tag_key_pattern: '只能匹配英文字母',
+    info: '查看',
   },
   resource: {
     statistics: '合規報告',

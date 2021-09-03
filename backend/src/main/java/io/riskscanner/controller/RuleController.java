@@ -136,9 +136,16 @@ public class RuleController {
     }
 
     @ApiOperation(value = "规则条例")
+    @PostMapping(value = "ruleInspectionReports/{goPage}/{pageSize}")
+    public Pager<List<RuleInspectionReport>> getRuleInspectionReports(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody RuleInspectionReport ruleInspectionReport) {
+        Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
+        return PageUtils.setPageInfo(page, ruleService.getRuleInspectionReport(ruleInspectionReport));
+    }
+
+    @ApiIgnore
     @GetMapping(value = "all/ruleInspectionReport")
     public List<RuleInspectionReport> getRuleInspectionReport() {
-        return ruleService.getRuleInspectionReport();
+        return ruleService.getRuleInspectionReport(new RuleInspectionReport());
     }
 
     @ApiIgnore

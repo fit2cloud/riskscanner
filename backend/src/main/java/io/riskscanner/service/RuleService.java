@@ -492,8 +492,14 @@ public class RuleService {
         return ruleGroupMapper.selectByExample(example);
     }
 
-    public List<RuleInspectionReport> getRuleInspectionReport() {
-        return ruleInspectionReportMapper.selectByExample(null);
+    public List<RuleInspectionReport> getRuleInspectionReport(RuleInspectionReport ruleInspectionReport) {
+        RuleInspectionReportExample example = new RuleInspectionReportExample();
+        RuleInspectionReportExample.Criteria criteria = example.createCriteria();
+        if(ruleInspectionReport.getProject()!=null) criteria.andProjectLike(ruleInspectionReport.getProject());
+        if(ruleInspectionReport.getItemSortFirstLevel()!=null) criteria.andItemSortFirstLevelLike(ruleInspectionReport.getItemSortFirstLevel());
+        if(ruleInspectionReport.getItemSortSecondLevel()!=null) criteria.andItemSortSecondLevelLike(ruleInspectionReport.getItemSortSecondLevel());
+        if(ruleInspectionReport.getImprovement()!=null) criteria.andImprovementLike(ruleInspectionReport.getImprovement());
+        return ruleInspectionReportMapper.selectByExample(example);
     }
 
     public String getResourceTypesById(String ruleId) {

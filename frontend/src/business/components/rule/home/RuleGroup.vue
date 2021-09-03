@@ -75,15 +75,15 @@
       <!--Update group-->
       <el-drawer class="rtl" :title="$t('rule.update_group')" :visible.sync="updateVisible" size="45%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
-        <el-form :model="updateForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="updateForm">
+        <el-form :model="infoForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="infoForm">
             <el-form-item :label="$t('rule.rule_set')" prop="name">
-              <el-input v-model="updateForm.name" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
+              <el-input v-model="infoForm.name" :disabled="infoForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
             </el-form-item>
             <el-form-item :label="$t('commons.description')" prop="description">
-              <el-input v-model="updateForm.description" :disabled="updateForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
+              <el-input v-model="infoForm.description" :disabled="infoForm.flag" autocomplete="off" :placeholder="$t('commons.please_input')"/>
             </el-form-item>
           <el-form-item :label="$t('account.cloud_platform')" prop="pluginId" :rules="{required: true, message: $t('account.cloud_platform') + this.$t('commons.cannot_be_empty'), trigger: 'change'}">
-            <el-select style="width: 100%;" v-model="updateForm.pluginId" :disabled="updateForm.flag" :placeholder="$t('account.please_choose_plugin')">
+            <el-select style="width: 100%;" v-model="infoForm.pluginId" :disabled="infoForm.flag" :placeholder="$t('account.please_choose_plugin')">
               <el-option
                 v-for="item in plugins"
                 :key="item.id"
@@ -97,22 +97,22 @@
         </el-form>
         <dialog-footer
           @cancel="updateVisible = false"
-          @confirm="save(updateForm, 'updateForm')"/>
+          @confirm="save(infoForm, 'infoForm')"/>
       </el-drawer>
       <!--Update group-->
 
       <!--Info group-->
       <el-drawer class="rtl" :title="$t('rule.update_group')" :visible.sync="infoVisible" size="45%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
-        <el-form :model="updateForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="infoForm">
+        <el-form :model="infoForm" label-position="right" label-width="120px" size="small" :rules="rule" ref="infoForm">
           <el-form-item :label="$t('rule.rule_set')" prop="name">
-            {{ updateForm.name }}
+            {{ infoForm.name }}
           </el-form-item>
           <el-form-item :label="$t('commons.description')" prop="description">
-            {{ updateForm.description }}
+            {{ infoForm.description }}
           </el-form-item>
           <el-form-item :label="$t('account.cloud_platform')">
-            <el-select style="width: 100%;" v-model="updateForm.pluginId" :disabled="updateForm.flag" :placeholder="$t('account.please_choose_plugin')">
+            <el-select style="width: 100%;" v-model="infoForm.pluginId" :disabled="infoForm.flag" :placeholder="$t('account.please_choose_plugin')">
               <el-option
                 v-for="item in plugins"
                 :key="item.id"
@@ -203,7 +203,7 @@ import {RULE_CONFIGS, RULE_GROUP_CONFIGS} from "../../common/components/search/s
         plugins: [],
         tableData: [],
         createForm: {},
-        updateForm: {},
+        infoForm: {},
         ruleForm: [],
         createVisible: false,
         updateVisible: false,
@@ -297,14 +297,9 @@ import {RULE_CONFIGS, RULE_GROUP_CONFIGS} from "../../common/components/search/s
         });
       },
       handleInfo(item) {
-        this.updateForm = {};
-        this.updateForm = item;
+        this.infoForm = {};
+        this.infoForm = item;
         this.infoVisible = true;
-      },
-      handleEdit(item) {
-        this.updateForm = {};
-        this.updateForm = item;
-        this.updateVisible = true;
       },
       handleClose() {
         this.createVisible =  false;

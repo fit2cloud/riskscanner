@@ -14,6 +14,10 @@
           <el-menu-item :index="'/rule/rulegroup'">
             {{ $t("rule.rule_set") }}
           </el-menu-item>
+
+          <el-menu-item :index="'/rule/regulation'">
+            {{ $t("resource.regulation") }}
+          </el-menu-item>
         </el-menu>
       </el-col>
       <el-col :span="12"/>

@@ -508,6 +508,7 @@ export default {
     change_status_off:'Disabled',
     full_param:'Please fill in the complete parameters',
     tag_key_pattern:'Can only match English letters',
+    info:'View',
   },
   resource: {
     statistics:'Compliance Report',
