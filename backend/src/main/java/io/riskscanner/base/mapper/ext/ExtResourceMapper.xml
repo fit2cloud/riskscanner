@@ -315,7 +315,7 @@
             ELSE 'risk_free'
             END AS status,
             (select create_time from task where account_id = #{accountId} order by create_time desc limit 1) as createTime,
-            '检测中' as state
+            '暂无合规报告' as state
         FROM rule_group t
         left join cloud_account t1 on t.plugin_id = t1.plugin_id
         WHERE t1.id = #{accountId}

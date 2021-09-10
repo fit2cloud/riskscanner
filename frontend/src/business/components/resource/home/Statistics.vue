@@ -34,7 +34,7 @@
               </el-col>
               <el-col :span="8">
                 <span v-if="group.status == 'risky'" style="color: red;cursor: pointer;" @click="download"><i class="el-icon-download"></i> {{ $t('resource.download_report') }}</span>
-                <span v-if="group.status == 'risk_free'" style="color: green;"><i class="el-icon-loading"></i> {{ group.state }}</span>
+                <span v-if="group.status == 'risk_free'" style="color: green;"> {{ group.state }}</span>
               </el-col>
             </el-row>
             <el-row>
