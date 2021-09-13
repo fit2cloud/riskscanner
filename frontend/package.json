@@ -28,6 +28,7 @@
     "sha.js": "^2.4.11",
     "vue": "^2.6.10",
     "vue-calendar-heatmap": "^0.8.4",
+    "vue-code-diff": "^1.2.0",
     "vue-codemirror": "^4.0.6",
     "vue-cron-generator": "^0.1.9",
     "vue-echarts": "^4.1.0",
