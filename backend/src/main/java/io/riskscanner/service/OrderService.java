@@ -604,6 +604,14 @@ public class OrderService {
             if (list.size() > 1) {
                 list.stream().filter(item -> !StringUtils.equals(item.getId().toString(), String.valueOf(id))).forEach(item -> scanHistoryMapper.deleteByPrimaryKey(item.getId()));
             }
+            ScanTaskHistoryExample scanTaskHistoryExample = new ScanTaskHistoryExample();
+            scanTaskHistoryExample.createCriteria().andIdEqualTo(id);
+            List<ScanTaskHistory> scanTaskHistories = scanTaskHistoryMapper.selectByExampleWithBLOBs(scanTaskHistoryExample);
+            JSONArray jsonArray = new JSONArray();
+            scanTaskHistories.stream().forEach(item ->{
+                jsonArray.addAll(JSON.parseArray(item.getOutput()));
+            });
+            history.setOutput(jsonArray.toJSONString());
             history.setId(id);
             history.setResourcesSum(Long.valueOf(extResourceMapper.sumResourcesSum(account.getId())));
             history.setReturnSum(Long.valueOf(extResourceMapper.sumReturnSum(account.getId())));
@@ -625,18 +633,38 @@ public class OrderService {
         if (list.size() > 0) {
             updateTaskHistory(task, example);
         } else {
+            TaskItemResourceExample taskItemResourceExample = new TaskItemResourceExample();
+            taskItemResourceExample.createCriteria().andTaskIdEqualTo(task.getId());
+            List<TaskItemResourceWithBLOBs> taskItemResources = taskItemResourceMapper.selectByExampleWithBLOBs(taskItemResourceExample);
+            JSONArray jsonArray = new JSONArray();
+            taskItemResources.stream().forEach(item ->{
+                ResourceWithBLOBs resource = resourceMapper.selectByPrimaryKey(item.getResourceId());
+                jsonArray.addAll(JSON.parseArray(resource.getResources()));
+            });
             ScanTaskHistory history = new ScanTaskHistory();
             history.setScanId(scanId);
             history.setTaskId(task.getId());
+            history.setOperation("新增历史合规扫描");
+            history.setOutput(jsonArray.toJSONString());
             scanTaskHistoryMapper.insertSelective(history);
         }
     }
 
     public void updateTaskHistory (Task task, ScanTaskHistoryExample example) {
+        TaskItemResourceExample taskItemResourceExample = new TaskItemResourceExample();
+        taskItemResourceExample.createCriteria().andTaskIdEqualTo(task.getId());
+        List<TaskItemResourceWithBLOBs> taskItemResources = taskItemResourceMapper.selectByExampleWithBLOBs(taskItemResourceExample);
+        JSONArray jsonArray = new JSONArray();
+        taskItemResources.stream().forEach(item ->{
+            ResourceWithBLOBs resource = resourceMapper.selectByPrimaryKey(item.getResourceId());
+            jsonArray.addAll(JSON.parseArray(resource.getResources()));
+        });
         ScanTaskHistory history = new ScanTaskHistory();
         history.setResourcesSum(task.getResourcesSum()!=null?task.getResourcesSum():0);
         history.setReturnSum(task.getReturnSum()!=null?task.getReturnSum():0);
         history.setScanScore(calculateScore(accountMapper.selectByPrimaryKey(task.getAccountId()), task));
+        history.setOperation("修改历史合规扫描");
+        history.setOutput(jsonArray.toJSONString());
         scanTaskHistoryMapper.updateByExampleSelective(history, example);
     }
 

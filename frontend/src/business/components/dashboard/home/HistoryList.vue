@@ -18,13 +18,20 @@
               {{ scope.row.scanScore }}
             </template>
           </el-table-column>
-          <el-table-column :label="$t('history.resource_result')" min-width="30%" show-overflow-tooltip>
+          <el-table-column :label="$t('history.resource_result')" min-width="20%" show-overflow-tooltip>
             <template v-slot:default="scope">
               <span> {{ scope.row.returnSum?scope.row.returnSum:0 }}/{{ scope.row.resourcesSum?scope.row.resourcesSum:0 }}</span>
               <span> &nbsp;&nbsp;<i :class="scope.row.assets" ></i></span>
             </template>
           </el-table-column>
-          <el-table-column min-width="30%" :label="$t('history.create_time')" sortable
+          <el-table-column :label="$t('resource.resource_result')" min-width="20%" show-overflow-tooltip>
+              <span>
+                <el-link type="primary">
+                  主要链接 <i class="el-icon-s-data"></i>
+                </el-link>
+              </span>
+          </el-table-column>
+          <el-table-column min-width="20%" :label="$t('history.create_time')" sortable
                            prop="createTime">
             <template v-slot:default="scope">
               <span><i class="el-icon-time"></i> {{ scope.row.createTime | timestampFormatDayDate }}</span>
