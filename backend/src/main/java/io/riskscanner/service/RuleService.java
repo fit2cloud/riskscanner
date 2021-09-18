@@ -511,16 +511,11 @@ public class RuleService {
     }
 
     @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED, rollbackFor = {RuntimeException.class, Exception.class})
-    public void scan(List<String> ids, List<String> checkedGroups) {
-        ids.forEach(id -> {
-            AccountWithBLOBs account = accountMapper.selectByPrimaryKey(id);
-            List<String> ruleGroupList = extRuleGroupMapper.getRuleGroup(id);
-            for (String groupId : checkedGroups) {
-                for (String ruleGroup : ruleGroupList) {
-                    if (StringUtils.equalsIgnoreCase(ruleGroup, groupId)) {
-                        this.scanGroups(account, groupId);
-                    }
-                }
+    public void scan(List<ScanCheckedGroups> scanCheckedGroups) {
+        scanCheckedGroups.forEach(scan -> {
+            AccountWithBLOBs account = accountMapper.selectByPrimaryKey(scan.getAccountId());
+            for (String groupId : scan.getCheckedGroups()) {
+                this.scanGroups(account, groupId);
             }
         });
     }

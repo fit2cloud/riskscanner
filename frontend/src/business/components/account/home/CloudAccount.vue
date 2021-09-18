@@ -284,9 +284,9 @@
               <img :src="require(`@/assets/img/platform/${accountGroup.accountWithBLOBs.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
                &nbsp;&nbsp; {{ accountGroup.accountWithBLOBs.pluginName }} {{ $t('rule.rule_set') }} | {{accountGroup.accountWithBLOBs.name}}
             </span>
-            <el-button style="float: right; padding: 3px 0" type="text"  @click="handleCheckAll(accountGroup.groups)">{{ $t('account.i18n_sync_all') }}</el-button>
+            <el-button style="float: right; padding: 3px 0" type="text"  @click="handleCheckAll(accountGroup.groups, index)">{{ $t('account.i18n_sync_all') }}</el-button>
           </div>
-          <el-checkbox-group v-model="checkedGroups" @change="handleCheckedGroupsChange">
+          <el-checkbox-group v-model="accountGroup.checkedGroups" @change="handleCheckedGroupsChange()">
             <el-checkbox v-for="(group,index) in accountGroup.groups" :label="group.id" :value="group.id" :key="index" border >
                 {{ group.name }}
             </el-checkbox>
@@ -727,7 +727,8 @@ import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
         this.initGroups();
       },
       scanGroup () {
-        this.$alert(this.$t('account.one_scan') + this.$t('account.cloud_account') + " ？", '', {
+        let account = this.$t('account.one_scan') + this.$t('account.cloud_account');
+        this.$alert( account + " ？", '', {
           confirmButtonText: this.$t('commons.confirm'),
           callback: (action) => {
             if (action === 'confirm') {
@@ -736,10 +737,7 @@ import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
                 this.$warning(this.$t('account.please_choose_rule_group'));
                 return;
               }
-              formData.append('selectIds', new Blob([JSON.stringify(Array.from(this.selectIds))], {
-                type: "application/json"
-              }));
-              formData.append('checkedGroups', new Blob([JSON.stringify(Array.from(this.checkedGroups))], {
+              formData.append('scanCheckedGroups', new Blob([JSON.stringify(Array.from(this.checkedGroups))], {
                 type: "application/json"
               }));
               this.result = this.$request({
@@ -793,7 +791,7 @@ import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
           }
         })
       },
-      handleCheckAll(val) {
+      handleCheckAll(val, index) {
         let arr = [];
         if (val) {
           for (let obj of val) {
@@ -801,12 +799,23 @@ import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
           }
         }
         let concatArr = this.checkedGroups.concat(arr);
-        let arrNew = new Set(concatArr);
-        this.checkedGroups = !this.isContain(this.checkedGroups, arr) ? Array.from(arrNew) : this.checkedGroups.filter(n => !arr.toString().includes(n));
+        this.checkedGroups = !this.isContain(this.checkedGroups, arr) ? Array.from(concatArr) : this.checkedGroups.filter(n => !arr.toString().includes(n));
         this.checkAll = this.checkedGroups.length === this.groupsSelect.length;
         this.isIndeterminate = this.checkedGroups.length > 0 && this.checkedGroups.length < this.groupsSelect.length;
       },
       handleCheckAllChange() {
+        for (let item of this.accountGroups) {
+          if (item.checkedGroups.length > 0) {
+            item.checkedGroups = [];
+          } else {
+            for (let group of this.groupsSelect) {
+              if (group.accountId === item.accountWithBLOBs.id) {
+                item.checkedGroups = group.checkedGroups;
+                break;
+              }
+            }
+          }
+        }
         this.checkedGroups = this.checkedGroups.length === 0 ? this.groupsSelect : [];
         this.isIndeterminate = false;
       },
@@ -830,9 +839,14 @@ import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
         }, (res) => {
           this.accountGroups = res.data;
           for (let item of this.accountGroups) {
-            for (let obj of item.groups) {
-              this.groupsSelect.push(obj.id);
+            let accountGroup = {accountId: item.accountWithBLOBs.id, checkedGroups: []};
+            let checkedGroups = [];
+            for(let group of item.groups) {
+              checkedGroups.push(group.id);
             }
+            accountGroup.checkedGroups = checkedGroups;
+            this.groupsSelect.push(accountGroup);
+            item.checkedGroups = checkedGroups;
           }
         });
       },
