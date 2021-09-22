@@ -86,7 +86,7 @@
           </el-table-column>
           <el-table-column :label="$t('resource.resource_result')" min-width="20%" show-overflow-tooltip>
             <template v-slot:default="scope">
-              <el-link type="primary" @click="innerDrawer = true">
+              <el-link type="primary" @click="innerDrawerComparison(scope.row)">
                 {{ $t('dashboard.online_comparison') }} <i class="el-icon-s-data"></i>
               </el-link>
             </template>
@@ -284,6 +284,7 @@ import CodeDiff from 'vue-code-diff';
       },
       codeDiffOpen(item) {
         this.condition.pluginId = item.pluginId;
+        this.oldStr = item.output;
         this.historyList();
         this.diffVisible =  true;
       },
@@ -306,6 +307,10 @@ import CodeDiff from 'vue-code-diff';
       },
       innerDrawerClose() {
         this.innerDrawer = false;
+      },
+      innerDrawerComparison(item) {
+        this.innerDrawer = true;
+        this.newStr = item.output;
       },
     },
     mounted() {

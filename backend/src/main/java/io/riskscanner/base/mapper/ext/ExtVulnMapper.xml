@@ -268,6 +268,7 @@
             t.resources_sum as resourcesSum,
             t.return_sum as returnSum,
             t.scan_score as scanScore,
+            t.output,
             t1.name as AccountName,
             t1.plugin_id as pluginId,
             t1.plugin_name as pluginName,
