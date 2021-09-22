@@ -24,12 +24,59 @@
               <span> &nbsp;&nbsp;<i :class="scope.row.assets" ></i></span>
             </template>
           </el-table-column>
+          <el-table-column min-width="20%" :label="$t('history.create_time')" sortable
+                           prop="createTime">
+            <template v-slot:default="scope">
+              <span><i class="el-icon-time"></i> {{ scope.row.createTime | timestampFormatDayDate }}</span>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('resource.resource_result')" min-width="20%" show-overflow-tooltip>
-              <span>
-                <el-link type="primary">
-                  主要链接 <i class="el-icon-s-data"></i>
-                </el-link>
-              </span>
+            <template v-slot:default="scope">
+              <table-operators :buttons="buttons" :row="scope.row"/>
+            </template>
+          </el-table-column>
+        </el-table>
+        <table-pagination :change="search" :current-page.sync="currentPage" :page-size.sync="pageSize" :total="total"/>
+
+      </el-card>
+
+      <!--History output-->
+      <el-drawer class="rtl" :title="$t('dashboard.history')" :visible.sync="visible" size="60%" :before-close="handleClose" :direction="direction"
+                 :destroy-on-close="true">
+        <el-form label-position="right">
+          <el-form-item style="margin: 1%;">
+            <codemirror ref="cmEditor" v-model="script" class="code-mirror" :options="cmOptions" />
+          </el-form-item>
+        </el-form>
+        <dialog-footer
+          @cancel="visible = false"
+          @confirm="handleClose"/>
+      </el-drawer>
+      <!--History output-->
+
+      <!--History result-->
+      <el-drawer class="rtl" :title="$t('dashboard.history')" :visible.sync="diffVisible" size="85%" :before-close="handleClose" :direction="direction"
+                 :destroy-on-close="true">
+        <el-table border :data="historys" class="adjust-table table-content" @sort-change="sort" :row-class-name="tableRowClassName" style="margin: 2%;">
+          <el-table-column type="index" min-width="5%"/>
+          <el-table-column :label="$t('history.cloud_account')" min-width="20%" show-overflow-tooltip>
+            <template v-slot:default="scope">
+              <el-row type="primary">
+                <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
+                {{ scope.row.AccountName }}
+              </el-row>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('history.scan_score')" min-width="15%" show-overflow-tooltip>
+            <template v-slot:default="scope">
+              {{ scope.row.scanScore }}
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('history.resource_result')" min-width="15%" show-overflow-tooltip>
+            <template v-slot:default="scope">
+              <span> {{ scope.row.returnSum?scope.row.returnSum:0 }}/{{ scope.row.resourcesSum?scope.row.resourcesSum:0 }}</span>
+              <span> &nbsp;&nbsp;<i :class="scope.row.assets" ></i></span>
+            </template>
           </el-table-column>
           <el-table-column min-width="20%" :label="$t('history.create_time')" sortable
                            prop="createTime">
@@ -37,10 +84,35 @@
               <span><i class="el-icon-time"></i> {{ scope.row.createTime | timestampFormatDayDate }}</span>
             </template>
           </el-table-column>
+          <el-table-column :label="$t('resource.resource_result')" min-width="20%" show-overflow-tooltip>
+            <template v-slot:default="scope">
+              <el-link type="primary" @click="innerDrawer = true">
+                {{ $t('dashboard.online_comparison') }} <i class="el-icon-s-data"></i>
+              </el-link>
+            </template>
+          </el-table-column>
         </el-table>
-        <table-pagination :change="search" :current-page.sync="currentPage" :page-size.sync="pageSize" :total="total"/>
+        <table-pagination :change="historyList" :current-page.sync="historyPage" :page-size.sync="historyPageSize" :total="historyTotal"/>
+        <el-drawer
+          size="80%"
+          :title="$t('dashboard.online_comparison')"
+          :append-to-body="true"
+          :before-close="innerDrawerClose"
+          :visible.sync="innerDrawer">
+          <el-form>
+            <code-diff
+              :old-string="oldStr"
+              :new-string="newStr"
+              outputFormat="side-by-side"
+              :context="10"/>
+          </el-form>
+        </el-drawer>
+        <dialog-footer
+          @cancel="diffVisible = false"
+          @confirm="handleClose"/>
+      </el-drawer>
+      <!--History result-->
 
-      </el-card>
     </el-col>
   </el-row>
 </template>
@@ -50,6 +122,8 @@
 import {_filter, _sort} from "@/common/js/utils";
 import TablePagination from "../../common/pagination/TablePagination";
 import DialogFooter from "../../common/components/DialogFooter";
+import TableOperators from "../../common/components/TableOperators";
+import CodeDiff from 'vue-code-diff';
 /* eslint-disable */
   const assets = [
     {key: "ec2", value: "el-icon-s-platform"},
@@ -87,6 +161,8 @@ import DialogFooter from "../../common/components/DialogFooter";
     components: {
       TablePagination,
       DialogFooter,
+      TableOperators,
+      CodeDiff,
     },
     props: {
       selectNodeIds: Array,
@@ -122,6 +198,26 @@ import DialogFooter from "../../common/components/DialogFooter";
           line: true,
           indentWithTabs: true,
         },
+        visible: false,
+        diffVisible: false,
+        radio: '',
+        historys: [],
+        historyPage: 1,
+        historyPageSize: 10,
+        historyTotal: 0,
+        oldStr: 'old code',
+        newStr: 'new code',
+        innerDrawer: false,
+        script: '',
+        buttons: [
+          {
+            tip: this.$t('resource.resource_result'), icon: "el-icon-s-data", type: "success",
+            exec: this.handleOpen
+          }, {
+            tip: this.$t('commons.edit'), icon: "el-icon-document-copy", type: "primary",
+            exec: this.codeDiffOpen
+          }
+        ],
       }
     },
     created() {
@@ -182,6 +278,35 @@ import DialogFooter from "../../common/components/DialogFooter";
       edit(row) {
         this.$emit('edit', row);
       },
+      handleOpen(item) {
+        this.visible =  true;
+        this.script = item.output;
+      },
+      codeDiffOpen(item) {
+        this.condition.pluginId = item.pluginId;
+        this.historyList();
+        this.diffVisible =  true;
+      },
+      handleClose() {
+        this.visible =  false;
+        this.diffVisible =  false;
+      },
+      historyList() {
+        let url = "/dashboard/history/" + this.historyPage + "/" + this.historyPageSize;
+        if (!!this.selectNodeIds) {
+          this.condition.accountId = this.selectNodeIds[0];
+        } else {
+          this.condition.accountId = null;
+        }
+        this.result = this.$post(url, this.condition, response => {
+          let data = response.data;
+          this.historyTotal = data.itemCount;
+          this.historys = data.listObject;
+        });
+      },
+      innerDrawerClose() {
+        this.innerDrawer = false;
+      },
     },
     mounted() {
       this.init();
@@ -190,6 +315,13 @@ import DialogFooter from "../../common/components/DialogFooter";
 </script>
 
 <style scoped>
+  .code-mirror {
+    height: 600px !important;
+  }
+  .code-mirror >>> .CodeMirror {
+    /* Set height, width, borders, and global font properties here */
+    height: 600px !important;
+  }
   /deep/ .el-drawer__header {
     margin-bottom: 0;
   }

@@ -481,10 +481,10 @@ import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
         });
       },
       select(selection) {
-        this.selectIds.clear()
+        this.selectIds.clear();
         selection.forEach(s => {
           this.selectIds.add(s.id)
-        })
+        });
       },
       //查询列表
       search() {

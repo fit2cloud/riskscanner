@@ -66,7 +66,7 @@ import {DEFAULT_LANGUAGE} from "../common/js/constants";
           ],
           password: [
             {required: true, message: this.$t('commons.input_password'), trigger: 'blur'},
-            {min: 6, max: 20, message: this.$t('commons.input_limit', [6, 20]), trigger: 'blur'}
+            {min: 1, max: 50, message: this.$t('commons.input_limit', [1, 50]), trigger: 'blur'}
           ]
         },
         msg: '',

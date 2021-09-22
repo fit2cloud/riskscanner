@@ -441,6 +441,7 @@ export default {
     active_list:'Active list',
     search_by_name:'Search by operator name',
     expand_all:'Expand all',
+    online_comparison:'Online comparison',
   },
   rule: {
     rule:'Scan Rule',

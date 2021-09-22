@@ -279,6 +279,9 @@
             <if test="accountId != null">
                 AND t.account_id = #{accountId}
             </if>
+            <if test="pluginId != null">
+                AND t1.plugin_id = #{pluginId}
+            </if>
         </where>
         ORDER BY
             t.create_time desc

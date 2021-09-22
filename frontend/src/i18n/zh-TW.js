@@ -441,6 +441,7 @@ export default {
     active_list: '活動列表',
     search_by_name: '按操作者名稱搜索',
     expand_all: '展開全部',
+    online_comparison: '在線對比',
   },
   rule: {
     rule: '掃描規則',
