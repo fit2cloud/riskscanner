@@ -171,7 +171,7 @@ public class RuleController {
 
     @ApiOperation(value = "批量扫描")
     @PostMapping("scan")
-    public void scan(@RequestPart(value = "scanCheckedGroups") List<ScanCheckedGroups> scanCheckedGroups) {
+    public void scan(@RequestPart(value = "scanCheckedGroups") List<String> scanCheckedGroups) {
         ruleService.scan(scanCheckedGroups);
     }
 

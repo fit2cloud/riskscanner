@@ -277,17 +277,17 @@
                  :title="$t('account.scan_group_quick')"
                  :visible.sync="scanVisible"
                  class="" width="70%">
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">{{ $t('account.i18n_sync_all') }}</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAll">{{ $t('account.i18n_sync_all') }}</el-checkbox>
         <el-card class="box-card el-box-card" v-for="(accountGroup, index) in accountGroups" :key="index">
           <div slot="header" class="clearfix">
             <span>
               <img :src="require(`@/assets/img/platform/${accountGroup.accountWithBLOBs.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
                &nbsp;&nbsp; {{ accountGroup.accountWithBLOBs.pluginName }} {{ $t('rule.rule_set') }} | {{accountGroup.accountWithBLOBs.name}}
             </span>
-            <el-button style="float: right; padding: 3px 0" type="text"  @click="handleCheckAll(accountGroup.groups, index)">{{ $t('account.i18n_sync_all') }}</el-button>
+            <el-button style="float: right; padding: 3px 0" type="text"  @click="handleCheckAllByAccount(accountGroup, index)">{{ $t('account.i18n_sync_all') }}</el-button>
           </div>
-          <el-checkbox-group v-model="accountGroup.checkedGroups" @change="handleCheckedGroupsChange()">
-            <el-checkbox v-for="(group,index) in accountGroup.groups" :label="group.id" :value="group.id" :key="index" border >
+          <el-checkbox-group v-model="checkedGroups" @change="handleCheckedGroupsChange(accountGroup)">
+            <el-checkbox v-for="(group,index) in accountGroup.groups" :label="accountGroup.accountWithBLOBs.id + '/' + group.id" :value="accountGroup.accountWithBLOBs.id + '/' + group.id" :key="index" border >
                 {{ group.name }}
             </el-checkbox>
           </el-checkbox-group>
@@ -421,9 +421,12 @@ import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
           indentWithTabs: true,
         },
         checkAll: false,
+        //选中的规则组的acccount/id集合
         checkedGroups: [],
+        //云账号规则组list分组
         accountGroups: [],
         isIndeterminate: true,
+        //云账号规则组拼接可用类型： [acccount/id]
         groupsSelect: [],
         proxyType: [
           {id: 'Http', value: "Http"},
@@ -791,11 +794,11 @@ import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
           }
         })
       },
-      handleCheckAll(val, index) {
+      handleCheckAllByAccount(val, index) {
         let arr = [];
         if (val) {
-          for (let obj of val) {
-            arr.push(obj.id);
+          for (let obj of val.groups) {
+            arr.push(val.accountWithBLOBs.id + "/" + obj.id);
           }
         }
         let concatArr = this.checkedGroups.concat(arr);
@@ -803,24 +806,13 @@ import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
         this.checkAll = this.checkedGroups.length === this.groupsSelect.length;
         this.isIndeterminate = this.checkedGroups.length > 0 && this.checkedGroups.length < this.groupsSelect.length;
       },
-      handleCheckAllChange() {
-        for (let item of this.accountGroups) {
-          if (item.checkedGroups.length > 0) {
-            item.checkedGroups = [];
-          } else {
-            for (let group of this.groupsSelect) {
-              if (group.accountId === item.accountWithBLOBs.id) {
-                item.checkedGroups = group.checkedGroups;
-                break;
-              }
-            }
-          }
-        }
+      handleCheckAll() {
         this.checkedGroups = this.checkedGroups.length === 0 ? this.groupsSelect : [];
-        this.isIndeterminate = false;
+        this.checkAll = this.checkedGroups.length === this.groupsSelect.length;
+        this.isIndeterminate = this.checkedGroups.length > 0 && this.checkedGroups.length < this.groupsSelect.length;
       },
       handleCheckedGroupsChange(value) {
-        let checkedCount = value.length;
+        let checkedCount = value.checkedGroups.length;
         this.checkAll = checkedCount === this.groupsSelect.length;
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.groupsSelect.length;
       },
@@ -842,10 +834,11 @@ import {ACCOUNT_ID, ACCOUNT_NAME} from "../../../../common/js/constants";
             let accountGroup = {accountId: item.accountWithBLOBs.id, checkedGroups: []};
             let checkedGroups = [];
             for(let group of item.groups) {
-              checkedGroups.push(group.id);
+              checkedGroups.push(item.accountWithBLOBs.id + "/" + group.id);
+              this.checkedGroups.push(item.accountWithBLOBs.id + "/" + group.id);
+              this.groupsSelect.push(item.accountWithBLOBs.id + "/" + group.id);
             }
             accountGroup.checkedGroups = checkedGroups;
-            this.groupsSelect.push(accountGroup);
             item.checkedGroups = checkedGroups;
           }
         });
