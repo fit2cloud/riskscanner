@@ -600,6 +600,7 @@ export default {
     download_report_description_end: ' 生成的报告，若您需要获取最新报告请重新扫描。',
     audit_name: '审计名称',
     resource_report_xlsx: '不合规资源扫描报告.xlsx',
+    merge_resource: '合并报告',
   },
   account: {
     cloud_account_setting: '云账号设置',

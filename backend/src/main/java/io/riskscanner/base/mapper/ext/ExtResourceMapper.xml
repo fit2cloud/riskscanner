@@ -342,7 +342,10 @@
         JOIN rule t3 on t2.rule_id = t3.id
         LEFT JOIN rule_inspection_report_mapping t4 on t3.id = t4.rule_id
         LEFT JOIN rule_inspection_report t5 on t4.report_id = t5.id
-        WHERE t.account_id = #{accountId}
+        WHERE t.account_id in
+        <foreach collection='accountIds' item='accountId' open='(' separator=',' close=')' >,
+            #{accountId},
+        </foreach>
         ORDER BY t.f2c_id
     </select>
 

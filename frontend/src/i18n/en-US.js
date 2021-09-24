@@ -600,6 +600,7 @@ export default {
     download_report_description_end:' generated report, if you need to get the latest report, please rescan it. ',
     audit_name:'Audit name',
     resource_report_xls:'Non-compliant resource scan report.xls',
+    merge_resource:'Merge report',
   },
   account: {
     cloud_account_setting:'Cloud account settings',

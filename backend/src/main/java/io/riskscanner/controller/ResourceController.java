@@ -91,9 +91,9 @@ public class ResourceController {
     }
 
     @ApiOperation(value = "导出扫描报告")
-    @PostMapping("export/{accountId}")
-    public ResponseEntity<byte[]> exportReport(@RequestBody ExcelExportRequest request, @PathVariable String accountId) throws Exception {
-        byte[] bytes = resourceService.export(request, accountId);
+    @PostMapping("export")
+    public ResponseEntity<byte[]> exportReport(@RequestBody ExcelExportRequest request, @RequestBody List<String> accountIds) throws Exception {
+        byte[] bytes = resourceService.export(request, accountIds);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", "不合规资源扫描报告.xlsx");

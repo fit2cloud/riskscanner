@@ -33,7 +33,7 @@
                 <span style="color: #909090;">{{ $t('resource.statistics') }}</span>
               </el-col>
               <el-col :span="8">
-                <span v-if="group.status == 'risky'" style="color: red;cursor: pointer;" @click="download"><i class="el-icon-download"></i> {{ $t('resource.download_report') }}</span>
+                <span v-if="group.status == 'risky'" style="color: red;cursor: pointer;" @click="openDownload"><i class="el-icon-download"></i> {{ $t('resource.download_report') }}</span>
                 <span v-if="group.status == 'risk_free'" style="color: green;"> {{ group.state }}</span>
               </el-col>
             </el-row>
@@ -262,6 +262,41 @@
       </el-drawer>
       <!--Rule detail-->
 
+      <!-- 合并下载报告 -->
+      <el-drawer class="rtl" :title="$t('resource.merge_resource')" :visible.sync="infoVisible" size="70%" :before-close="handleClose" :direction="direction"
+                 :destroy-on-close="true">
+        <el-table border :data="accountData" class="adjust-table table-content" @sort-change="sort"
+                  :row-class-name="tableRowClassName" @select-all="select" @select="select" style="margin: 1%;">
+          <el-table-column type="selection" min-width="5%">
+          </el-table-column>
+          <el-table-column type="index" min-width="5%"/>
+          <el-table-column prop="name" :label="$t('account.name')" min-width="12%" show-overflow-tooltip></el-table-column>
+          <el-table-column :label="$t('account.cloud_platform')" min-width="10%" show-overflow-tooltip>
+            <template v-slot:default="scope">
+              <span>
+                <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
+                 &nbsp;&nbsp; {{ $t(scope.row.pluginName) }}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="15%" :label="$t('account.create_time')" sortable
+                           prop="createTime">
+            <template v-slot:default="scope">
+              <span><i class="el-icon-time"></i> {{ scope.row.createTime | timestampFormatDate }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="15%" :label="$t('account.update_time')" sortable
+                           prop="updateTime">
+            <template v-slot:default="scope">
+              <span><i class="el-icon-time"></i> {{ scope.row.updateTime | timestampFormatDate }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="userName" :label="$t('account.creator')" min-width="8%" show-overflow-tooltip/>
+        </el-table>
+        <table-pagination :change="search" :current-page.sync="accountPage" :page-size.sync="accountSize" :total="accountTotal"/>
+      </el-drawer>
+      <!-- 合并下载报告 -->
+
     </main-container>
 </template>
 
@@ -327,6 +362,7 @@ import {saveAs} from "@/common/js/FileSaver.js";
         ],
         visible: false,
         accountId: localStorage.getItem(ACCOUNT_ID),
+        accountIds: [],
         direction: 'rtl',
         detailForm: {},
         innerDrawer: false,
@@ -343,6 +379,12 @@ import {saveAs} from "@/common/js/FileSaver.js";
         },
         groupId: "",
         groupName: "",
+        infoVisible: false,
+        accountData: [],
+        accountPage: 1,
+        accountSize: 10,
+        accountTotal: 0,
+        selectIds: new Set(),
       }
     },
     methods: {
@@ -353,6 +395,12 @@ import {saveAs} from "@/common/js/FileSaver.js";
       filter(filters) {
         _filter(filters, this.condition);
         this.init();
+      },
+      select(selection) {
+        this.selectIds.clear();
+        selection.forEach(s => {
+          this.selectIds.add(s.id)
+        });
       },
       async search () {
         if (!!getCurrentAccountID()) {
@@ -442,6 +490,7 @@ import {saveAs} from "@/common/js/FileSaver.js";
         this.ruleSetOptionsFnc();
         this.inspectionSeportOptionsFnc();
         this.search();
+        this.accountList();
       },
       filterAccount (tag) {
         if (!!tag.name) {
@@ -470,6 +519,7 @@ import {saveAs} from "@/common/js/FileSaver.js";
       },
       handleClose() {
         this.visible = false;
+        this.infoVisible = false;
       },
       innerDrawerClose() {
         this.innerDrawer = false;
@@ -484,6 +534,9 @@ import {saveAs} from "@/common/js/FileSaver.js";
             this.search();
           }
         });
+      },
+      openDownload() {
+        this.infoVisible = true;
       },
       download() {
         let myDate = new Date();
@@ -504,8 +557,9 @@ import {saveAs} from "@/common/js/FileSaver.js";
                 {value: this.$t('resource.basic_requirements_for_grade_protection'), key: "basicRequirements"},
                 {value: this.$t('resource.suggestions_for_improvement'), key: "improvement"},
               ];
-              this.result = this.$download("/resource/export/" + this.accountId, {
-                columns: columns
+              this.result = this.$download("/resource/export", {
+                columns: columns,
+                accountIds: this.accountIds,
               }, response => {
                 if (response.status === 201) {
                   let blob = new Blob([response.data], {type: "'application/octet-stream'"});
@@ -516,6 +570,14 @@ import {saveAs} from "@/common/js/FileSaver.js";
               });
             }
           }
+        });
+      },
+      accountList() {
+        let url = "/account/list/" + this.accountPage + "/" + this.accountSize;
+        this.result = this.$post(url, {}, response => {
+          let data = response.data;
+          this.accountTotal = data.itemCount;
+          this.accountData = data.listObject;
         });
       },
     },

@@ -600,6 +600,7 @@ export default {
     download_report_description_end: ' 生成的報告，若您需要獲取最新報告請重新掃描。',
     audit_name: '審計名稱',
     resource_report_xls: '不合規資源掃描報告.xls',
+    merge_resource: '合併報告',
   },
   account: {
     cloud_account_setting: '雲賬號設置',

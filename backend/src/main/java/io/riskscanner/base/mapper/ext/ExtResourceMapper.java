@@ -35,7 +35,7 @@ public interface ExtResourceMapper {
 
     List<Map<String, String>> groups(Map<String, Object> params);
 
-    List<ExportDTO> searchExportData(ResourceRequest resourceRequest, @Param("accountId") String accountId);
+    List<ExportDTO> searchExportData(ResourceRequest resourceRequest, @Param("accountIds") List<String> accountIds);
 
     ResourceWithBLOBs resource(TaskItem taskItem);
 
