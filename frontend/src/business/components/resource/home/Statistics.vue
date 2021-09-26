@@ -263,7 +263,7 @@
       <!--Rule detail-->
 
       <!-- 合并下载报告 -->
-      <el-drawer class="rtl" :title="$t('resource.merge_resource')" :visible.sync="infoVisible" size="70%" :before-close="handleClose" :direction="direction"
+      <el-drawer class="rtl" :title="$t('resource.merge_resource')" :visible.sync="infoVisible" size="80%" :before-close="handleClose" :direction="direction"
                  :destroy-on-close="true">
         <el-table border :data="accountData" class="adjust-table table-content" @sort-change="sort"
                   :row-class-name="tableRowClassName" @select-all="select" @select="select" style="margin: 1%;">
@@ -294,6 +294,10 @@
           <el-table-column prop="userName" :label="$t('account.creator')" min-width="8%" show-overflow-tooltip/>
         </el-table>
         <table-pagination :change="search" :current-page.sync="accountPage" :page-size.sync="accountSize" :total="accountTotal"/>
+        <el-row style="margin: 3%;">
+          <span style="color: red;font-style: italic; font-weight: bold;">{{ $t('resource.desc') }}</span>
+        </el-row>
+        <el-button type="primary" style="margin-left: 45%;" @click="download">{{ $t('resource.download_report') }}</el-button>
       </el-drawer>
       <!-- 合并下载报告 -->
 
@@ -537,6 +541,8 @@ import {saveAs} from "@/common/js/FileSaver.js";
       },
       openDownload() {
         this.infoVisible = true;
+        this.accountIds = [];
+        this.accountIds.push(this.accountId);
       },
       download() {
         let myDate = new Date();
@@ -557,6 +563,7 @@ import {saveAs} from "@/common/js/FileSaver.js";
                 {value: this.$t('resource.basic_requirements_for_grade_protection'), key: "basicRequirements"},
                 {value: this.$t('resource.suggestions_for_improvement'), key: "improvement"},
               ];
+              this.accountIds = this.accountIds.concat(Array.from(this.selectIds));
               this.result = this.$download("/resource/export", {
                 columns: columns,
                 accountIds: this.accountIds,

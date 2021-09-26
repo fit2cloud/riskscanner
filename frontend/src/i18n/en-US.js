@@ -601,6 +601,7 @@ export default {
     audit_name:'Audit name',
     resource_report_xls:'Non-compliant resource scan report.xls',
     merge_resource:'Merge report',
+    desc:'Note: Please select the cloud accounts that need to be merged and export the report together. If you do not merge, please download the report directly. ',
   },
   account: {
     cloud_account_setting:'Cloud account settings',

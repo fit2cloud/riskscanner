@@ -601,6 +601,7 @@ export default {
     audit_name: '審計名稱',
     resource_report_xls: '不合規資源掃描報告.xls',
     merge_resource: '合併報告',
+    desc: '注：請選擇需要合併的雲賬號一起導出報告，若不合併請直接下載報告即可。 ',
   },
   account: {
     cloud_account_setting: '雲賬號設置',

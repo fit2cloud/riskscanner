@@ -343,10 +343,10 @@
         LEFT JOIN rule_inspection_report_mapping t4 on t3.id = t4.rule_id
         LEFT JOIN rule_inspection_report t5 on t4.report_id = t5.id
         WHERE t.account_id in
-        <foreach collection='accountIds' item='accountId' open='(' separator=',' close=')' >,
-            #{accountId},
+        <foreach collection='accountIds' item='accountId' open='(' separator=',' close=')'>
+            #{accountId}
         </foreach>
-        ORDER BY t.f2c_id
+        ORDER BY t.resource_type, t1.resource_name, t.region_id, t.f2c_id
     </select>
 
     <select id="resource" resultType="io.riskscanner.base.domain.ResourceWithBLOBs" parameterType="io.riskscanner.base.domain.TaskItem">

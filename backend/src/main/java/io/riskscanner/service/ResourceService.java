@@ -509,14 +509,14 @@ public class ResourceService {
      * 导出excel
      */
     @SuppressWarnings(value={"unchecked","deprecation", "serial"})
-    public byte[] export(ExcelExportRequest request, List<String> accountIds) throws Exception {
+    public byte[] export(ExcelExportRequest request) throws Exception {
         Map<String, Object> params = request.getParams();
         ResourceRequest resourceRequest = new ResourceRequest();
         if (MapUtils.isNotEmpty(params)) {
             org.apache.commons.beanutils.BeanUtils.populate(resourceRequest, params);
         }
         List<ExcelExportRequest.Column> columns = request.getColumns();
-        List<ExportDTO> exportDTOs = searchExportData(resourceRequest, accountIds);
+        List<ExportDTO> exportDTOs = searchExportData(resourceRequest, request.getAccountIds());
         List<List<Object>> data = exportDTOs.stream().map(resource -> {
             return new ArrayList<Object>() {{
                 columns.forEach(column -> {
@@ -568,7 +568,7 @@ public class ResourceService {
                 });
             }};
         }).collect(Collectors.toList());
-        OperationLogService.log(SessionUtils.getUser(), accountIds.toString(), "RESOURCE", ResourceTypeConstants.RESOURCE.name(), ResourceOperation.EXPORT, "导出合规报告");
+        OperationLogService.log(SessionUtils.getUser(), request.getAccountIds().get(0), "RESOURCE", ResourceTypeConstants.RESOURCE.name(), ResourceOperation.EXPORT, "导出合规报告");
         return ExcelExportUtils.exportExcelData("不合规资源扫描报告", request.getColumns().stream().map(ExcelExportRequest.Column::getValue).collect(Collectors.toList()), data);
     }
 
