@@ -5,14 +5,17 @@
 </template>
 
 <script>
-
+import echarts from 'echarts';//不能删掉，删了会报错
 import RsChart from "@/business/components/common/chart/RsChart";
 
 let objData = [];
 /* eslint-disable */
 export default {
   name: "DashboardPieChart",
-  components: {RsChart},
+  components: {
+    echarts,
+    RsChart
+  },
   data() {
     return {
       vulns: {
