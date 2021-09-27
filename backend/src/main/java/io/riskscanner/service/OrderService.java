@@ -633,19 +633,10 @@ public class OrderService {
         if (list.size() > 0) {
             updateTaskHistory(task, example);
         } else {
-            TaskItemResourceExample taskItemResourceExample = new TaskItemResourceExample();
-            taskItemResourceExample.createCriteria().andTaskIdEqualTo(task.getId());
-            List<TaskItemResourceWithBLOBs> taskItemResources = taskItemResourceMapper.selectByExampleWithBLOBs(taskItemResourceExample);
-            JSONArray jsonArray = new JSONArray();
-            taskItemResources.stream().forEach(item ->{
-                ResourceWithBLOBs resource = resourceMapper.selectByPrimaryKey(item.getResourceId());
-                jsonArray.addAll(JSON.parseArray(resource.getResources()));
-            });
             ScanTaskHistory history = new ScanTaskHistory();
             history.setScanId(scanId);
             history.setTaskId(task.getId());
             history.setOperation("新增历史合规扫描");
-            history.setOutput(jsonArray.toJSONString());
             scanTaskHistoryMapper.insertSelective(history);
         }
     }

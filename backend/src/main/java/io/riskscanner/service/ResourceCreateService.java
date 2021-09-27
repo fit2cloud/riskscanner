@@ -59,6 +59,8 @@ public class ResourceCreateService {
     private NucleiService nucleiService;
     @Resource
     private ProwlerService prowlerService;
+    @Resource
+    private ScanTaskHistoryMapper scanTaskHistoryMapper;
 
     @QuartzScheduled(cron = "${cron.expression.local}")
     public void handleTasks() {
@@ -150,6 +152,14 @@ public class ResourceCreateService {
                 createResource(taskItem, task);
             }
             orderService.updateTaskItemStatus(taskItem.getId(), TaskConstants.TASK_STATUS.FINISHED);
+            ScanTaskHistoryExample example = new ScanTaskHistoryExample();
+            ScanTaskHistoryExample.Criteria criteria = example.createCriteria();
+            criteria.andTaskIdEqualTo(task.getId());
+            example.setOrderByClause("id desc");
+            ScanTaskHistory scanTaskHistory = scanTaskHistoryMapper.selectByExampleWithBLOBs(example).get(0);
+
+            criteria.andScanIdEqualTo(scanTaskHistory.getScanId()).andIdEqualTo(scanTaskHistory.getId());
+            orderService.updateTaskHistory(task, example);
             return true;
         } catch (Exception e) {
             orderService.updateTaskItemStatus(taskItem.getId(), TaskConstants.TASK_STATUS.ERROR);
