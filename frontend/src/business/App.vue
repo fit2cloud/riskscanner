@@ -3,7 +3,7 @@
     <el-row id="header-top" type="flex" justify="space-between" align="middle">
 
       <el-col :span="12">
-        <a class="logo"/>
+        <el-image class="logo" :src="require('@/assets/logo-red.png')"/>
         <cs-top-menus/>
       </el-col>
 
@@ -33,7 +33,7 @@ export default {
     name: "app",
     data() {
       return {
-        auth: false
+        auth: false,
       }
     },
     beforeCreate() {
@@ -64,13 +64,13 @@ export default {
   }
 
   .logo {
-    width: 156px;
+    width: 180px;
     margin-bottom: 0;
     border: 0;
     margin-right: 20px;
     display: inline-block;
     line-height: 37px;
-    background-size: 156px 30px;
+    background-size: 180px 30px;
     box-sizing: border-box;
     height: 37px;
     background-repeat: no-repeat;
