@@ -5,12 +5,15 @@
 </template>
 
 <script>
-
+import echarts from 'echarts';
 import RsChart from "@/business/components/common/chart/RsChart";
 /* eslint-disable */
 export default {
   name: "AccountExpandChart",
-  components: {RsChart},
+  components: {
+    RsChart,
+    echarts,
+  },
   props: {
     data: {},
   },

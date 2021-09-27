@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import echarts from 'echarts';//不能删掉，删了会报错
+import echarts from 'echarts';
 import RsChart from "@/business/components/common/chart/RsChart";
 
 let objData = [];

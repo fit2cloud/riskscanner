@@ -5,12 +5,15 @@
 </template>
 
 <script>
-
+import echarts from 'echarts';
 import RsChart from "@/business/components/common/chart/RsChart";
 /* eslint-disable */
 export default {
   name: "RegionsPieChart",
-  components: {RsChart},
+  components: {
+    RsChart,
+    echarts
+  },
   data() {
     return {
       options: {},

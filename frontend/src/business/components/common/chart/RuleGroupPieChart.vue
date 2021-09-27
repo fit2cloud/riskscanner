@@ -5,7 +5,7 @@
 </template>
 
 <script>
-
+import echarts from 'echarts';
 import RsChart from "@/business/components/common/chart/RsChart";
 
 let ruleGroup = [];
@@ -14,7 +14,10 @@ let color = ['#11cfae', '#009ef0', '#627dec', '#0051a4', '#893fdc', '#89ffff', '
 /* eslint-disable */
 export default {
   name: "RuleGroupPieChart",
-  components: {RsChart},
+  components: {
+    RsChart,
+    echarts
+  },
   data() {
     return {
       options: {
