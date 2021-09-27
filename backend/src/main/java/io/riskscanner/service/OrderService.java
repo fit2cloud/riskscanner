@@ -609,7 +609,7 @@ public class OrderService {
             List<ScanTaskHistory> scanTaskHistories = scanTaskHistoryMapper.selectByExampleWithBLOBs(scanTaskHistoryExample);
             JSONArray jsonArray = new JSONArray();
             scanTaskHistories.stream().forEach(item ->{
-                jsonArray.addAll(JSON.parseArray(item.getOutput()));
+                if(item.getOutput()!=null) jsonArray.addAll(JSON.parseArray(item.getOutput()));
             });
             history.setOutput(jsonArray.toJSONString());
             history.setId(id);
@@ -648,7 +648,7 @@ public class OrderService {
         JSONArray jsonArray = new JSONArray();
         taskItemResources.stream().forEach(item ->{
             ResourceWithBLOBs resource = resourceMapper.selectByPrimaryKey(item.getResourceId());
-            jsonArray.addAll(JSON.parseArray(resource.getResources()));
+            if(resource!=null) jsonArray.addAll(JSON.parseArray(resource.getResources()));
         });
         ScanTaskHistory history = new ScanTaskHistory();
         history.setResourcesSum(task.getResourcesSum()!=null?task.getResourcesSum():0);
