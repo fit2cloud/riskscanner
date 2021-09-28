@@ -7,6 +7,7 @@ import io.riskscanner.base.rs.ChartData;
 import io.riskscanner.base.rs.DashboardTarget;
 import io.riskscanner.commons.utils.PageUtils;
 import io.riskscanner.commons.utils.Pager;
+import io.riskscanner.dto.ScanHistoryDTO;
 import io.riskscanner.service.DashboardService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -51,7 +52,7 @@ public class DashboardController {
 
     @ApiOperation(value = "历史记录")
     @PostMapping("history/{goPage}/{pageSize}")
-    public Pager<List<ScanHistory>> history(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody Map<String, Object> params) {
+    public Pager<List<ScanHistoryDTO>> history(@PathVariable int goPage, @PathVariable int pageSize, @RequestBody Map<String, Object> params) {
         Page<Object> page = PageHelper.startPage(goPage, pageSize, true);
         return PageUtils.setPageInfo(page, dashboardService.history(params));
     }

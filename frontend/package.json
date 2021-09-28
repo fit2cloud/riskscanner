@@ -20,6 +20,7 @@
     "diffable-html": "^4.0.0",
     "echarts": "^4.6.0",
     "element-ui": "^2.13.0",
+    "highlight.js": "^11.2.0",
     "js-base64": "^3.4.4",
     "json-bigint": "^1.0.0",
     "less-loader": "5.0.0",

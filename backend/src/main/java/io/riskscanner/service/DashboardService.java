@@ -1,16 +1,23 @@
 package io.riskscanner.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import io.riskscanner.base.domain.ScanHistory;
 import io.riskscanner.base.mapper.ext.ExtVulnMapper;
 import io.riskscanner.base.rs.ChartData;
 import io.riskscanner.base.rs.DashboardTarget;
+import io.riskscanner.dto.ScanHistoryDTO;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static com.alibaba.fastjson.JSON.parseArray;
 
 @Service
 public class DashboardService {
@@ -51,8 +58,19 @@ public class DashboardService {
         return extVulnMapper.target(params);
     }
 
-    public List<ScanHistory> history(Map<String, Object> params) {
-        return extVulnMapper.history(params);
+    public List<ScanHistoryDTO> history(Map<String, Object> params) {
+        List<ScanHistoryDTO> historyList = extVulnMapper.history(params);
+        for (ScanHistoryDTO scanHistory : historyList) {
+            scanHistory.setOutput(toJSONString2(scanHistory.getOutput()!=null?scanHistory.getOutput():"[]"));
+        }
+        return historyList;
+    }
+
+    public String toJSONString2(String jsonString) {
+        String res = JSON.parse(jsonString).toString();
+        JSONArray jsonArray = parseArray(res);
+        return JSON.toJSONString(jsonArray, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
+                SerializerFeature.WriteDateUseDateFormat);
     }
 
 }

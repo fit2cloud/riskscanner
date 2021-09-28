@@ -135,7 +135,14 @@ public class ResourceCreateService {
                 taskStatus = TaskConstants.TASK_STATUS.WARNING.toString();
             }
             orderService.updateTaskStatus(taskId, null, taskStatus);
+            ScanTaskHistoryExample example = new ScanTaskHistoryExample();
+            ScanTaskHistoryExample.Criteria criteria = example.createCriteria();
+            criteria.andTaskIdEqualTo(task.getId());
+            example.setOrderByClause("id desc");
+            ScanTaskHistory scanTaskHistory = scanTaskHistoryMapper.selectByExampleWithBLOBs(example).get(0);
 
+            criteria.andScanIdEqualTo(scanTaskHistory.getScanId()).andIdEqualTo(scanTaskHistory.getId());
+            orderService.updateTaskHistory(task, example);
         } catch (Exception e) {
             orderService.updateTaskStatus(taskId, null, TaskConstants.TASK_STATUS.ERROR.name());
             LogUtil.error("handleTask, taskId: " + taskId, e);
@@ -152,14 +159,6 @@ public class ResourceCreateService {
                 createResource(taskItem, task);
             }
             orderService.updateTaskItemStatus(taskItem.getId(), TaskConstants.TASK_STATUS.FINISHED);
-            ScanTaskHistoryExample example = new ScanTaskHistoryExample();
-            ScanTaskHistoryExample.Criteria criteria = example.createCriteria();
-            criteria.andTaskIdEqualTo(task.getId());
-            example.setOrderByClause("id desc");
-            ScanTaskHistory scanTaskHistory = scanTaskHistoryMapper.selectByExampleWithBLOBs(example).get(0);
-
-            criteria.andScanIdEqualTo(scanTaskHistory.getScanId()).andIdEqualTo(scanTaskHistory.getId());
-            orderService.updateTaskHistory(task, example);
             return true;
         } catch (Exception e) {
             orderService.updateTaskItemStatus(taskItem.getId(), TaskConstants.TASK_STATUS.ERROR);

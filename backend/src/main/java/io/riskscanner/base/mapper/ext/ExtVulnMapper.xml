@@ -259,7 +259,7 @@
             t.tag_key NOT IN ( 'cost', 'safety', 'tagging' )
     </select>
 
-    <select id="history" resultType="java.util.Map">
+    <select id="history" resultType="io.riskscanner.dto.ScanHistoryDTO">
         SELECT
             t.id,
             t.account_id as accountId,
@@ -269,7 +269,7 @@
             t.return_sum as returnSum,
             t.scan_score as scanScore,
             t.output,
-            t1.name as AccountName,
+            t1.name as accountName,
             t1.plugin_id as pluginId,
             t1.plugin_name as pluginName,
             t1.plugin_icon as pluginIcon

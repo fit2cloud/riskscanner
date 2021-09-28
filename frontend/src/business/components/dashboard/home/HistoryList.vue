@@ -9,7 +9,7 @@
             <template v-slot:default="scope">
               <el-row type="primary">
                 <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                {{ scope.row.AccountName }}
+                {{ scope.row.accountName }}
               </el-row>
             </template>
           </el-table-column>
@@ -63,7 +63,7 @@
             <template v-slot:default="scope">
               <el-row type="primary">
                 <img :src="require(`@/assets/img/platform/${scope.row.pluginIcon}`)" style="width: 16px; height: 16px; vertical-align:middle" alt=""/>
-                {{ scope.row.AccountName }}
+                {{ scope.row.accountName }}
               </el-row>
             </template>
           </el-table-column>
@@ -104,6 +104,8 @@
               :old-string="oldStr"
               :new-string="newStr"
               outputFormat="side-by-side"
+              :isShowNoChange="true"
+              :drawFileList="true"
               :context="10"/>
           </el-form>
         </el-drawer>
@@ -280,13 +282,17 @@ import CodeDiff from 'vue-code-diff';
       },
       handleOpen(item) {
         this.visible =  true;
-        this.script = item.output;
+        this.$post("/resource/string2PrettyFormat", {json: item.output?item.output:"[]"}, res => {
+          this.script = res.data;
+        });
       },
       codeDiffOpen(item) {
-        this.condition.pluginId = item.pluginId;
-        this.oldStr = item.output;
+        this.condition.accountId = item.accountId;
         this.historyList();
         this.diffVisible =  true;
+        this.$post("/resource/string2PrettyFormat", {json: item.output?item.output:"[]"}, res => {
+          this.oldStr = res.data;
+        });
       },
       handleClose() {
         this.visible =  false;
@@ -294,11 +300,6 @@ import CodeDiff from 'vue-code-diff';
       },
       historyList() {
         let url = "/dashboard/history/" + this.historyPage + "/" + this.historyPageSize;
-        if (!!this.selectNodeIds) {
-          this.condition.accountId = this.selectNodeIds[0];
-        } else {
-          this.condition.accountId = null;
-        }
         this.result = this.$post(url, this.condition, response => {
           let data = response.data;
           this.historyTotal = data.itemCount;
@@ -309,8 +310,8 @@ import CodeDiff from 'vue-code-diff';
         this.innerDrawer = false;
       },
       innerDrawerComparison(item) {
+        this.newStr = item.output?item.output:"[]";
         this.innerDrawer = true;
-        this.newStr = item.output;
       },
     },
     mounted() {
@@ -320,15 +321,15 @@ import CodeDiff from 'vue-code-diff';
 </script>
 
 <style scoped>
-  .code-mirror {
+/deep/  .code-mirror {
     height: 600px !important;
   }
-  .code-mirror >>> .CodeMirror {
+/deep/ .code-mirror >>> .CodeMirror {
     /* Set height, width, borders, and global font properties here */
     height: 600px !important;
   }
-  /deep/ .el-drawer__header {
+/deep/ .el-drawer__header {
     margin-bottom: 0;
   }
-  /deep/ :focus{outline:0;}
+/deep/ :focus{outline:0;}
 </style>

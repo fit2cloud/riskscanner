@@ -4,6 +4,7 @@ package io.riskscanner.base.mapper.ext;
 import io.riskscanner.base.domain.ScanHistory;
 import io.riskscanner.base.rs.ChartData;
 import io.riskscanner.base.rs.DashboardTarget;
+import io.riskscanner.dto.ScanHistoryDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -32,5 +33,5 @@ public interface ExtVulnMapper {
 
     List<DashboardTarget> target(Map<String, Object> params);
 
-    List<ScanHistory> history(Map<String, Object> params);
+    List<ScanHistoryDTO> history(Map<String, Object> params);
 }
