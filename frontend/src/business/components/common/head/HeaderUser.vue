@@ -5,10 +5,13 @@
     </span>
     <template v-slot:dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item command="personal">{{ $t('commons.personal_information') }}</el-dropdown-item>
+        <el-dropdown-item command="personal">{{ $t('commons.personal_information') }} <i class="el-icon-user-solid"/></el-dropdown-item>
         <el-dropdown-item command="about">{{ $t('commons.about_us') }} <i class="el-icon-info"/></el-dropdown-item>
-        <el-dropdown-item command="ApiHelp">{{ $t('commons.api_help_documentation') }}</el-dropdown-item>
-        <el-dropdown-item command="logout">{{ $t('commons.exit_system') }}</el-dropdown-item>
+        <el-dropdown-item command="ApiHelp">{{ $t('commons.api_help_documentation') }} <i class="el-icon-question"/></el-dropdown-item>
+        <el-dropdown-item command="custodian">{{ 'Custodian' }} <i class="el-icon-s-help"/></el-dropdown-item>
+        <el-dropdown-item command="nuclei">{{ 'Nuclei' }} <i class="el-icon-s-help"/></el-dropdown-item>
+        <el-dropdown-item command="prowler">{{ 'Prowler' }} <i class="el-icon-s-help"/></el-dropdown-item>
+        <el-dropdown-item command="logout">{{ $t('commons.exit_system') }} <i class="el-icon-warning"/></el-dropdown-item>
       </el-dropdown-menu>
     </template>
 
@@ -54,6 +57,15 @@ import axios from "axios";
             break;
           case "ApiHelp":
             window.open('/doc.html', "_blank");
+            break;
+          case "custodian":
+            window.open('https://docs.riskscanner.io/question/rule', "_blank");
+            break;
+          case "nuclei":
+            window.open('https://docs.riskscanner.io/question/nuclei', "_blank");
+            break;
+          case "prowler":
+            window.open('https://docs.riskscanner.io/question/prowler', "_blank");
             break;
           default:
             break;
