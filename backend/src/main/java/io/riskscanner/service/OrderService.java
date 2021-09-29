@@ -626,7 +626,7 @@ public class OrderService {
         return scanHistoryMapper.insertSelective(history);
     }
 
-    public void insertTaskHistory (Task task, Integer scanId) {
+    public void insertTaskHistory (Task task, Integer scanId) throws Exception {
         ScanTaskHistoryExample example = new ScanTaskHistoryExample();
         example.createCriteria().andTaskIdEqualTo(task.getId()).andScanIdEqualTo(scanId);
         List<ScanTaskHistory> list = scanTaskHistoryMapper.selectByExample(example);
@@ -641,22 +641,26 @@ public class OrderService {
         }
     }
 
-    public void updateTaskHistory (Task task, ScanTaskHistoryExample example) {
-        TaskItemResourceExample taskItemResourceExample = new TaskItemResourceExample();
-        taskItemResourceExample.createCriteria().andTaskIdEqualTo(task.getId());
-        List<TaskItemResourceWithBLOBs> taskItemResources = taskItemResourceMapper.selectByExampleWithBLOBs(taskItemResourceExample);
-        JSONArray jsonArray = new JSONArray();
-        taskItemResources.stream().forEach(item ->{
-            ResourceWithBLOBs resource = resourceMapper.selectByPrimaryKey(item.getResourceId());
-            if(resource!=null) jsonArray.addAll(JSON.parseArray(resource.getResources()));
-        });
-        ScanTaskHistory history = new ScanTaskHistory();
-        history.setResourcesSum(task.getResourcesSum()!=null?task.getResourcesSum():0);
-        history.setReturnSum(task.getReturnSum()!=null?task.getReturnSum():0);
-        history.setScanScore(calculateScore(accountMapper.selectByPrimaryKey(task.getAccountId()), task));
-        history.setOperation("修改历史合规扫描");
-        history.setOutput(jsonArray.toJSONString());
-        scanTaskHistoryMapper.updateByExampleSelective(history, example);
+    public void updateTaskHistory (Task task, ScanTaskHistoryExample example) throws Exception {
+        try{
+            TaskItemResourceExample taskItemResourceExample = new TaskItemResourceExample();
+            taskItemResourceExample.createCriteria().andTaskIdEqualTo(task.getId());
+            List<TaskItemResourceWithBLOBs> taskItemResources = taskItemResourceMapper.selectByExampleWithBLOBs(taskItemResourceExample);
+            JSONArray jsonArray = new JSONArray();
+            taskItemResources.forEach(item ->{
+                ResourceWithBLOBs resource = resourceMapper.selectByPrimaryKey(item.getResourceId());
+                if(resource!=null) jsonArray.addAll(JSON.parseArray(!resource.getResources().isEmpty()?resource.getResources():"[]"));
+            });
+            ScanTaskHistory history = new ScanTaskHistory();
+            history.setResourcesSum(task.getResourcesSum()!=null?task.getResourcesSum():0);
+            history.setReturnSum(task.getReturnSum()!=null?task.getReturnSum():0);
+            history.setScanScore(calculateScore(accountMapper.selectByPrimaryKey(task.getAccountId()), task));
+            history.setOperation("修改历史合规扫描");
+            history.setOutput(jsonArray.toJSONString());
+            scanTaskHistoryMapper.updateByExampleSelective(history, example);
+        }catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
     }
 
     public void createQuartzTask(String quartzTaskId) {

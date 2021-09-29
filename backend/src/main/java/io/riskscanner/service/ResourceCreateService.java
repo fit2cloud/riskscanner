@@ -104,7 +104,7 @@ public class ResourceCreateService {
         }
     }
 
-    public void handleTask(Task task) {
+    public void handleTask(Task task) throws Exception {
         String taskId = task.getId();
         int i = orderService.updateTaskStatus(taskId, TaskConstants.TASK_STATUS.APPROVED.toString(), TaskConstants.TASK_STATUS.PROCESSING.toString());
         if (i == 0) {

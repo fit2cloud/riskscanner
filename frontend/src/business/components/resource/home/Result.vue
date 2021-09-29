@@ -130,7 +130,7 @@
                       <span :key="tag.tagKey" v-if="scope.row.ruleTags.indexOf(tag.tagKey) > -1"> {{ tag.tagName }}</span>
                     </span>
                   </template>
-                  <span v-if="!!scope.row.resourceTypes && scope.row.resourceTypes.indexOf('.')===-1"> [{{ scope.row.resourceTypes }}]</span>
+                  <span v-if="!!scope.row.resourceTypes && scope.row.resourceTypes.indexOf('.')===-1"> {{ scope.row.resourceTypes }}</span>
                   <span v-if="!!scope.row.resourceTypes && scope.row.resourceTypes.indexOf('.')>-1">
                     <template v-for="type in resourceTypes" >
                       <span :key="type.value" v-if="scope.row.resourceTypes">
