@@ -1,4 +1,4 @@
-<p align="center"><a href="https://riskscanner.io"><img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/logo-dark.png" alt="RiskScanner" width="300" /></a></p>
+<p align="center"><a href="https://riskscanner.io"><img src="https://cdn0-download-offline-installer.fit2cloud.com/riskscanner/img/logo-dark.png" alt="RiskScanner" width="300" /></a></p>
 <h3 align="center">开源多云安全合规扫描平台 <a href="https://github.com/riskscanner/riskscanner/blob/master/README_EN.md">[英文版]</a></h3>
 
 <p align="center">
@@ -28,11 +28,11 @@ RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，�
 > - [x] 支持多资源类型：支持的资源类型包括云服务器、云磁盘、云数据库、负载均衡、对象存储、专有网络、安全组等；
 > - [x] 丰富全面的漏洞规则库：覆盖 OWASP TOP 10 的 Web 漏洞，例如：SQL 注入、跨站脚本攻击（XSS）、跨站请求伪造（CSRF）、弱密码等。
 
-![功能架构](https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/functional-architecture.png)
+![功能架构](https://cdn0-download-offline-installer.fit2cloud.com/riskscanner/img/functional-architecture.png)
 
 ## UI 界面展示
 
-![UI 界面展示](https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/dashboard.gif)
+![UI 界面展示](https://cdn0-download-offline-installer.fit2cloud.com/riskscanner/img/dashboard.gif)
 
 ## 快速开始
 
@@ -53,7 +53,7 @@ curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/qu
 
 ## 微信群
 
-<img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/wechat-group.png" width="156" height="156"/>
+<img src="https://cdn0-download-offline-installer.fit2cloud.com/riskscanner/img/wechat-group.png" width="156" height="156"/>
 
 ## 技术栈
 

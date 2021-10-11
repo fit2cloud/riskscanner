@@ -1,4 +1,4 @@
-<p align="center"><a href="https://riskscanner.io"><img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/logo-dark.png" alt="RiskScanner" width="300" /></a></p>
+<p align="center"><a href="https://riskscanner.io"><img src="https://cdn0-download-offline-installer.fit2cloud.com/riskscanner/img/logo-dark.png" alt="RiskScanner" width="300" /></a></p>
 <h3 align="center">Open source multi-cloud security compliance scanning platform <a href="https://github.com/riskscanner/riskscanner/blob/master/README.md">[Chinese Version]</a></h3>
 
 <p align="center">
@@ -53,7 +53,7 @@ curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/qu
 
 ## WeChat group
 
-<img src="https://fit2cloud2-offline-installer.oss-cn-beijing.aliyuncs.com/riskscanner/img/wechat-group.png" width="156" height="156"/>
+<img src="https://cdn0-download-offline-installer.fit2cloud.com/riskscanner/img/wechat-group.png" width="156" height="156"/>
 
 ## Technology stack
 
