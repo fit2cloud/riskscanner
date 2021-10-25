@@ -112,7 +112,7 @@
     padding: 10px 20px 10px 50px;
     width: 47%;
     white-space: nowrap;
-    overflow: hidden;
+    /*overflow: hidden;*/
     text-overflow: ellipsis;
   }
   .el-table-expand >>> .el-form-item__content {

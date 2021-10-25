@@ -25,7 +25,7 @@ public interface ExtResourceMapper {
 
     SourceDTO source(@Param("accountId")String accountId);
 
-    String resultPercent(String accountId, String severity, String taskId);
+    String resultPercent(@Param("accountId") String accountId, @Param("severity") String severity, @Param("taskId") String taskId);
 
     String sumReturnSum(@Param("accountId") String accountId);
 

@@ -11,8 +11,8 @@ public interface ExtRuleGroupMapper {
 
     List<RuleGroupDTO> list(@Param("request") RuleGroupRequest request);
 
-    List<RuleDTO> getRules(String accountId, String groupId);
+    List<RuleDTO> getRules(@Param("accountId") String accountId, @Param("groupId") String groupId);
 
-    List<String> getRuleGroup(String accountId);
+    List<String> getRuleGroup(@Param("accountId") String accountId);
 
 }
