@@ -89,7 +89,7 @@ public class TaskService {
         }
     }
 
-    public boolean morelTask(String taskId)  {
+    public boolean morelTask(String taskId) {
         try {
             Task task = taskMapper.selectByPrimaryKey(taskId);
             if (task != null) {
@@ -105,7 +105,7 @@ public class TaskService {
         return true;
     }
 
-    public boolean validateYaml (QuartzTaskDTO quartzTaskDTO) {
+    public boolean validateYaml(QuartzTaskDTO quartzTaskDTO) {
         try {
             String script = quartzTaskDTO.getScript();
             JSONArray jsonArray = JSON.parseArray(quartzTaskDTO.getParameter());
@@ -151,7 +151,7 @@ public class TaskService {
                     if (taskItemResource == null) return;
                     resourceMapper.deleteByPrimaryKey(taskItemResource.getResourceId());
 
-                    if (taskItemResource.getResourceId()!= null) {
+                    if (taskItemResource.getResourceId() != null) {
                         ResourceItemExample resourceItemExample = new ResourceItemExample();
                         resourceItemExample.createCriteria().andResourceIdEqualTo(taskItemResource.getResourceId());
                         List<ResourceItem> resourceItems = resourceItemMapper.selectByExample(resourceItemExample);
@@ -174,6 +174,7 @@ public class TaskService {
         }
     }
 
+
     public boolean dryRun(QuartzTaskDTO quartzTaskDTO) {
         //validate && dryrun
         String uuid = UUIDUtil.newUUID();
@@ -194,34 +195,80 @@ public class TaskService {
             AccountWithBLOBs account = accountMapper.selectByExampleWithBLOBs(example).get(0);
             Proxy proxy = new Proxy();
             if (account.getProxyId() != null) proxy = proxyMapper.selectByPrimaryKey(account.getProxyId());
-            JSONObject regionObj = (JSONObject) PlatformUtils._getRegions(account, proxy, accountService.validate(account.getId())).get(0);
+            // 校验云账号是否有效
+            Optional.ofNullable(accountService.validate(account.getId())).filter(Boolean::booleanValue).orElseGet(() -> {
+                RSException.throwException(Translator.get("i18n_ex_plugin_validate"));
+                return null;
+            });
+            //  获得区域 -- nuclei的区域为all 因为当前方法是判断当前规则是否正确,所以任意取一个区域只要执行没有问题则证明规则没有问题
+            JSONObject regionObj = quartzTaskDTO.getScanType().equals(ScanTypeConstants.nuclei.name()) ? new JSONObject() {{
+                put("regionId", "ALL");
+            }} : Optional.ofNullable(PlatformUtils._getRegions(account, proxy, true)).filter(s -> {
+                return !s.isEmpty();
+            }).map(jsonArr -> {
+                return (JSONObject) jsonArr.get(0);
+            }).orElseGet(() -> {
+                RSException.throwException(Translator.get("i18n_ex_plugin_validate"));
+                return null;
+            });
+
             Map<String, String> map = PlatformUtils.getAccount(account, regionObj.get("regionId").toString(), proxyMapper.selectByPrimaryKey(account.getProxyId()));
+
             String fileName = "", commandEnum = "";
             if (StringUtils.equalsIgnoreCase(quartzTaskDTO.getScanType(), ScanTypeConstants.custodian.name())) {
                 fileName = "policy.yml";
                 commandEnum = CommandEnum.custodian.getCommand();
-            } else if (StringUtils.equalsIgnoreCase(quartzTaskDTO.getScanType(), ScanTypeConstants.nuclei.name())){
+            } else if (StringUtils.equalsIgnoreCase(quartzTaskDTO.getScanType(), ScanTypeConstants.nuclei.name())) {
                 fileName = "nuclei.yml";
                 commandEnum = CommandEnum.nuclei.getCommand();
+            } else if (StringUtils.equalsIgnoreCase(quartzTaskDTO.getScanType(), ScanTypeConstants.prowler.name())) {
+                JSONArray objects = JSONObject.parseArray(quartzTaskDTO.getParameter());
+                if (objects.isEmpty()) RSException.throwException(Translator.get("error_lang_invalid"));
+                fileName = objects.getJSONObject(0).getString("defaultValue");
+                commandEnum = CommandEnum.prowler.getCommand();
             }
             dirPath = CommandUtils.saveAsFile(finalScript, TaskConstants.RESULT_FILE_PATH_PREFIX + uuid, fileName);
-            String command = PlatformUtils.fixedCommand(commandEnum, CommandEnum.validate.getCommand(), dirPath, fileName, map);
-            String resultStr = CommandUtils.commonExecCmdWithResult(command, dirPath);
-            if (!resultStr.isEmpty() && !resultStr.contains("INFO")) {
-                LogUtil.error(Translator.get("i18n_compliance_rule_error")+ " {validate}:" + resultStr);
-                RSException.throwException(Translator.get("i18n_compliance_rule_error"));
-            }
-            String command2 = PlatformUtils.fixedCommand(CommandEnum.custodian.getCommand(), CommandEnum.dryrun.getCommand(), dirPath, fileName, map);
-            String resultStr2 = CommandUtils.commonExecCmdWithResult(command2, dirPath);
-            if (!resultStr.isEmpty() && !resultStr2.contains("INFO")) {
-                LogUtil.error(Translator.get("i18n_compliance_rule_error")+ " {dryrun}:" + resultStr);
-                RSException.throwException(Translator.get("i18n_compliance_rule_error"));
-            }
+
+            String command = PlatformUtils.fixedCommand(commandEnum, CommandEnum.validate.getCommand(), quartzTaskDTO.getScanType().equals(ScanTypeConstants.nuclei.name()) ? TaskConstants.PROWLER_RESULT_FILE_PATH : dirPath, fileName, map);
+
+            String resultStr = quartzTaskDTO.getScanType().equals(ScanTypeConstants.nuclei.name()) ? CommandUtils.commonExecCmdWithResultByNuclei(command, dirPath) : CommandUtils.commonExecCmdWithResult(command, dirPath);
+            // 检查结果
+            checkResultStr(resultStr, quartzTaskDTO.getScanType());
+            String command2 = PlatformUtils.fixedCommand(commandEnum, CommandEnum.dryrun.getCommand(), quartzTaskDTO.getScanType().equals(ScanTypeConstants.nuclei.name()) ? TaskConstants.PROWLER_RESULT_FILE_PATH : dirPath, fileName, map);
+            String resultStr2 = quartzTaskDTO.getScanType().equals(ScanTypeConstants.nuclei.name()) ? CommandUtils.commonExecCmdWithResultByNuclei(command2, dirPath) : CommandUtils.commonExecCmdWithResult(command2, dirPath);
+            // 结果
+            checkResultStr(resultStr2, quartzTaskDTO.getScanType());
         } catch (Exception e) {
             LogUtil.error("[{}] validate && dryrun generate policy.yml file failed:{}", uuid, e.getMessage());
-            RSException.throwException(Translator.get("i18n_compliance_rule_error"));
+            RSException.throwException(e instanceof RSException ? e.getMessage() : Translator.get("i18n_compliance_rule_error"));
         }
         return true;
+    }
+
+    /**
+     * 检查返回值是否正常返回
+     *
+     * @param resultStr 需要检查的结果
+     * @param type      扫描类型
+     */
+    public void checkResultStr(String resultStr, String type) {
+        Optional.ofNullable(type).filter(scanType -> {
+            return scanType.equals(ScanTypeConstants.nuclei.name());
+        }).map(scanType -> {
+            if (resultStr.contains("ERR")) {
+                RSException.throwException(Translator.get("i18n_create_resource_failed") + ": " + resultStr);
+            }
+            return scanType;
+        }).filter(scanType -> {
+            return scanType.equals(ScanTypeConstants.prowler.name()) || scanType.equals(ScanTypeConstants.custodian.name());
+        }).map(scanType -> {
+            if (!resultStr.isEmpty() && !resultStr.contains("INFO")) {
+                LogUtil.error(Translator.get("i18n_compliance_rule_error") + " {validate}:" + resultStr);
+                RSException.throwException(Translator.get("i18n_compliance_rule_error"));
+            }
+            return scanType;
+        });
+
     }
 
     public List<Task> selectManualTasks(Map<String, Object> params) {
@@ -288,7 +335,7 @@ public class TaskService {
             quartzTaskMapper.insertSelective(dto);
 
             if (StringUtils.equalsIgnoreCase(dto.getQzType(), "ACCOUNT")) {
-                for(String accountId : dto.getAccountIds()){
+                for (String accountId : dto.getAccountIds()) {
                     CloudAccountQuartzTaskRelation quartzTaskRelation = new CloudAccountQuartzTaskRelation();
                     quartzTaskRelation.setId(UUIDUtil.newUUID());
                     quartzTaskRelation.setQuartzTaskId(dto.getId());
@@ -350,7 +397,7 @@ public class TaskService {
                 }
             } else {
                 JSONArray jsonArray = new JSONArray();
-                for(String ruleId : dto.getRuleIds()){
+                for (String ruleId : dto.getRuleIds()) {
                     CloudAccountQuartzTaskRelation quartzTaskRelation = new CloudAccountQuartzTaskRelation();
                     quartzTaskRelation.setId(UUIDUtil.newUUID());
                     quartzTaskRelation.setQuartzTaskId(dto.getId());
@@ -459,7 +506,8 @@ public class TaskService {
                 RSException.throwException(e);
             }
             quartzTask.setLastFireTime(trigger.getNextFireTime().getTime());
-            if (trigger.getPreviousFireTime() != null) quartzTask.setPrevFireTime(trigger.getPreviousFireTime().getTime());
+            if (trigger.getPreviousFireTime() != null)
+                quartzTask.setPrevFireTime(trigger.getPreviousFireTime().getTime());
             quartzTaskMapper.updateByPrimaryKeySelective(quartzTask);
 
         });
@@ -516,7 +564,7 @@ public class TaskService {
                 quartzTaskRelaLog.setSourceId(quartzTaskRelation.getSourceId());
                 quartzTaskRelaLog.setQzType(quartzTaskRelation.getQzType());
                 quartzTaskRelaLog.setOperator("System");
-                quartzTaskRelaLog.setOperation(action.equals(QuartzTaskAction.PAUSE)? "暂停定时任务" : "启动定时任务");
+                quartzTaskRelaLog.setOperation(action.equals(QuartzTaskAction.PAUSE) ? "暂停定时任务" : "启动定时任务");
                 quartzTaskRelaLogMapper.insertSelective(quartzTaskRelaLog);
             }
 
