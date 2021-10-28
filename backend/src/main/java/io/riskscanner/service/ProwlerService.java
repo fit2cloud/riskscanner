@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.alibaba.fastjson.JSON.toJSONString;
 
@@ -126,7 +127,7 @@ public class ProwlerService {
                     taskItemWithBLOBs.setDetails(finalScript);
                     taskItemMapper.updateByPrimaryKeySelective(taskItemWithBLOBs);
 
-                    task.setResourceTypes(resourceTypes.toString());
+                    task.setResourceTypes(resourceTypes.stream().collect(Collectors.toSet()).toString());
                     taskMapper.updateByPrimaryKeySelective(task);
                 });
             }
@@ -244,7 +245,7 @@ public class ProwlerService {
                 resourceWithBLOBs.setCustodianRunLog(prowlerRun);
                 resourceWithBLOBs.setMetadata(metadata);
                 resourceWithBLOBs.setResources(resources);
-                resourceWithBLOBs.setResourceName(resourceName);
+                    resourceWithBLOBs.setResourceName(resourceName);
                 resourceWithBLOBs.setDirName(taskItemResource.getDirName());
                 resourceWithBLOBs.setResourceType(resourceType);
                 resourceWithBLOBs.setAccountId(taskItem.getAccountId());

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.alibaba.fastjson.JSON.parseObject;
 import static com.alibaba.fastjson.JSON.toJSONString;
@@ -145,7 +146,7 @@ public class NucleiService {
                         taskItemWithBLOBs.setDetails(sc);
                         taskItemMapper.updateByPrimaryKeySelective(taskItemWithBLOBs);
 
-                        task.setResourceTypes(resourceTypes.toString());
+                        task.setResourceTypes(resourceTypes.stream().collect(Collectors.toSet()).toString());
                         taskMapper.updateByPrimaryKeySelective(task);
                     }
                 });

@@ -172,7 +172,7 @@ public class OrderService {
                         taskItemWithBLOBs.setDetails(sc);
                         taskItemMapper.updateByPrimaryKeySelective(taskItemWithBLOBs);
 
-                        task.setResourceTypes(resourceTypes.toString());
+                        task.setResourceTypes(resourceTypes.stream().collect(Collectors.toSet()).toString());
                         taskMapper.updateByPrimaryKeySelective(task);
                     }
                 });

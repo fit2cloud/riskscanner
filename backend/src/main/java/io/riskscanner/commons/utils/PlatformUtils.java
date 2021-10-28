@@ -88,7 +88,6 @@ public class PlatformUtils {
 
     /**
      * 支持的插件（云平台）
-     *
      */
     public final static List<String> getPlugin() {
         return Arrays.asList(aws, azure, aliyun, huawei, tencent, vsphere, openstack, gcp);
@@ -96,7 +95,6 @@ public class PlatformUtils {
 
     /**
      * azure 所有区域
-     *
      */
     public final static List<String> getAzureResions() {
         return Arrays.asList("AzureCloud", "AzureChinaCloud", "AzureGermanyCloud", "AzureUSGov");
@@ -146,23 +144,23 @@ public class PlatformUtils {
             case aws:
                 String awsAccessKey = params.get("accessKey");
                 String awsSecretKey = params.get("secretKey");
-                if(StringUtils.equalsIgnoreCase(custodian, ScanTypeConstants.prowler.name())){
+                if (StringUtils.equalsIgnoreCase(custodian, ScanTypeConstants.prowler.name())) {
                     String defaultConfig = "[default]" + "\n"
                             + "region=" + region + "\n";
                     String defaultCredentials = "[default]" + "\n"
-                            + "aws_access_key_id=" + awsAccessKey  + "\n"
+                            + "aws_access_key_id=" + awsAccessKey + "\n"
                             + "aws_secret_access_key=" + awsSecretKey + "\n";
                     CommandUtils.saveAsFile(defaultConfig, TaskConstants.PROWLER_CONFIG_FILE_PATH, "config");
                     CommandUtils.saveAsFile(defaultCredentials, TaskConstants.PROWLER_CONFIG_FILE_PATH, "credentials");
                     String config = ReadFileUtils.readToBuffer(TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config");
                     String credentials = ReadFileUtils.readToBuffer(TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials");
-                    if(!config.contains(region)) {
+                    if (!config.contains(region)) {
                         CommandUtils.commonExecCmdWithResult("echo -e '" + defaultConfig + "' >> " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/config", TaskConstants.PROWLER_CONFIG_FILE_PATH);
                     }
                     if (!credentials.contains(awsAccessKey) && !credentials.contains(awsSecretKey)) {
                         CommandUtils.commonExecCmdWithResult("echo -e '" + defaultCredentials + "' >> " + TaskConstants.PROWLER_CONFIG_FILE_PATH + "/credentials", TaskConstants.PROWLER_CONFIG_FILE_PATH);
                     }
-                    return proxy + "./prowler -g " + (StringUtils.isNotEmpty(fileName)?fileName:"group1") + " -f " + region + " -s -M text > result.txt";
+                    return proxy + "./prowler -g " + (StringUtils.isNotEmpty(fileName) ? fileName : "group1") + " -f " + region + " -s -M text > result.txt";
                 }
                 pre = "AWS_ACCESS_KEY_ID=" + awsAccessKey + " " +
                         "AWS_SECRET_ACCESS_KEY=" + awsSecretKey + " " +
@@ -211,14 +209,14 @@ public class PlatformUtils {
                 try {
                     String clouds =
                             "clouds:\n" +
-                            "  demo:\n" +
-                            "    region_name: " + region + "\n" +
-                            "    auth:\n" +
-                            "      username: " + oUserName + "\n" +
-                            "      password: " + oPassword + "\n" +
-                            "      project_id: " + oProjectId + "\n" +
-                            "      domain_name: " + oDomainId + "\n" +
-                            "      auth_url: " + oEndpoint + "\n";
+                                    "  demo:\n" +
+                                    "    region_name: " + region + "\n" +
+                                    "    auth:\n" +
+                                    "      username: " + oUserName + "\n" +
+                                    "      password: " + oPassword + "\n" +
+                                    "      project_id: " + oProjectId + "\n" +
+                                    "      domain_name: " + oDomainId + "\n" +
+                                    "      auth_url: " + oEndpoint + "\n";
                     CommandUtils.saveAsFile(clouds, dirPath, "clouds.yml");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -250,7 +248,10 @@ public class PlatformUtils {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return "nuclei -l " + dirPath + "/urls.txt -t " + dirPath + "/" + fileName + " -o " + dirPath +  "/result.txt";
+                if (behavior.equals("validate")) {
+                    return "nuclei -t " + dirPath + "/" + fileName + " -validate";
+                }
+                return "nuclei -l " + dirPath + "/urls.txt -t " + dirPath + "/" + fileName + " -o " + dirPath + "/result.txt";
         }
         switch (behavior) {
             case "run":
@@ -352,11 +353,11 @@ public class PlatformUtils {
             default:
                 throw new IllegalStateException("Unexpected value: " + account.getPluginId());
         }
-        map.put("proxyType", proxy != null?proxy.getProxyType():"");
-        map.put("proxyIp", proxy != null?proxy.getProxyIp():"");
-        map.put("proxyPort", proxy != null?proxy.getProxyPort():"");
-        map.put("proxyName", proxy != null?proxy.getProxyName():"");
-        map.put("proxyPassword", proxy != null?proxy.getProxyPassword():"");
+        map.put("proxyType", proxy != null ? proxy.getProxyType() : "");
+        map.put("proxyIp", proxy != null ? proxy.getProxyIp() : "");
+        map.put("proxyPort", proxy != null ? proxy.getProxyPort() : "");
+        map.put("proxyName", proxy != null ? proxy.getProxyName() : "");
+        map.put("proxyPassword", proxy != null ? proxy.getProxyPassword() : "");
         return map;
     }
 
@@ -391,8 +392,8 @@ public class PlatformUtils {
                     result.getRegions().forEach(region -> {
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("regionId", region.getRegionName());
-                        jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.getRegionName(), aws))?tranforRegionId2RegionName(region.getRegionName(), aws):region.getRegionName());
-                        if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                        jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.getRegionName(), aws)) ? tranforRegionId2RegionName(region.getRegionName(), aws) : region.getRegionName());
+                        if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                     });
                     break;
                 case azure:
@@ -404,8 +405,8 @@ public class PlatformUtils {
                         azureClient.getCloudRegions().forEach(region -> {
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("regionId", region.get("regionId"));
-                            jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.get("regionId"), azure))?tranforRegionId2RegionName(region.get("regionId"), azure):region.get("regionName"));
-                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                            jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.get("regionId"), azure)) ? tranforRegionId2RegionName(region.get("regionId"), azure) : region.get("regionName"));
+                            if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                         });
                     } catch (Exception e) {
                         LogUtil.error(e.getMessage());
@@ -423,8 +424,8 @@ public class PlatformUtils {
                         regions.forEach(region -> {
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("regionId", region.getRegionId());
-                            jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.getRegionId(), aliyun))?tranforRegionId2RegionName(region.getRegionId(), aliyun):region.getLocalName());
-                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                            jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.getRegionId(), aliyun)) ? tranforRegionId2RegionName(region.getRegionId(), aliyun) : region.getLocalName());
+                            if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                         });
                     } catch (Exception e) {
                         LogUtil.error(e.getMessage());
@@ -443,7 +444,7 @@ public class PlatformUtils {
                         List<ProjectResult> projects = iamClient.keystoneListProjects(request).getProjects();
                         for (Map<String, String> region : regions) {
                             for (ProjectResult project : projects) {
-                                if(project.getName().equalsIgnoreCase(region.get("key"))){
+                                if (project.getName().equalsIgnoreCase(region.get("key"))) {
                                     region.put("projectId", project.getId());
                                 }
                             }
@@ -451,9 +452,9 @@ public class PlatformUtils {
                         for (Map<String, String> region : regions) {
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("regionId", region.get("key"));
-                            jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.get("key"), huawei))?tranforRegionId2RegionName(region.get("key"), huawei):region.get("value"));
+                            jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(region.get("key"), huawei)) ? tranforRegionId2RegionName(region.get("key"), huawei) : region.get("value"));
                             jsonObject.put("projectId", region.get("projectId"));
-                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                            if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                         }
                     } catch (RSException | PluginException e) {
                         RSException.throwException(e.getMessage());
@@ -470,8 +471,8 @@ public class PlatformUtils {
                         for (RegionInfo regionInfo : regionInfos) {
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("regionId", regionInfo.getRegion());
-                            jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(regionInfo.getRegion(), tencent))?tranforRegionId2RegionName(regionInfo.getRegion(), tencent):regionInfo.getRegionName());
-                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                            jsonObject.put("regionName", StringUtils.isNotEmpty(tranforRegionId2RegionName(regionInfo.getRegion(), tencent)) ? tranforRegionId2RegionName(regionInfo.getRegion(), tencent) : regionInfo.getRegionName());
+                            if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                         }
                     } catch (Exception e) {
                         LogUtil.error(e.getMessage());
@@ -492,14 +493,14 @@ public class PlatformUtils {
                                         JSONObject jsonObject = new JSONObject();
                                         jsonObject.put("regionId", region.getId());
                                         jsonObject.put("regionName", region.getId());
-                                        if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                                        if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                                     });
-                                }else {
+                                } else {
                                     regions.forEach(region -> {
                                         JSONObject jsonObject = new JSONObject();
                                         jsonObject.put("regionId", region.getId());
                                         jsonObject.put("regionName", region.getId());
-                                        if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                                        if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                                     });
                                 }
                             } else {
@@ -507,7 +508,7 @@ public class PlatformUtils {
                                 JSONObject jsonObject = new JSONObject();
                                 jsonObject.put("regionId", region);
                                 jsonObject.put("regionName", region);
-                                if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                                if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                             }
                         }
                     } catch (Exception e) {
@@ -530,7 +531,7 @@ public class PlatformUtils {
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("regionId", vsphereRegion.getName());
                             jsonObject.put("regionName", vsphereRegion.getName());
-                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                            if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                         }
                     } catch (Exception e) {
                         if (e instanceof PluginException) {
@@ -559,32 +560,32 @@ public class PlatformUtils {
                                 .build();
                         JSONObject gcp = JSON.parseObject(gcpBaseRequest.getGcpCredential().getCredentials());
                         String projectId = gcp.getString("quota_project_id");
-                        if (projectId==null) projectId = gcp.getString("project_id");
+                        if (projectId == null) projectId = gcp.getString("project_id");
                         CloudResourceManager.Projects.Get request =
                                 cloudResourceManagerService.projects().get(projectId);
                         Project response = request.execute();
-                        if (response==null) {
+                        if (response == null) {
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("regionId", projectId);
                             jsonObject.put("regionName", projectId);
-                            if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                            if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                             break;
                         }
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("regionId", projectId);
                         jsonObject.put("regionName", response.getName());
-                        if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                        if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                     } catch (Exception e) {
                         Request gcpRequest = new Request();
                         gcpRequest.setCredential(account.getCredential());
                         GcpBaseRequest gcpBaseRequest = new GcpBaseRequest(gcpRequest);
                         JSONObject gcp = JSON.parseObject(gcpBaseRequest.getGcpCredential().getCredentials());
                         String projectId = gcp.getString("quota_project_id");
-                        if (projectId==null) projectId = gcp.getString("project_id");
+                        if (projectId == null) projectId = gcp.getString("project_id");
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("regionId", projectId);
                         jsonObject.put("regionName", projectId);
-                        if(!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
+                        if (!jsonArray.contains(jsonObject)) jsonArray.add(jsonObject);
                     }
                     break;
                 case nuclei:
@@ -598,7 +599,7 @@ public class PlatformUtils {
         }
     }
 
-    public static boolean validateCredential (AccountWithBLOBs account, Proxy proxy) throws IOException, PluginException {
+    public static boolean validateCredential(AccountWithBLOBs account, Proxy proxy) throws IOException, PluginException {
         switch (account.getPluginId()) {
             case aws:
                 try {
@@ -699,7 +700,7 @@ public class PlatformUtils {
                     vsphereRequest.setCredential(account.getCredential());
                     VsphereBaseRequest vsphereBaseRequest = new VsphereBaseRequest(vsphereRequest);
                     vsphereClient = vsphereBaseRequest.getVsphereClient();
-                    if(!vsphereClient.isUseCustomSpec()){
+                    if (!vsphereClient.isUseCustomSpec()) {
                         throw new PluginException("This version of vCenter is not supported!");
                     }
                     return true;
@@ -738,7 +739,7 @@ public class PlatformUtils {
             IamClient iamClient = ClientUtil.getIamClient(busiRequest, proxy);
             List<ProjectResult> projectResults = ProjectUtil.listProjects(iamClient, AuthUtil.validate(iamClient, busiRequest.getHuaweiCloudCredential().getAk()).getUserId());
             List<Region> regions = RegionUtil.allRegions(iamClient);
-            if (CollectionUtils.isEmpty(projectResults)){
+            if (CollectionUtils.isEmpty(projectResults)) {
                 List<Map<String, String>> temp = new ArrayList<>();
                 for (Region tmp : regions) {//获取全部的Region，带中文
                     Map<String, String> region = new HashMap<>();
@@ -762,12 +763,12 @@ public class PlatformUtils {
                 KeystoneListEndpointsResponse keystoneListEndpointsResponse = iamClient.keystoneListEndpoints(new KeystoneListEndpointsRequest().withServiceId(svc.getId()));
                 endpoints.addAll(keystoneListEndpointsResponse.getEndpoints());
             });
-            List<Map<String, String>> collect = endpoints.stream().filter(end-> regionMap.containsKey(end.getRegionId()) && regionIdSets.contains(end.getRegionId())).map(endpoint ->{
+            List<Map<String, String>> collect = endpoints.stream().filter(end -> regionMap.containsKey(end.getRegionId()) && regionIdSets.contains(end.getRegionId())).map(endpoint -> {
                 HashMap<String, String> tempRegion = new HashMap<>();
-                tempRegion.put("key",endpoint.getRegionId());
+                tempRegion.put("key", endpoint.getRegionId());
                 RegionLocales regionLocales = regionMap.get(endpoint.getRegionId());
                 String name = Optional.ofNullable(regionLocales.getZhCn()).orElse(regionLocales.getEnUs());
-                tempRegion.put("value",name);
+                tempRegion.put("value", name);
                 return tempRegion;
             }).distinct().collect(Collectors.toList());
             return collect;
@@ -776,7 +777,7 @@ public class PlatformUtils {
         }
     }
 
-    public static String tranforRegionId2RegionName (String strEn, String pluginId) {
+    public static String tranforRegionId2RegionName(String strEn, String pluginId) {
         String strCn;
         switch (pluginId) {
             case aws:
@@ -813,7 +814,7 @@ public class PlatformUtils {
         return strCn;
     }
 
-    public static boolean checkAvailableRegion (String pluginId, String resource, String region) {
+    public static boolean checkAvailableRegion(String pluginId, String resource, String region) {
         String[] stringArray;
         List<String> tempList;
         switch (pluginId) {
