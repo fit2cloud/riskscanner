@@ -174,7 +174,6 @@ public class TaskService {
         }
     }
 
-
     public boolean dryRun(QuartzTaskDTO quartzTaskDTO) {
         //validate && dryrun
         String uuid = UUIDUtil.newUUID();
@@ -227,14 +226,15 @@ public class TaskService {
                 fileName = objects.getJSONObject(0).getString("defaultValue");
                 commandEnum = CommandEnum.prowler.getCommand();
             }
-            dirPath = CommandUtils.saveAsFile(finalScript, TaskConstants.RESULT_FILE_PATH_PREFIX + uuid, fileName);
 
-            String command = PlatformUtils.fixedCommand(commandEnum, CommandEnum.validate.getCommand(), quartzTaskDTO.getScanType().equals(ScanTypeConstants.nuclei.name()) ? TaskConstants.PROWLER_RESULT_FILE_PATH : dirPath, fileName, map);
+            dirPath = commandEnum.equals(CommandEnum.prowler.getCommand())?TaskConstants.PROWLER_RESULT_FILE_PATH:CommandUtils.saveAsFile(finalScript, TaskConstants.RESULT_FILE_PATH_PREFIX + uuid, fileName);
+
+            String command = PlatformUtils.fixedCommand(commandEnum, CommandEnum.validate.getCommand(), dirPath, fileName, map);
 
             String resultStr = quartzTaskDTO.getScanType().equals(ScanTypeConstants.nuclei.name()) ? CommandUtils.commonExecCmdWithResultByNuclei(command, dirPath) : CommandUtils.commonExecCmdWithResult(command, dirPath);
             // 检查结果
             checkResultStr(resultStr, quartzTaskDTO.getScanType());
-            String command2 = PlatformUtils.fixedCommand(commandEnum, CommandEnum.dryrun.getCommand(), quartzTaskDTO.getScanType().equals(ScanTypeConstants.nuclei.name()) ? TaskConstants.PROWLER_RESULT_FILE_PATH : dirPath, fileName, map);
+            String command2 = PlatformUtils.fixedCommand(commandEnum, CommandEnum.dryrun.getCommand(), dirPath, fileName, map);
             String resultStr2 = quartzTaskDTO.getScanType().equals(ScanTypeConstants.nuclei.name()) ? CommandUtils.commonExecCmdWithResultByNuclei(command2, dirPath) : CommandUtils.commonExecCmdWithResult(command2, dirPath);
             // 结果
             checkResultStr(resultStr2, quartzTaskDTO.getScanType());
@@ -252,23 +252,21 @@ public class TaskService {
      * @param type      扫描类型
      */
     public void checkResultStr(String resultStr, String type) {
-        Optional.ofNullable(type).filter(scanType -> {
-            return scanType.equals(ScanTypeConstants.nuclei.name());
-        }).map(scanType -> {
-            if (resultStr.contains("ERR")) {
-                RSException.throwException(Translator.get("i18n_create_resource_failed") + ": " + resultStr);
+        if (type.equals(ScanTypeConstants.nuclei.name())) {
+            if (resultStr.contains("ERR") || resultStr.contains("error")) {
+                RSException.throwException(Translator.get("i18n_create_resource_failed"));
             }
-            return scanType;
-        }).filter(scanType -> {
-            return scanType.equals(ScanTypeConstants.prowler.name()) || scanType.equals(ScanTypeConstants.custodian.name());
-        }).map(scanType -> {
+        } else if (type.equals(ScanTypeConstants.custodian.name())) {
             if (!resultStr.isEmpty() && !resultStr.contains("INFO")) {
                 LogUtil.error(Translator.get("i18n_compliance_rule_error") + " {validate}:" + resultStr);
                 RSException.throwException(Translator.get("i18n_compliance_rule_error"));
             }
-            return scanType;
-        });
-
+        } else if (type.equals(ScanTypeConstants.prowler.name())) {
+            if (!resultStr.isEmpty() && !resultStr.contains("INFO")) {
+                LogUtil.error(Translator.get("i18n_compliance_rule_error") + " {validate}:" + resultStr);
+                RSException.throwException(Translator.get("i18n_compliance_rule_error"));
+            }
+        }
     }
 
     public List<Task> selectManualTasks(Map<String, Object> params) {
