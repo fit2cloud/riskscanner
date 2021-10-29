@@ -1,8 +1,8 @@
-FROM registry.cn-qingdao.aliyuncs.com/x-lab/nuclei:v1.7.0 as nuclei-env
+FROM registry.cn-qingdao.aliyuncs.com/x-lab/nuclei:v1.6.1 as nuclei-env
 
-FROM registry.cn-qingdao.aliyuncs.com/x-lab/prowler:v1.7.0 as prowler-env
+FROM registry.cn-qingdao.aliyuncs.com/x-lab/prowler:v1.6.1 as prowler-env
 
-FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.7.0
+FROM registry.cn-qingdao.aliyuncs.com/x-lab/custodian:v1.6.1
 
 ARG RS_VERSION=dev
 
