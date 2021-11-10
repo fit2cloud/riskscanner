@@ -32,6 +32,8 @@ RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，�
 
 ## UI 界面展示
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e4d32773202c43c39eec40873d5307ec)](https://app.codacy.com/gh/riskscanner/riskscanner?utm_source=github.com&utm_medium=referral&utm_content=riskscanner/riskscanner&utm_campaign=Badge_Grade_Settings)
+
 ![UI 界面展示](https://cdn0-download-offline-installer.fit2cloud.com/riskscanner/img/dashboard.gif)
 
 ## 快速开始
