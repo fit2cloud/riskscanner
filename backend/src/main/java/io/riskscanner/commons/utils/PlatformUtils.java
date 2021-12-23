@@ -437,7 +437,7 @@ public class PlatformUtils {
                     try {
                         BusiRequest busiRequest = new BusiRequest();
                         busiRequest.setCredential(account.getCredential());
-                        List<Map<String, String>> regions = getRegions(busiRequest, proxy);
+                        List<Map<String, String>> regions = getRegionsP(busiRequest, proxy);
                         IamClient iamClient = ClientUtil.getIamClient(busiRequest, proxy);
                         KeystoneListProjectsRequest request = new KeystoneListProjectsRequest();
                         request.setDomainId(busiRequest.getHuaweiCloudCredential().getDomainId());
@@ -732,6 +732,31 @@ public class PlatformUtils {
                 throw new IllegalStateException("Unexpected value: " + account.getPluginId());
         }
         return false;
+    }
+
+    /**
+     * 获取云账号区域
+     *
+     * @param busiRequest 请求参数
+     * @param proxy       代理对象
+     * @return
+     */
+    private static List<Map<String, String>> getRegionsP(BusiRequest busiRequest, Proxy proxy) throws PluginException {
+        try {
+            IamClient iamClient = ClientUtil.getIamClient(busiRequest, proxy);
+            List<Region> regions = RegionUtil.allRegions(iamClient);
+            List<Map<String, String>> resRegions = regions.stream().map(region -> {
+                String id = region.getId();
+                Map<String, String> regionMap = new HashMap<>();
+                String name = Optional.ofNullable(region.getLocales().getZhCn()).orElse(region.getLocales().getEnUs());
+                regionMap.put("key", id);
+                regionMap.put("value", name);
+                return regionMap;
+            }).collect(Collectors.toList());
+            return resRegions;
+        } catch (Exception e) {
+            throw new PluginException(e.getMessage(), e);
+        }
     }
 
     private static List<Map<String, String>> getRegions(BusiRequest busiRequest, Proxy proxy) throws PluginException {
