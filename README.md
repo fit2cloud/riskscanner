@@ -1,5 +1,4 @@
-<p align="center"><a href="https://riskscanner.io"><img src="https://cdn0-download-offline-installer.fit2cloud.com/riskscanner/img/logo-dark.png" alt="RiskScanner" width="300" /></a></p>
-<h3 align="center">开源多云安全合规扫描平台 <a href="https://github.com/riskscanner/riskscanner/blob/master/README_EN.md">[英文版]</a></h3>
+<h3 align="center">RiskScanner 开源多云安全合规扫描平台</h3>
 
 <p align="center">
    <a href="https://www.codacy.com/gh/riskscanner/riskscanner/dashboardutm_source=github.com&amp;utm_medium=referral&amp;utm_content=riskscanner/riskscanner&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/3331d2c045ae4d0ba1fd8fdd623186e7" alt="A"/></a>
