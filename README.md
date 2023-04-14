@@ -1,3 +1,9 @@
+<br />
+
+> **Warning**
+> # 此项目已停止维护，已迁移至[CloudExplorer Lite](https://www.fit2cloud.com/cloudexplorer-lite/index.html)的安全合规模块。
+<br />
+<br />
 <h3 align="center">RiskScanner 开源多云安全合规扫描平台</h3>
 
 <p align="center">
