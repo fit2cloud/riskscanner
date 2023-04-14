@@ -39,26 +39,6 @@ RiskScanner 遵循 GPL v2 开源协议，使用 SpringBoot/Vue 进行开发，�
 
 ![UI 界面展示](https://cdn0-download-offline-installer.fit2cloud.com/riskscanner/img/dashboard.gif)
 
-## 快速开始
-
-仅需两步快速安装 RiskScanner：
-
-1.  准备一台不小于 4 G 内存的 64 位 Linux 主机；
-2.  以 root 用户执行如下命令一键安装 RiskScanner。
-
-```sh
-curl -sSL https://github.com/riskscanner/riskscanner/releases/latest/download/quick_start.sh | sh
-```
-
-## 帮助文档和演示视频
-
-> [帮助文档](https://docs.riskscanner.io/)
-
-> [演示视频](https://www.bilibili.com/video/BV12p4y1b7Ud)
-
-## 微信群
-
-<img src="https://cdn0-download-offline-installer.fit2cloud.com/riskscanner/img/wechat-group.png" width="156" height="156"/>
 
 ## 技术栈
 
